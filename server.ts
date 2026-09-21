@@ -73,7 +73,13 @@ async function extractTextFromPdf(buffer: Buffer): Promise<string> {
 }
 
 const app = express();
-const PORT = Number(process.env.PORT) || 3000;
+
+// Bolt reserves port 9091 for its own MCP proxy infrastructure.
+// If PORT is unset or points to 9091, fall back to 3000 so the dev server
+// can start without conflicting with the Bolt preview environment.
+const BOLT_RESERVED_PORT = 9091;
+const requestedPort = Number(process.env.PORT) || 3000;
+const PORT = requestedPort === BOLT_RESERVED_PORT ? 3000 : requestedPort;
 
 let isServerReady = false;
 let isShuttingDown = false;
@@ -4556,11 +4562,25 @@ async function startServer() {
     });
   }
 
-  httpServer.listen(PORT, "0.0.0.0", async () => {
-    isServerReady = true;
-    console.log(`Plataforma de Estudos Server running on http://localhost:${PORT}`);
-    await testDatabaseConnection();
-  });
+  const startListen = (port: number) => {
+    httpServer.listen(port, "0.0.0.0", async () => {
+      isServerReady = true;
+      console.log(`Plataforma de Estudos Server running on http://localhost:${port}`);
+      await testDatabaseConnection();
+    });
+    httpServer.on("error", (err: NodeJS.ErrnoException) => {
+      if (err.code === "EADDRINUSE" && port < 65535) {
+        console.warn(`[SERVER] Porta ${port} em uso, tentando ${port + 1}...`);
+        httpServer.close();
+        startListen(port + 1);
+      } else {
+        console.error("[SERVER] Erro ao iniciar servidor:", err);
+        process.exit(1);
+      }
+    });
+  };
+
+  startListen(PORT);
 }
 
 startServer();
