@@ -7,6 +7,7 @@ import { FloatingTimerWidget } from "./FloatingTimerWidget";
 import { ScheduledReview } from "../../types";
 
 import { StatCardsRow } from "./StatCardsRow";
+import { EditalProgressCard } from "./EditalProgressCard";
 import { OfensivaCard } from "./OfensivaCard";
 import { TodayScheduleSection, PlannedBlockItem } from "./TodayScheduleSection";
 import { ReviewsSection } from "./ReviewsSection";
@@ -292,50 +293,19 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy 
   };
 
   return (
-    <div className="relative space-y-6 pb-20 max-w-7xl mx-auto lg:space-y-7">
-      {/* Iluminação radial âmbar extremamente sutil (composição do fundo) */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0 h-72"
-        style={{
-          background:
-            "radial-gradient(circle at 70% 10%, rgba(243,170,45,0.05), transparent 40%)",
-        }}
-      />
-
+    <div className="nx-home relative space-y-6 pb-20 max-w-7xl mx-auto lg:space-y-7">
       {/* ========================================================================= */}
-      {/* CABEÇALHO — BARLOW CONDENSED, FORTE E MODERNO                             */}
+      {/* CABEÇALHO                                                                 */}
       {/* ========================================================================= */}
       <div className="relative pt-1 pb-1">
         <h1 className="font-condensed text-[32px] sm:text-[36px] font-bold leading-tight tracking-[0.01em]">
-          <span className="text-[#8FA0B8]">{greeting}, </span>
+          <span className="text-[#A5B0C2]">{greeting}, </span>
           <span className="text-[#F5F4EF]">{userName}</span>
         </h1>
       </div>
 
       {/* ========================================================================= */}
-      {/* 1 A 4. CARDS DE MÉTRICAS: TEMPO, QUESTÕES, PRECISÃO E PROGRESSO           */}
-      {/* ========================================================================= */}
-      <StatCardsRow
-        todayMinutes={todayMinutes}
-        todaySessionsCount={todaySessions.length}
-        todayQuestionsDone={todayQuestionsDone}
-        todayQuestionsCorrect={todayQuestionsCorrect}
-        accuracyRate={todayAccuracy}
-        overallAccuracyRate={metrics.overallAccuracyRate}
-        globalProgressPercentage={gamification.globalProgressPercentage}
-        completedTopicsCount={gamification.completedTopicsCount}
-        totalTopicsCount={gamification.totalTopicsCount}
-        onNavigateToEdital={() => setActiveTab("edital")}
-      />
-
-      {/* ========================================================================= */}
-      {/* 5. OFENSIVA: QUADRANTE LONGO PREENCHIDO COM OS DIAS DA SEMANA             */}
-      {/* ========================================================================= */}
-      <OfensivaCard />
-
-      {/* ========================================================================= */}
-      {/* 6. PLANEJAMENTO DE HOJE                                                   */}
+      {/* 1. PRÓXIMA AÇÃO: PLANEJAMENTO DE HOJE                                     */}
       {/* ========================================================================= */}
       <TodayScheduleSection
         plannedBlocks={todayPlannedBlocks}
@@ -344,7 +314,36 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy 
       />
 
       {/* ========================================================================= */}
-      {/* 7. REVISÕES                                                               */}
+      {/* 2. PROGRESSO NO EDITAL — ELEMENTO-CHAVE DA HOME                           */}
+      {/* ========================================================================= */}
+      <EditalProgressCard
+        title={activeEdital?.title}
+        cargo={activeEdital?.cargo}
+        percentage={gamification.globalProgressPercentage}
+        completedTopicsCount={gamification.completedTopicsCount}
+        totalTopicsCount={gamification.totalTopicsCount}
+        onNavigateToEdital={() => setActiveTab("edital")}
+      />
+
+      {/* ========================================================================= */}
+      {/* 3. INDICADORES DE HOJE: TEMPO, QUESTÕES E PRECISÃO                        */}
+      {/* ========================================================================= */}
+      <StatCardsRow
+        todayMinutes={todayMinutes}
+        todaySessionsCount={todaySessions.length}
+        todayQuestionsDone={todayQuestionsDone}
+        todayQuestionsCorrect={todayQuestionsCorrect}
+        accuracyRate={todayAccuracy}
+        overallAccuracyRate={metrics.overallAccuracyRate}
+      />
+
+      {/* ========================================================================= */}
+      {/* 4. OFENSIVA                                                               */}
+      {/* ========================================================================= */}
+      <OfensivaCard />
+
+      {/* ========================================================================= */}
+      {/* 5. REVISÕES                                                               */}
       {/* ========================================================================= */}
       <ReviewsSection
         todayReviews={todayReviews}

@@ -180,31 +180,50 @@
     letter-spacing: 0.02em;
   }
 
-  /* Superfície de card da Home */
+  /* Tipografia de texto da Home: Inter (títulos de impacto seguem Barlow Condensed) */
+  .nx-home,
+  .nx-home h1,
+  .nx-home h2,
+  .nx-home h3,
+  .nx-home h4,
+  .nx-home h5,
+  .nx-home h6 {
+    font-family: "Inter", "Manrope", Arial, sans-serif;
+  }
+  .nx-home .font-condensed,
+  .nx-home .num-condensed {
+    font-family: "Barlow Condensed", "Manrope", sans-serif;
+  }
+
+  /* Superfície de card da Home — perceptivelmente mais clara que o fundo #11151F */
   .nx-card {
-    background-color: #1d212b;
-    border: 1px solid #2a3040;
+    background-color: #252b38;
+    border: 1px solid #384154;
     border-radius: 1rem;
     box-shadow:
-      0 1px 2px rgba(8, 10, 16, 0.35),
-      0 10px 28px -14px rgba(8, 10, 16, 0.5);
+      0 1px 2px rgba(8, 10, 16, 0.22),
+      0 10px 28px -16px rgba(8, 10, 16, 0.4);
   }
   .nx-card-hover {
     transition:
       border-color 200ms ease,
-      box-shadow 200ms ease;
+      background-color 200ms ease,
+      box-shadow 200ms ease,
+      transform 200ms ease;
   }
   .nx-card-hover:hover {
-    border-color: #39445a;
+    background-color: #2d3442;
+    border-color: #4a556e;
+    transform: translateY(-1px);
     box-shadow:
-      0 2px 4px rgba(8, 10, 16, 0.4),
-      0 16px 40px -16px rgba(8, 10, 16, 0.55);
+      0 2px 4px rgba(8, 10, 16, 0.28),
+      0 14px 32px -16px rgba(8, 10, 16, 0.45);
   }
 
   /* Área profunda: itens internos, inputs, tracks */
   .nx-deep {
-    background-color: #0c0e14;
-    border: 1px solid #222836;
+    background-color: #171b25;
+    border: 1px solid #384154;
     border-radius: 0.75rem;
   }
   .nx-deep-hover {
@@ -213,13 +232,14 @@
       background-color 200ms ease;
   }
   .nx-deep-hover:hover {
-    border-color: #39445a;
+    border-color: #4a556e;
+    background-color: #1b2130;
   }
 
   /* Botão principal âmbar da Home */
   .nx-btn-primary {
     background-color: #f3aa2d;
-    color: #0b0d14;
+    color: #11151f;
     border-radius: 0.75rem;
     font-weight: 700;
     transition:

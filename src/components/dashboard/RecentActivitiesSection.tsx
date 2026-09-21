@@ -17,9 +17,9 @@ export const RecentActivitiesSection: React.FC<RecentActivitiesSectionProps> = (
       className="nx-card p-5 sm:p-6 flex flex-col justify-between"
     >
       <div>
-        <div className="flex items-center justify-between pb-3.5 border-b border-[#232A3A]">
+        <div className="flex items-center justify-between pb-3.5 border-b border-[#384154]">
           <div className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#2A3040] bg-[#0C0E14] text-[#8FA0B8]">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#384154] bg-[#171B25] text-[#A5B0C2]">
               <History className="h-4 w-4" />
             </div>
             <h3 className="font-condensed text-[19px] font-bold text-[#F5F4EF]">
@@ -41,7 +41,7 @@ export const RecentActivitiesSection: React.FC<RecentActivitiesSectionProps> = (
         <div className="mt-3.5">
           {activities.length === 0 ? (
             <div className="py-7 text-center">
-              <p className="text-[13px] text-[#8FA0B8]">
+              <p className="text-[13px] text-[#A5B0C2]">
                 Nenhuma atividade registrada ainda.
               </p>
             </div>
@@ -61,7 +61,7 @@ export const RecentActivitiesSection: React.FC<RecentActivitiesSectionProps> = (
                       {sess.durationMinutes} min
                     </span>
                   </div>
-                  <div className="mt-1 flex items-center justify-between text-[11px] text-[#8FA0B8]">
+                  <div className="mt-1 flex items-center justify-between text-[11px] text-[#A5B0C2]">
                     <span className="font-medium text-[#F5F4EF]/80">
                       {sess.disciplineName}
                     </span>

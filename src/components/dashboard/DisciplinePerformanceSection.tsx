@@ -31,9 +31,9 @@ export const DisciplinePerformanceSection: React.FC<DisciplinePerformanceSection
       id="section-desempenho-disciplinas"
       className="nx-card p-5 sm:p-6"
     >
-      <div className="flex items-center justify-between pb-4 border-b border-[#232A3A]">
+      <div className="flex items-center justify-between pb-4 border-b border-[#384154]">
         <div className="flex items-center gap-2.5">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#2A3040] bg-[#0C0E14] text-[#8FA0B8]">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#384154] bg-[#171B25] text-[#A5B0C2]">
             <Layers className="h-4 w-4" />
           </div>
           <h2 className="font-condensed text-[19px] font-bold text-[#F5F4EF]">
@@ -54,13 +54,13 @@ export const DisciplinePerformanceSection: React.FC<DisciplinePerformanceSection
 
       <div className="mt-3 overflow-x-auto">
         {disciplines.length === 0 ? (
-          <p className="text-[14px] text-[#8FA0B8] py-8 text-center">
+          <p className="text-[14px] text-[#A5B0C2] py-8 text-center">
             Nenhuma disciplina cadastrada no edital ativo.
           </p>
         ) : (
           <table className="w-full text-left text-[13px]">
             <thead>
-              <tr className="border-b border-[#232A3A] text-[11px] font-semibold uppercase tracking-[0.08em] text-[#8FA0B8]">
+              <tr className="border-b border-[#384154] text-[11px] font-semibold uppercase tracking-[0.08em] text-[#A5B0C2]">
                 <th className="pb-3 pr-4 font-semibold">Disciplina</th>
                 <th className="pb-3 px-4 font-semibold text-center">Questões</th>
                 <th className="pb-3 px-4 font-semibold text-center">Precisão</th>
@@ -69,12 +69,12 @@ export const DisciplinePerformanceSection: React.FC<DisciplinePerformanceSection
                 <th className="pb-3 pl-4 font-semibold text-right">Ação</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#232A3A]">
+            <tbody className="divide-y divide-[#384154]">
               {disciplines.map((d) => (
                 <tr
                   key={d.id}
                   id={`discipline-row-${d.id}`}
-                  className="transition-colors duration-200 hover:bg-[#232A3A]/40"
+                  className="transition-colors duration-200 hover:bg-[#2D3442]/50"
                 >
                   <td className="py-3.5 pr-4">
                     <div className="flex items-center gap-2.5">
@@ -88,7 +88,7 @@ export const DisciplinePerformanceSection: React.FC<DisciplinePerformanceSection
                     </div>
                   </td>
 
-                  <td className="py-3.5 px-4 text-center text-[12px] text-[#8FA0B8]">
+                  <td className="py-3.5 px-4 text-center text-[12px] text-[#A5B0C2]">
                     {d.qDone > 0 ? (
                       <span className="nx-deep inline-flex items-center rounded-md px-2 py-0.5">
                         <strong className="num-condensed text-[13px] font-bold text-[#F5F4EF] mr-1">{d.qDone}</strong>
@@ -112,7 +112,7 @@ export const DisciplinePerformanceSection: React.FC<DisciplinePerformanceSection
                         {d.accuracy}%
                       </span>
                     ) : (
-                      <span className="text-[#8FA0B8]">—</span>
+                      <span className="text-[#A5B0C2]">—</span>
                     )}
                   </td>
 
@@ -122,13 +122,13 @@ export const DisciplinePerformanceSection: React.FC<DisciplinePerformanceSection
 
                   <td className="py-3.5 px-4 min-w-[150px]">
                     <div className="space-y-1">
-                      <div className="flex justify-between text-[11px] text-[#8FA0B8] font-medium">
+                      <div className="flex justify-between text-[11px] text-[#A5B0C2] font-medium">
                         <span>
                           {d.studiedTopicsCount}/{d.topicsCount} tópicos
                         </span>
                         <span className="num-condensed text-[#F5F4EF] font-bold">{d.topicsProgressPercent}%</span>
                       </div>
-                      <div className="h-1.5 w-full overflow-hidden rounded-full border border-[#222836] bg-[#0C0E14]">
+                      <div className="h-1.5 w-full overflow-hidden rounded-full border border-[#384154] bg-[#171B25]">
                         <div
                           className="h-full rounded-full bg-[#F3AA2D] transition-all duration-500"
                           style={{

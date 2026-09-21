@@ -150,7 +150,7 @@ export const OfensivaCard: React.FC<OfensivaCardProps> = ({ className = "" }) =>
       className={`nx-card nx-card-hover w-full p-5 sm:p-6 ${className}`}
     >
       {/* Topo Limpo da Ofensiva */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-4 border-b border-[#232A3A] gap-3">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-4 border-b border-[#384154] gap-3">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#F3AA2D]/20 bg-[#F3AA2D]/10 text-[#F3AA2D]">
             <Flame className="h-5 w-5 fill-[#F3AA2D] text-[#F3AA2D]" />
@@ -162,16 +162,13 @@ export const OfensivaCard: React.FC<OfensivaCardProps> = ({ className = "" }) =>
             <span className="num-condensed text-[26px] font-bold leading-none text-[#F3AA2D]">
               {currentStreak} {currentStreak === 1 ? "dia" : "dias"}
             </span>
-            <span className="text-[12px] font-medium text-[#8FA0B8]">
-              sequência atual
-            </span>
           </div>
         </div>
 
         {/* Lado Direito: Recorde e Status resumido sem poluição de texto */}
         <div className="flex items-center gap-2.5 text-[12px]">
           <div className="nx-deep flex items-center gap-1.5 px-3 py-1.5">
-            <span className="text-[#8FA0B8]">Recorde:</span>
+            <span className="text-[#A5B0C2]">Recorde:</span>
             <span className="num-condensed font-bold text-[#F5F4EF]">
               {recordStreak} {recordStreak === 1 ? "dia" : "dias"}
             </span>
@@ -206,10 +203,10 @@ export const OfensivaCard: React.FC<OfensivaCardProps> = ({ className = "" }) =>
                   day.isStudied
                     ? "border border-[#F3AA2D]/30 bg-[#F3AA2D]/[0.07]"
                     : day.isToday
-                    ? "border-2 border-[#F3AA2D] bg-[#0C0E14]"
+                    ? "border-2 border-[#F3AA2D] bg-[#171B25]"
                     : day.isFuture
-                    ? "border border-dashed border-[#222836] bg-[#0C0E14]/60 opacity-60"
-                    : "border border-[#222836] bg-[#0C0E14]"
+                    ? "border border-dashed border-[#384154] bg-[#171B25]/60 opacity-60"
+                    : "border border-[#384154] bg-[#171B25]"
                 }`}
               >
                 {/* Rótulo do dia (SEG, TER, QUA...) */}
@@ -219,7 +216,7 @@ export const OfensivaCard: React.FC<OfensivaCardProps> = ({ className = "" }) =>
                       ? "text-[#F3AA2D]"
                       : day.isStudied
                       ? "text-[#F3AA2D]"
-                      : "text-[#8FA0B8]"
+                      : "text-[#A5B0C2]"
                   }`}
                 >
                   {day.label}
@@ -233,8 +230,8 @@ export const OfensivaCard: React.FC<OfensivaCardProps> = ({ className = "" }) =>
                       : day.isToday
                       ? "text-[#F5F4EF]"
                       : day.isFuture
-                      ? "text-[#5A6A85]"
-                      : "text-[#8FA0B8]"
+                      ? "text-[#76829B]"
+                      : "text-[#A5B0C2]"
                   }`}
                 >
                   {day.dayNumber}
@@ -245,7 +242,7 @@ export const OfensivaCard: React.FC<OfensivaCardProps> = ({ className = "" }) =>
                   {day.isStudied ? (
                     <div
                       title="Estudado"
-                      className="flex h-5 w-5 items-center justify-center rounded-full bg-[#F3AA2D] text-[#0B0D14]"
+                      className="flex h-5 w-5 items-center justify-center rounded-full bg-[#F3AA2D] text-[#11151F]"
                     >
                       <Check className="h-3 w-3 stroke-[3]" />
                     </div>
@@ -254,11 +251,11 @@ export const OfensivaCard: React.FC<OfensivaCardProps> = ({ className = "" }) =>
                       Hoje
                     </span>
                   ) : day.isFuture ? (
-                    <span className="h-1.5 w-1.5 rounded-full bg-[#222836]" />
+                    <span className="h-1.5 w-1.5 rounded-full bg-[#384154]" />
                   ) : (
                     <span
                       title="Sem estudo"
-                      className="h-1.5 w-1.5 rounded-full bg-[#2A3550]"
+                      className="h-1.5 w-1.5 rounded-full bg-[#4A556E]"
                     />
                   )}
                 </div>

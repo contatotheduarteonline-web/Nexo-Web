@@ -18,9 +18,9 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({
       id="section-revisoes"
       className="nx-card p-5 sm:p-6"
     >
-      <div className="flex items-center justify-between pb-4 border-b border-[#232A3A]">
+      <div className="flex items-center justify-between pb-4 border-b border-[#384154]">
         <div className="flex items-center gap-2.5">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#2A3040] bg-[#0C0E14] text-[#8FA0B8]">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#384154] bg-[#171B25] text-[#A5B0C2]">
             <RotateCcw className="h-4 w-4" />
           </div>
           <h2 className="font-condensed text-[19px] font-bold text-[#F5F4EF]">
@@ -53,10 +53,7 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({
         {todayReviews.length === 0 ? (
           <div className="nx-deep border-dashed p-7 text-center">
             <p className="text-[14px] font-semibold text-[#F5F4EF]">
-              Todas as revisões estão em dia
-            </p>
-            <p className="text-[12px] text-[#8FA0B8] mt-1">
-              Nenhuma pendência agendada para hoje.
+              Nenhuma revisão pendente
             </p>
           </div>
         ) : (
@@ -73,7 +70,7 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({
                     <p className="font-semibold text-[#F5F4EF] truncate group-hover:text-[#F3AA2D] transition-colors duration-200">
                       {rev.topicName}
                     </p>
-                    <p className="text-[12px] text-[#8FA0B8] truncate mt-0.5">
+                    <p className="text-[12px] text-[#A5B0C2] truncate mt-0.5">
                       {rev.disciplineName} &bull; {rev.stage ? `Etapa ${rev.stage}` : "Revisão"}
                     </p>
                   </div>

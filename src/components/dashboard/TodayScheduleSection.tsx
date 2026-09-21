@@ -25,9 +25,9 @@ export const TodayScheduleSection: React.FC<TodayScheduleSectionProps> = ({
       className="nx-card p-5 sm:p-6"
     >
       {/* Cabeçalho Limpo sem textos explicativos redundantes */}
-      <div className="flex items-center justify-between pb-4 border-b border-[#232A3A]">
+      <div className="flex items-center justify-between pb-4 border-b border-[#384154]">
         <div className="flex items-center gap-2.5">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#2A3040] bg-[#0C0E14] text-[#8FA0B8]">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#384154] bg-[#171B25] text-[#A5B0C2]">
             <BookOpen className="h-4 w-4" />
           </div>
           <h2 className="font-condensed text-[19px] font-bold text-[#F5F4EF]">
@@ -80,8 +80,8 @@ export const TodayScheduleSection: React.FC<TodayScheduleSectionProps> = ({
                     <span className="inline-flex items-center rounded-md border border-[#F3AA2D]/25 bg-[#F3AA2D]/10 px-2 py-0.5 text-[11px] font-semibold text-[#F3AA2D]">
                       {idx === 0 ? "Próximo" : `Bloco ${idx + 1}`}
                     </span>
-                    <span className="inline-flex items-center gap-1 text-[12px] font-medium text-[#8FA0B8]">
-                      <Clock className="h-3 w-3 text-[#8FA0B8]" />
+                    <span className="inline-flex items-center gap-1 text-[12px] font-medium text-[#A5B0C2]">
+                      <Clock className="h-3 w-3 text-[#A5B0C2]" />
                       <span>{block.targetMinutes} min</span>
                     </span>
                   </div>
@@ -97,7 +97,7 @@ export const TodayScheduleSection: React.FC<TodayScheduleSectionProps> = ({
                   onClick={() => onStartStudy(block.disciplineId, block.targetMinutes)}
                   className="nx-btn-primary inline-flex shrink-0 items-center justify-center gap-1.5 px-4 py-2 text-[13px] cursor-pointer"
                 >
-                  <Play className="h-3.5 w-3.5 fill-[#0B0D14]" />
+                  <Play className="h-3.5 w-3.5 fill-[#11151F]" />
                   <span>Estudar agora</span>
                 </button>
               </div>

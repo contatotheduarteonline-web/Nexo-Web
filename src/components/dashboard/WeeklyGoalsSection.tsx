@@ -47,9 +47,9 @@ export const WeeklyGoalsSection: React.FC<WeeklyGoalsSectionProps> = ({
       id="section-meta-semana"
       className="nx-card p-5 sm:p-6"
     >
-      <div className="flex items-center justify-between pb-4 border-b border-[#232A3A]">
+      <div className="flex items-center justify-between pb-4 border-b border-[#384154]">
         <div className="flex items-center gap-2.5">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#2A3040] bg-[#0C0E14] text-[#8FA0B8]">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#384154] bg-[#171B25] text-[#A5B0C2]">
             <Target className="h-4 w-4" />
           </div>
           <h2 className="font-condensed text-[19px] font-bold text-[#F5F4EF]">
@@ -57,12 +57,12 @@ export const WeeklyGoalsSection: React.FC<WeeklyGoalsSectionProps> = ({
           </h2>
         </div>
 
-        <div className="nx-deep flex items-center gap-1 text-[12px] text-[#8FA0B8] px-2.5 py-1 rounded-lg">
+        <div className="nx-deep flex items-center gap-1 text-[12px] text-[#A5B0C2] px-2.5 py-1 rounded-lg">
           <button
             type="button"
             id="btn-semana-anterior"
             onClick={onPrevWeek}
-            className="rounded p-0.5 hover:bg-[#1D212B] hover:text-[#F5F4EF] cursor-pointer transition-colors duration-200"
+            className="rounded p-0.5 hover:bg-[#2D3442] hover:text-[#F5F4EF] cursor-pointer transition-colors duration-200"
             title="Semana anterior"
           >
             <ChevronLeft className="h-3.5 w-3.5" />
@@ -75,7 +75,7 @@ export const WeeklyGoalsSection: React.FC<WeeklyGoalsSectionProps> = ({
             id="btn-proxima-semana"
             onClick={onNextWeek}
             disabled={weekOffset >= 0}
-            className="rounded p-0.5 hover:bg-[#1D212B] hover:text-[#F5F4EF] disabled:opacity-30 cursor-pointer transition-colors duration-200"
+            className="rounded p-0.5 hover:bg-[#2D3442] hover:text-[#F5F4EF] disabled:opacity-30 cursor-pointer transition-colors duration-200"
             title="Próxima semana"
           >
             <ChevronRight className="h-3.5 w-3.5" />
@@ -89,7 +89,7 @@ export const WeeklyGoalsSection: React.FC<WeeklyGoalsSectionProps> = ({
           {/* Meta 1: Tempo de Estudo */}
           <div className="space-y-1.5">
             <div className="flex items-center justify-between text-[13px]">
-              <span className="text-[#8FA0B8] font-medium">Horas de estudo</span>
+              <span className="text-[#A5B0C2] font-medium">Horas de estudo</span>
               <div className="flex items-baseline gap-1.5">
                 <span className="num-condensed text-[15px] font-bold text-[#F5F4EF]">
                   {weeklyChartData.totalWeekHoursFormatted} / {weeklyGoalHours}h
@@ -99,7 +99,7 @@ export const WeeklyGoalsSection: React.FC<WeeklyGoalsSectionProps> = ({
                 </span>
               </div>
             </div>
-            <div className="h-2 w-full overflow-hidden rounded-full border border-[#222836] bg-[#0C0E14]">
+            <div className="h-2 w-full overflow-hidden rounded-full border border-[#384154] bg-[#171B25]">
               <div
                 className="h-full rounded-full bg-[#F3AA2D] transition-all duration-500"
                 style={{ width: `${timeProgressPercent}%` }}
@@ -110,17 +110,17 @@ export const WeeklyGoalsSection: React.FC<WeeklyGoalsSectionProps> = ({
           {/* Meta 2: Questões Resolvidas */}
           <div className="space-y-1.5">
             <div className="flex items-center justify-between text-[13px]">
-              <span className="text-[#8FA0B8] font-medium">Questões resolvidas</span>
+              <span className="text-[#A5B0C2] font-medium">Questões resolvidas</span>
               <div className="flex items-baseline gap-1.5">
                 <span className="num-condensed text-[15px] font-bold text-[#F5F4EF]">
                   {weeklyChartData.totalWeekQuestions} / {weeklyGoalQuestions}
                 </span>
-                <span className="num-condensed text-[12px] font-bold text-[#8FA0B8]">
+                <span className="num-condensed text-[12px] font-bold text-[#A5B0C2]">
                   ({questionsProgressPercent}%)
                 </span>
               </div>
             </div>
-            <div className="h-2 w-full overflow-hidden rounded-full border border-[#222836] bg-[#0C0E14]">
+            <div className="h-2 w-full overflow-hidden rounded-full border border-[#384154] bg-[#171B25]">
               <div
                 className="h-full rounded-full bg-[#7C8BA5] transition-all duration-500"
                 style={{ width: `${questionsProgressPercent}%` }}
@@ -131,7 +131,7 @@ export const WeeklyGoalsSection: React.FC<WeeklyGoalsSectionProps> = ({
 
         {/* Gráfico de Barras dos 7 Dias */}
         <div className="nx-deep lg:col-span-6 p-4">
-          <div className="text-[11px] font-semibold uppercase tracking-[0.08em] text-[#8FA0B8] mb-2">
+          <div className="text-[11px] font-semibold uppercase tracking-[0.08em] text-[#A5B0C2] mb-2">
             Distribuição diária
           </div>
           <div className="flex items-end justify-between gap-2 h-20 px-1 pt-2">
@@ -142,7 +142,7 @@ export const WeeklyGoalsSection: React.FC<WeeklyGoalsSectionProps> = ({
                   className={`w-full rounded-t-sm transition-all ${
                     d.hasStudied
                       ? "bg-[#F3AA2D]"
-                      : "bg-[#222836]"
+                      : "bg-[#384154]"
                   }`}
                   style={{ height: `${Math.max(10, d.heightPercent)}%` }}
                 />
@@ -150,7 +150,7 @@ export const WeeklyGoalsSection: React.FC<WeeklyGoalsSectionProps> = ({
                   className={`text-[10px] font-semibold tracking-tight ${
                     d.hasStudied
                       ? "text-[#F3AA2D]"
-                      : "text-[#8FA0B8]"
+                      : "text-[#A5B0C2]"
                   }`}
                 >
                   {d.label}
