@@ -199,7 +199,7 @@ const RootRouter: React.FC = () => {
     if (authView === "cadastro") {
       return <CadastroView onGoToLogin={() => setAuthView("login")} />;
     }
-    return <LoginView onGoToCadastro={() => setAuthView("cadastro")} />;
+    return <LoginView />;
   }
 
   return (

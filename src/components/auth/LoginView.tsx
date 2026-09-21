@@ -21,12 +21,9 @@ import {
 import { useAuth } from "../../context/AuthContext";
 import { Logo } from "../brand/Logo";
 import { ForgotPasswordModal } from "./ForgotPasswordModal";
+import { RegisterForm } from "./RegisterForm";
 
-interface LoginViewProps {
-  onGoToCadastro?: () => void;
-}
-
-export const LoginView: React.FC<LoginViewProps> = ({ onGoToCadastro }) => {
+export const LoginView: React.FC = () => {
   const { loginWithEmail, loginWithGoogle, isLoading } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -36,6 +33,7 @@ export const LoginView: React.FC<LoginViewProps> = ({ onGoToCadastro }) => {
   const [copiedDomain, setCopiedDomain] = useState(false);
   const [isForgotModalOpen, setIsForgotModalOpen] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState<"entrar" | "cadastrar">("entrar");
 
   const isValidEmail = (val: string): boolean => {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val.trim());
@@ -212,10 +210,12 @@ export const LoginView: React.FC<LoginViewProps> = ({ onGoToCadastro }) => {
           {/* Form Header */}
           <div className="mb-6 space-y-2 text-left">
             <h2 className="text-2xl font-black uppercase tracking-tight text-white">
-              Bem-vindo de volta
+              {activeTab === "entrar" ? "Bem-vindo de volta" : "Crie sua conta"}
             </h2>
             <p className="text-sm text-[#a0a0a0] font-normal">
-              Entre para continuar sua preparação.
+              {activeTab === "entrar"
+                ? "Entre para continuar sua preparação."
+                : "Cadastre-se para começar sua preparação."}
             </p>
           </div>
 
@@ -223,20 +223,30 @@ export const LoginView: React.FC<LoginViewProps> = ({ onGoToCadastro }) => {
           <div className="mb-6 flex rounded-xl bg-[#1b1e24] p-1">
             <button
               type="button"
-              className="flex-1 rounded-lg bg-[#fca326] px-4 py-2.5 text-sm font-semibold text-[#0d0f12] transition-colors cursor-default"
+              onClick={() => setActiveTab("entrar")}
+              className={
+                activeTab === "entrar"
+                  ? "flex-1 rounded-lg bg-[#fca326] px-4 py-2.5 text-sm font-semibold text-[#0d0f12] transition-colors cursor-pointer"
+                  : "flex-1 rounded-lg px-4 py-2.5 text-sm font-semibold text-[#a0a0a0] hover:text-white transition-colors cursor-pointer"
+              }
             >
               Entrar
             </button>
             <button
               type="button"
-              onClick={onGoToCadastro}
-              disabled={!onGoToCadastro}
-              className="flex-1 rounded-lg px-4 py-2.5 text-sm font-semibold text-[#a0a0a0] hover:text-white transition-colors cursor-pointer disabled:cursor-default"
+              onClick={() => setActiveTab("cadastrar")}
+              className={
+                activeTab === "cadastrar"
+                  ? "flex-1 rounded-lg bg-[#fca326] px-4 py-2.5 text-sm font-semibold text-[#0d0f12] transition-colors cursor-pointer"
+                  : "flex-1 rounded-lg px-4 py-2.5 text-sm font-semibold text-[#a0a0a0] hover:text-white transition-colors cursor-pointer"
+              }
             >
               Cadastrar
             </button>
           </div>
 
+          {activeTab === "entrar" ? (
+          <>
           {/* Unauthorized Domain Helper Notification */}
           {unauthorizedDomainInfo && (
             <div className="mb-6 rounded-2xl border border-amber-500/30 bg-gradient-to-b from-amber-500/10 to-amber-950/20 p-4 text-xs text-amber-200 shadow-lg space-y-3">
@@ -441,17 +451,19 @@ export const LoginView: React.FC<LoginViewProps> = ({ onGoToCadastro }) => {
           </button>
 
           {/* Registration Link */}
-          {onGoToCadastro && (
-            <p className="mt-8 text-center text-xs text-[#a0a0a0]">
-              Ainda não tem acesso?{" "}
-              <button
-                type="button"
-                onClick={onGoToCadastro}
-                className="font-semibold text-[#fca326] hover:text-[#ffb04d] transition-colors cursor-pointer underline-offset-4 hover:underline"
-              >
-                Criar conta
-              </button>
-            </p>
+          <p className="mt-8 text-center text-xs text-[#a0a0a0]">
+            Ainda não tem acesso?{" "}
+            <button
+              type="button"
+              onClick={() => setActiveTab("cadastrar")}
+              className="font-semibold text-[#fca326] hover:text-[#ffb04d] transition-colors cursor-pointer underline-offset-4 hover:underline"
+            >
+              Criar conta
+            </button>
+          </p>
+          </>
+          ) : (
+            <RegisterForm onGoToLogin={() => setActiveTab("entrar")} />
           )}
         </div>
       </div>
