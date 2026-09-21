@@ -20,33 +20,9 @@ export const NexoWatermark: React.FC = () => {
             patternUnits="userSpaceOnUse"
             patternTransform="rotate(-15)"
           >
-            {/* Logo Geométrico Nexo Estilizado */}
-            <g transform="translate(20, 20)">
-              <rect
-                x="0"
-                y="0"
-                width="28"
-                height="28"
-                rx="6"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                className="text-[#172033] dark:text-white"
-              />
-              <path
-                d="M7 21 L14 7 L21 21"
-                fill="none"
-                stroke="#EA580C"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <circle cx="14" cy="14" r="2.5" fill="#EA580C" />
-            </g>
-
-            {/* Texto "NEXO" */}
+            {/* Wordmark "NEXO." */}
             <text
-              x="58"
+              x="20"
               y="40"
               fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
               fontSize="16"
@@ -56,6 +32,7 @@ export const NexoWatermark: React.FC = () => {
             >
               NEXO
             </text>
+            <circle cx="82" cy="37" r="2.5" fill="#fca326" />
 
             {/* Ícones sutis intercalados: Relógio, Alvo, Livro */}
             <g transform="translate(140, 30)" opacity="0.6">
@@ -65,7 +42,7 @@ export const NexoWatermark: React.FC = () => {
 
             <g transform="translate(80, 85)" opacity="0.6">
               <circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-[#172033] dark:text-white" />
-              <circle cx="8" cy="8" r="3.5" fill="none" stroke="#EA580C" strokeWidth="1.5" />
+              <circle cx="8" cy="8" r="3.5" fill="none" stroke="#fca326" strokeWidth="1.5" />
             </g>
 
             <g transform="translate(170, 95)" opacity="0.5">

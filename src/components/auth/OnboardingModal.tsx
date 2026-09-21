@@ -52,7 +52,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4 backdrop-blur-sm">
       <div className="w-full max-w-2xl rounded-3xl border border-[#292929] bg-[#111622] p-6 sm:p-8 text-white shadow-2xl">
         <div className="flex flex-col items-center text-center">
-          <Logo variant="symbol" size="md" />
+          <Logo variant="compact" size="md" />
 
           <span className="mt-3 text-[10px] font-bold uppercase tracking-[0.3em] text-[#249D84]">
             NEXO &bull; BOAS-VINDAS

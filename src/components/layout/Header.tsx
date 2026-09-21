@@ -86,10 +86,7 @@ export const Header: React.FC<HeaderProps> = () => {
           onClick={() => setActiveTab("dashboard")}
           className="flex cursor-pointer items-center gap-2.5 transition-opacity hover:opacity-85"
         >
-          <Logo variant="symbol" size="xs" />
-          <span className="text-[15px] font-bold tracking-[0.14em] text-[#172033] dark:text-white">
-            NEXO
-          </span>
+          <Logo variant="compact" size="sm" />
         </div>
       </div>
 

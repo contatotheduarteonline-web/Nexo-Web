@@ -111,7 +111,7 @@ export const LoginView: React.FC<LoginViewProps> = ({ onGoToCadastro }) => {
 
           {/* Brand Symbol Watermark (lower left) */}
           <div className="absolute -left-12 -bottom-12 opacity-[0.04] pointer-events-none select-none">
-            <Logo variant="symbol" size="hero" />
+            <Logo variant="compact" size="hero" />
           </div>
 
           {/* Outline Study Icons (Watermark line art) */}
@@ -126,17 +126,7 @@ export const LoginView: React.FC<LoginViewProps> = ({ onGoToCadastro }) => {
 
         {/* Top Logo (Foreground: z-10) */}
         <div className="relative z-10 flex items-center">
-          <div className="inline-flex items-center gap-3">
-            <Logo variant="symbol" size="sm" />
-            <div className="flex flex-col justify-center">
-              <span className="text-base font-black tracking-[0.16em] text-white leading-tight">
-                NEXO.
-              </span>
-              <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#fca326] mt-0.5">
-                Plataforma de Estudos
-              </span>
-            </div>
-          </div>
+          <Logo variant="horizontal" size="sm" themeMode="dark" />
         </div>
 
         {/* Central Presentation (Foreground: z-10) */}
@@ -216,17 +206,7 @@ export const LoginView: React.FC<LoginViewProps> = ({ onGoToCadastro }) => {
         <div className="w-full max-w-[430px] my-auto relative z-10">
           {/* Mobile Brand Header */}
           <div className="lg:hidden flex flex-col items-center text-center mb-8">
-            <div className="inline-flex items-center gap-3">
-              <Logo variant="symbol" size="sm" />
-              <div className="flex flex-col text-left">
-                <span className="text-lg font-black tracking-[0.18em] text-white leading-none">
-                  NEXO.
-                </span>
-                <span className="text-[9px] font-bold uppercase tracking-[0.22em] text-[#fca326] mt-0.5">
-                  Plataforma de Estudos
-                </span>
-              </div>
-            </div>
+            <Logo variant="horizontal" size="sm" themeMode="dark" />
           </div>
 
           {/* Form Header */}
