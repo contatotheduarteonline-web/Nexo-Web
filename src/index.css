@@ -165,3 +165,75 @@
     border-color: var(--border, currentColor);
   }
 }
+
+/* ===== HOME / DASHBOARD — REFINAMENTO VISUAL (ARDÓSIA + ÂMBAR) ===== */
+
+@layer base {
+  /* Tipografia de impacto: Barlow Condensed (títulos e números de destaque) */
+  .font-condensed {
+    font-family: "Barlow Condensed", "Manrope", sans-serif;
+    letter-spacing: 0.01em;
+  }
+  .num-condensed {
+    font-family: "Barlow Condensed", "Manrope", sans-serif;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.02em;
+  }
+
+  /* Superfície de card da Home */
+  .nx-card {
+    background-color: #1d212b;
+    border: 1px solid #2a3040;
+    border-radius: 1rem;
+    box-shadow:
+      0 1px 2px rgba(8, 10, 16, 0.35),
+      0 10px 28px -14px rgba(8, 10, 16, 0.5);
+  }
+  .nx-card-hover {
+    transition:
+      border-color 200ms ease,
+      box-shadow 200ms ease;
+  }
+  .nx-card-hover:hover {
+    border-color: #39445a;
+    box-shadow:
+      0 2px 4px rgba(8, 10, 16, 0.4),
+      0 16px 40px -16px rgba(8, 10, 16, 0.55);
+  }
+
+  /* Área profunda: itens internos, inputs, tracks */
+  .nx-deep {
+    background-color: #0c0e14;
+    border: 1px solid #222836;
+    border-radius: 0.75rem;
+  }
+  .nx-deep-hover {
+    transition:
+      border-color 200ms ease,
+      background-color 200ms ease;
+  }
+  .nx-deep-hover:hover {
+    border-color: #39445a;
+  }
+
+  /* Botão principal âmbar da Home */
+  .nx-btn-primary {
+    background-color: #f3aa2d;
+    color: #0b0d14;
+    border-radius: 0.75rem;
+    font-weight: 700;
+    transition:
+      background-color 200ms ease,
+      transform 150ms ease;
+  }
+  .nx-btn-primary:hover {
+    background-color: #d98f20;
+  }
+  .nx-btn-primary:active {
+    transform: scale(0.98);
+  }
+  .nx-btn-primary:focus-visible {
+    outline: 2px solid #f3aa2d;
+    outline-offset: 2px;
+  }
+}

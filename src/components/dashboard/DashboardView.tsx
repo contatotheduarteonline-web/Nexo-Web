@@ -292,13 +292,24 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy 
   };
 
   return (
-    <div className="space-y-6 pb-20 max-w-7xl mx-auto">
+    <div className="relative space-y-6 pb-20 max-w-7xl mx-auto lg:space-y-7">
+      {/* Iluminação radial âmbar extremamente sutil (composição do fundo) */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 h-72"
+        style={{
+          background:
+            "radial-gradient(circle at 70% 10%, rgba(243,170,45,0.05), transparent 40%)",
+        }}
+      />
+
       {/* ========================================================================= */}
-      {/* CABEÇALHO LIMPO E ELEGANTE                                                */}
+      {/* CABEÇALHO — BARLOW CONDENSED, FORTE E MODERNO                             */}
       {/* ========================================================================= */}
-      <div className="pt-1 pb-1">
-        <h1 className="text-[26px] sm:text-[30px] font-bold text-[#172033] dark:text-white tracking-tight">
-          {greeting}, {userName}
+      <div className="relative pt-1 pb-1">
+        <h1 className="font-condensed text-[32px] sm:text-[36px] font-bold leading-tight tracking-[0.01em]">
+          <span className="text-[#8FA0B8]">{greeting}, </span>
+          <span className="text-[#F5F4EF]">{userName}</span>
         </h1>
       </div>
 

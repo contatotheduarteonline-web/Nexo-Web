@@ -201,7 +201,7 @@ export const FloatingTimerWidget: React.FC = () => {
             animate={{ opacity: 1, x: 0, scale: 1 }}
             exit={{ opacity: 0, x: 10, scale: 0.9 }}
             onClick={() => setIsOpen(true)}
-            className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/90 text-white dark:bg-white/95 dark:text-slate-900 shadow-xl border border-white/20 dark:border-slate-800 backdrop-blur-md cursor-pointer hover:scale-105 transition"
+            className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#1D212B] text-[#F5F4EF] shadow-xl border border-[#2A3040] hover:border-[#39445A] cursor-pointer transition-colors duration-200"
           >
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
@@ -214,41 +214,31 @@ export const FloatingTimerWidget: React.FC = () => {
           </motion.div>
         )}
 
-        {/* Main Floating Trigger Button - Objeto 3D Esculpido e Tátil */}
+        {/* Main Floating Trigger Button — âmbar sólido, elevação sutil */}
         <motion.button
           type="button"
-          whileHover={{ scale: 1.08, y: -2 }}
-          whileTap={{ scale: 0.92, y: 1 }}
+          whileHover={{ scale: 1.05, y: -2 }}
+          whileTap={{ scale: 0.95 }}
           onClick={() => setIsOpen((prev) => !prev)}
           id="floating-clock-btn"
           aria-label="Abrir Cronômetro e Registro de Estudos"
-          className={`relative flex h-16 w-16 items-center justify-center rounded-2xl sm:rounded-3xl cursor-pointer select-none transition-all duration-300 border-2 border-white/50 dark:border-white/20 ${
+          className={`relative flex h-16 w-16 items-center justify-center rounded-2xl sm:rounded-3xl cursor-pointer select-none transition-colors duration-200 border ${
             timer.isRunning
-              ? "bg-gradient-to-b from-[#10B981] via-[#059669] to-[#047857] text-white shadow-[0_12px_32px_-4px_rgba(16,185,129,0.55),inset_0_2px_4px_rgba(255,255,255,0.4),inset_0_-3px_6px_rgba(0,0,0,0.35)] ring-4 ring-emerald-400/30"
-              : timer.elapsedSeconds > 0
-              ? "bg-gradient-to-b from-amber-400 via-amber-500 to-amber-600 text-slate-950 shadow-[0_12px_32px_-4px_rgba(245,158,11,0.55),inset_0_2px_4px_rgba(255,255,255,0.4),inset_0_-3px_6px_rgba(0,0,0,0.35)] ring-4 ring-amber-400/30"
-              : "bg-gradient-to-b from-[#FBBF24] via-[#D97706] to-[#9A3412] text-white shadow-[0_14px_36px_-6px_rgba(194,65,12,0.6),inset_0_2px_4px_rgba(255,255,255,0.45),inset_0_-3px_6px_rgba(0,0,0,0.4)] hover:shadow-[0_18px_40px_-6px_rgba(194,65,12,0.7)]"
+              ? "border-emerald-400/40 bg-[#10B981] text-[#0B0D14] shadow-[0_10px_28px_-8px_rgba(16,185,129,0.5)]"
+              : "border-[#F3AA2D]/40 bg-[#F3AA2D] text-[#0B0D14] shadow-[0_10px_28px_-8px_rgba(243,170,45,0.5)] hover:bg-[#D98F20]"
           }`}
         >
-          {/* Luz de Chanfro Superior 3D */}
-          <div className="absolute inset-x-2 top-1 h-3 rounded-t-xl bg-gradient-to-b from-white/40 to-transparent pointer-events-none" />
-
-          {/* Radar Pulse Ring quando cronômetro está rodando */}
-          {timer.isRunning && (
-            <span className="absolute inset-0 rounded-2xl sm:rounded-3xl bg-emerald-400 animate-ping opacity-30 pointer-events-none" />
-          )}
-
-          {/* Clock Icon 3D com profundidade */}
-          <div className="relative flex items-center justify-center drop-shadow-md">
+          {/* Clock Icon com traço consistente */}
+          <div className="relative flex items-center justify-center">
             {timer.isRunning ? (
-              <Timer className="h-8 w-8 stroke-[2.4] animate-pulse" />
+              <Timer className="h-8 w-8 stroke-[2.2]" />
             ) : (
-              <Clock className="h-8 w-8 stroke-[2.4]" />
+              <Clock className="h-8 w-8 stroke-[2.2]" />
             )}
 
             {/* Micro Badge para Questões ou Tempo em pausa */}
             {timer.elapsedSeconds > 0 && !timer.isRunning && (
-              <span className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-[#0F172A] text-white dark:bg-white dark:text-[#0F172A] text-[9px] font-black shadow-md border border-white/40">
+              <span className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-[#0B0D14] text-[#F3AA2D] text-[9px] font-black shadow-md border border-[#2A3040]">
                 ||
               </span>
             )}
@@ -270,7 +260,7 @@ export const FloatingTimerWidget: React.FC = () => {
               {/* Header with gradient accent */}
               <div className="relative border-b border-slate-100 bg-slate-50/80 px-5 py-3.5 dark:border-[#1A202C] dark:bg-[#0F172A] flex items-center justify-between">
                 <div className="flex items-center gap-2.5">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-tr from-[#F59E0B] to-[#FBBF24] text-white shadow-xs">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#F3AA2D] text-[#0B0D14] shadow-xs">
                     <Clock className="h-5 w-5" />
                   </div>
                   <div>
@@ -314,7 +304,7 @@ export const FloatingTimerWidget: React.FC = () => {
                   onClick={() => setActiveTabMode("LIVE_TIMER")}
                   className={`flex-1 pb-2.5 text-xs font-bold transition-all relative cursor-pointer ${
                     activeTabMode === "LIVE_TIMER"
-                      ? "text-[#F59E0B] dark:text-[#FBBF24]"
+                      ? "text-[#F3AA2D] dark:text-[#F3AA2D]"
                       : "text-slate-500 hover:text-slate-800 dark:text-slate-400"
                   }`}
                 >
@@ -328,7 +318,7 @@ export const FloatingTimerWidget: React.FC = () => {
                   {activeTabMode === "LIVE_TIMER" && (
                     <motion.div
                       layoutId="floating-timer-tab"
-                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#F59E0B]"
+                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#F3AA2D]"
                     />
                   )}
                 </button>
@@ -338,7 +328,7 @@ export const FloatingTimerWidget: React.FC = () => {
                   onClick={() => setActiveTabMode("MANUAL_LOG")}
                   className={`flex-1 pb-2.5 text-xs font-bold transition-all relative cursor-pointer ${
                     activeTabMode === "MANUAL_LOG"
-                      ? "text-[#F59E0B] dark:text-[#FBBF24]"
+                      ? "text-[#F3AA2D] dark:text-[#F3AA2D]"
                       : "text-slate-500 hover:text-slate-800 dark:text-slate-400"
                   }`}
                 >
@@ -349,7 +339,7 @@ export const FloatingTimerWidget: React.FC = () => {
                   {activeTabMode === "MANUAL_LOG" && (
                     <motion.div
                       layoutId="floating-timer-tab"
-                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#F59E0B]"
+                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#F3AA2D]"
                     />
                   )}
                 </button>
@@ -367,22 +357,22 @@ export const FloatingTimerWidget: React.FC = () => {
                         onClick={() => setTimerConfig({ mode: "stopwatch" })}
                         className={`px-3 py-1 text-[11px] font-bold rounded-lg transition cursor-pointer ${
                           timer.mode === "stopwatch"
-                            ? "bg-[#F59E0B] text-white shadow-2xs"
+                            ? "bg-[#F3AA2D] text-[#0B0D14] shadow-2xs"
                             : "text-slate-500 hover:text-slate-800 dark:text-slate-400"
                         }`}
                       >
-                        ⏱️ Contínuo
+                        Contínuo
                       </button>
                       <button
                         type="button"
                         onClick={() => setTimerConfig({ mode: "pomodoro" })}
                         className={`px-3 py-1 text-[11px] font-bold rounded-lg transition cursor-pointer ${
                           timer.mode === "pomodoro"
-                            ? "bg-[#F59E0B] text-white shadow-2xs"
+                            ? "bg-[#F3AA2D] text-[#0B0D14] shadow-2xs"
                             : "text-slate-500 hover:text-slate-800 dark:text-slate-400"
                         }`}
                       >
-                        🍅 Pomodoro (25m)
+                        Pomodoro (25m)
                       </button>
                     </div>
 
@@ -392,7 +382,7 @@ export const FloatingTimerWidget: React.FC = () => {
                     </div>
 
                     <div className="flex items-center gap-2 mt-1">
-                      <span className="text-[11px] font-bold text-[#F59E0B] dark:text-[#FBBF24] bg-amber-500/15 px-2.5 py-0.5 rounded-full">
+                      <span className="text-[11px] font-bold text-[#F3AA2D] dark:text-[#F3AA2D] bg-amber-500/15 px-2.5 py-0.5 rounded-full">
                         {timer.modality || "Teoria"}
                       </span>
                       {timer.questionsDone > 0 && (
@@ -428,7 +418,7 @@ export const FloatingTimerWidget: React.FC = () => {
                       <button
                         type="button"
                         onClick={startTimer}
-                        className="flex flex-1 items-center justify-center gap-2 h-12 rounded-2xl bg-gradient-to-r from-[#F59E0B] to-[#FBBF24] hover:from-[#D97706] hover:to-[#F59E0B] text-white font-black text-sm shadow-md shadow-amber-500/20 active:scale-95 transition cursor-pointer"
+                        className="flex flex-1 items-center justify-center gap-2 h-12 rounded-2xl bg-[#F3AA2D] hover:bg-[#D98F20] text-[#0B0D14] font-black text-sm shadow-md shadow-amber-500/20 active:scale-95 transition cursor-pointer"
                       >
                         <Play className="h-5 w-5 fill-current" />
                         {timer.elapsedSeconds > 0 ? "Retomar Estudo" : "Iniciar Cronômetro"}
@@ -455,7 +445,7 @@ export const FloatingTimerWidget: React.FC = () => {
                             topicName: firstTopic?.name || "Geral",
                           });
                         }}
-                        className="w-full rounded-xl border border-slate-200 bg-slate-50 p-2 text-xs font-semibold text-slate-900 focus:ring-1 focus:ring-[#F59E0B] focus:border-[#F59E0B] dark:border-slate-800 dark:bg-[#161D29] dark:text-white"
+                        className="w-full rounded-xl border border-slate-200 bg-slate-50 p-2 text-xs font-semibold text-slate-900 focus:ring-1 focus:ring-[#F3AA2D] focus:border-[#F3AA2D] dark:border-slate-800 dark:bg-[#161D29] dark:text-white"
                       >
                         {activeEdital?.disciplines.map((d) => (
                           <option key={d.id} value={d.id}>
@@ -479,7 +469,7 @@ export const FloatingTimerWidget: React.FC = () => {
                             topicName: t?.name || "Estudo Geral",
                           });
                         }}
-                        className="w-full rounded-xl border border-slate-200 bg-slate-50 p-2 text-xs font-semibold text-slate-900 focus:ring-1 focus:ring-[#F59E0B] focus:border-[#F59E0B] dark:border-slate-800 dark:bg-[#161D29] dark:text-white truncate"
+                        className="w-full rounded-xl border border-slate-200 bg-slate-50 p-2 text-xs font-semibold text-slate-900 focus:ring-1 focus:ring-[#F3AA2D] focus:border-[#F3AA2D] dark:border-slate-800 dark:bg-[#161D29] dark:text-white truncate"
                       >
                         {disciplineTopics.length === 0 ? (
                           <option value="">Sem tópicos específicos</option>
@@ -507,7 +497,7 @@ export const FloatingTimerWidget: React.FC = () => {
                           onClick={() => setTimerConfig({ modality: m })}
                           className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition cursor-pointer ${
                             timer.modality === m
-                              ? "bg-[#F59E0B] text-white shadow-2xs"
+                              ? "bg-[#F3AA2D] text-[#0B0D14] shadow-2xs"
                               : "bg-slate-100 dark:bg-[#161D29] text-slate-600 dark:text-slate-400 hover:bg-slate-200"
                           }`}
                         >
@@ -567,7 +557,7 @@ export const FloatingTimerWidget: React.FC = () => {
                     type="button"
                     onClick={handleFinishLiveSession}
                     disabled={timer.elapsedSeconds < 10 && (timer.questionsDone || 0) === 0}
-                    className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl text-xs font-black text-white bg-gradient-to-r from-[#F59E0B] to-[#FBBF24] hover:from-[#D97706] hover:to-[#F59E0B] disabled:opacity-40 transition shadow-md shadow-amber-500/20 cursor-pointer"
+                    className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl text-xs font-black text-[#0B0D14] bg-[#F3AA2D] hover:bg-[#D98F20] disabled:opacity-40 transition shadow-md shadow-amber-500/20 cursor-pointer"
                   >
                     <CheckCircle2 className="h-4 w-4" />
                     Salvar e Concluir Sessão
@@ -592,7 +582,7 @@ export const FloatingTimerWidget: React.FC = () => {
                           const firstTopic = activeEdital?.topics.find((t) => t.disciplineId === discId);
                           setManualTopicId(firstTopic?.id || "");
                         }}
-                        className="w-full rounded-xl border border-slate-200 bg-slate-50 p-2 text-xs font-semibold text-slate-900 focus:ring-1 focus:ring-[#F59E0B] focus:border-[#F59E0B] dark:border-slate-800 dark:bg-[#161D29] dark:text-white"
+                        className="w-full rounded-xl border border-slate-200 bg-slate-50 p-2 text-xs font-semibold text-slate-900 focus:ring-1 focus:ring-[#F3AA2D] focus:border-[#F3AA2D] dark:border-slate-800 dark:bg-[#161D29] dark:text-white"
                         required
                       >
                         {activeEdital?.disciplines.map((d) => (
@@ -610,7 +600,7 @@ export const FloatingTimerWidget: React.FC = () => {
                       <select
                         value={manualTopicId}
                         onChange={(e) => setManualTopicId(e.target.value)}
-                        className="w-full rounded-xl border border-slate-200 bg-slate-50 p-2 text-xs font-semibold text-slate-900 focus:ring-1 focus:ring-[#F59E0B] focus:border-[#F59E0B] dark:border-slate-800 dark:bg-[#161D29] dark:text-white truncate"
+                        className="w-full rounded-xl border border-slate-200 bg-slate-50 p-2 text-xs font-semibold text-slate-900 focus:ring-1 focus:ring-[#F3AA2D] focus:border-[#F3AA2D] dark:border-slate-800 dark:bg-[#161D29] dark:text-white truncate"
                       >
                         {manualTopics.length === 0 ? (
                           <option value="">Sem tópicos específicos</option>
@@ -635,7 +625,7 @@ export const FloatingTimerWidget: React.FC = () => {
                         type="date"
                         value={manualDate}
                         onChange={(e) => setManualDate(e.target.value)}
-                        className="w-full rounded-xl border border-slate-200 bg-slate-50 p-2 text-xs font-semibold text-slate-900 focus:ring-1 focus:ring-[#F59E0B] focus:border-[#F59E0B] dark:border-slate-800 dark:bg-[#161D29] dark:text-white"
+                        className="w-full rounded-xl border border-slate-200 bg-slate-50 p-2 text-xs font-semibold text-slate-900 focus:ring-1 focus:ring-[#F3AA2D] focus:border-[#F3AA2D] dark:border-slate-800 dark:bg-[#161D29] dark:text-white"
                       />
                     </div>
 
@@ -649,7 +639,7 @@ export const FloatingTimerWidget: React.FC = () => {
                         max="600"
                         value={manualDurationMinutes}
                         onChange={(e) => setManualDurationMinutes(Number(e.target.value) || 0)}
-                        className="w-full rounded-xl border border-slate-200 bg-slate-50 p-2 text-xs font-semibold text-slate-900 focus:ring-1 focus:ring-[#F59E0B] focus:border-[#F59E0B] dark:border-slate-800 dark:bg-[#161D29] dark:text-white"
+                        className="w-full rounded-xl border border-slate-200 bg-slate-50 p-2 text-xs font-semibold text-slate-900 focus:ring-1 focus:ring-[#F3AA2D] focus:border-[#F3AA2D] dark:border-slate-800 dark:bg-[#161D29] dark:text-white"
                       />
                     </div>
 
@@ -660,7 +650,7 @@ export const FloatingTimerWidget: React.FC = () => {
                       <select
                         value={manualModality}
                         onChange={(e) => setManualModality(e.target.value as StudyModality)}
-                        className="w-full rounded-xl border border-slate-200 bg-slate-50 p-2 text-xs font-semibold text-slate-900 focus:ring-1 focus:ring-[#F59E0B] focus:border-[#F59E0B] dark:border-slate-800 dark:bg-[#161D29] dark:text-white"
+                        className="w-full rounded-xl border border-slate-200 bg-slate-50 p-2 text-xs font-semibold text-slate-900 focus:ring-1 focus:ring-[#F3AA2D] focus:border-[#F3AA2D] dark:border-slate-800 dark:bg-[#161D29] dark:text-white"
                       >
                         {modalities.map((m) => (
                           <option key={m} value={m}>
@@ -724,7 +714,7 @@ export const FloatingTimerWidget: React.FC = () => {
                   {/* Submit Manual Log Button */}
                   <button
                     type="submit"
-                    className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl text-xs font-black text-white bg-gradient-to-r from-[#F59E0B] to-[#FBBF24] hover:from-[#D97706] hover:to-[#F59E0B] transition shadow-md shadow-amber-500/20 mt-2 cursor-pointer"
+                    className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl text-xs font-black text-[#0B0D14] bg-[#F3AA2D] hover:bg-[#D98F20] transition shadow-md shadow-amber-500/20 mt-2 cursor-pointer"
                   >
                     <CheckCircle2 className="h-4 w-4" />
                     Registrar Estudo Manual

@@ -40,31 +40,31 @@ export const StatCardsRow: React.FC<StatCardsRowProps> = ({
       : "—";
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
       {/* 1. Tempo de estudo */}
       <div
         id="card-tempo-estudo"
-        className="rounded-2xl border border-[#E5E7EB] bg-white p-5 shadow-[0_1px_3px_rgba(0,0,0,0.03),0_4px_12px_rgba(0,0,0,0.015)] dark:border-[#1E293B] dark:bg-[#121622] flex flex-col justify-between transition-all duration-200 hover:border-[#D1D5DB] dark:hover:border-[#2A3447]"
+        className="nx-card nx-card-hover p-5 flex flex-col justify-between"
       >
         <div className="flex items-center justify-between">
-          <span className="text-[13px] font-semibold text-[#667085] dark:text-[#94A3B8]">
+          <span className="text-[12px] font-semibold text-[#8FA0B8]">
             Tempo de estudo
           </span>
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-50 text-[#F59E0B] dark:bg-amber-950/40 dark:text-amber-400">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#F3AA2D]/20 bg-[#F3AA2D]/10 text-[#F3AA2D]">
             <Clock className="h-4 w-4" />
           </div>
         </div>
 
-        <div className="mt-3">
-          <span className="text-[26px] font-bold text-[#172033] dark:text-white font-mono tracking-tight">
+        <div className="mt-4">
+          <span className="num-condensed block text-[32px] font-bold leading-none text-[#F5F4EF]">
             {timeFormatted}
           </span>
         </div>
 
-        <div className="mt-3.5 pt-3 border-t border-[#F0F2F5] dark:border-[#1C2333] flex items-center gap-1.5 text-[12px] text-[#667085] dark:text-[#94A3B8]">
+        <div className="mt-4 pt-3 border-t border-[#232A3A] flex items-center gap-1.5 text-[12px] text-[#8FA0B8]">
           <span
-            className={`h-2 w-2 rounded-full shrink-0 ${
-              todaySessionsCount > 0 ? "bg-[#10B981]" : "bg-[#CBD5E1] dark:bg-[#334155]"
+            className={`h-2 w-2 rounded-full shrink-0 transition-colors ${
+              todaySessionsCount > 0 ? "bg-[#F3AA2D]" : "bg-[#33415A]"
             }`}
           />
           <span className="truncate">
@@ -80,30 +80,30 @@ export const StatCardsRow: React.FC<StatCardsRowProps> = ({
       {/* 2. Questões */}
       <div
         id="card-questoes"
-        className="rounded-2xl border border-[#E5E7EB] bg-white p-5 shadow-[0_1px_3px_rgba(0,0,0,0.03),0_4px_12px_rgba(0,0,0,0.015)] dark:border-[#1E293B] dark:bg-[#121622] flex flex-col justify-between transition-all duration-200 hover:border-[#D1D5DB] dark:hover:border-[#2A3447]"
+        className="nx-card nx-card-hover p-5 flex flex-col justify-between"
       >
         <div className="flex items-center justify-between">
-          <span className="text-[13px] font-semibold text-[#667085] dark:text-[#94A3B8]">
+          <span className="text-[12px] font-semibold text-[#8FA0B8]">
             Questões
           </span>
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-50 text-[#2563EB] dark:bg-blue-950/40 dark:text-blue-400">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#F3AA2D]/20 bg-[#F3AA2D]/10 text-[#F3AA2D]">
             <CheckSquare className="h-4 w-4" />
           </div>
         </div>
 
-        <div className="mt-3 flex items-baseline gap-1.5">
-          <span className="text-[26px] font-bold text-[#172033] dark:text-white font-mono tracking-tight">
+        <div className="mt-4 flex items-baseline gap-1.5">
+          <span className="num-condensed block text-[32px] font-bold leading-none text-[#F5F4EF]">
             {todayQuestionsDone}
           </span>
-          <span className="text-[13px] font-medium text-[#667085] dark:text-[#94A3B8]">
+          <span className="text-[13px] font-medium text-[#8FA0B8]">
             resolvidas
           </span>
         </div>
 
-        <div className="mt-3.5 pt-3 border-t border-[#F0F2F5] dark:border-[#1C2333] flex items-center gap-1.5 text-[12px] text-[#667085] dark:text-[#94A3B8]">
+        <div className="mt-4 pt-3 border-t border-[#232A3A] flex items-center gap-1.5 text-[12px] text-[#8FA0B8]">
           <span
-            className={`h-2 w-2 rounded-full shrink-0 ${
-              todayQuestionsCorrect > 0 ? "bg-[#10B981]" : "bg-[#CBD5E1] dark:bg-[#334155]"
+            className={`h-2 w-2 rounded-full shrink-0 transition-colors ${
+              todayQuestionsCorrect > 0 ? "bg-[#F3AA2D]" : "bg-[#33415A]"
             }`}
           />
           <span className="truncate">
@@ -119,60 +119,60 @@ export const StatCardsRow: React.FC<StatCardsRowProps> = ({
       {/* 3. Precisão */}
       <div
         id="card-precisao"
-        className="rounded-2xl border border-[#E5E7EB] bg-white p-5 shadow-[0_1px_3px_rgba(0,0,0,0.03),0_4px_12px_rgba(0,0,0,0.015)] dark:border-[#1E293B] dark:bg-[#121622] flex flex-col justify-between transition-all duration-200 hover:border-[#D1D5DB] dark:hover:border-[#2A3447]"
+        className="nx-card nx-card-hover p-5 flex flex-col justify-between"
       >
         <div className="flex items-center justify-between">
-          <span className="text-[13px] font-semibold text-[#667085] dark:text-[#94A3B8]">
+          <span className="text-[12px] font-semibold text-[#8FA0B8]">
             Precisão
           </span>
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-50 text-[#10B981] dark:bg-emerald-950/40 dark:text-emerald-400">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#F3AA2D]/20 bg-[#F3AA2D]/10 text-[#F3AA2D]">
             <Target className="h-4 w-4" />
           </div>
         </div>
 
-        <div className="mt-3">
-          <span className="text-[26px] font-bold text-[#172033] dark:text-white font-mono tracking-tight">
+        <div className="mt-4">
+          <span className="num-condensed block text-[32px] font-bold leading-none text-[#F5F4EF]">
             {displayAccuracy}
           </span>
         </div>
 
-        <div className="mt-3.5 pt-3 border-t border-[#F0F2F5] dark:border-[#1C2333] flex items-center gap-1.5 text-[12px] text-[#667085] dark:text-[#94A3B8]">
-          <span className="h-2 w-2 rounded-full bg-[#10B981] shrink-0" />
+        <div className="mt-4 pt-3 border-t border-[#232A3A] flex items-center gap-1.5 text-[12px] text-[#8FA0B8]">
+          <span className="h-2 w-2 rounded-full bg-[#33415A] shrink-0" />
           <span className="truncate">
             {todayQuestionsDone > 0 ? "Média de hoje" : "Média geral"}
           </span>
         </div>
       </div>
 
-      {/* 4. Progresso no edital */}
+      {/* 4. Progresso no edital — indicador-chave em âmbar */}
       <div
         id="card-progresso-edital"
-        className="rounded-2xl border border-[#E5E7EB] bg-white p-5 shadow-[0_1px_3px_rgba(0,0,0,0.03),0_4px_12px_rgba(0,0,0,0.015)] dark:border-[#1E293B] dark:bg-[#121622] flex flex-col justify-between transition-all duration-200 hover:border-[#D1D5DB] dark:hover:border-[#2A3447]"
+        className="nx-card nx-card-hover p-5 flex flex-col justify-between"
       >
         <div className="flex items-center justify-between">
-          <span className="text-[13px] font-semibold text-[#667085] dark:text-[#94A3B8]">
+          <span className="text-[12px] font-semibold text-[#8FA0B8]">
             Progresso no edital
           </span>
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-50 text-[#F59E0B] dark:bg-amber-950/40 dark:text-amber-400">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#F3AA2D]/20 bg-[#F3AA2D]/10 text-[#F3AA2D]">
             <TrendingUp className="h-4 w-4" />
           </div>
         </div>
 
-        <div className="mt-3">
+        <div className="mt-4">
           <div className="flex items-baseline justify-between">
-            <span className="text-[26px] font-bold text-[#D97706] font-mono tracking-tight">
+            <span className="num-condensed block text-[32px] font-bold leading-none text-[#F3AA2D]">
               {globalProgressPercentage}%
             </span>
           </div>
-          <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-[#E5E7EB] dark:bg-[#1E293B]">
+          <div className="mt-3 h-2 w-full overflow-hidden rounded-full border border-[#222836] bg-[#0C0E14]">
             <div
-              className="h-full bg-gradient-to-r from-[#F59E0B] to-[#D97706] rounded-full transition-all duration-500"
+              className="h-full rounded-full bg-[#F3AA2D] transition-all duration-500"
               style={{ width: `${Math.min(100, Math.max(0, globalProgressPercentage))}%` }}
             />
           </div>
         </div>
 
-        <div className="mt-3.5 pt-3 border-t border-[#F0F2F5] dark:border-[#1C2333] flex items-center justify-between text-[12px] text-[#667085] dark:text-[#94A3B8]">
+        <div className="mt-4 pt-3 border-t border-[#232A3A] flex items-center justify-between text-[12px] text-[#8FA0B8]">
           <span className="truncate">
             {completedTopicsCount} de {totalTopicsCount} tópicos
           </span>
@@ -180,7 +180,7 @@ export const StatCardsRow: React.FC<StatCardsRowProps> = ({
             type="button"
             id="btn-link-edital"
             onClick={onNavigateToEdital}
-            className="text-[#F59E0B] hover:underline font-semibold shrink-0 cursor-pointer transition-colors"
+            className="text-[#F3AA2D] hover:text-[#D98F20] hover:underline font-semibold shrink-0 cursor-pointer transition-colors duration-200"
           >
             Ver edital &rarr;
           </button>

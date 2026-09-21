@@ -14,15 +14,15 @@ export const RecentActivitiesSection: React.FC<RecentActivitiesSectionProps> = (
   return (
     <section
       id="section-ultimas-atividades"
-      className="rounded-2xl border border-[#E5E7EB] bg-white p-5 sm:p-6 shadow-[0_1px_3px_rgba(0,0,0,0.03),0_4px_12px_rgba(0,0,0,0.015)] dark:border-[#1E293B] dark:bg-[#121622] flex flex-col justify-between"
+      className="nx-card p-5 sm:p-6 flex flex-col justify-between"
     >
       <div>
-        <div className="flex items-center justify-between pb-3.5 border-b border-[#F0F2F5] dark:border-[#1C2333]">
+        <div className="flex items-center justify-between pb-3.5 border-b border-[#232A3A]">
           <div className="flex items-center gap-2.5">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-50 text-[#F59E0B] dark:bg-amber-950/40 dark:text-amber-400">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#2A3040] bg-[#0C0E14] text-[#8FA0B8]">
               <History className="h-4 w-4" />
             </div>
-            <h3 className="text-[16px] font-semibold text-[#172033] dark:text-white tracking-tight">
+            <h3 className="font-condensed text-[19px] font-bold text-[#F5F4EF]">
               Últimas atividades
             </h3>
           </div>
@@ -31,7 +31,7 @@ export const RecentActivitiesSection: React.FC<RecentActivitiesSectionProps> = (
             type="button"
             id="btn-historico-completo"
             onClick={onNavigateToHistory}
-            className="text-[13px] font-semibold text-[#F59E0B] hover:text-[#D97706] hover:underline flex items-center gap-1 cursor-pointer transition-colors"
+            className="text-[13px] font-semibold text-[#F3AA2D] hover:text-[#D98F20] hover:underline flex items-center gap-1 cursor-pointer transition-colors duration-200"
           >
             <span>Histórico</span>
             <ArrowUpRight className="h-3.5 w-3.5" />
@@ -41,7 +41,7 @@ export const RecentActivitiesSection: React.FC<RecentActivitiesSectionProps> = (
         <div className="mt-3.5">
           {activities.length === 0 ? (
             <div className="py-7 text-center">
-              <p className="text-[13px] text-[#667085] dark:text-[#94A3B8]">
+              <p className="text-[13px] text-[#8FA0B8]">
                 Nenhuma atividade registrada ainda.
               </p>
             </div>
@@ -51,22 +51,22 @@ export const RecentActivitiesSection: React.FC<RecentActivitiesSectionProps> = (
                 <div
                   key={sess.id}
                   id={`activity-item-${sess.id}`}
-                  className="rounded-xl border border-[#E5E7EB] bg-[#F8F9FB] p-3 text-[12px] transition hover:border-[#D1D5DB] dark:border-[#1E293B] dark:bg-[#161D2B]"
+                  className="nx-deep nx-deep-hover p-3 text-[12px]"
                 >
                   <div className="flex items-center justify-between">
-                    <span className="font-semibold text-[#172033] dark:text-white truncate max-w-[220px]">
+                    <span className="font-semibold text-[#F5F4EF] truncate max-w-[220px]">
                       {sess.topicName || sess.disciplineName}
                     </span>
-                    <span className="font-mono text-[11px] font-semibold text-[#F59E0B] bg-amber-50 px-2 py-0.5 rounded-md dark:bg-amber-950/40">
+                    <span className="num-condensed text-[11px] font-bold text-[#F3AA2D] border border-[#F3AA2D]/25 bg-[#F3AA2D]/10 px-2 py-0.5 rounded-md">
                       {sess.durationMinutes} min
                     </span>
                   </div>
-                  <div className="mt-1 flex items-center justify-between text-[11px] text-[#667085] dark:text-[#94A3B8]">
-                    <span className="font-medium text-[#172033]/80 dark:text-white/80">
+                  <div className="mt-1 flex items-center justify-between text-[11px] text-[#8FA0B8]">
+                    <span className="font-medium text-[#F5F4EF]/80">
                       {sess.disciplineName}
                     </span>
                     {sess.questionsDone ? (
-                      <span className="font-medium text-[#172033] dark:text-white">
+                      <span className="font-medium text-[#F5F4EF]">
                         {sess.questionsCorrect}/{sess.questionsDone} acertos
                       </span>
                     ) : (

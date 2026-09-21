@@ -148,7 +148,11 @@ const AuthenticatedApp: React.FC = () => {
         />
 
         {/* Scrollable View Canvas */}
-        <main className="flex-1 overflow-y-auto bg-[#F4F5F7] p-4 md:p-6 lg:p-7 dark:bg-[#0F172A]">
+        <main
+          className={`flex-1 overflow-y-auto bg-[#F4F5F7] p-4 md:p-6 lg:p-7 dark:bg-[#0F172A] ${
+            activeTab === "dashboard" ? "dark:bg-[#0B0D14]" : ""
+          }`}
+        >
           <div className="mx-auto max-w-7xl">{renderActiveView()}</div>
         </main>
       </div>
