@@ -4,55 +4,30 @@
 
 @layer base {
   :root {
-    --background: #E9EAEC;
-    --surface: #FFFFFF;
-    --surface-secondary: #F4F5F7;
+    /* TEMA ÚNICO NEXO — ARDÓSIA + ÂMBAR */
+    --background: #0F172A;          /* ardósia: base principal (fundo, sidebar, navegação) */
+    --surface: #1E293B;              /* ardósia: superfície secundária (cards estruturais) */
+    --surface-secondary: #253349;    /* ardósia: superfícies elevadas */
 
-    --primary: #F97316;
-    --primary-hover: #EA580C;
-    --primary-foreground: #FFFFFF;
+    --primary: #F59E0B;             /* âmbar: destaque principal (botões, links, ativos) */
+    --primary-hover: #D97706;        /* âmbar escuro (hover) */
+    --primary-foreground: #0F172A; /* texto sobre âmbar (contraste) */
 
-    --secondary: #FFF7ED;
+    --secondary: #1C2A40;
 
-    --text-primary: #172033;
-    --text-secondary: #667085;
-
-    --border: #E4E7EC;
-
-    --success: #16A37A;
-    --danger: #DC4B4B;
-    --warning: #F59E0B;
-    --accent-blue: #315B8C;
-
-    --brand-orange: #F97316;
-    --brand-orange-light: #FFF7ED;
-    --brand-orange-dark: #EA580C;
-  }
-
-  .dark {
-    --background: #0C0F17;
-    --surface: #131824;
-    --surface-secondary: #181F2E;
-
-    --primary: #F97316;
-    --primary-hover: #EA580C;
-    --primary-foreground: #FFFFFF;
-
-    --secondary: #1A2232;
-
-    --text-primary: #F1F5F9;
+    --text-primary: #F1F5F9;        /* leitura confortável sobre ardósia */
     --text-secondary: #94A3B8;
 
-    --border: #1E2536;
+    --border: #334155;              /* ardósia: elementos secundários */
 
     --success: #16A37A;
     --danger: #DC4B4B;
-    --warning: #FBBF24;
+    --warning: #FBBF24;             /* âmbar: destaque secundário */
     --accent-blue: #315B8C;
 
-    --brand-orange: #F97316;
-    --brand-orange-light: #2A170A;
-    --brand-orange-dark: #EA580C;
+    --brand-amber: #F59E0B;
+    --brand-amber-light: #FEF3C7;
+    --brand-amber-dark: #D97706;
   }
 
   body {
@@ -114,14 +89,11 @@
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #D1D5DB;
+  background: #334155;
   border-radius: 9999px;
 }
-.dark ::-webkit-scrollbar-thumb {
-  background: #2E2E2E;
-}
 ::-webkit-scrollbar-thumb:hover {
-  background: #9CA3AF;
+  background: #475569;
 }
 
 @layer base {

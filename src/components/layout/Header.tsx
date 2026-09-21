@@ -4,8 +4,6 @@ import { useAuth } from "../../context/AuthContext";
 import {
   Menu,
   Bell,
-  Sun,
-  Moon,
   User,
   Settings,
   LogOut,
@@ -29,8 +27,6 @@ export const Header: React.FC<HeaderProps> = () => {
   const {
     setActiveTab,
     toggleSidebar,
-    theme,
-    toggleTheme,
     pendingReviewsCount,
     pendingReviewsToday,
     reminders,
@@ -70,7 +66,7 @@ export const Header: React.FC<HeaderProps> = () => {
   const totalNotifications = pendingReviewsCount + activeReminders.length;
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b border-[#E4E7EC] bg-white px-4 md:px-6 dark:border-[#1E2536] dark:bg-[#131824] transition-colors">
+    <header className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b border-[#E4E7EC] bg-white px-4 md:px-6 dark:border-[#334155] dark:bg-[#1E293B] transition-colors">
       {/* Lado Esquerdo: Somente Hamburger e Logo NEXO */}
       <div className="flex items-center gap-3">
         <button
@@ -92,21 +88,7 @@ export const Header: React.FC<HeaderProps> = () => {
 
       {/* Lado Direito: Seletor de Tema, Notificações e Perfil do Usuário */}
       <div className="flex items-center gap-2.5">
-        {/* 1. Alternador de Tema (Claro / Escuro) Bespoke */}
-        <button
-          type="button"
-          onClick={toggleTheme}
-          title={`Alternar para tema ${theme === "dark" ? "Claro" : "Escuro"}`}
-          className="group relative flex h-9.5 w-9.5 items-center justify-center rounded-xl border border-[#E4E7EC] bg-[#FAFAFC] text-[#667085] shadow-[0_1px_2px_rgba(0,0,0,0.04)] transition-all duration-200 hover:border-[#D0D5DD] hover:bg-white hover:text-[#172033] active:scale-95 dark:border-[#1E2536] dark:bg-[#151D2C] dark:text-[#94A3B8] dark:hover:border-[#2E384D] dark:hover:bg-[#1A2436] dark:hover:text-white cursor-pointer"
-        >
-          {theme === "dark" ? (
-            <Sun className="h-4.5 w-4.5 text-[#F97316] transition-transform duration-300 group-hover:rotate-45" />
-          ) : (
-            <Moon className="h-4.5 w-4.5 text-[#475467] transition-transform duration-300 group-hover:-rotate-12" />
-          )}
-        </button>
-
-        {/* 2. Notificações Bespoke */}
+        {/* Notificações Bespoke */}
         <div className="relative" ref={notificationsRef}>
           <button
             type="button"
@@ -115,13 +97,13 @@ export const Header: React.FC<HeaderProps> = () => {
               setIsProfileMenuOpen(false);
             }}
             title="Notificações"
-            className="group relative flex h-9.5 w-9.5 items-center justify-center rounded-xl border border-[#E4E7EC] bg-[#FAFAFC] text-[#667085] shadow-[0_1px_2px_rgba(0,0,0,0.04)] transition-all duration-200 hover:border-[#D0D5DD] hover:bg-white hover:text-[#172033] active:scale-95 dark:border-[#1E2536] dark:bg-[#151D2C] dark:text-[#94A3B8] dark:hover:border-[#2E384D] dark:hover:bg-[#1A2436] dark:hover:text-white cursor-pointer"
+            className="group relative flex h-9.5 w-9.5 items-center justify-center rounded-xl border border-[#E4E7EC] bg-[#FAFAFC] text-[#667085] shadow-[0_1px_2px_rgba(0,0,0,0.04)] transition-all duration-200 hover:border-[#D0D5DD] hover:bg-white hover:text-[#172033] active:scale-95 dark:border-[#334155] dark:bg-[#1E293B] dark:text-[#94A3B8] dark:hover:border-[#334155] dark:hover:bg-[#1E293B] dark:hover:text-white cursor-pointer"
           >
             <Bell className="h-4.5 w-4.5 transition-transform duration-200 group-hover:scale-105" />
             {totalNotifications > 0 && (
               <span className="absolute top-1 right-1 flex h-2.5 w-2.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#EA580C] opacity-75" />
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-gradient-to-tr from-[#EA580C] to-[#F97316] ring-2 ring-white dark:ring-[#131824]" />
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#D97706] opacity-75" />
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-gradient-to-tr from-[#D97706] to-[#F59E0B] ring-2 ring-white dark:ring-[#1E293B]" />
               </span>
             )}
           </button>
@@ -130,13 +112,13 @@ export const Header: React.FC<HeaderProps> = () => {
             <div className="absolute right-0 top-full mt-2 w-80 rounded-2xl border border-[#E7EAF0] bg-white p-3 shadow-lg z-50 dark:border-[#1F2636] dark:bg-[#111520]">
               <div className="flex items-center justify-between border-b border-[#E7EAF0] pb-2.5 dark:border-[#1F2636]">
                 <div className="flex items-center gap-2">
-                  <Bell className="h-4 w-4 text-[#F97316]" />
+                  <Bell className="h-4 w-4 text-[#F59E0B]" />
                   <span className="text-xs font-semibold text-[#172033] dark:text-white">
                     Notificações
                   </span>
                 </div>
                 {totalNotifications > 0 && (
-                  <span className="rounded-full bg-orange-50 px-2 py-0.5 text-[10px] font-semibold text-[#F97316] dark:bg-[#F97316]/15">
+                  <span className="rounded-full bg-amber-50 px-2 py-0.5 text-[10px] font-semibold text-[#F59E0B] dark:bg-[#F59E0B]/15">
                     {totalNotifications} pendente{totalNotifications > 1 ? "s" : ""}
                   </span>
                 )}
@@ -149,9 +131,9 @@ export const Header: React.FC<HeaderProps> = () => {
                       setIsNotificationsOpen(false);
                       setActiveTab("revisoes");
                     }}
-                    className="flex cursor-pointer items-start gap-2.5 p-2.5 rounded-lg hover:bg-slate-50 transition-colors dark:hover:bg-[#151D2C]"
+                    className="flex cursor-pointer items-start gap-2.5 p-2.5 rounded-lg hover:bg-slate-50 transition-colors dark:hover:bg-[#1E293B]"
                   >
-                    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-orange-50 text-[#FF6B00] dark:bg-[#FF6B00]/15">
+                    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-amber-50 text-[#F59E0B] dark:bg-[#F59E0B]/15">
                       <Clock className="h-3.5 w-3.5" />
                     </div>
                     <div className="flex-1 text-left">
@@ -173,9 +155,9 @@ export const Header: React.FC<HeaderProps> = () => {
                       setIsNotificationsOpen(false);
                       setActiveTab("lembretes");
                     }}
-                    className="flex cursor-pointer items-start gap-2.5 p-2.5 rounded-lg hover:bg-slate-50 transition-colors dark:hover:bg-[#151D2C]"
+                    className="flex cursor-pointer items-start gap-2.5 p-2.5 rounded-lg hover:bg-slate-50 transition-colors dark:hover:bg-[#1E293B]"
                   >
-                    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-orange-50 text-[#FF6B00] dark:bg-[#FF6B00]/15">
+                    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-amber-50 text-[#F59E0B] dark:bg-[#F59E0B]/15">
                       <Calendar className="h-3.5 w-3.5" />
                     </div>
                     <div className="flex-1 text-left">
@@ -198,14 +180,14 @@ export const Header: React.FC<HeaderProps> = () => {
                 )}
               </div>
 
-              <div className="border-t border-slate-100 pt-2 text-center dark:border-[#1E2536]">
+              <div className="border-t border-slate-100 pt-2 text-center dark:border-[#334155]">
                 <button
                   type="button"
                   onClick={() => {
                     setIsNotificationsOpen(false);
                     setActiveTab("lembretes");
                   }}
-                  className="text-[11px] font-medium text-[#FF6B00] hover:underline cursor-pointer"
+                  className="text-[11px] font-medium text-[#F59E0B] hover:underline cursor-pointer"
                 >
                   Ver Todos os Lembretes &rarr;
                 </button>
@@ -225,7 +207,7 @@ export const Header: React.FC<HeaderProps> = () => {
             title={user?.name || "Perfil"}
             className="flex h-9 items-center gap-2 rounded-lg p-1 text-xs font-medium text-slate-700 transition-colors hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 cursor-pointer"
           >
-            <div className="relative flex h-8.5 w-8.5 items-center justify-center rounded-full p-[1.5px] bg-gradient-to-tr from-[#EA580C] via-[#FDBA74] to-[#C2410C] shadow-xs">
+            <div className="relative flex h-8.5 w-8.5 items-center justify-center rounded-full p-[1.5px] bg-gradient-to-tr from-[#D97706] via-[#FCD34D] to-[#C2410C] shadow-xs">
               <div className="h-full w-full rounded-full overflow-hidden bg-white dark:bg-[#111520] flex items-center justify-center">
                 <img
                   src={
@@ -255,7 +237,7 @@ export const Header: React.FC<HeaderProps> = () => {
                     }}
                     title="Alterar foto de perfil"
                   >
-                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#F97316] text-xs font-bold text-white overflow-hidden">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#F59E0B] text-xs font-bold text-white overflow-hidden">
                       {user?.avatarUrl ? (
                         <img
                           src={user.avatarUrl}
@@ -282,7 +264,7 @@ export const Header: React.FC<HeaderProps> = () => {
                       <span className="inline-flex items-center gap-1 rounded bg-slate-100 px-1.5 py-0.2 text-[9px] font-medium text-slate-700 dark:bg-[#1A2234] dark:text-slate-300">
                         {isAdmin ? (
                           <>
-                            <ShieldCheck className="h-2.5 w-2.5 text-[#F97316]" />
+                            <ShieldCheck className="h-2.5 w-2.5 text-[#F59E0B]" />
                             Administrador
                           </>
                         ) : (
@@ -317,7 +299,7 @@ export const Header: React.FC<HeaderProps> = () => {
                     setIsProfileMenuOpen(false);
                     setIsProfilePictureModalOpen(true);
                   }}
-                  className="flex w-full items-center gap-2 rounded-lg px-2.5 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-[#151D2C] dark:hover:text-white transition-colors cursor-pointer"
+                  className="flex w-full items-center gap-2 rounded-lg px-2.5 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-[#1E293B] dark:hover:text-white transition-colors cursor-pointer"
                 >
                   <Camera className="h-3.5 w-3.5 text-slate-400" />
                   <span>Foto de Perfil</span>
@@ -325,7 +307,7 @@ export const Header: React.FC<HeaderProps> = () => {
               </div>
 
               {/* Logout Action */}
-              <div className="mt-1 border-t border-slate-100 pt-1 dark:border-[#1E2536]">
+              <div className="mt-1 border-t border-slate-100 pt-1 dark:border-[#334155]">
                 <button
                   type="button"
                   onClick={() => {

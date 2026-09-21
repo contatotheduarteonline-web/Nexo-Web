@@ -85,7 +85,7 @@ export const LembretesView: React.FC = () => {
 
         <button
           onClick={() => setIsAdding(true)}
-          className="flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#FF6B00] to-[#FF8A00] hover:from-[#E05D00] hover:to-[#FF6B00] px-4 py-2 text-xs font-bold text-white shadow-md shadow-orange-500/20 transition active:scale-98 cursor-pointer"
+          className="flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#F59E0B] to-[#FBBF24] hover:from-[#D97706] hover:to-[#F59E0B] px-4 py-2 text-xs font-bold text-white shadow-md shadow-amber-500/20 transition active:scale-98 cursor-pointer"
         >
           <Plus className="h-4 w-4" />
           Novo Lembrete
@@ -94,15 +94,15 @@ export const LembretesView: React.FC = () => {
 
       {/* KPI Cards */}
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-        <div className="rounded-xl border border-[#E2E8F0] bg-white p-4 shadow-[0_1px_3px_rgba(0,0,0,0.02)] dark:border-[#1E293B] dark:bg-[#1B2126]">
+        <div className="rounded-xl border border-[#E2E8F0] bg-white p-4 shadow-[0_1px_3px_rgba(0,0,0,0.02)] dark:border-[#1E293B] dark:bg-[#1E293B]">
           <div className="text-[10px] font-bold text-[#737D89] uppercase dark:text-[#94A3B8]">Total de Lembretes</div>
           <div className="mt-1 text-2xl font-extrabold text-[#374151] dark:text-white">{stats.total}</div>
         </div>
-        <div className="rounded-xl border border-[#E2E8F0] bg-white p-4 shadow-[0_1px_3px_rgba(0,0,0,0.02)] dark:border-[#1E293B] dark:bg-[#1B2126]">
-          <div className="text-[10px] font-bold text-[#FF6B00] uppercase dark:text-[#FFA726]">Pendentes</div>
+        <div className="rounded-xl border border-[#E2E8F0] bg-white p-4 shadow-[0_1px_3px_rgba(0,0,0,0.02)] dark:border-[#1E293B] dark:bg-[#1E293B]">
+          <div className="text-[10px] font-bold text-[#F59E0B] uppercase dark:text-[#FBBF24]">Pendentes</div>
           <div className="mt-1 text-2xl font-extrabold text-[#374151] dark:text-white">{stats.pending}</div>
         </div>
-        <div className="rounded-xl border border-[#E2E8F0] bg-white p-4 shadow-[0_1px_3px_rgba(0,0,0,0.02)] dark:border-[#1E293B] dark:bg-[#1B2126]">
+        <div className="rounded-xl border border-[#E2E8F0] bg-white p-4 shadow-[0_1px_3px_rgba(0,0,0,0.02)] dark:border-[#1E293B] dark:bg-[#1E293B]">
           <div className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase">Concluídos</div>
           <div className="mt-1 text-2xl font-extrabold text-[#374151] dark:text-white">{stats.completed}</div>
         </div>
@@ -112,9 +112,9 @@ export const LembretesView: React.FC = () => {
       {isAdding && (
         <form
           onSubmit={handleCreate}
-          className="rounded-2xl border border-orange-500/40 bg-orange-50/60 p-4.5 shadow-sm dark:border-orange-500/30 dark:bg-orange-950/20"
+          className="rounded-2xl border border-amber-500/40 bg-amber-50/60 p-4.5 shadow-sm dark:border-amber-500/30 dark:bg-amber-950/20"
         >
-          <h3 className="text-xs font-bold text-[#FF6B00] uppercase dark:text-[#FFA726]">
+          <h3 className="text-xs font-bold text-[#F59E0B] uppercase dark:text-[#FBBF24]">
             Cadastrar Novo Lembrete
           </h3>
 
@@ -129,7 +129,7 @@ export const LembretesView: React.FC = () => {
                 placeholder="Ex: Último dia para pagamento da taxa de inscrição..."
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-white p-2.5 text-xs text-[#374151] focus:border-[#FF6B00] focus:outline-none dark:border-[#1E293B] dark:bg-[#111622] dark:text-white"
+                className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-white p-2.5 text-xs text-[#374151] focus:border-[#F59E0B] focus:outline-none dark:border-[#1E293B] dark:bg-[#0F172A] dark:text-white"
               />
             </div>
 
@@ -140,7 +140,7 @@ export const LembretesView: React.FC = () => {
               <select
                 value={category}
                 onChange={(e: any) => setCategory(e.target.value)}
-                className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-white p-2.5 text-xs text-[#374151] focus:border-[#FF6B00] focus:outline-none dark:border-[#1E293B] dark:bg-[#111622] dark:text-white"
+                className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-white p-2.5 text-xs text-[#374151] focus:border-[#F59E0B] focus:outline-none dark:border-[#1E293B] dark:bg-[#0F172A] dark:text-white"
               >
                 <option value="INSCRICOES">Inscrições</option>
                 <option value="PROVAS">Provas</option>
@@ -157,7 +157,7 @@ export const LembretesView: React.FC = () => {
                 type="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-white p-2.5 text-xs text-[#374151] focus:border-[#FF6B00] focus:outline-none dark:border-[#1E293B] dark:bg-[#111622] dark:text-white"
+                className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-white p-2.5 text-xs text-[#374151] focus:border-[#F59E0B] focus:outline-none dark:border-[#1E293B] dark:bg-[#0F172A] dark:text-white"
               />
             </div>
 
@@ -171,7 +171,7 @@ export const LembretesView: React.FC = () => {
               </button>
               <button
                 type="submit"
-                className="rounded-xl bg-gradient-to-r from-[#FF6B00] to-[#FF8A00] hover:from-[#E05D00] hover:to-[#FF6B00] px-4 py-2 text-xs font-bold text-white shadow-md shadow-orange-500/20 cursor-pointer"
+                className="rounded-xl bg-gradient-to-r from-[#F59E0B] to-[#FBBF24] hover:from-[#D97706] hover:to-[#F59E0B] px-4 py-2 text-xs font-bold text-white shadow-md shadow-amber-500/20 cursor-pointer"
               >
                 Salvar Lembrete
               </button>
@@ -181,7 +181,7 @@ export const LembretesView: React.FC = () => {
       )}
 
       {/* Filters Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-2 rounded-2xl border border-[#E2E8F0] bg-white p-3 dark:border-[#1E293B] dark:bg-[#1B2126]">
+      <div className="flex flex-wrap items-center justify-between gap-2 rounded-2xl border border-[#E2E8F0] bg-white p-3 dark:border-[#1E293B] dark:bg-[#1E293B]">
         {/* Category Tabs */}
         <div className="flex flex-wrap gap-1">
           {(["TODOS", "INSCRICOES", "PROVAS", "PAGAMENTOS", "GERAL"] as const).map((cat) => (
@@ -190,8 +190,8 @@ export const LembretesView: React.FC = () => {
               onClick={() => setFilterCategory(cat)}
               className={`rounded-xl px-2.5 py-1 text-xs font-semibold transition ${
                 filterCategory === cat
-                  ? "bg-orange-500/10 text-[#FF6B00] border border-orange-500/30 dark:bg-orange-500/20 dark:text-[#FFA726]"
-                  : "text-[#737D89] hover:bg-[#F8FAFC] dark:text-[#94A3B8] dark:hover:bg-[#182030]"
+                  ? "bg-amber-500/10 text-[#F59E0B] border border-amber-500/30 dark:bg-amber-500/20 dark:text-[#FBBF24]"
+                  : "text-[#737D89] hover:bg-[#F8FAFC] dark:text-[#94A3B8] dark:hover:bg-[#1E293B]"
               }`}
             >
               {cat === "TODOS" ? "Todas Categorias" : cat}
@@ -200,14 +200,14 @@ export const LembretesView: React.FC = () => {
         </div>
 
         {/* Status Filter */}
-        <div className="flex items-center gap-1 rounded-xl bg-[#F8FAFC] p-0.5 text-xs font-bold dark:bg-[#111622]">
+        <div className="flex items-center gap-1 rounded-xl bg-[#F8FAFC] p-0.5 text-xs font-bold dark:bg-[#0F172A]">
           {(["TODOS", "PENDENTES", "CONCLUIDOS"] as const).map((st) => (
             <button
               key={st}
               onClick={() => setFilterStatus(st)}
               className={`rounded-lg px-2.5 py-1 transition ${
                 filterStatus === st
-                  ? "bg-white text-[#FF6B00] shadow-xs dark:bg-[#182030] dark:text-[#FFA726]"
+                  ? "bg-white text-[#F59E0B] shadow-xs dark:bg-[#1E293B] dark:text-[#FBBF24]"
                   : "text-[#737D89] dark:text-[#94A3B8]"
               }`}
             >
@@ -220,8 +220,8 @@ export const LembretesView: React.FC = () => {
       {/* Reminders List */}
       <div className="space-y-2">
         {filteredReminders.length === 0 ? (
-          <div className="rounded-2xl border border-[#E2E8F0] bg-white p-8 text-center text-xs text-[#737D89] dark:border-[#1E293B] dark:bg-[#1B2126] dark:text-[#94A3B8]">
-            <CheckCircle2 className="mx-auto mb-2 h-8 w-8 text-[#FF6B00]" />
+          <div className="rounded-2xl border border-[#E2E8F0] bg-white p-8 text-center text-xs text-[#737D89] dark:border-[#1E293B] dark:bg-[#1E293B] dark:text-[#94A3B8]">
+            <CheckCircle2 className="mx-auto mb-2 h-8 w-8 text-[#F59E0B]" />
             <p className="font-semibold">Nenhum lembrete encontrado para este filtro.</p>
           </div>
         ) : (
@@ -230,8 +230,8 @@ export const LembretesView: React.FC = () => {
               key={rem.id}
               className={`flex items-center justify-between rounded-xl border p-3.5 transition ${
                 rem.completed
-                  ? "border-[#E2E8F0] bg-[#F8FAFC]/70 opacity-70 dark:border-[#1E293B] dark:bg-[#111622]/60"
-                  : "border-[#E2E8F0] bg-white hover:border-[#FF6B00] dark:border-[#1E293B] dark:bg-[#1B2126]"
+                  ? "border-[#E2E8F0] bg-[#F8FAFC]/70 opacity-70 dark:border-[#1E293B] dark:bg-[#0F172A]/60"
+                  : "border-[#E2E8F0] bg-white hover:border-[#F59E0B] dark:border-[#1E293B] dark:bg-[#1E293B]"
               }`}
             >
               <div className="flex items-center gap-3">
@@ -239,7 +239,7 @@ export const LembretesView: React.FC = () => {
                   type="checkbox"
                   checked={rem.completed}
                   onChange={() => toggleReminder(rem.id)}
-                  className="h-4 w-4 rounded accent-[#FF6B00] cursor-pointer"
+                  className="h-4 w-4 rounded accent-[#F59E0B] cursor-pointer"
                 />
                 <div>
                   <p

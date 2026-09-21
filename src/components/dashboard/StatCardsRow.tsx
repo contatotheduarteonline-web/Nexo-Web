@@ -44,13 +44,13 @@ export const StatCardsRow: React.FC<StatCardsRowProps> = ({
       {/* 1. Tempo de estudo */}
       <div
         id="card-tempo-estudo"
-        className="rounded-2xl border border-[#E5E7EB] bg-white p-5 shadow-[0_1px_3px_rgba(0,0,0,0.03),0_4px_12px_rgba(0,0,0,0.015)] dark:border-[#1E2638] dark:bg-[#121622] flex flex-col justify-between transition-all duration-200 hover:border-[#D1D5DB] dark:hover:border-[#2A3447]"
+        className="rounded-2xl border border-[#E5E7EB] bg-white p-5 shadow-[0_1px_3px_rgba(0,0,0,0.03),0_4px_12px_rgba(0,0,0,0.015)] dark:border-[#1E293B] dark:bg-[#121622] flex flex-col justify-between transition-all duration-200 hover:border-[#D1D5DB] dark:hover:border-[#2A3447]"
       >
         <div className="flex items-center justify-between">
           <span className="text-[13px] font-semibold text-[#667085] dark:text-[#94A3B8]">
             Tempo de estudo
           </span>
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-orange-50 text-[#F97316] dark:bg-orange-950/40 dark:text-orange-400">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-50 text-[#F59E0B] dark:bg-amber-950/40 dark:text-amber-400">
             <Clock className="h-4 w-4" />
           </div>
         </div>
@@ -80,7 +80,7 @@ export const StatCardsRow: React.FC<StatCardsRowProps> = ({
       {/* 2. Questões */}
       <div
         id="card-questoes"
-        className="rounded-2xl border border-[#E5E7EB] bg-white p-5 shadow-[0_1px_3px_rgba(0,0,0,0.03),0_4px_12px_rgba(0,0,0,0.015)] dark:border-[#1E2638] dark:bg-[#121622] flex flex-col justify-between transition-all duration-200 hover:border-[#D1D5DB] dark:hover:border-[#2A3447]"
+        className="rounded-2xl border border-[#E5E7EB] bg-white p-5 shadow-[0_1px_3px_rgba(0,0,0,0.03),0_4px_12px_rgba(0,0,0,0.015)] dark:border-[#1E293B] dark:bg-[#121622] flex flex-col justify-between transition-all duration-200 hover:border-[#D1D5DB] dark:hover:border-[#2A3447]"
       >
         <div className="flex items-center justify-between">
           <span className="text-[13px] font-semibold text-[#667085] dark:text-[#94A3B8]">
@@ -119,7 +119,7 @@ export const StatCardsRow: React.FC<StatCardsRowProps> = ({
       {/* 3. Precisão */}
       <div
         id="card-precisao"
-        className="rounded-2xl border border-[#E5E7EB] bg-white p-5 shadow-[0_1px_3px_rgba(0,0,0,0.03),0_4px_12px_rgba(0,0,0,0.015)] dark:border-[#1E2638] dark:bg-[#121622] flex flex-col justify-between transition-all duration-200 hover:border-[#D1D5DB] dark:hover:border-[#2A3447]"
+        className="rounded-2xl border border-[#E5E7EB] bg-white p-5 shadow-[0_1px_3px_rgba(0,0,0,0.03),0_4px_12px_rgba(0,0,0,0.015)] dark:border-[#1E293B] dark:bg-[#121622] flex flex-col justify-between transition-all duration-200 hover:border-[#D1D5DB] dark:hover:border-[#2A3447]"
       >
         <div className="flex items-center justify-between">
           <span className="text-[13px] font-semibold text-[#667085] dark:text-[#94A3B8]">
@@ -147,26 +147,26 @@ export const StatCardsRow: React.FC<StatCardsRowProps> = ({
       {/* 4. Progresso no edital */}
       <div
         id="card-progresso-edital"
-        className="rounded-2xl border border-[#E5E7EB] bg-white p-5 shadow-[0_1px_3px_rgba(0,0,0,0.03),0_4px_12px_rgba(0,0,0,0.015)] dark:border-[#1E2638] dark:bg-[#121622] flex flex-col justify-between transition-all duration-200 hover:border-[#D1D5DB] dark:hover:border-[#2A3447]"
+        className="rounded-2xl border border-[#E5E7EB] bg-white p-5 shadow-[0_1px_3px_rgba(0,0,0,0.03),0_4px_12px_rgba(0,0,0,0.015)] dark:border-[#1E293B] dark:bg-[#121622] flex flex-col justify-between transition-all duration-200 hover:border-[#D1D5DB] dark:hover:border-[#2A3447]"
       >
         <div className="flex items-center justify-between">
           <span className="text-[13px] font-semibold text-[#667085] dark:text-[#94A3B8]">
             Progresso no edital
           </span>
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-orange-50 text-[#F97316] dark:bg-orange-950/40 dark:text-orange-400">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-50 text-[#F59E0B] dark:bg-amber-950/40 dark:text-amber-400">
             <TrendingUp className="h-4 w-4" />
           </div>
         </div>
 
         <div className="mt-3">
           <div className="flex items-baseline justify-between">
-            <span className="text-[26px] font-bold text-[#EA580C] font-mono tracking-tight">
+            <span className="text-[26px] font-bold text-[#D97706] font-mono tracking-tight">
               {globalProgressPercentage}%
             </span>
           </div>
-          <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-[#E5E7EB] dark:bg-[#1E2638]">
+          <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-[#E5E7EB] dark:bg-[#1E293B]">
             <div
-              className="h-full bg-gradient-to-r from-[#F97316] to-[#EA580C] rounded-full transition-all duration-500"
+              className="h-full bg-gradient-to-r from-[#F59E0B] to-[#D97706] rounded-full transition-all duration-500"
               style={{ width: `${Math.min(100, Math.max(0, globalProgressPercentage))}%` }}
             />
           </div>
@@ -180,7 +180,7 @@ export const StatCardsRow: React.FC<StatCardsRowProps> = ({
             type="button"
             id="btn-link-edital"
             onClick={onNavigateToEdital}
-            className="text-[#F97316] hover:underline font-semibold shrink-0 cursor-pointer transition-colors"
+            className="text-[#F59E0B] hover:underline font-semibold shrink-0 cursor-pointer transition-colors"
           >
             Ver edital &rarr;
           </button>

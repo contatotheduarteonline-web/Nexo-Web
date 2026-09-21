@@ -14,12 +14,12 @@ export const RecentActivitiesSection: React.FC<RecentActivitiesSectionProps> = (
   return (
     <section
       id="section-ultimas-atividades"
-      className="rounded-2xl border border-[#E5E7EB] bg-white p-5 sm:p-6 shadow-[0_1px_3px_rgba(0,0,0,0.03),0_4px_12px_rgba(0,0,0,0.015)] dark:border-[#1E2638] dark:bg-[#121622] flex flex-col justify-between"
+      className="rounded-2xl border border-[#E5E7EB] bg-white p-5 sm:p-6 shadow-[0_1px_3px_rgba(0,0,0,0.03),0_4px_12px_rgba(0,0,0,0.015)] dark:border-[#1E293B] dark:bg-[#121622] flex flex-col justify-between"
     >
       <div>
         <div className="flex items-center justify-between pb-3.5 border-b border-[#F0F2F5] dark:border-[#1C2333]">
           <div className="flex items-center gap-2.5">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-orange-50 text-[#F97316] dark:bg-orange-950/40 dark:text-orange-400">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-50 text-[#F59E0B] dark:bg-amber-950/40 dark:text-amber-400">
               <History className="h-4 w-4" />
             </div>
             <h3 className="text-[16px] font-semibold text-[#172033] dark:text-white tracking-tight">
@@ -31,7 +31,7 @@ export const RecentActivitiesSection: React.FC<RecentActivitiesSectionProps> = (
             type="button"
             id="btn-historico-completo"
             onClick={onNavigateToHistory}
-            className="text-[13px] font-semibold text-[#F97316] hover:text-[#EA580C] hover:underline flex items-center gap-1 cursor-pointer transition-colors"
+            className="text-[13px] font-semibold text-[#F59E0B] hover:text-[#D97706] hover:underline flex items-center gap-1 cursor-pointer transition-colors"
           >
             <span>Histórico</span>
             <ArrowUpRight className="h-3.5 w-3.5" />
@@ -51,13 +51,13 @@ export const RecentActivitiesSection: React.FC<RecentActivitiesSectionProps> = (
                 <div
                   key={sess.id}
                   id={`activity-item-${sess.id}`}
-                  className="rounded-xl border border-[#E5E7EB] bg-[#F8F9FB] p-3 text-[12px] transition hover:border-[#D1D5DB] dark:border-[#1E2638] dark:bg-[#161D2B]"
+                  className="rounded-xl border border-[#E5E7EB] bg-[#F8F9FB] p-3 text-[12px] transition hover:border-[#D1D5DB] dark:border-[#1E293B] dark:bg-[#161D2B]"
                 >
                   <div className="flex items-center justify-between">
                     <span className="font-semibold text-[#172033] dark:text-white truncate max-w-[220px]">
                       {sess.topicName || sess.disciplineName}
                     </span>
-                    <span className="font-mono text-[11px] font-semibold text-[#F97316] bg-orange-50 px-2 py-0.5 rounded-md dark:bg-orange-950/40">
+                    <span className="font-mono text-[11px] font-semibold text-[#F59E0B] bg-amber-50 px-2 py-0.5 rounded-md dark:bg-amber-950/40">
                       {sess.durationMinutes} min
                     </span>
                   </div>

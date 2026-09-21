@@ -116,7 +116,7 @@ export const MedalhasView: React.FC = () => {
       {/* 2. RESUMO SUPERIOR (compacto e elegante, idêntico aos indicadores do Histórico) */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         {/* NÍVEL */}
-        <div className="rounded-xl border border-slate-200 bg-white p-3.5 sm:p-4 shadow-xs dark:border-slate-800 dark:bg-[#0E121A]">
+        <div className="rounded-xl border border-slate-200 bg-white p-3.5 sm:p-4 shadow-xs dark:border-slate-800 dark:bg-[#0F172A]">
           <div className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-400">
             Nível
           </div>
@@ -131,17 +131,17 @@ export const MedalhasView: React.FC = () => {
         </div>
 
         {/* XP */}
-        <div className="rounded-xl border border-slate-200 bg-white p-3.5 sm:p-4 shadow-xs dark:border-slate-800 dark:bg-[#0E121A]">
+        <div className="rounded-xl border border-slate-200 bg-white p-3.5 sm:p-4 shadow-xs dark:border-slate-800 dark:bg-[#0F172A]">
           <div className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-400">
             XP
           </div>
-          <div className="mt-1 font-mono text-2xl font-bold text-[#FF6B00] dark:text-[#FFA726]">
+          <div className="mt-1 font-mono text-2xl font-bold text-[#F59E0B] dark:text-[#FBBF24]">
             {gamification.totalXp.toLocaleString("pt-BR")} XP
           </div>
         </div>
 
         {/* CONQUISTAS */}
-        <div className="rounded-xl border border-slate-200 bg-white p-3.5 sm:p-4 shadow-xs dark:border-slate-800 dark:bg-[#0E121A]">
+        <div className="rounded-xl border border-slate-200 bg-white p-3.5 sm:p-4 shadow-xs dark:border-slate-800 dark:bg-[#0F172A]">
           <div className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-400">
             Conquistas
           </div>
@@ -151,7 +151,7 @@ export const MedalhasView: React.FC = () => {
         </div>
 
         {/* PRECISÃO */}
-        <div className="rounded-xl border border-slate-200 bg-white p-3.5 sm:p-4 shadow-xs dark:border-slate-800 dark:bg-[#0E121A]">
+        <div className="rounded-xl border border-slate-200 bg-white p-3.5 sm:p-4 shadow-xs dark:border-slate-800 dark:bg-[#0F172A]">
           <div className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-400">
             Precisão
           </div>
@@ -162,7 +162,7 @@ export const MedalhasView: React.FC = () => {
       </div>
 
       {/* 3. PROGRESSO PRINCIPAL & PRÓXIMAS CONQUISTAS */}
-      <div className="rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-xs dark:border-slate-800 dark:bg-[#0E121A] space-y-4">
+      <div className="rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-xs dark:border-slate-800 dark:bg-[#0F172A] space-y-4">
         <div>
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
@@ -188,7 +188,7 @@ export const MedalhasView: React.FC = () => {
           {/* Barra de Progresso Horizontal */}
           <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
             <div
-              className="h-full rounded-full bg-[#FF6B00] transition-all duration-500 ease-out"
+              className="h-full rounded-full bg-[#F59E0B] transition-all duration-500 ease-out"
               style={{ width: `${Math.min(100, Math.max(0, gamification.globalProgressPercentage))}%` }}
             />
           </div>
@@ -213,7 +213,7 @@ export const MedalhasView: React.FC = () => {
                 <div
                   key={badge.id}
                   onClick={() => setActiveModalBadge(badge)}
-                  className="flex items-center gap-3 p-2.5 rounded-xl border border-slate-200/80 dark:border-slate-800 bg-slate-50/70 dark:bg-[#131822] cursor-pointer hover:border-[#FF6B00]/40 transition-colors"
+                  className="flex items-center gap-3 p-2.5 rounded-xl border border-slate-200/80 dark:border-slate-800 bg-slate-50/70 dark:bg-[#131822] cursor-pointer hover:border-[#F59E0B]/40 transition-colors"
                 >
                   <div className="shrink-0">
                     <AchievementMedal
@@ -236,7 +236,7 @@ export const MedalhasView: React.FC = () => {
                     </div>
                     <div className="mt-1.5 h-1 w-full overflow-hidden rounded-full bg-slate-200/70 dark:bg-slate-700">
                       <div
-                        className="h-full rounded-full bg-[#FF6B00]"
+                        className="h-full rounded-full bg-[#F59E0B]"
                         style={{ width: `${Math.min(100, Math.max(0, badge.progressPercent))}%` }}
                       />
                     </div>
@@ -249,7 +249,7 @@ export const MedalhasView: React.FC = () => {
       </div>
 
       {/* 4. TIMELINE DE NÍVEIS INTUITIVA */}
-      <div className="rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-xs dark:border-slate-800 dark:bg-[#0E121A] space-y-4">
+      <div className="rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-xs dark:border-slate-800 dark:bg-[#0F172A] space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div>
             <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
@@ -260,7 +260,7 @@ export const MedalhasView: React.FC = () => {
             </h2>
           </div>
 
-          <div className="inline-flex items-center gap-2 self-start sm:self-auto px-3 py-1 rounded-full text-xs font-semibold bg-orange-50 text-[#FF6B00] border border-orange-200/70 dark:bg-orange-950/40 dark:text-[#FFA726] dark:border-orange-800/60">
+          <div className="inline-flex items-center gap-2 self-start sm:self-auto px-3 py-1 rounded-full text-xs font-semibold bg-amber-50 text-[#F59E0B] border border-amber-200/70 dark:bg-amber-950/40 dark:text-[#FBBF24] dark:border-amber-800/60">
             <span>Nível atual:</span>
             <strong className="font-bold">{gamification.rankLevel} &bull; {gamification.rankTitle}</strong>
           </div>
@@ -274,7 +274,7 @@ export const MedalhasView: React.FC = () => {
 
             {/* Filled Progress Line based on actual coverage % */}
             <div
-              className="absolute top-[28px] left-12 h-1 rounded-full bg-[#FF6B00] -translate-y-1/2 z-0 transition-all duration-500"
+              className="absolute top-[28px] left-12 h-1 rounded-full bg-[#F59E0B] -translate-y-1/2 z-0 transition-all duration-500"
               style={{
                 width: `calc(${Math.min(100, Math.max(0, gamification.globalProgressPercentage))}% * ((100% - 96px) / 100))`,
               }}
@@ -296,7 +296,7 @@ export const MedalhasView: React.FC = () => {
                     <div
                       className={`flex h-9 w-9 items-center justify-center rounded-full text-xs font-bold transition-all duration-300 ${
                         isCurrent
-                          ? "bg-[#FF6B00] text-white ring-4 ring-orange-500/20 shadow-xs scale-105"
+                          ? "bg-[#F59E0B] text-white ring-4 ring-amber-500/20 shadow-xs scale-105"
                           : isCompleted
                           ? "bg-slate-900 text-white dark:bg-white dark:text-slate-900"
                           : "bg-white text-slate-400 border-2 border-slate-200 dark:bg-[#131822] dark:border-slate-700 dark:text-slate-500"
@@ -314,7 +314,7 @@ export const MedalhasView: React.FC = () => {
                       <div
                         className={`text-xs ${
                           isCurrent
-                            ? "font-bold text-[#FF6B00] dark:text-[#FFA726]"
+                            ? "font-bold text-[#F59E0B] dark:text-[#FBBF24]"
                             : isCompleted
                             ? "font-semibold text-slate-800 dark:text-slate-200"
                             : "font-medium text-slate-400 dark:text-slate-500"
@@ -328,7 +328,7 @@ export const MedalhasView: React.FC = () => {
                       </div>
 
                       {isCurrent && (
-                        <span className="inline-block mt-1 px-1.5 py-0.2 rounded text-[9px] font-bold uppercase tracking-wider bg-orange-100 text-[#FF6B00] dark:bg-orange-950/60 dark:text-[#FFA726]">
+                        <span className="inline-block mt-1 px-1.5 py-0.2 rounded text-[9px] font-bold uppercase tracking-wider bg-amber-100 text-[#F59E0B] dark:bg-amber-950/60 dark:text-[#FBBF24]">
                           Atual
                         </span>
                       )}
@@ -343,14 +343,14 @@ export const MedalhasView: React.FC = () => {
         {/* Informative Context Bar below timeline */}
         <div className="mt-2 pt-3 border-t border-slate-100 dark:border-slate-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
           <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400">
-            <Target className="h-4 w-4 text-[#FF6B00] shrink-0" />
+            <Target className="h-4 w-4 text-[#F59E0B] shrink-0" />
             {gamification.rankLevel >= 6 ? (
               <span className="font-semibold text-emerald-600 dark:text-emerald-400">
                 Parabéns! Você alcançou o nível máximo cobrindo 100% dos tópicos deste planejamento.
               </span>
             ) : (
               <span>
-                Próximo marco: <strong className="text-slate-900 dark:text-white font-semibold">Nível {gamification.rankLevel + 1} ({gamification.nextRankName})</strong> • Faltam <strong className="text-[#FF6B00] font-semibold">{gamification.topicsRemainingForNext} tópicos</strong> para avançar.
+                Próximo marco: <strong className="text-slate-900 dark:text-white font-semibold">Nível {gamification.rankLevel + 1} ({gamification.nextRankName})</strong> • Faltam <strong className="text-[#F59E0B] font-semibold">{gamification.topicsRemainingForNext} tópicos</strong> para avançar.
               </span>
             )}
           </div>
@@ -402,7 +402,7 @@ export const MedalhasView: React.FC = () => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Buscar conquista..."
-                className="w-full pl-8 pr-8 py-1.5 text-xs rounded-lg border border-slate-200 bg-white dark:border-slate-800 dark:bg-[#0E121A] text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-hidden focus:ring-1 focus:ring-[#FF6B00]"
+                className="w-full pl-8 pr-8 py-1.5 text-xs rounded-lg border border-slate-200 bg-white dark:border-slate-800 dark:bg-[#0F172A] text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-hidden focus:ring-1 focus:ring-[#F59E0B]"
               />
               {searchQuery && (
                 <button
@@ -437,7 +437,7 @@ export const MedalhasView: React.FC = () => {
               onClick={() => setStatusFilter("unlocked")}
               className={`px-3 py-1 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap ${
                 statusFilter === "unlocked"
-                  ? "bg-[#FF6B00] text-white"
+                  ? "bg-[#F59E0B] text-white"
                   : "bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-[#131822] dark:text-slate-400 dark:hover:bg-slate-800"
               }`}
             >
@@ -474,8 +474,8 @@ export const MedalhasView: React.FC = () => {
                 onClick={() => setCategoryFilter(cat.id)}
                 className={`px-2.5 py-1 text-[11px] font-medium rounded-md border transition-colors whitespace-nowrap ${
                   categoryFilter === cat.id
-                    ? "bg-orange-50 border-orange-300 text-[#FF6B00] dark:bg-orange-950/40 dark:border-orange-800 dark:text-[#FFA726]"
-                    : "border-slate-200 bg-white text-slate-600 hover:bg-slate-50 dark:border-slate-800 dark:bg-[#0E121A] dark:text-slate-400 dark:hover:bg-[#131822]"
+                    ? "bg-amber-50 border-amber-300 text-[#F59E0B] dark:bg-amber-950/40 dark:border-amber-800 dark:text-[#FBBF24]"
+                    : "border-slate-200 bg-white text-slate-600 hover:bg-slate-50 dark:border-slate-800 dark:bg-[#0F172A] dark:text-slate-400 dark:hover:bg-[#131822]"
                 }`}
               >
                 {cat.label}

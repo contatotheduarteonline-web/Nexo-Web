@@ -129,7 +129,7 @@ export const NewTopicModal: React.FC<NewTopicModalProps> = ({
               <button
                 type="button"
                 onClick={handleAddSubtopicField}
-                className="flex items-center gap-1 text-[11px] font-bold text-[#FF6B00] hover:underline cursor-pointer"
+                className="flex items-center gap-1 text-[11px] font-bold text-[#F59E0B] hover:underline cursor-pointer"
               >
                 <Plus className="h-3 w-3" /> Adicionar Subtópico
               </button>
@@ -143,7 +143,7 @@ export const NewTopicModal: React.FC<NewTopicModalProps> = ({
                     placeholder={`Subtópico ${idx + 1} (Ex: Mandado de Segurança, Habeas Corpus...)`}
                     value={sub}
                     onChange={(e) => handleSubtopicChange(idx, e.target.value)}
-                    className="flex-1 rounded-lg border border-slate-200 p-2 focus:border-[#FF6B00] focus:ring-1 focus:ring-[#FF6B00] focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                    className="flex-1 rounded-lg border border-slate-200 p-2 focus:border-[#F59E0B] focus:ring-1 focus:ring-[#F59E0B] focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                   />
                   {subtopics.length > 1 && (
                     <button
@@ -168,7 +168,7 @@ export const NewTopicModal: React.FC<NewTopicModalProps> = ({
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="Ex: Atenção ao Art. 5º, XI (Inviolabilidade do domicílio à noite apenas com flagrante ou desastre)."
-              className="mt-1 w-full rounded-lg border border-slate-200 p-2 focus:border-[#FF6B00] focus:ring-1 focus:ring-[#FF6B00] focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+              className="mt-1 w-full rounded-lg border border-slate-200 p-2 focus:border-[#F59E0B] focus:ring-1 focus:ring-[#F59E0B] focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
             />
           </div>
 
@@ -182,7 +182,7 @@ export const NewTopicModal: React.FC<NewTopicModalProps> = ({
             </button>
             <button
               type="submit"
-              className="rounded-lg bg-gradient-to-r from-[#FF6B00] to-[#FF8A00] hover:from-[#E05D00] hover:to-[#FF6B00] px-4 py-2 font-bold text-white shadow-md shadow-orange-500/25 transition cursor-pointer"
+              className="rounded-lg bg-gradient-to-r from-[#F59E0B] to-[#FBBF24] hover:from-[#D97706] hover:to-[#F59E0B] px-4 py-2 font-bold text-white shadow-md shadow-amber-500/25 transition cursor-pointer"
             >
               Salvar no Edital
             </button>

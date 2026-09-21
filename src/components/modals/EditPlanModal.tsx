@@ -175,7 +175,7 @@ export const EditPlanModal: React.FC<EditPlanModalProps> = ({ plan, onClose }) =
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 p-4 backdrop-blur-xs">
-      <div className="relative flex max-h-[90vh] w-full max-w-xl flex-col overflow-hidden rounded-2xl border border-[#E2E8F0] bg-white shadow-2xl dark:border-[#1E293B] dark:bg-[#111622]">
+      <div className="relative flex max-h-[90vh] w-full max-w-xl flex-col overflow-hidden rounded-2xl border border-[#E2E8F0] bg-white shadow-2xl dark:border-[#1E293B] dark:bg-[#0F172A]">
         {/* Header */}
         <div className="flex items-center justify-between border-b border-[#E2E8F0] px-6 py-4 dark:border-[#1E293B]">
           <div>
@@ -190,7 +190,7 @@ export const EditPlanModal: React.FC<EditPlanModalProps> = ({ plan, onClose }) =
           </div>
           <button
             onClick={onClose}
-            className="rounded-lg p-1.5 text-[#737D89] hover:bg-[#F8FAFC] dark:hover:bg-[#182030]"
+            className="rounded-lg p-1.5 text-[#737D89] hover:bg-[#F8FAFC] dark:hover:bg-[#1E293B]"
           >
             <X className="h-5 w-5" />
           </button>
@@ -230,7 +230,7 @@ export const EditPlanModal: React.FC<EditPlanModalProps> = ({ plan, onClose }) =
                 type="button"
                 onClick={() => setIsConfirmingDelete(false)}
                 disabled={isDeleting}
-                className="rounded-xl border border-[#E2E8F0] px-4 py-2 text-xs font-semibold text-[#737D89] hover:bg-[#F8FAFC] disabled:opacity-50 dark:border-[#1E293B] dark:text-[#94A3B8] dark:hover:bg-[#182030]"
+                className="rounded-xl border border-[#E2E8F0] px-4 py-2 text-xs font-semibold text-[#737D89] hover:bg-[#F8FAFC] disabled:opacity-50 dark:border-[#1E293B] dark:text-[#94A3B8] dark:hover:bg-[#1E293B]"
               >
                 Cancelar
               </button>
@@ -279,7 +279,7 @@ export const EditPlanModal: React.FC<EditPlanModalProps> = ({ plan, onClose }) =
                 required
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] p-2.5 text-xs text-[#374151] focus:border-[#48C3A7] focus:bg-white focus:outline-hidden dark:border-[#1E293B] dark:bg-[#182030] dark:text-white"
+                className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] p-2.5 text-xs text-[#374151] focus:border-[#48C3A7] focus:bg-white focus:outline-hidden dark:border-[#1E293B] dark:bg-[#1E293B] dark:text-white"
               />
             </div>
 
@@ -293,7 +293,7 @@ export const EditPlanModal: React.FC<EditPlanModalProps> = ({ plan, onClose }) =
                   value={organ}
                   onChange={(e) => setOrgan(e.target.value)}
                   placeholder="Ex: Órgão ou instituição..."
-                  className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] p-2.5 text-xs text-[#374151] focus:border-[#48C3A7] focus:bg-white focus:outline-hidden dark:border-[#1E293B] dark:bg-[#182030] dark:text-white"
+                  className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] p-2.5 text-xs text-[#374151] focus:border-[#48C3A7] focus:bg-white focus:outline-hidden dark:border-[#1E293B] dark:bg-[#1E293B] dark:text-white"
                 />
               </div>
 
@@ -306,7 +306,7 @@ export const EditPlanModal: React.FC<EditPlanModalProps> = ({ plan, onClose }) =
                   value={cargo}
                   onChange={(e) => setCargo(e.target.value)}
                   placeholder="Ex: Cargo ou função pretendida..."
-                  className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] p-2.5 text-xs text-[#374151] focus:border-[#48C3A7] focus:bg-white focus:outline-hidden dark:border-[#1E293B] dark:bg-[#182030] dark:text-white"
+                  className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] p-2.5 text-xs text-[#374151] focus:border-[#48C3A7] focus:bg-white focus:outline-hidden dark:border-[#1E293B] dark:bg-[#1E293B] dark:text-white"
                 />
               </div>
 
@@ -319,7 +319,7 @@ export const EditPlanModal: React.FC<EditPlanModalProps> = ({ plan, onClose }) =
                   value={banca}
                   onChange={(e) => setBanca(e.target.value)}
                   placeholder="Ex: FGV, Cebraspe"
-                  className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] p-2.5 text-xs text-[#374151] focus:border-[#48C3A7] focus:bg-white focus:outline-hidden dark:border-[#1E293B] dark:bg-[#182030] dark:text-white"
+                  className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] p-2.5 text-xs text-[#374151] focus:border-[#48C3A7] focus:bg-white focus:outline-hidden dark:border-[#1E293B] dark:bg-[#1E293B] dark:text-white"
                 />
               </div>
 
@@ -333,7 +333,7 @@ export const EditPlanModal: React.FC<EditPlanModalProps> = ({ plan, onClose }) =
                   placeholder="Ex: 20 ou 7.5"
                   value={weeklyGoalHours}
                   onChange={(e) => setWeeklyGoalHours(e.target.value)}
-                  className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] p-2.5 text-xs text-[#374151] focus:border-[#48C3A7] focus:bg-white focus:outline-hidden dark:border-[#1E293B] dark:bg-[#182030] dark:text-white font-mono"
+                  className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] p-2.5 text-xs text-[#374151] focus:border-[#48C3A7] focus:bg-white focus:outline-hidden dark:border-[#1E293B] dark:bg-[#1E293B] dark:text-white font-mono"
                 />
               </div>
             </div>
@@ -344,7 +344,7 @@ export const EditPlanModal: React.FC<EditPlanModalProps> = ({ plan, onClose }) =
                   type="button"
                   onClick={handleArchive}
                   disabled={isUploading}
-                  className="flex items-center gap-1 rounded-lg px-3 py-1.5 text-xs font-semibold text-[#737D89] hover:bg-[#F8FAFC] disabled:opacity-50 dark:text-[#94A3B8] dark:hover:bg-[#182030]"
+                  className="flex items-center gap-1 rounded-lg px-3 py-1.5 text-xs font-semibold text-[#737D89] hover:bg-[#F8FAFC] disabled:opacity-50 dark:text-[#94A3B8] dark:hover:bg-[#1E293B]"
                 >
                   <Archive className="h-3.5 w-3.5" />
                   {plan.isArchived ? "Desarquivar" : "Arquivar"}

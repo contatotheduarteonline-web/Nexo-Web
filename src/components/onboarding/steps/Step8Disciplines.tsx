@@ -39,7 +39,7 @@ export const Step8Disciplines: React.FC<Step8DisciplinesProps> = ({
     <div id="step-8-disciplines" className="w-full max-w-2xl mx-auto px-4 py-4 sm:py-8">
       {/* Question Header */}
       <div className="mb-8 text-center sm:text-left">
-        <span className="text-xs font-semibold text-[#FF6B00] tracking-wider uppercase">
+        <span className="text-xs font-semibold text-[#F59E0B] tracking-wider uppercase">
           Etapa 8 de 12
         </span>
         <h2 className="text-2xl sm:text-4xl font-bold tracking-tight text-white mt-1">
@@ -55,14 +55,14 @@ export const Step8Disciplines: React.FC<Step8DisciplinesProps> = ({
           onClick={() => onChangeMode("adicionar")}
           className={`flex items-center gap-3 p-4 sm:p-5 rounded-xl border text-left transition-all duration-150 cursor-pointer ${
             disciplinesMode === "adicionar"
-              ? "bg-zinc-800/90 border-[#FF6B00] shadow-[0_0_18px_rgba(255,107,0,0.18)]"
+              ? "bg-zinc-800/90 border-[#F59E0B] shadow-[0_0_18px_rgba(255,107,0,0.18)]"
               : "bg-zinc-900/60 border-zinc-800/80 hover:bg-zinc-800/50 hover:border-zinc-700"
           }`}
         >
           <div
             className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 ${
               disciplinesMode === "adicionar"
-                ? "bg-[#FF6B00] text-white"
+                ? "bg-[#F59E0B] text-white"
                 : "bg-zinc-800 text-zinc-400"
             }`}
           >
@@ -84,14 +84,14 @@ export const Step8Disciplines: React.FC<Step8DisciplinesProps> = ({
           onClick={() => onChangeMode("nao_sei")}
           className={`flex items-center gap-3 p-4 sm:p-5 rounded-xl border text-left transition-all duration-150 cursor-pointer ${
             disciplinesMode === "nao_sei"
-              ? "bg-zinc-800/90 border-[#FF6B00] shadow-[0_0_18px_rgba(255,107,0,0.18)]"
+              ? "bg-zinc-800/90 border-[#F59E0B] shadow-[0_0_18px_rgba(255,107,0,0.18)]"
               : "bg-zinc-900/60 border-zinc-800/80 hover:bg-zinc-800/50 hover:border-zinc-700"
           }`}
         >
           <div
             className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 ${
               disciplinesMode === "nao_sei"
-                ? "bg-[#FF6B00] text-white"
+                ? "bg-[#F59E0B] text-white"
                 : "bg-zinc-800 text-zinc-400"
             }`}
           >
@@ -119,7 +119,7 @@ export const Step8Disciplines: React.FC<Step8DisciplinesProps> = ({
               onChange={(e) => setInputValue(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="Nome da disciplina (ex: Português, Direito Constitucional...)"
-              className="flex-1 px-4 py-3 rounded-xl bg-zinc-800/80 border border-zinc-700/80 text-white placeholder-zinc-500 focus:outline-none focus:border-[#FF6B00] focus:ring-1 focus:ring-[#FF6B00] text-sm"
+              className="flex-1 px-4 py-3 rounded-xl bg-zinc-800/80 border border-zinc-700/80 text-white placeholder-zinc-500 focus:outline-none focus:border-[#F59E0B] focus:ring-1 focus:ring-[#F59E0B] text-sm"
               autoFocus
             />
             <button
@@ -127,7 +127,7 @@ export const Step8Disciplines: React.FC<Step8DisciplinesProps> = ({
               id="btn-add-discipline"
               onClick={handleAdd}
               disabled={!inputValue.trim()}
-              className="inline-flex items-center gap-1.5 px-5 py-3 rounded-xl bg-[#FF6B00] hover:bg-[#FF7A1A] disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold text-sm transition-colors cursor-pointer shrink-0"
+              className="inline-flex items-center gap-1.5 px-5 py-3 rounded-xl bg-[#F59E0B] hover:bg-[#FF7A1A] disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold text-sm transition-colors cursor-pointer shrink-0"
             >
               <Plus className="w-4 h-4" />
               <span>Adicionar</span>
@@ -174,7 +174,7 @@ export const Step8Disciplines: React.FC<Step8DisciplinesProps> = ({
           id="btn-disciplines-next"
           onClick={onNext}
           disabled={!disciplinesMode}
-          className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-[#FF6B00] hover:bg-[#FF7A1A] disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold text-sm transition-all duration-200 cursor-pointer shadow-[0_6px_20px_rgba(255,107,0,0.25)]"
+          className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-[#F59E0B] hover:bg-[#FF7A1A] disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold text-sm transition-all duration-200 cursor-pointer shadow-[0_6px_20px_rgba(255,107,0,0.25)]"
         >
           <span>Continuar</span>
           <ArrowRight className="w-4 h-4" />

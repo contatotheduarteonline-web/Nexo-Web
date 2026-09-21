@@ -31,12 +31,12 @@ export const RemindersSection: React.FC<RemindersSectionProps> = ({
   return (
     <section
       id="section-lembretes"
-      className="rounded-2xl border border-[#E5E7EB] bg-white p-5 sm:p-6 shadow-[0_1px_3px_rgba(0,0,0,0.03),0_4px_12px_rgba(0,0,0,0.015)] dark:border-[#1E2638] dark:bg-[#121622] flex flex-col justify-between"
+      className="rounded-2xl border border-[#E5E7EB] bg-white p-5 sm:p-6 shadow-[0_1px_3px_rgba(0,0,0,0.03),0_4px_12px_rgba(0,0,0,0.015)] dark:border-[#1E293B] dark:bg-[#121622] flex flex-col justify-between"
     >
       <div>
         <div className="flex items-center justify-between pb-3.5 border-b border-[#F0F2F5] dark:border-[#1C2333]">
           <div className="flex items-center gap-2.5">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-orange-50 text-[#F97316] dark:bg-orange-950/40 dark:text-orange-400">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-50 text-[#F59E0B] dark:bg-amber-950/40 dark:text-amber-400">
               <Calendar className="h-4 w-4" />
             </div>
             <h3 className="text-[16px] font-semibold text-[#172033] dark:text-white tracking-tight">
@@ -48,7 +48,7 @@ export const RemindersSection: React.FC<RemindersSectionProps> = ({
             type="button"
             id="btn-adicionar-lembrete-toggle"
             onClick={() => setIsAddingReminder(!isAddingReminder)}
-            className="text-[13px] font-semibold text-[#F97316] hover:text-[#EA580C] hover:underline flex items-center gap-1 cursor-pointer transition-colors"
+            className="text-[13px] font-semibold text-[#F59E0B] hover:text-[#D97706] hover:underline flex items-center gap-1 cursor-pointer transition-colors"
           >
             <Plus className="h-3.5 w-3.5" />
             <span>Adicionar</span>
@@ -58,7 +58,7 @@ export const RemindersSection: React.FC<RemindersSectionProps> = ({
         {isAddingReminder && (
           <form
             onSubmit={handleSubmit}
-            className="mt-3.5 rounded-xl border border-[#F97316]/30 bg-orange-50/40 p-3 text-[12px] dark:bg-[#F97316]/10"
+            className="mt-3.5 rounded-xl border border-[#F59E0B]/30 bg-amber-50/40 p-3 text-[12px] dark:bg-[#F59E0B]/10"
           >
             <input
               type="text"
@@ -66,14 +66,14 @@ export const RemindersSection: React.FC<RemindersSectionProps> = ({
               placeholder="Título do lembrete..."
               value={newReminderTitle}
               onChange={(e) => setNewReminderTitle(e.target.value)}
-              className="w-full rounded-lg border border-[#E5E7EB] bg-white p-2 text-[12px] text-[#172033] outline-hidden focus:border-[#F97316] dark:border-[#1E2638] dark:bg-[#121622] dark:text-white mb-2"
+              className="w-full rounded-lg border border-[#E5E7EB] bg-white p-2 text-[12px] text-[#172033] outline-hidden focus:border-[#F59E0B] dark:border-[#1E293B] dark:bg-[#121622] dark:text-white mb-2"
             />
             <div className="flex items-center justify-between gap-2">
               <input
                 type="date"
                 value={newReminderDate}
                 onChange={(e) => setNewReminderDate(e.target.value)}
-                className="rounded-lg border border-[#E5E7EB] bg-white p-1.5 text-[11px] text-[#172033] dark:border-[#1E2638] dark:bg-[#121622] dark:text-white"
+                className="rounded-lg border border-[#E5E7EB] bg-white p-1.5 text-[11px] text-[#172033] dark:border-[#1E293B] dark:bg-[#121622] dark:text-white"
               />
               <div className="flex items-center gap-1.5">
                 <button
@@ -85,7 +85,7 @@ export const RemindersSection: React.FC<RemindersSectionProps> = ({
                 </button>
                 <button
                   type="submit"
-                  className="rounded-lg bg-[#F97316] px-3 py-1 text-[11px] font-semibold text-white hover:bg-[#EA580C] shadow-xs transition cursor-pointer"
+                  className="rounded-lg bg-[#F59E0B] px-3 py-1 text-[11px] font-semibold text-white hover:bg-[#D97706] shadow-xs transition cursor-pointer"
                 >
                   Salvar
                 </button>
@@ -108,14 +108,14 @@ export const RemindersSection: React.FC<RemindersSectionProps> = ({
                   key={rem.id}
                   id={`reminder-item-${rem.id}`}
                   onClick={() => onToggleReminder(rem.id)}
-                  className="flex cursor-pointer items-center justify-between rounded-xl border border-[#E5E7EB] bg-[#F8F9FB] p-3 text-[12px] transition hover:border-[#F97316]/40 dark:border-[#1E2638] dark:bg-[#161D2B]"
+                  className="flex cursor-pointer items-center justify-between rounded-xl border border-[#E5E7EB] bg-[#F8F9FB] p-3 text-[12px] transition hover:border-[#F59E0B]/40 dark:border-[#1E293B] dark:bg-[#161D2B]"
                 >
                   <div className="flex items-center gap-2.5 min-w-0 pr-2">
                     <input
                       type="checkbox"
                       checked={rem.completed}
                       onChange={() => onToggleReminder(rem.id)}
-                      className="h-4 w-4 rounded text-[#F97316] focus:ring-[#F97316] shrink-0 cursor-pointer"
+                      className="h-4 w-4 rounded text-[#F59E0B] focus:ring-[#F59E0B] shrink-0 cursor-pointer"
                     />
                     <span
                       className={`truncate text-[12px] ${
@@ -127,7 +127,7 @@ export const RemindersSection: React.FC<RemindersSectionProps> = ({
                       {rem.title}
                     </span>
                   </div>
-                  <span className="text-[11px] font-medium text-[#667085] dark:text-[#94A3B8] shrink-0 bg-white dark:bg-[#121622] px-2 py-0.5 rounded border border-[#E5E7EB] dark:border-[#1E2638]">
+                  <span className="text-[11px] font-medium text-[#667085] dark:text-[#94A3B8] shrink-0 bg-white dark:bg-[#121622] px-2 py-0.5 rounded border border-[#E5E7EB] dark:border-[#1E293B]">
                     {rem.date}
                   </span>
                 </div>

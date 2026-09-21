@@ -39,7 +39,7 @@ const PASTEL_COLORS = [
   "#FDE047", // soft warm yellow (Estatística)
   "#C4B5FD", // soft purple (Direito)
   "#6EE7B7", // soft emerald (RLM)
-  "#FDBA74", // soft orange (Informática)
+  "#FCD34D", // soft orange (Informática)
   "#A7F3D0", // soft mint
   "#F9A8D4", // soft pink
   "#CBD5E1", // soft slate
@@ -88,12 +88,12 @@ const DISCIPLINE_PALETTES = [
     barBg: "#FBBF24",
   },
   {
-    bg: "bg-[#FFEDD5] dark:bg-[#7C2D12]/40",
+    bg: "bg-[#FEF3C7] dark:bg-[#7C2D12]/40",
     border: "border-[#FED7AA] dark:border-[#C2410C]",
     text: "text-[#C2410C] dark:text-[#FED7AA]",
     badgeBg: "bg-[#FED7AA] dark:bg-[#C2410C]",
-    badgeText: "text-[#9A3412] dark:text-[#FFEDD5]",
-    barBg: "#FB923C",
+    badgeText: "text-[#9A3412] dark:text-[#FEF3C7]",
+    barBg: "#FBBF24",
   },
 ];
 
@@ -393,7 +393,7 @@ export const PlanejamentoViewContent: React.FC = () => {
       {/* ========================================================================= */}
       {/* TOP HEADER: CLEAN BENTO DESIGN */}
       {/* ========================================================================= */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 rounded-3xl border border-slate-200/80 bg-white px-7 py-6 shadow-sm dark:border-slate-800 dark:bg-[#111622]">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 rounded-3xl border border-slate-200/80 bg-white px-7 py-6 shadow-sm dark:border-slate-800 dark:bg-[#0F172A]">
         <div>
           <h1 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">
             Planejamento de Estudos
@@ -404,7 +404,7 @@ export const PlanejamentoViewContent: React.FC = () => {
           {/* Quick Action: Planejar */}
           <button
             onClick={() => setIsEditingWizard(true)}
-            className="flex items-center gap-2 rounded-2xl border border-orange-500/30 bg-orange-500/10 px-5 py-2.5 text-xs font-bold text-[#FF6B00] dark:bg-orange-500/20 dark:text-[#FFA726] hover:bg-orange-500/20 transition-all shadow-xs cursor-pointer"
+            className="flex items-center gap-2 rounded-2xl border border-amber-500/30 bg-amber-500/10 px-5 py-2.5 text-xs font-bold text-[#F59E0B] dark:bg-amber-500/20 dark:text-[#FBBF24] hover:bg-amber-500/20 transition-all shadow-xs cursor-pointer"
           >
             <Edit3 className="h-4 w-4" />
             <span>Planejar</span>
@@ -422,12 +422,12 @@ export const PlanejamentoViewContent: React.FC = () => {
             {/* Top Cards: CICLOS COMPLETOS & PROGRESSO BAR */}
             <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 w-full">
               {/* Card 1: CICLOS COMPLETOS */}
-              <div className="sm:col-span-3 rounded-2xl border border-[#E2E8F0] bg-white p-4.5 shadow-xs dark:border-[#1E293B] dark:bg-[#111622]">
+              <div className="sm:col-span-3 rounded-2xl border border-[#E2E8F0] bg-white p-4.5 shadow-xs dark:border-[#1E293B] dark:bg-[#0F172A]">
                 <span className="text-[10px] font-black uppercase tracking-wider text-[#6B7280] dark:text-[#9CA3AF]">
                   CICLOS COMPLETOS
                 </span>
                 <div className="mt-2 flex items-center gap-3">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-full border-2 border-[#FF6B00] font-mono text-base font-black text-[#FF6B00] dark:border-[#FFA726] dark:text-[#FFA726]">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-full border-2 border-[#F59E0B] font-mono text-base font-black text-[#F59E0B] dark:border-[#FBBF24] dark:text-[#FBBF24]">
                     {completedCycles}
                   </div>
                   <div>
@@ -442,7 +442,7 @@ export const PlanejamentoViewContent: React.FC = () => {
               </div>
 
               {/* Card 2: PROGRESSO DO CICLO ATUAL */}
-              <div className="sm:col-span-9 rounded-2xl border border-[#E2E8F0] bg-white p-4.5 shadow-xs dark:border-[#1E293B] dark:bg-[#111622] flex flex-col justify-between">
+              <div className="sm:col-span-9 rounded-2xl border border-[#E2E8F0] bg-white p-4.5 shadow-xs dark:border-[#1E293B] dark:bg-[#0F172A] flex flex-col justify-between">
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] font-black uppercase tracking-wider text-[#6B7280] dark:text-[#9CA3AF]">
                     PROGRESSO DA RODADA ATUAL
@@ -453,7 +453,7 @@ export const PlanejamentoViewContent: React.FC = () => {
                     </span>
                     <button
                       onClick={handleRestartCycle}
-                      className="rounded-lg bg-orange-50 px-2.5 py-1 text-[10px] font-bold text-[#FF6B00] hover:bg-orange-100 dark:bg-orange-950/40 dark:text-[#FFA726] transition cursor-pointer"
+                      className="rounded-lg bg-amber-50 px-2.5 py-1 text-[10px] font-bold text-[#F59E0B] hover:bg-amber-100 dark:bg-amber-950/40 dark:text-[#FBBF24] transition cursor-pointer"
                       title="Reiniciar este ciclo a partir do bloco 1"
                     >
                       Recomeçar Ciclo
@@ -465,7 +465,7 @@ export const PlanejamentoViewContent: React.FC = () => {
                   <div className="h-3 w-full overflow-hidden rounded-full bg-[#E2E8F0] dark:bg-[#1E293B]">
                     <div
                       style={{ width: `${cycleProgressPercentage}%` }}
-                      className="h-full rounded-full bg-[#FF6B00] transition-all duration-300"
+                      className="h-full rounded-full bg-[#F59E0B] transition-all duration-300"
                     />
                   </div>
                 </div>
@@ -476,7 +476,7 @@ export const PlanejamentoViewContent: React.FC = () => {
           {/* Main 2-Column Dashboard: Left Sequence List / Right Donut Chart */}
           <div className="grid grid-cols-1 gap-5 lg:grid-cols-12">
             {/* LEFT COLUMN (lg:col-span-7): SEQUÊNCIA DOS ESTUDOS */}
-            <div className="lg:col-span-7 rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-xs dark:border-[#1E293B] dark:bg-[#111622] flex flex-col justify-between">
+            <div className="lg:col-span-7 rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-xs dark:border-[#1E293B] dark:bg-[#0F172A] flex flex-col justify-between">
               <div>
                 <div className="flex items-center justify-between border-b border-[#E2E8F0] pb-3 dark:border-[#1E293B]">
                   <div>
@@ -487,7 +487,7 @@ export const PlanejamentoViewContent: React.FC = () => {
                       Ordem contínua dos blocos de estudo no ciclo
                     </p>
                   </div>
-                  <span className="rounded-full bg-[#F3F4F6] px-2.5 py-1 font-mono text-[10px] font-bold text-[#6B7280] dark:bg-[#182030] dark:text-[#9CA3AF]">
+                  <span className="rounded-full bg-[#F3F4F6] px-2.5 py-1 font-mono text-[10px] font-bold text-[#6B7280] dark:bg-[#1E293B] dark:text-[#9CA3AF]">
                     {(cycleSteps || []).length} Blocos
                   </span>
                 </div>
@@ -518,7 +518,7 @@ export const PlanejamentoViewContent: React.FC = () => {
                           key={step.id || `step-${idx}`}
                           className={`relative flex items-center justify-between rounded-xl border p-3 transition ${
                             isCurrent
-                              ? "border-[#FF6B00] bg-[#FFF8F2] ring-1 ring-[#FF6B00] dark:border-[#FF6B00] dark:bg-[#2A1608]"
+                              ? "border-[#F59E0B] bg-[#FFF8F2] ring-1 ring-[#F59E0B] dark:border-[#F59E0B] dark:bg-[#2A1608]"
                               : "border-[#E2E8F0] bg-[#F9FAFB] hover:bg-white dark:border-[#1E293B] dark:bg-[#1C2429] dark:hover:bg-[#20292F]"
                           }`}
                         >
@@ -537,7 +537,7 @@ export const PlanejamentoViewContent: React.FC = () => {
                                 {disc?.name || "Disciplina"}
                               </p>
                               {isCurrent && (
-                                <span className="inline-flex items-center gap-1 text-[10px] font-black text-[#FF6B00] dark:text-[#FFA726] uppercase">
+                                <span className="inline-flex items-center gap-1 text-[10px] font-black text-[#F59E0B] dark:text-[#FBBF24] uppercase">
                                   <Flame className="h-3 w-3" /> Vez Atual no Ciclo
                                 </span>
                               )}
@@ -555,7 +555,7 @@ export const PlanejamentoViewContent: React.FC = () => {
                             {isCurrent && (
                               <button
                                 onClick={() => handleStartStepStudy(step.disciplineId, step.targetMinutes)}
-                                className="flex items-center gap-1 rounded-lg bg-[#FF6B00] px-2.5 py-1 text-[10px] font-bold text-white hover:bg-[#E05D00] shadow-xs cursor-pointer"
+                                className="flex items-center gap-1 rounded-lg bg-[#F59E0B] px-2.5 py-1 text-[10px] font-bold text-white hover:bg-[#D97706] shadow-xs cursor-pointer"
                                 title="Iniciar estudo agora no cronômetro"
                               >
                                 <Play className="h-3 w-3 fill-current" />
@@ -574,7 +574,7 @@ export const PlanejamentoViewContent: React.FC = () => {
               <div className="mt-4 pt-3 border-t border-[#E2E8F0] dark:border-[#1E293B] flex justify-end">
                 <button
                   onClick={() => setIsEditingWizard(true)}
-                  className="flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#FF6B00] to-[#FF8A00] hover:from-[#E05D00] hover:to-[#FF6B00] px-5 py-2.5 text-xs font-bold text-white transition shadow-md shadow-orange-500/20 cursor-pointer"
+                  className="flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#F59E0B] to-[#FBBF24] hover:from-[#D97706] hover:to-[#F59E0B] px-5 py-2.5 text-xs font-bold text-white transition shadow-md shadow-amber-500/20 cursor-pointer"
                 >
                   <Sliders className="h-3.5 w-3.5" />
                   <span>Ajustar Ciclo</span>
@@ -583,7 +583,7 @@ export const PlanejamentoViewContent: React.FC = () => {
             </div>
 
             {/* RIGHT COLUMN (lg:col-span-5): DONUT CHART & MATÉRIAS PROPORÇÕES */}
-            <div className="lg:col-span-5 rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-xs dark:border-[#1E293B] dark:bg-[#111622] flex flex-col justify-between">
+            <div className="lg:col-span-5 rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-xs dark:border-[#1E293B] dark:bg-[#0F172A] flex flex-col justify-between">
               <div>
                 <div className="border-b border-[#E2E8F0] pb-3 dark:border-[#1E293B]">
                   <span className="text-[10px] font-black uppercase tracking-wider text-[#6B7280] dark:text-[#9CA3AF]">
@@ -646,7 +646,7 @@ export const PlanejamentoViewContent: React.FC = () => {
                     return (
                       <div
                         key={disc.id}
-                        className="flex items-center justify-between text-xs py-1 border-b border-[#F3F4F6] dark:border-[#182030] last:border-0"
+                        className="flex items-center justify-between text-xs py-1 border-b border-[#F3F4F6] dark:border-[#1E293B] last:border-0"
                       >
                         <div className="flex items-center gap-2">
                           <span
@@ -693,7 +693,7 @@ export const PlanejamentoViewContent: React.FC = () => {
           {/* Left Sidebar Pane (lg:col-span-3): Mini Calendar & Agendas Filter */}
           <div className="lg:col-span-3 space-y-4">
             {/* Mini Calendar Card */}
-            <div className="rounded-2xl border border-[#E2E8F0] bg-white p-4.5 shadow-xs dark:border-[#1E293B] dark:bg-[#111622]">
+            <div className="rounded-2xl border border-[#E2E8F0] bg-white p-4.5 shadow-xs dark:border-[#1E293B] dark:bg-[#0F172A]">
               {/* Month Navigator Header */}
               <div className="flex items-center justify-between border-b border-[#E2E8F0] pb-3 dark:border-[#1E293B]">
                 <button
@@ -703,7 +703,7 @@ export const PlanejamentoViewContent: React.FC = () => {
                     prev.setMonth(prev.getMonth() - 1);
                     setCurrentCalendarDate(prev);
                   }}
-                  className="rounded-lg p-1 text-[#6B7280] hover:bg-[#F3F4F6] hover:text-[#1F2937] dark:text-[#9CA3AF] dark:hover:bg-[#182030] dark:hover:text-white"
+                  className="rounded-lg p-1 text-[#6B7280] hover:bg-[#F3F4F6] hover:text-[#1F2937] dark:text-[#9CA3AF] dark:hover:bg-[#1E293B] dark:hover:text-white"
                 >
                   <ChevronLeft className="h-4 w-4" />
                 </button>
@@ -721,7 +721,7 @@ export const PlanejamentoViewContent: React.FC = () => {
                     next.setMonth(next.getMonth() + 1);
                     setCurrentCalendarDate(next);
                   }}
-                  className="rounded-lg p-1 text-[#6B7280] hover:bg-[#F3F4F6] hover:text-[#1F2937] dark:text-[#9CA3AF] dark:hover:bg-[#182030] dark:hover:text-white"
+                  className="rounded-lg p-1 text-[#6B7280] hover:bg-[#F3F4F6] hover:text-[#1F2937] dark:text-[#9CA3AF] dark:hover:bg-[#1E293B] dark:hover:text-white"
                 >
                   <ChevronRight className="h-4 w-4" />
                 </button>
@@ -760,7 +760,7 @@ export const PlanejamentoViewContent: React.FC = () => {
                           ? "bg-[#249D84] font-bold text-white shadow-xs"
                           : item.isSelected
                           ? "bg-[#1F2937] text-white dark:bg-white dark:text-[#1F2937]"
-                          : "text-[#374151] hover:bg-[#F3F4F6] dark:text-[#E5EAEF] dark:hover:bg-[#182030]"
+                          : "text-[#374151] hover:bg-[#F3F4F6] dark:text-[#E5EAEF] dark:hover:bg-[#1E293B]"
                       }`}
                     >
                       {item.day}
@@ -873,7 +873,7 @@ export const PlanejamentoViewContent: React.FC = () => {
           {/* Right Area (lg:col-span-9): 7-Day Weekly Timetable (Bento Box Modern Grid) */}
           <div className="lg:col-span-9 space-y-4">
             {/* Week Navigation Header Bar */}
-            <div className="flex items-center justify-between rounded-3xl border border-slate-200/80 bg-white px-5 py-3.5 shadow-sm dark:border-slate-800 dark:bg-[#111622]">
+            <div className="flex items-center justify-between rounded-3xl border border-slate-200/80 bg-white px-5 py-3.5 shadow-sm dark:border-slate-800 dark:bg-[#0F172A]">
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => setWeekOffset((prev) => prev - 1)}
@@ -934,7 +934,7 @@ export const PlanejamentoViewContent: React.FC = () => {
                     className={`flex min-h-[520px] flex-col justify-between rounded-3xl border p-2.5 transition-all duration-200 ${
                       day.isToday
                         ? "border-[#249D84] bg-emerald-50/20 shadow-sm ring-1 ring-[#249D84]/40 dark:border-[#249D84] dark:bg-[#249D84]/5"
-                        : "border-slate-200/80 bg-white shadow-sm dark:border-slate-800 dark:bg-[#111622]"
+                        : "border-slate-200/80 bg-white shadow-sm dark:border-slate-800 dark:bg-[#0F172A]"
                     }`}
                   >
                     <div>
@@ -1055,7 +1055,7 @@ export const PlanejamentoViewContent: React.FC = () => {
       {/* Modal: Editar Bloco Existente */}
       {editingBlock && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs">
-          <div className="w-full max-w-md rounded-3xl border border-slate-200/80 bg-white p-6 shadow-2xl dark:border-slate-800 dark:bg-[#111622]">
+          <div className="w-full max-w-md rounded-3xl border border-slate-200/80 bg-white p-6 shadow-2xl dark:border-slate-800 dark:bg-[#0F172A]">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3 dark:border-slate-800">
               <h3 className="text-sm font-black uppercase text-slate-900 dark:text-white">
                 Editar Bloco de Estudo
@@ -1144,7 +1144,7 @@ export const PlanejamentoViewContent: React.FC = () => {
       {/* Modal: Adicionar Bloco ao Calendário Semanal */}
       {isAddBlockModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs">
-          <div className="w-full max-w-md rounded-3xl border border-slate-200/80 bg-white p-6 shadow-2xl dark:border-slate-800 dark:bg-[#111622]">
+          <div className="w-full max-w-md rounded-3xl border border-slate-200/80 bg-white p-6 shadow-2xl dark:border-slate-800 dark:bg-[#0F172A]">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3 dark:border-slate-800">
               <h3 className="text-sm font-black uppercase text-slate-900 dark:text-white">
                 Adicionar Bloco à Grade

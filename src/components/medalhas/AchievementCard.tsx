@@ -29,12 +29,12 @@ export const AchievementCard: React.FC<AchievementCardProps> = ({ badge, onClick
           onClick();
         }
       }}
-      className={`group relative flex flex-col items-center text-center p-4 sm:p-5 rounded-2xl border transition-all duration-200 cursor-pointer select-none focus:outline-hidden focus:ring-2 focus:ring-[#FF6B00] ${
+      className={`group relative flex flex-col items-center text-center p-4 sm:p-5 rounded-2xl border transition-all duration-200 cursor-pointer select-none focus:outline-hidden focus:ring-2 focus:ring-[#F59E0B] ${
         isUnlocked
-          ? "bg-white dark:bg-[#0E121A] border-slate-200/80 dark:border-slate-800/90 shadow-2xs hover:border-[#FF6B00]/60 hover:-translate-y-1 hover:shadow-md dark:hover:border-[#FF6B00]/50"
+          ? "bg-white dark:bg-[#0F172A] border-slate-200/80 dark:border-slate-800/90 shadow-2xs hover:border-[#F59E0B]/60 hover:-translate-y-1 hover:shadow-md dark:hover:border-[#F59E0B]/50"
           : isInProgress
-          ? "bg-white/80 dark:bg-[#0E121A]/80 border-slate-200/60 dark:border-slate-800/70 hover:border-slate-300 dark:hover:border-slate-700 hover:-translate-y-0.5 hover:shadow-2xs"
-          : "bg-slate-50/50 dark:bg-[#0B0F16]/50 border-slate-200/40 dark:border-slate-800/40 opacity-75 hover:opacity-100 hover:bg-white dark:hover:bg-[#0E121A] hover:-translate-y-0.5 hover:border-slate-300 dark:hover:border-slate-700"
+          ? "bg-white/80 dark:bg-[#0F172A]/80 border-slate-200/60 dark:border-slate-800/70 hover:border-slate-300 dark:hover:border-slate-700 hover:-translate-y-0.5 hover:shadow-2xs"
+          : "bg-slate-50/50 dark:bg-[#0B0F16]/50 border-slate-200/40 dark:border-slate-800/40 opacity-75 hover:opacity-100 hover:bg-white dark:hover:bg-[#0F172A] hover:-translate-y-0.5 hover:border-slate-300 dark:hover:border-slate-700"
       }`}
     >
       {/* Header: Category & Status */}
@@ -49,7 +49,7 @@ export const AchievementCard: React.FC<AchievementCardProps> = ({ badge, onClick
             Desbloqueada
           </span>
         ) : isInProgress ? (
-          <span className="text-[10px] font-semibold text-[#FF6B00] dark:text-[#FFA726]">
+          <span className="text-[10px] font-semibold text-[#F59E0B] dark:text-[#FBBF24]">
             {Math.round(badge.progressPercent)}%
           </span>
         ) : (
@@ -63,7 +63,7 @@ export const AchievementCard: React.FC<AchievementCardProps> = ({ badge, onClick
       <h3
         className={`text-sm font-bold leading-tight transition-colors line-clamp-1 h-5 ${
           isUnlocked
-            ? "text-slate-900 dark:text-white group-hover:text-[#FF6B00] dark:group-hover:text-[#FFA726]"
+            ? "text-slate-900 dark:text-white group-hover:text-[#F59E0B] dark:group-hover:text-[#FBBF24]"
             : "text-slate-700 dark:text-slate-300"
         }`}
       >
@@ -108,7 +108,7 @@ export const AchievementCard: React.FC<AchievementCardProps> = ({ badge, onClick
               isUnlocked
                 ? "bg-emerald-500"
                 : isInProgress
-                ? "bg-[#FF6B00]"
+                ? "bg-[#F59E0B]"
                 : "bg-slate-300 dark:bg-slate-700"
             }`}
             style={{ width: `${Math.min(100, Math.max(0, badge.progressPercent))}%` }}
@@ -121,7 +121,7 @@ export const AchievementCard: React.FC<AchievementCardProps> = ({ badge, onClick
         <span
           className={`font-mono text-[11px] font-bold px-2 py-0.5 rounded-full border transition-colors ${
             isUnlocked
-              ? "bg-orange-50 text-[#FF6B00] border-orange-200 dark:bg-orange-950/50 dark:text-[#FFA726] dark:border-orange-800/60"
+              ? "bg-amber-50 text-[#F59E0B] border-amber-200 dark:bg-amber-950/50 dark:text-[#FBBF24] dark:border-amber-800/60"
               : "bg-slate-100 text-slate-600 border-slate-200 dark:bg-slate-800/60 dark:text-slate-400 dark:border-slate-700/60"
           }`}
         >

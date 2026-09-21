@@ -172,7 +172,7 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
 
             <button
               onClick={() => createScheduledReview(topic.id, "24h")}
-              className="flex items-center gap-1.5 rounded-xl border border-orange-200 bg-orange-50 px-3.5 py-2 text-xs font-semibold text-[#FF6B00] hover:bg-orange-100 dark:border-orange-900 dark:bg-orange-950/60 dark:text-[#FFA726] cursor-pointer"
+              className="flex items-center gap-1.5 rounded-xl border border-amber-200 bg-amber-50 px-3.5 py-2 text-xs font-semibold text-[#F59E0B] hover:bg-amber-100 dark:border-amber-900 dark:bg-amber-950/60 dark:text-[#FBBF24] cursor-pointer"
             >
               <RotateCw className="h-3.5 w-3.5" />
               Agendar Revisão (24h)
@@ -199,7 +199,7 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
                     className="flex items-center justify-between rounded-lg border border-slate-200/80 bg-white p-2.5 text-xs text-slate-800 shadow-2xs dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
                   >
                     <div className="flex items-center gap-2">
-                      <span className="h-1.5 w-1.5 rounded-full bg-[#FF6B00]" />
+                      <span className="h-1.5 w-1.5 rounded-full bg-[#F59E0B]" />
                       <span>{sub}</span>
                     </div>
                     <button
@@ -220,12 +220,12 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
                   value={newSubtopicText}
                   onChange={(e) => setNewSubtopicText(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleAddSubtopic()}
-                  className="flex-1 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs text-slate-900 focus:border-[#FF6B00] focus:ring-1 focus:ring-[#FF6B00] focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                  className="flex-1 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs text-slate-900 focus:border-[#F59E0B] focus:ring-1 focus:ring-[#F59E0B] focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                 />
                 <button
                   type="button"
                   onClick={handleAddSubtopic}
-                  className="flex items-center gap-1 rounded-lg bg-[#FF6B00] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#E05D00] cursor-pointer"
+                  className="flex items-center gap-1 rounded-lg bg-[#F59E0B] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#D97706] cursor-pointer"
                 >
                   <Plus className="h-3.5 w-3.5" /> Adicionar
                 </button>
@@ -242,14 +242,14 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
               {!isEditingNotes ? (
                 <button
                   onClick={() => setIsEditingNotes(true)}
-                  className="flex items-center gap-1 text-xs font-semibold text-[#FF6B00] hover:underline dark:text-[#FFA726] cursor-pointer"
+                  className="flex items-center gap-1 text-xs font-semibold text-[#F59E0B] hover:underline dark:text-[#FBBF24] cursor-pointer"
                 >
                   <Edit3 className="h-3 w-3" /> Editar
                 </button>
               ) : (
                 <button
                   onClick={handleSaveNotes}
-                  className="flex items-center gap-1 rounded-md bg-[#FF6B00] px-2.5 py-1 text-xs font-bold text-white hover:bg-[#E05D00] cursor-pointer"
+                  className="flex items-center gap-1 rounded-md bg-[#F59E0B] px-2.5 py-1 text-xs font-bold text-white hover:bg-[#D97706] cursor-pointer"
                 >
                   Salvar
                 </button>
@@ -263,7 +263,7 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
                   placeholder="Ex: Cuidado com a pegadinha da banca sobre prazo prescricional..."
-                  className="w-full rounded-lg border border-slate-200 p-2.5 text-xs text-slate-900 focus:border-[#FF6B00] focus:ring-1 focus:ring-[#FF6B00] focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                  className="w-full rounded-lg border border-slate-200 p-2.5 text-xs text-slate-900 focus:border-[#F59E0B] focus:ring-1 focus:ring-[#F59E0B] focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                 />
               ) : (
                 <div className="rounded-lg bg-slate-50 p-3 text-xs text-slate-700 dark:bg-slate-800/40 dark:text-slate-300">
@@ -296,7 +296,7 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
                     className="flex items-center justify-between rounded-xl border border-slate-100 bg-slate-50/70 p-3 text-xs dark:border-slate-800 dark:bg-slate-800/30"
                   >
                     <div className="flex items-center gap-3">
-                      <span className="rounded-md bg-orange-100 px-2 py-0.5 text-[10px] font-bold text-orange-800 dark:bg-orange-950 dark:text-orange-300">
+                      <span className="rounded-md bg-amber-100 px-2 py-0.5 text-[10px] font-bold text-amber-800 dark:bg-amber-950 dark:text-amber-300">
                         {sess.modality}
                       </span>
                       <div>

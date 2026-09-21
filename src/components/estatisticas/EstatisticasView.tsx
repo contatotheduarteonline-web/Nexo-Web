@@ -71,7 +71,7 @@ export const EstatisticasView: React.FC = () => {
     };
   }).filter((m) => m.value > 0);
 
-  const MODALITY_COLORS = ["#FF6B00", "#FF8A00", "#FFA726", "#111622", "#475569"];
+  const MODALITY_COLORS = ["#F59E0B", "#FBBF24", "#FBBF24", "#0F172A", "#475569"];
 
   return (
     <div className="space-y-6">
@@ -89,7 +89,7 @@ export const EstatisticasView: React.FC = () => {
             onClick={() => setTimeRange("7d")}
             className={`rounded-lg px-3 py-1.5 text-xs font-bold transition ${
               timeRange === "7d"
-                ? "bg-[#FF6B00] text-white shadow-xs"
+                ? "bg-[#F59E0B] text-white shadow-xs"
                 : "text-slate-500 hover:text-slate-900 dark:text-slate-400"
             }`}
           >
@@ -99,7 +99,7 @@ export const EstatisticasView: React.FC = () => {
             onClick={() => setTimeRange("30d")}
             className={`rounded-lg px-3 py-1.5 text-xs font-bold transition ${
               timeRange === "30d"
-                ? "bg-[#FF6B00] text-white shadow-xs"
+                ? "bg-[#F59E0B] text-white shadow-xs"
                 : "text-slate-500 hover:text-slate-900 dark:text-slate-400"
             }`}
           >
@@ -109,7 +109,7 @@ export const EstatisticasView: React.FC = () => {
             onClick={() => setTimeRange("all")}
             className={`rounded-lg px-3 py-1.5 text-xs font-bold transition ${
               timeRange === "all"
-                ? "bg-[#FF6B00] text-white shadow-xs"
+                ? "bg-[#F59E0B] text-white shadow-xs"
                 : "text-slate-500 hover:text-slate-900 dark:text-slate-400"
             }`}
           >
@@ -138,7 +138,7 @@ export const EstatisticasView: React.FC = () => {
 
         <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-xs dark:border-slate-800 dark:bg-slate-900">
           <span className="text-xs font-semibold text-slate-400 uppercase">Média Diária</span>
-          <div className="mt-2 text-2xl font-bold text-[#FF6B00] dark:text-[#FFA726]">
+          <div className="mt-2 text-2xl font-bold text-[#F59E0B] dark:text-[#FBBF24]">
             {(metrics.hoursThisWeek / 7).toFixed(1)}h/dia
           </div>
           <p className="mt-1 text-xs text-slate-500">Ritmo sustentável</p>
@@ -146,7 +146,7 @@ export const EstatisticasView: React.FC = () => {
 
         <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-xs dark:border-slate-800 dark:bg-slate-900">
           <span className="text-xs font-semibold text-slate-400 uppercase">Cobertura do Edital</span>
-          <div className="mt-2 text-2xl font-bold text-[#FF6B00] dark:text-[#FFA726]">
+          <div className="mt-2 text-2xl font-bold text-[#F59E0B] dark:text-[#FBBF24]">
             {metrics.editalStudiedPercentage}%
           </div>
           <p className="mt-1 text-xs text-slate-500">{metrics.studiedTopicsCount} de {metrics.totalTopicsCount} tópicos</p>
@@ -174,7 +174,7 @@ export const EstatisticasView: React.FC = () => {
                   contentStyle={{ backgroundColor: "#1E293B", borderRadius: "8px", border: "none", color: "#FFF" }}
                   formatter={(value: any) => [`${value}h`, "Horas Estudadas"]}
                 />
-                <Bar dataKey="horas" fill="#FF6B00" radius={[6, 6, 0, 0]} />
+                <Bar dataKey="horas" fill="#F59E0B" radius={[6, 6, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>

@@ -386,7 +386,7 @@ export const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({
                             Math.min(questionsDone, Math.max(0, parseInt(e.target.value) || 0))
                           )
                         }
-                        className="mt-0.5 w-full rounded-lg border border-slate-200 bg-white p-1.5 text-center text-xs font-bold text-[#FF6B00] focus:border-[#FF6B00] focus:outline-hidden dark:border-slate-700 dark:bg-slate-900 dark:text-[#FFA726]"
+                        className="mt-0.5 w-full rounded-lg border border-slate-200 bg-white p-1.5 text-center text-xs font-bold text-[#F59E0B] focus:border-[#F59E0B] focus:outline-hidden dark:border-slate-700 dark:bg-slate-900 dark:text-[#FBBF24]"
                       />
                     </div>
                   </div>
@@ -396,7 +396,7 @@ export const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({
               {/* Nível de Retenção (Algoritmo Espaçado) */}
               <div>
                 <label className="flex items-center gap-1.5 text-xs font-bold text-slate-800 dark:text-slate-200">
-                  <Brain className="h-4 w-4 text-[#FF6B00] dark:text-[#FFA726]" />
+                  <Brain className="h-4 w-4 text-[#F59E0B] dark:text-[#FBBF24]" />
                   <span>Como foi seu domínio ao revisar? (Algoritmo Espaçado)</span>
                 </label>
                 <p className="text-[11px] text-slate-500">
@@ -437,13 +437,13 @@ export const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({
                     onClick={() => setRetentionLevel("bom")}
                     className={`flex flex-col items-center rounded-xl border p-2.5 text-center transition ${
                       retentionLevel === "bom"
-                        ? "border-orange-500 bg-orange-50 text-[#FF6B00] dark:border-orange-500 dark:bg-orange-500/20 dark:text-[#FFA726] ring-2 ring-orange-500"
+                        ? "border-amber-500 bg-amber-50 text-[#F59E0B] dark:border-amber-500 dark:bg-amber-500/20 dark:text-[#FBBF24] ring-2 ring-amber-500"
                         : "border-slate-200 bg-white hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800"
                     }`}
                   >
                     <span className="text-sm">👍</span>
                     <span className="mt-1 text-xs font-bold">Bom / Entendi</span>
-                    <span className="text-[10px] text-[#FF6B00] dark:text-[#FFA726]">Ciclo normal</span>
+                    <span className="text-[10px] text-[#F59E0B] dark:text-[#FBBF24]">Ciclo normal</span>
                   </button>
 
                   <button
@@ -451,13 +451,13 @@ export const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({
                     onClick={() => setRetentionLevel("facil")}
                     className={`flex flex-col items-center rounded-xl border p-2.5 text-center transition ${
                       retentionLevel === "facil"
-                        ? "border-orange-500 bg-gradient-to-tr from-orange-50 to-orange-100/80 text-[#0A0D12] dark:border-[#FFA726] dark:bg-orange-500/30 dark:text-white ring-2 ring-orange-500"
+                        ? "border-amber-500 bg-gradient-to-tr from-amber-50 to-amber-100/80 text-[#0A0D12] dark:border-[#FBBF24] dark:bg-amber-500/30 dark:text-white ring-2 ring-amber-500"
                         : "border-slate-200 bg-white hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800"
                     }`}
                   >
                     <span className="text-sm">⭐</span>
                     <span className="mt-1 text-xs font-bold">Fácil / Dominado</span>
-                    <span className="text-[10px] text-[#FF6B00] dark:text-[#FFA726] font-bold">+Maestria</span>
+                    <span className="text-[10px] text-[#F59E0B] dark:text-[#FBBF24] font-bold">+Maestria</span>
                   </button>
                 </div>
               </div>
@@ -536,7 +536,7 @@ export const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({
                     required
                     value={newDueDate}
                     onChange={(e) => setNewDueDate(e.target.value)}
-                    className="mt-1.5 w-full rounded-xl border border-slate-200 bg-white p-2.5 text-xs text-slate-900 focus:border-[#FF6B00] focus:ring-1 focus:ring-[#FF6B00] focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                    className="mt-1.5 w-full rounded-xl border border-slate-200 bg-white p-2.5 text-xs text-slate-900 focus:border-[#F59E0B] focus:ring-1 focus:ring-[#F59E0B] focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                   />
                 </div>
 
@@ -547,7 +547,7 @@ export const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({
                   <select
                     value={newStage}
                     onChange={(e) => setNewStage(e.target.value as ReviewInterval)}
-                    className="mt-1.5 w-full rounded-xl border border-slate-200 bg-white p-2.5 text-xs text-slate-900 focus:border-[#FF6B00] focus:ring-1 focus:ring-[#FF6B00] focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                    className="mt-1.5 w-full rounded-xl border border-slate-200 bg-white p-2.5 text-xs text-slate-900 focus:border-[#F59E0B] focus:ring-1 focus:ring-[#F59E0B] focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                   >
                     <option value="24h">24 Horas (R1)</option>
                     <option value="7d">7 Dias (R2)</option>
@@ -610,7 +610,7 @@ export const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({
                 <button
                   type="button"
                   onClick={handleCompleteReview}
-                  className="flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#FF6B00] to-[#FF8A00] hover:from-[#E05D00] hover:to-[#FF6B00] px-5 py-2.5 text-xs font-bold text-white shadow-md shadow-orange-500/25 active:scale-98 transition cursor-pointer"
+                  className="flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#F59E0B] to-[#FBBF24] hover:from-[#D97706] hover:to-[#F59E0B] px-5 py-2.5 text-xs font-bold text-white shadow-md shadow-amber-500/25 active:scale-98 transition cursor-pointer"
                 >
                   <CheckCircle2 className="h-4 w-4" />
                   <span>Concluir Revisão</span>
@@ -632,7 +632,7 @@ export const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({
               <button
                 type="button"
                 onClick={handleReschedule}
-                className="flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#FF6B00] to-[#FF8A00] hover:from-[#E05D00] hover:to-[#FF6B00] px-5 py-2.5 text-xs font-bold text-white shadow-md shadow-orange-500/25 active:scale-98 transition cursor-pointer"
+                className="flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#F59E0B] to-[#FBBF24] hover:from-[#D97706] hover:to-[#F59E0B] px-5 py-2.5 text-xs font-bold text-white shadow-md shadow-amber-500/25 active:scale-98 transition cursor-pointer"
               >
                 <Calendar className="h-4 w-4" />
                 <span>Confirmar Nova Data</span>

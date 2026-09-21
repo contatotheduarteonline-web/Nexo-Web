@@ -389,7 +389,7 @@ export const CronometroView: React.FC = () => {
         {/* COLUNA ESQUERDA (~65%) */}
         <div className="space-y-6 lg:col-span-8">
           {/* Seletor Compacto: Disciplina e Tópico com busca */}
-          <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-xs dark:border-slate-800 dark:bg-[#0E121A]">
+          <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-xs dark:border-slate-800 dark:bg-[#0F172A]">
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               {/* Disciplina */}
               <div>
@@ -406,7 +406,7 @@ export const CronometroView: React.FC = () => {
                       const firstTopic = currentEdital?.topics.find((t) => t.disciplineId === discId);
                       setSelectedTopicId(firstTopic?.id || "");
                     }}
-                    className="w-full appearance-none rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 pr-8 text-xs font-semibold text-slate-900 transition focus:border-[#FF6B00] focus:ring-1 focus:ring-[#FF6B00] dark:border-slate-800 dark:bg-[#141924] dark:text-white cursor-pointer"
+                    className="w-full appearance-none rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 pr-8 text-xs font-semibold text-slate-900 transition focus:border-[#F59E0B] focus:ring-1 focus:ring-[#F59E0B] dark:border-slate-800 dark:bg-[#0F172A] dark:text-white cursor-pointer"
                   >
                     {disciplines.length === 0 ? (
                       <option value="">Nenhuma disciplina</option>
@@ -431,7 +431,7 @@ export const CronometroView: React.FC = () => {
                   id="study-topic-dropdown-trigger"
                   type="button"
                   onClick={() => setIsTopicDropdownOpen((prev) => !prev)}
-                  className="mt-1 flex w-full items-center justify-between rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-left text-xs font-semibold text-slate-900 transition hover:border-slate-300 focus:border-[#FF6B00] focus:ring-1 focus:ring-[#FF6B00] dark:border-slate-800 dark:bg-[#141924] dark:text-white cursor-pointer"
+                  className="mt-1 flex w-full items-center justify-between rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-left text-xs font-semibold text-slate-900 transition hover:border-slate-300 focus:border-[#F59E0B] focus:ring-1 focus:ring-[#F59E0B] dark:border-slate-800 dark:bg-[#0F172A] dark:text-white cursor-pointer"
                 >
                   <span className="truncate">
                     {currentTopic?.name || "Selecionar tópico..."}
@@ -451,7 +451,7 @@ export const CronometroView: React.FC = () => {
                           placeholder="Buscar tópico..."
                           value={topicSearchTerm}
                           onChange={(e) => setTopicSearchTerm(e.target.value)}
-                          className="w-full rounded-md border border-slate-200 bg-slate-50 py-1.5 pl-8 pr-3 text-xs text-slate-900 focus:border-[#FF6B00] focus:outline-none dark:border-slate-700 dark:bg-[#161C28] dark:text-white"
+                          className="w-full rounded-md border border-slate-200 bg-slate-50 py-1.5 pl-8 pr-3 text-xs text-slate-900 focus:border-[#F59E0B] focus:outline-none dark:border-slate-700 dark:bg-[#161C28] dark:text-white"
                         />
                       </div>
                     </div>
@@ -475,7 +475,7 @@ export const CronometroView: React.FC = () => {
                               }}
                               className={`flex w-full items-center justify-between rounded-lg px-2.5 py-2 text-left transition cursor-pointer ${
                                 isSelected
-                                  ? "bg-orange-50 font-bold text-[#FF6B00] dark:bg-orange-950/40 dark:text-[#FFA726]"
+                                  ? "bg-amber-50 font-bold text-[#F59E0B] dark:bg-amber-950/40 dark:text-[#FBBF24]"
                                   : "text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
                               }`}
                             >
@@ -493,7 +493,7 @@ export const CronometroView: React.FC = () => {
           </div>
 
           {/* Atividade: Segmented Control Compacto */}
-          <div className="rounded-xl border border-slate-200 bg-white p-3 shadow-xs dark:border-slate-800 dark:bg-[#0E121A]">
+          <div className="rounded-xl border border-slate-200 bg-white p-3 shadow-xs dark:border-slate-800 dark:bg-[#0F172A]">
             <div className="grid grid-cols-3 gap-1.5 sm:grid-cols-6">
               {modalities.map((item) => {
                 const IconComp = item.icon;
@@ -505,8 +505,8 @@ export const CronometroView: React.FC = () => {
                     onClick={() => setModality(item.key)}
                     className={`flex items-center justify-center gap-1.5 rounded-lg py-2 text-xs font-semibold transition cursor-pointer ${
                       isSelected
-                        ? "bg-[#FF6B00] text-white shadow-xs"
-                        : "bg-slate-50 text-slate-600 hover:bg-slate-100 dark:bg-[#141924] dark:text-slate-400 dark:hover:bg-slate-800"
+                        ? "bg-[#F59E0B] text-white shadow-xs"
+                        : "bg-slate-50 text-slate-600 hover:bg-slate-100 dark:bg-[#0F172A] dark:text-slate-400 dark:hover:bg-slate-800"
                     }`}
                   >
                     <IconComp className="h-3.5 w-3.5" />
@@ -518,7 +518,7 @@ export const CronometroView: React.FC = () => {
           </div>
 
           {/* Cronômetro & Registro Manual de Tempo */}
-          <div className="relative rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 text-center shadow-xs dark:border-slate-800 dark:bg-[#0E121A]">
+          <div className="relative rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 text-center shadow-xs dark:border-slate-800 dark:bg-[#0F172A]">
             {/* Alternador discreto entre Cronômetro e Tempo Manual */}
             <div className="mb-4 inline-flex items-center rounded-lg bg-slate-100 p-1 dark:bg-slate-900">
               <button
@@ -557,7 +557,7 @@ export const CronometroView: React.FC = () => {
 
                 {/* Disciplina e Tópico em foco */}
                 <div className="mt-3">
-                  <div className="text-xs font-bold uppercase tracking-wider text-[#FF6B00] dark:text-[#FFA726]">
+                  <div className="text-xs font-bold uppercase tracking-wider text-[#F59E0B] dark:text-[#FBBF24]">
                     {currentDiscipline?.name || "Disciplina"}
                   </div>
                   <div className="mt-0.5 text-sm font-medium text-slate-600 dark:text-slate-400">
@@ -614,7 +614,7 @@ export const CronometroView: React.FC = () => {
                       id="timer-start-btn"
                       type="button"
                       onClick={startTimer}
-                      className="flex items-center gap-2 rounded-xl bg-[#FF6B00] px-7 py-2.5 text-xs font-bold text-white shadow-sm shadow-orange-500/20 transition hover:bg-[#E05D00] active:scale-98 cursor-pointer"
+                      className="flex items-center gap-2 rounded-xl bg-[#F59E0B] px-7 py-2.5 text-xs font-bold text-white shadow-sm shadow-amber-500/20 transition hover:bg-[#D97706] active:scale-98 cursor-pointer"
                     >
                       <Play className="h-4 w-4 fill-white" />
                       {timer.elapsedSeconds > 0 ? "Continuar" : "Iniciar"}
@@ -651,7 +651,7 @@ export const CronometroView: React.FC = () => {
                           const val = Math.max(0, Math.min(23, parseInt(e.target.value) || 0));
                           setManualHours(val);
                         }}
-                        className="h-20 w-24 rounded-2xl border border-slate-200 bg-slate-50 text-center font-mono text-5xl font-bold text-slate-900 focus:border-[#FF6B00] focus:ring-1 focus:ring-[#FF6B00] dark:border-slate-800 dark:bg-[#141924] dark:text-white"
+                        className="h-20 w-24 rounded-2xl border border-slate-200 bg-slate-50 text-center font-mono text-5xl font-bold text-slate-900 focus:border-[#F59E0B] focus:ring-1 focus:ring-[#F59E0B] dark:border-slate-800 dark:bg-[#0F172A] dark:text-white"
                       />
                     </div>
                     <span className="mt-1 text-[11px] font-bold text-slate-400">Horas</span>
@@ -672,7 +672,7 @@ export const CronometroView: React.FC = () => {
                           const val = Math.max(0, Math.min(59, parseInt(e.target.value) || 0));
                           setManualMinutes(val);
                         }}
-                        className="h-20 w-24 rounded-2xl border border-slate-200 bg-slate-50 text-center font-mono text-5xl font-bold text-slate-900 focus:border-[#FF6B00] focus:ring-1 focus:ring-[#FF6B00] dark:border-slate-800 dark:bg-[#141924] dark:text-white"
+                        className="h-20 w-24 rounded-2xl border border-slate-200 bg-slate-50 text-center font-mono text-5xl font-bold text-slate-900 focus:border-[#F59E0B] focus:ring-1 focus:ring-[#F59E0B] dark:border-slate-800 dark:bg-[#0F172A] dark:text-white"
                       />
                     </div>
                     <span className="mt-1 text-[11px] font-bold text-slate-400">Minutos</span>
@@ -697,7 +697,7 @@ export const CronometroView: React.FC = () => {
                         setManualHours(preset.h);
                         setManualMinutes(preset.m);
                       }}
-                      className="rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1.5 font-medium text-slate-600 hover:border-orange-300 hover:bg-orange-50 hover:text-[#FF6B00] dark:border-slate-800 dark:bg-[#141924] dark:text-slate-300 dark:hover:border-orange-700 dark:hover:bg-orange-950/40 dark:hover:text-[#FFA726] cursor-pointer transition"
+                      className="rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1.5 font-medium text-slate-600 hover:border-amber-300 hover:bg-amber-50 hover:text-[#F59E0B] dark:border-slate-800 dark:bg-[#0F172A] dark:text-slate-300 dark:hover:border-amber-700 dark:hover:bg-amber-950/40 dark:hover:text-[#FBBF24] cursor-pointer transition"
                     >
                       {preset.label}
                     </button>
@@ -706,7 +706,7 @@ export const CronometroView: React.FC = () => {
 
                 {/* Disciplina e Tópico em foco */}
                 <div className="mt-4 border-t border-slate-100 pt-3 dark:border-slate-800">
-                  <div className="text-xs font-bold uppercase tracking-wider text-[#FF6B00] dark:text-[#FFA726]">
+                  <div className="text-xs font-bold uppercase tracking-wider text-[#F59E0B] dark:text-[#FBBF24]">
                     {currentDiscipline?.name || "Disciplina"}
                   </div>
                   <div className="mt-0.5 text-sm font-medium text-slate-600 dark:text-slate-400">
@@ -718,13 +718,13 @@ export const CronometroView: React.FC = () => {
           </div>
 
           {/* Questões: Card Compacto com 3 métricas */}
-          <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-xs dark:border-slate-800 dark:bg-[#0E121A]">
+          <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-xs dark:border-slate-800 dark:bg-[#0F172A]">
             <div className="flex items-center justify-between">
               <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
                 QUESTÕES
               </span>
               {questionsDone > 0 && (
-                <span className="text-xs font-bold text-[#FF6B00] dark:text-[#FFA726]">
+                <span className="text-xs font-bold text-[#F59E0B] dark:text-[#FBBF24]">
                   {accuracyRate}% aproveitamento
                 </span>
               )}
@@ -732,7 +732,7 @@ export const CronometroView: React.FC = () => {
 
             <div className="mt-4 grid grid-cols-3 gap-3 text-center">
               {/* Total Questões */}
-              <div className="rounded-lg bg-slate-50 p-3 dark:bg-[#141924]">
+              <div className="rounded-lg bg-slate-50 p-3 dark:bg-[#0F172A]">
                 <div className="text-2xl font-bold text-slate-900 dark:text-white">
                   {questionsDone}
                 </div>
@@ -813,7 +813,7 @@ export const CronometroView: React.FC = () => {
         {/* COLUNA DIREITA (~35%) */}
         <div className="space-y-5 lg:col-span-4">
           {/* Data do Estudo (Hoje, Ontem, Outra data) */}
-          <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-xs dark:border-slate-800 dark:bg-[#0E121A]">
+          <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-xs dark:border-slate-800 dark:bg-[#0F172A]">
             <div className="flex items-center justify-between">
               <label className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
                 Data do estudo
@@ -867,7 +867,7 @@ export const CronometroView: React.FC = () => {
                   type="date"
                   value={customDate}
                   onChange={(e) => setCustomDate(e.target.value)}
-                  className="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-semibold text-slate-900 focus:border-[#FF6B00] focus:ring-1 focus:ring-[#FF6B00] dark:border-slate-800 dark:bg-[#141924] dark:text-white cursor-pointer"
+                  className="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-semibold text-slate-900 focus:border-[#F59E0B] focus:ring-1 focus:ring-[#F59E0B] dark:border-slate-800 dark:bg-[#0F172A] dark:text-white cursor-pointer"
                 />
               </div>
             )}
@@ -884,7 +884,7 @@ export const CronometroView: React.FC = () => {
           </div>
 
           {/* Anotações */}
-          <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-xs dark:border-slate-800 dark:bg-[#0E121A]">
+          <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-xs dark:border-slate-800 dark:bg-[#0F172A]">
             <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400">
               Anotações
             </h3>
@@ -895,7 +895,7 @@ export const CronometroView: React.FC = () => {
               value={sessionNotes}
               onChange={(e) => setSessionNotes(e.target.value)}
               placeholder="O que você precisa lembrar deste estudo?"
-              className="mt-2 w-full resize-none rounded-lg border border-slate-200 bg-slate-50 p-2.5 text-xs text-slate-900 placeholder:text-slate-400 focus:border-[#FF6B00] focus:ring-1 focus:ring-[#FF6B00] dark:border-slate-800 dark:bg-[#141924] dark:text-white"
+              className="mt-2 w-full resize-none rounded-lg border border-slate-200 bg-slate-50 p-2.5 text-xs text-slate-900 placeholder:text-slate-400 focus:border-[#F59E0B] focus:ring-1 focus:ring-[#F59E0B] dark:border-slate-800 dark:bg-[#0F172A] dark:text-white"
             />
 
             {/* Chips de tags compactos */}
@@ -940,7 +940,7 @@ export const CronometroView: React.FC = () => {
               className={`group relative flex cursor-pointer items-start gap-3 rounded-xl border p-3.5 transition select-none ${
                 theoryCompleted
                   ? "border-emerald-500 bg-emerald-50/70 shadow-xs dark:border-emerald-600 dark:bg-emerald-950/30"
-                  : "border-slate-200 bg-white hover:border-slate-300 dark:border-slate-800 dark:bg-[#0E121A] dark:hover:border-slate-700"
+                  : "border-slate-200 bg-white hover:border-slate-300 dark:border-slate-800 dark:bg-[#0F172A] dark:hover:border-slate-700"
               }`}
             >
               <div
@@ -978,8 +978,8 @@ export const CronometroView: React.FC = () => {
             <div
               className={`rounded-xl border transition ${
                 scheduleReviews
-                  ? "border-orange-500/70 bg-orange-50/40 shadow-xs dark:border-orange-600/70 dark:bg-orange-950/20"
-                  : "border-slate-200 bg-white dark:border-slate-800 dark:bg-[#0E121A]"
+                  ? "border-amber-500/70 bg-amber-50/40 shadow-xs dark:border-amber-600/70 dark:bg-amber-950/20"
+                  : "border-slate-200 bg-white dark:border-slate-800 dark:bg-[#0F172A]"
               }`}
             >
               <div
@@ -990,7 +990,7 @@ export const CronometroView: React.FC = () => {
                 <div
                   className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-md border transition ${
                     scheduleReviews
-                      ? "border-[#FF6B00] bg-[#FF6B00] text-white"
+                      ? "border-[#F59E0B] bg-[#F59E0B] text-white"
                       : "border-slate-300 bg-white dark:border-slate-700 dark:bg-slate-800"
                   }`}
                 >
@@ -1000,7 +1000,7 @@ export const CronometroView: React.FC = () => {
                   <div
                     className={`text-xs font-bold transition ${
                       scheduleReviews
-                        ? "text-[#FF6B00] dark:text-[#FFA726]"
+                        ? "text-[#F59E0B] dark:text-[#FBBF24]"
                         : "text-slate-900 dark:text-white"
                     }`}
                   >
@@ -1009,7 +1009,7 @@ export const CronometroView: React.FC = () => {
                   <div
                     className={`text-[11px] transition ${
                       scheduleReviews
-                        ? "text-orange-800/80 dark:text-orange-300/80"
+                        ? "text-amber-800/80 dark:text-amber-300/80"
                         : "text-slate-500 dark:text-slate-400"
                     }`}
                   >
@@ -1020,7 +1020,7 @@ export const CronometroView: React.FC = () => {
 
               {/* Revelação progressiva dos ciclos e datas calculadas a partir da DATA DO ESTUDO */}
               {scheduleReviews && (
-                <div className="border-t border-orange-200/60 p-3.5 pt-3 dark:border-orange-900/40">
+                <div className="border-t border-amber-200/60 p-3.5 pt-3 dark:border-amber-900/40">
                   <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
                     Ciclos de Revisão
                   </div>
@@ -1034,7 +1034,7 @@ export const CronometroView: React.FC = () => {
                           onClick={() => toggleReviewDay(days)}
                           className={`rounded-lg py-1.5 text-xs font-bold transition cursor-pointer ${
                             isSelected
-                              ? "bg-[#FF6B00] text-white shadow-xs"
+                              ? "bg-[#F59E0B] text-white shadow-xs"
                               : "border border-slate-200 bg-white text-slate-600 hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700"
                           }`}
                         >
@@ -1046,7 +1046,7 @@ export const CronometroView: React.FC = () => {
 
                   {/* Datas calculadas a partir da DATA DO ESTUDO */}
                   {selectedReviewDays.length > 0 ? (
-                    <div className="mt-3 space-y-1.5 border-t border-orange-200/40 pt-2.5 dark:border-orange-900/30">
+                    <div className="mt-3 space-y-1.5 border-t border-amber-200/40 pt-2.5 dark:border-amber-900/30">
                       {selectedReviewDays.map((days) => {
                         const dateInfo = calculateReviewDateStr(effectiveStudyDate, days);
                         return (
@@ -1055,7 +1055,7 @@ export const CronometroView: React.FC = () => {
                             className="flex items-center justify-between text-xs text-slate-600 dark:text-slate-400"
                           >
                             <span className="flex items-center gap-1.5 font-medium">
-                              <Check className="h-3 w-3 text-[#FF6B00] dark:text-[#FFA726]" />
+                              <Check className="h-3 w-3 text-[#F59E0B] dark:text-[#FBBF24]" />
                               {days}d
                             </span>
                             <span className="font-mono text-xs font-semibold text-slate-800 dark:text-slate-200">
@@ -1076,7 +1076,7 @@ export const CronometroView: React.FC = () => {
           </div>
 
           {/* 15. RESUMO ANTES DE SALVAR (compacto e limpo) */}
-          <div className="rounded-xl border border-slate-200 bg-slate-50/80 p-3 text-xs dark:border-slate-800 dark:bg-[#141924]/60">
+          <div className="rounded-xl border border-slate-200 bg-slate-50/80 p-3 text-xs dark:border-slate-800 dark:bg-[#0F172A]/60">
             <div className="flex flex-wrap items-center gap-x-2 gap-y-1 font-medium text-slate-600 dark:text-slate-300">
               <span className="font-semibold text-slate-900 dark:text-white">
                 {formatDatePtBr(effectiveStudyDate)}
@@ -1103,7 +1103,7 @@ export const CronometroView: React.FC = () => {
               {scheduleReviews && selectedReviewDays.length > 0 && (
                 <>
                   <span>·</span>
-                  <span className="inline-flex items-center gap-1 rounded bg-orange-100 px-1.5 py-0.5 text-[10px] font-bold text-[#FF6B00] dark:bg-orange-950/60 dark:text-[#FFA726]">
+                  <span className="inline-flex items-center gap-1 rounded bg-amber-100 px-1.5 py-0.5 text-[10px] font-bold text-[#F59E0B] dark:bg-amber-950/60 dark:text-[#FBBF24]">
                     <RotateCw className="h-3 w-3" />
                     {selectedReviewDays.map((d) => `${d}d`).join(" · ")}
                   </span>
@@ -1122,7 +1122,7 @@ export const CronometroView: React.FC = () => {
               className={`flex w-full items-center justify-center gap-2 rounded-xl py-3.5 text-sm font-bold text-white shadow-sm transition active:scale-98 disabled:opacity-60 cursor-pointer ${
                 savedSuccess
                   ? "bg-emerald-600 hover:bg-emerald-700"
-                  : "bg-[#FF6B00] hover:bg-[#E05D00]"
+                  : "bg-[#F59E0B] hover:bg-[#D97706]"
               }`}
             >
               {isSaving ? (
@@ -1156,7 +1156,7 @@ export const CronometroView: React.FC = () => {
             <button
               type="button"
               onClick={() => setActiveTab("historico")}
-              className="flex items-center gap-1 text-xs font-semibold text-[#FF6B00] hover:underline dark:text-[#FFA726] cursor-pointer"
+              className="flex items-center gap-1 text-xs font-semibold text-[#F59E0B] hover:underline dark:text-[#FBBF24] cursor-pointer"
             >
               <span>Ver histórico completo</span>
               <ChevronRight className="h-3.5 w-3.5" />
@@ -1172,7 +1172,7 @@ export const CronometroView: React.FC = () => {
               return (
                 <div
                   key={s.id}
-                  className="flex flex-col justify-between rounded-xl border border-slate-200 bg-white p-4 shadow-xs transition hover:border-slate-300 dark:border-slate-800 dark:bg-[#0E121A] dark:hover:border-slate-700"
+                  className="flex flex-col justify-between rounded-xl border border-slate-200 bg-white p-4 shadow-xs transition hover:border-slate-300 dark:border-slate-800 dark:bg-[#0F172A] dark:hover:border-slate-700"
                 >
                   <div>
                     <div className="flex items-center justify-between text-[11px]">
@@ -1211,7 +1211,7 @@ export const CronometroView: React.FC = () => {
                     )}
 
                     {Boolean(s.reviewsScheduled && s.reviewsScheduled > 0) && (
-                      <div className="flex items-center gap-1 text-[10px] font-bold text-[#FF6B00] dark:text-[#FFA726]">
+                      <div className="flex items-center gap-1 text-[10px] font-bold text-[#F59E0B] dark:text-[#FBBF24]">
                         <RotateCw className="h-3 w-3" />
                         <span>
                           {s.reviewsScheduled}{" "}

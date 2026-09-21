@@ -203,7 +203,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy 
       return {
         id: disc.id,
         name: disc.name,
-        color: disc.color || "#F97316",
+        color: disc.color || "#F59E0B",
         qDone,
         qCorrect,
         accuracy,

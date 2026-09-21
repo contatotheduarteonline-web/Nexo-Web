@@ -273,7 +273,7 @@ export const MetasView: React.FC = () => {
       <form onSubmit={handleSaveGoals} className="space-y-6">
         <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs dark:border-slate-800 dark:bg-slate-900">
           <div className="flex items-center gap-2 border-b border-slate-100 pb-4 dark:border-slate-800">
-            <Sliders className="h-5 w-5 text-[#FF6B00]" />
+            <Sliders className="h-5 w-5 text-[#F59E0B]" />
             <h3 className="text-base font-bold text-slate-900 dark:text-white">
               Configurar Objetivos & Cargas Horárias
             </h3>
@@ -293,7 +293,7 @@ export const MetasView: React.FC = () => {
                   step="0.5"
                   value={dailyGoalHours}
                   onChange={(e) => setDailyGoalHours(parseFloat(e.target.value) || 0)}
-                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-sm font-bold text-slate-900 focus:border-[#FF6B00] focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-sm font-bold text-slate-900 focus:border-[#F59E0B] focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                 />
                 <span className="text-xs font-bold text-slate-500 dark:text-slate-400">horas/dia</span>
               </div>
@@ -315,7 +315,7 @@ export const MetasView: React.FC = () => {
                   step="10"
                   value={weeklyGoalQuestions}
                   onChange={(e) => setWeeklyGoalQuestions(parseInt(e.target.value, 10) || 0)}
-                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-sm font-bold text-slate-900 focus:border-[#FF6B00] focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-sm font-bold text-slate-900 focus:border-[#F59E0B] focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                 />
                 <span className="text-xs font-bold text-slate-500 dark:text-slate-400">questões</span>
               </div>
@@ -337,7 +337,7 @@ export const MetasView: React.FC = () => {
                   step="1"
                   value={targetAccuracy}
                   onChange={(e) => setTargetAccuracy(parseInt(e.target.value, 10) || 80)}
-                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-sm font-bold text-slate-900 focus:border-[#FF6B00] focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-sm font-bold text-slate-900 focus:border-[#F59E0B] focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                 />
                 <span className="text-xs font-bold text-slate-500 dark:text-slate-400">% de acertos</span>
               </div>
@@ -360,7 +360,7 @@ export const MetasView: React.FC = () => {
               </div>
               <div className="text-right">
                 <span className="text-xs text-slate-500">Total da semana: </span>
-                <span className="text-sm font-black text-[#FF6B00] dark:text-[#FFA726]">{weeklyGoalHours}h</span>
+                <span className="text-sm font-black text-[#F59E0B] dark:text-[#FBBF24]">{weeklyGoalHours}h</span>
               </div>
             </div>
 
@@ -392,7 +392,7 @@ export const MetasView: React.FC = () => {
                       onChange={(e) =>
                         handleDayAvailabilityChange(dayKey, parseFloat(e.target.value) || 0)
                       }
-                      className="mt-2 w-16 text-center rounded-lg border border-slate-200 bg-white py-1.5 text-xs font-black text-slate-900 focus:border-[#FF6B00] focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                      className="mt-2 w-16 text-center rounded-lg border border-slate-200 bg-white py-1.5 text-xs font-black text-slate-900 focus:border-[#F59E0B] focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                     />
                     <span className="mt-1 text-[10px] text-slate-400">horas</span>
                   </div>
@@ -405,7 +405,7 @@ export const MetasView: React.FC = () => {
           <div className="mt-8 flex items-center justify-end gap-3 border-t border-slate-100 pt-5 dark:border-slate-800">
             <button
               type="submit"
-              className="flex items-center gap-2 rounded-xl bg-[#FF6B00] hover:bg-[#E05D00] px-6 py-2.5 text-xs font-bold text-white shadow-xs transition active:scale-98"
+              className="flex items-center gap-2 rounded-xl bg-[#F59E0B] hover:bg-[#D97706] px-6 py-2.5 text-xs font-bold text-white shadow-xs transition active:scale-98"
             >
               <Save className="h-4 w-4" />
               <span>Salvar Metas</span>

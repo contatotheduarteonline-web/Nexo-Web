@@ -29,11 +29,11 @@ export const DisciplinePerformanceSection: React.FC<DisciplinePerformanceSection
   return (
     <section
       id="section-desempenho-disciplinas"
-      className="rounded-2xl border border-[#E5E7EB] bg-white p-5 sm:p-6 shadow-[0_1px_3px_rgba(0,0,0,0.03),0_4px_12px_rgba(0,0,0,0.015)] dark:border-[#1E2638] dark:bg-[#121622]"
+      className="rounded-2xl border border-[#E5E7EB] bg-white p-5 sm:p-6 shadow-[0_1px_3px_rgba(0,0,0,0.03),0_4px_12px_rgba(0,0,0,0.015)] dark:border-[#1E293B] dark:bg-[#121622]"
     >
       <div className="flex items-center justify-between pb-4 border-b border-[#F0F2F5] dark:border-[#1C2333]">
         <div className="flex items-center gap-2.5">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-orange-50 text-[#F97316] dark:bg-orange-950/40 dark:text-orange-400">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-50 text-[#F59E0B] dark:bg-amber-950/40 dark:text-amber-400">
             <Layers className="h-4 w-4" />
           </div>
           <h2 className="text-[16px] sm:text-[17px] font-semibold text-[#172033] dark:text-white tracking-tight">
@@ -45,7 +45,7 @@ export const DisciplinePerformanceSection: React.FC<DisciplinePerformanceSection
           type="button"
           id="btn-ver-detalhes-disciplinas"
           onClick={onNavigateToDisciplines}
-          className="text-[13px] font-semibold text-[#F97316] hover:text-[#EA580C] hover:underline flex items-center gap-1 cursor-pointer transition-colors"
+          className="text-[13px] font-semibold text-[#F59E0B] hover:text-[#D97706] hover:underline flex items-center gap-1 cursor-pointer transition-colors"
         >
           <span>Ver todas</span>
           <ArrowUpRight className="h-3.5 w-3.5" />
@@ -80,7 +80,7 @@ export const DisciplinePerformanceSection: React.FC<DisciplinePerformanceSection
                     <div className="flex items-center gap-2.5">
                       <span
                         className="h-2.5 w-2.5 rounded-full shrink-0 shadow-xs"
-                        style={{ backgroundColor: d.color || "#F97316" }}
+                        style={{ backgroundColor: d.color || "#F59E0B" }}
                       />
                       <span className="font-semibold text-[#172033] dark:text-white">
                         {d.name}
@@ -90,7 +90,7 @@ export const DisciplinePerformanceSection: React.FC<DisciplinePerformanceSection
 
                   <td className="py-3.5 px-4 text-center font-mono text-[12px] text-[#667085] dark:text-[#94A3B8]">
                     {d.qDone > 0 ? (
-                      <span className="inline-flex items-center rounded-md bg-[#F8F9FB] border border-[#E5E7EB] px-2 py-0.5 dark:bg-[#181F2E] dark:border-[#1E2638]">
+                      <span className="inline-flex items-center rounded-md bg-[#F8F9FB] border border-[#E5E7EB] px-2 py-0.5 dark:bg-[#1E293B] dark:border-[#1E293B]">
                         <strong className="text-[#172033] dark:text-white mr-1">{d.qDone}</strong>
                       </span>
                     ) : (
@@ -105,7 +105,7 @@ export const DisciplinePerformanceSection: React.FC<DisciplinePerformanceSection
                           d.accuracy >= 70
                             ? "inline-flex items-center rounded-md bg-emerald-50 px-2 py-0.5 font-semibold text-[#16A37A] border border-emerald-200/60 dark:bg-emerald-950/40 dark:border-emerald-800/40"
                             : d.accuracy >= 50
-                            ? "inline-flex items-center rounded-md bg-orange-50 px-2 py-0.5 font-semibold text-[#F97316] border border-orange-200/60 dark:bg-orange-950/40 dark:border-orange-800/40"
+                            ? "inline-flex items-center rounded-md bg-amber-50 px-2 py-0.5 font-semibold text-[#F59E0B] border border-amber-200/60 dark:bg-amber-950/40 dark:border-amber-800/40"
                             : "inline-flex items-center rounded-md bg-red-50 px-2 py-0.5 font-semibold text-[#DC4B4B] border border-red-200/60 dark:bg-red-950/40 dark:border-red-800/40"
                         }
                       >
@@ -128,12 +128,12 @@ export const DisciplinePerformanceSection: React.FC<DisciplinePerformanceSection
                         </span>
                         <span className="font-mono">{d.topicsProgressPercent}%</span>
                       </div>
-                      <div className="h-1.5 w-full overflow-hidden rounded-full bg-[#E5E7EB] dark:bg-[#1E2638]">
+                      <div className="h-1.5 w-full overflow-hidden rounded-full bg-[#E5E7EB] dark:bg-[#1E293B]">
                         <div
                           className="h-full rounded-full transition-all duration-500"
                           style={{
                             width: `${d.topicsProgressPercent}%`,
-                            backgroundColor: d.color || "#F97316",
+                            backgroundColor: d.color || "#F59E0B",
                           }}
                         />
                       </div>
@@ -145,7 +145,7 @@ export const DisciplinePerformanceSection: React.FC<DisciplinePerformanceSection
                       type="button"
                       id={`btn-estudar-disciplina-${d.id}`}
                       onClick={() => onStartStudy(d.id, 45)}
-                      className="inline-flex items-center gap-1.5 rounded-lg border border-[#E5E7EB] bg-white px-3 py-1.5 text-[12px] font-semibold text-[#172033] shadow-xs transition hover:border-[#F97316] hover:text-[#F97316] dark:border-[#1E2638] dark:bg-[#161D2B] dark:text-white dark:hover:border-[#F97316] cursor-pointer"
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-[#E5E7EB] bg-white px-3 py-1.5 text-[12px] font-semibold text-[#172033] shadow-xs transition hover:border-[#F59E0B] hover:text-[#F59E0B] dark:border-[#1E293B] dark:bg-[#161D2B] dark:text-white dark:hover:border-[#F59E0B] cursor-pointer"
                     >
                       <Play className="h-3 w-3 fill-current" />
                       <span>Estudar</span>

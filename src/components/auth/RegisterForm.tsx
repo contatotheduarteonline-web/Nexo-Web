@@ -7,7 +7,7 @@ interface RegisterFormProps {
 }
 
 const inputClass =
-  "h-[50px] w-full rounded-xl border border-[#2a2e35] bg-[#1b1e24] pl-10 pr-4 text-sm text-white placeholder:text-[#a0a0a0]/50 transition-colors focus:border-[#fca326] focus:ring-1 focus:ring-[#fca326]/30 focus:outline-none";
+  "h-[50px] w-full rounded-xl border border-[#2a2e35] bg-[#1b1e24] pl-10 pr-4 text-sm text-white placeholder:text-[#a0a0a0]/50 transition-colors focus:border-[#F59E0B] focus:ring-1 focus:ring-[#F59E0B]/30 focus:outline-none";
 
 /**
  * Registration form rendered in-place inside the login layout
@@ -178,7 +178,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onGoToLogin }) => {
           <button
             type="submit"
             disabled={isLoading}
-            className="flex h-[50px] w-full items-center justify-center gap-2 rounded-xl bg-[#fca326] hover:bg-[#ffb04d] text-sm font-bold text-[#0d0f12] transition-colors duration-150 active:scale-[0.99] disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
+            className="flex h-[50px] w-full items-center justify-center gap-2 rounded-xl bg-[#F59E0B] hover:bg-[#ffb04d] text-sm font-bold text-[#0d0f12] transition-colors duration-150 active:scale-[0.99] disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
           >
             <span>{isLoading ? "Criando conta..." : "Criar Minha Conta"}</span>
             {!isLoading && <ArrowRight className="h-4 w-4" />}
@@ -192,7 +192,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onGoToLogin }) => {
           <button
             type="button"
             onClick={onGoToLogin}
-            className="font-semibold text-[#fca326] hover:text-[#ffb04d] transition-colors cursor-pointer underline-offset-4 hover:underline"
+            className="font-semibold text-[#F59E0B] hover:text-[#ffb04d] transition-colors cursor-pointer underline-offset-4 hover:underline"
           >
             Fazer login
           </button>

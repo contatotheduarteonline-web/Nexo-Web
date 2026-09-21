@@ -26,11 +26,11 @@ function getCategoryPalette(category: string = "progresso") {
     case "progresso":
     case "edital":
       return {
-        rimOuter: "#EA580C",
+        rimOuter: "#D97706",
         rimInner: "#C2410C",
         faceFrom: "#271206",
         faceTo: "#120702",
-        accent: "#FB923C",
+        accent: "#FBBF24",
         accentLight: "#FED7AA",
         glow: "rgba(234, 88, 12, 0.25)",
       };
@@ -96,11 +96,11 @@ function getCategoryPalette(category: string = "progresso") {
       };
     default:
       return {
-        rimOuter: "#EA580C",
+        rimOuter: "#D97706",
         rimInner: "#C2410C",
         faceFrom: "#271206",
         faceTo: "#120702",
-        accent: "#FB923C",
+        accent: "#FBBF24",
         accentLight: "#FED7AA",
         glow: "rgba(234, 88, 12, 0.25)",
       };
@@ -839,7 +839,7 @@ export const AchievementMedal: React.FC<AchievementMedalProps> = ({
 
           {/* In-Progress Track Ring Gradient */}
           <linearGradient id={`progressRim-${badgeId}`} x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#FF8A00" />
+            <stop offset="0%" stopColor="#FBBF24" />
             <stop offset="100%" stopColor="#FFB300" />
           </linearGradient>
 
@@ -913,7 +913,7 @@ export const AchievementMedal: React.FC<AchievementMedalProps> = ({
       {/* Checkmark Status Badge in Corner for Unlocked Medals */}
       {isUnlocked && showCheckBadge && (
         <div
-          className="absolute rounded-full flex items-center justify-center font-bold text-white shadow-xs bg-emerald-500 ring-2 ring-white dark:ring-[#0E121A]"
+          className="absolute rounded-full flex items-center justify-center font-bold text-white shadow-xs bg-emerald-500 ring-2 ring-white dark:ring-[#0F172A]"
           style={{
             bottom: checkOffset,
             right: checkOffset,

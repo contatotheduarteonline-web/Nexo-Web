@@ -82,7 +82,7 @@ export const PlanosOverview: React.FC<PlanosOverviewProps> = ({
 
         <button
           onClick={onOpenCreateWizard}
-          className="flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#FF6B00] to-[#FF8A00] hover:from-[#E05D00] hover:to-[#FF6B00] px-4 py-2.5 text-xs font-bold text-white shadow-md shadow-orange-500/20 active:scale-98 transition shrink-0 cursor-pointer"
+          className="flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#F59E0B] to-[#FBBF24] hover:from-[#D97706] hover:to-[#F59E0B] px-4 py-2.5 text-xs font-bold text-white shadow-md shadow-amber-500/20 active:scale-98 transition shrink-0 cursor-pointer"
         >
           <Plus className="h-4 w-4" />
           <span>Criar Novo Plano</span>
@@ -130,7 +130,7 @@ export const PlanosOverview: React.FC<PlanosOverviewProps> = ({
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Buscar por nome, órgão ou cargo..."
-            className="w-full rounded-xl border border-zinc-200 bg-white py-2 pl-9 pr-3.5 text-xs text-zinc-900 placeholder:text-zinc-400 focus:border-[#FF6B00] focus:outline-none dark:border-zinc-800 dark:bg-zinc-900 dark:text-white"
+            className="w-full rounded-xl border border-zinc-200 bg-white py-2 pl-9 pr-3.5 text-xs text-zinc-900 placeholder:text-zinc-400 focus:border-[#F59E0B] focus:outline-none dark:border-zinc-800 dark:bg-zinc-900 dark:text-white"
           />
         </div>
       </div>
@@ -138,7 +138,7 @@ export const PlanosOverview: React.FC<PlanosOverviewProps> = ({
       {/* Plans Grid or Empty State */}
       {displayedPlans.length === 0 ? (
         <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-zinc-200 bg-white p-12 text-center dark:border-zinc-800 dark:bg-zinc-900">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-orange-500/10 text-[#FF6B00]">
+          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-500/10 text-[#F59E0B]">
             <Layers className="h-6 w-6" />
           </div>
           <h3 className="mt-3 text-sm font-bold text-zinc-900 dark:text-white">
@@ -154,7 +154,7 @@ export const PlanosOverview: React.FC<PlanosOverviewProps> = ({
           {activeFilter === "ativos" && (
             <button
               onClick={onOpenCreateWizard}
-              className="mt-4 flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#FF6B00] to-[#FF8A00] hover:from-[#E05D00] hover:to-[#FF6B00] px-4 py-2.5 text-xs font-bold text-white shadow-md shadow-orange-500/20 transition cursor-pointer"
+              className="mt-4 flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#F59E0B] to-[#FBBF24] hover:from-[#D97706] hover:to-[#F59E0B] px-4 py-2.5 text-xs font-bold text-white shadow-md shadow-amber-500/20 transition cursor-pointer"
             >
               <Plus className="h-4 w-4" />
               <span>Criar Primeiro Plano</span>

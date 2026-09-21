@@ -36,7 +36,7 @@ export const AchievementModal: React.FC<AchievementModalProps> = ({ badge, onClo
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="relative w-full max-w-sm rounded-3xl border border-slate-200/80 bg-white p-7 shadow-2xl backdrop-blur-xl dark:border-slate-800 dark:bg-[#0E121A] text-center transition-all animate-in zoom-in-95 duration-200"
+        className="relative w-full max-w-sm rounded-3xl border border-slate-200/80 bg-white p-7 shadow-2xl backdrop-blur-xl dark:border-slate-800 dark:bg-[#0F172A] text-center transition-all animate-in zoom-in-95 duration-200"
       >
         {/* Close button */}
         <button
@@ -92,7 +92,7 @@ export const AchievementModal: React.FC<AchievementModalProps> = ({ badge, onClo
             <span className="block text-[10px] uppercase font-semibold tracking-wider text-slate-400">
               Recompensa
             </span>
-            <span className="font-mono text-sm font-bold text-[#FF6B00] dark:text-[#FFA726] flex items-center justify-center gap-0.5">
+            <span className="font-mono text-sm font-bold text-[#F59E0B] dark:text-[#FBBF24] flex items-center justify-center gap-0.5">
               <Zap className="h-3 w-3 fill-current" />
               +{badge.xpReward} XP
             </span>
@@ -107,7 +107,7 @@ export const AchievementModal: React.FC<AchievementModalProps> = ({ badge, onClo
               <span>{badge.unlockedAt ? `Desbloqueada em ${badge.unlockedAt}` : "Desbloqueada"}</span>
             </div>
           ) : medalState === "in_progress" ? (
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-orange-50 text-[#FF6B00] border border-orange-200/80 dark:bg-orange-950/40 dark:text-[#FFA726] dark:border-orange-800/60">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-50 text-[#F59E0B] border border-amber-200/80 dark:bg-amber-950/40 dark:text-[#FBBF24] dark:border-amber-800/60">
               <span>Em progresso ({Math.round(badge.progressPercent)}%)</span>
             </div>
           ) : (

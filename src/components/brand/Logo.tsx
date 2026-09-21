@@ -51,14 +51,14 @@ export const Logo: React.FC<LogoProps> = ({
       >
         NEXO
       </span>
-      <span className="font-black leading-none text-[#fca326]">.</span>
+      <span className="font-black leading-none text-[#F59E0B]">.</span>
     </span>
   );
 
   const Subtitle: React.FC = () => (
     <span className="text-[9px] font-bold uppercase tracking-[0.24em] leading-none mt-1">
       <span className={subtitleSlate}>Plataforma</span>{" "}
-      <span className="text-[#fca326]">de Estudos</span>
+      <span className="text-[#F59E0B]">de Estudos</span>
     </span>
   );
 

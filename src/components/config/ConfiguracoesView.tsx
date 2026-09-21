@@ -157,7 +157,7 @@ export const ConfiguracoesView: React.FC = () => {
           onClick={() => setActiveSubTab("perfil")}
           className={`flex items-center gap-2 border-b-2 px-4 py-2.5 text-xs font-bold transition whitespace-nowrap ${
             activeSubTab === "perfil"
-              ? "border-[#FF6B00] text-[#FF6B00] dark:border-[#FF6B00] dark:text-white"
+              ? "border-[#F59E0B] text-[#F59E0B] dark:border-[#F59E0B] dark:text-white"
               : "border-transparent text-[#6B6B6B] hover:text-[#111111] dark:text-[#A6A6A6] dark:hover:text-white"
           }`}
         >
@@ -169,7 +169,7 @@ export const ConfiguracoesView: React.FC = () => {
           onClick={() => setActiveSubTab("revisoes")}
           className={`flex items-center gap-2 border-b-2 px-4 py-2.5 text-xs font-bold transition whitespace-nowrap ${
             activeSubTab === "revisoes"
-              ? "border-[#FF6B00] text-[#FF6B00] dark:border-[#FF6B00] dark:text-white"
+              ? "border-[#F59E0B] text-[#F59E0B] dark:border-[#F59E0B] dark:text-white"
               : "border-transparent text-[#6B6B6B] hover:text-[#111111] dark:text-[#A6A6A6] dark:hover:text-white"
           }`}
         >
@@ -181,7 +181,7 @@ export const ConfiguracoesView: React.FC = () => {
           onClick={() => setActiveSubTab("conta")}
           className={`flex items-center gap-2 border-b-2 px-4 py-2.5 text-xs font-bold transition whitespace-nowrap ${
             activeSubTab === "conta"
-              ? "border-[#FF6B00] text-[#FF6B00] dark:border-[#FF6B00] dark:text-white"
+              ? "border-[#F59E0B] text-[#F59E0B] dark:border-[#F59E0B] dark:text-white"
               : "border-transparent text-[#6B6B6B] hover:text-[#111111] dark:text-[#A6A6A6] dark:hover:text-white"
           }`}
         >
@@ -193,7 +193,7 @@ export const ConfiguracoesView: React.FC = () => {
           onClick={() => setActiveSubTab("dados")}
           className={`flex items-center gap-2 border-b-2 px-4 py-2.5 text-xs font-bold transition whitespace-nowrap ${
             activeSubTab === "dados"
-              ? "border-[#FF6B00] text-[#FF6B00] dark:border-[#FF6B00] dark:text-white"
+              ? "border-[#F59E0B] text-[#F59E0B] dark:border-[#F59E0B] dark:text-white"
               : "border-transparent text-[#6B6B6B] hover:text-[#111111] dark:text-[#A6A6A6] dark:hover:text-white"
           }`}
         >
@@ -206,9 +206,9 @@ export const ConfiguracoesView: React.FC = () => {
       {activeSubTab === "perfil" && (
         <form onSubmit={handleSaveProfile} className="space-y-6">
           {/* Avatar / Foto de Perfil Card */}
-          <div className="rounded-2xl border border-[#E2E8F0] bg-white p-6 dark:border-[#292929] dark:bg-[#111622] flex flex-col sm:flex-row items-center sm:items-start gap-5">
+          <div className="rounded-2xl border border-[#E2E8F0] bg-white p-6 dark:border-[#292929] dark:bg-[#0F172A] flex flex-col sm:flex-row items-center sm:items-start gap-5">
             <div className="relative group cursor-pointer" onClick={() => setIsProfileModalOpen(true)}>
-              <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-tr from-[#FF6B00] to-[#FFA726] text-2xl font-black text-white shadow-md overflow-hidden border-2 border-[#FF6B00]">
+              <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-tr from-[#F59E0B] to-[#FBBF24] text-2xl font-black text-white shadow-md overflow-hidden border-2 border-[#F59E0B]">
                 {user?.avatarUrl ? (
                   <img
                     src={user.avatarUrl}
@@ -238,7 +238,7 @@ export const ConfiguracoesView: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setIsProfileModalOpen(true)}
-                  className="inline-flex items-center gap-1.5 rounded-xl border border-orange-500/40 bg-orange-500/10 px-3.5 py-1.5 text-xs font-bold text-[#FF6B00] dark:text-[#FFA726] hover:bg-orange-500/20 transition"
+                  className="inline-flex items-center gap-1.5 rounded-xl border border-amber-500/40 bg-amber-500/10 px-3.5 py-1.5 text-xs font-bold text-[#F59E0B] dark:text-[#FBBF24] hover:bg-amber-500/20 transition"
                 >
                   <Camera className="h-3.5 w-3.5" />
                   Alterar Foto de Perfil
@@ -247,7 +247,7 @@ export const ConfiguracoesView: React.FC = () => {
             </div>
           </div>
 
-          <div className="rounded-2xl border border-[#E2E8F0] bg-white p-6 dark:border-[#292929] dark:bg-[#111622]">
+          <div className="rounded-2xl border border-[#E2E8F0] bg-white p-6 dark:border-[#292929] dark:bg-[#0F172A]">
             <h3 className="text-sm font-black uppercase tracking-wider text-[#111111] dark:text-white">
               Informações do Usuário
             </h3>
@@ -262,7 +262,7 @@ export const ConfiguracoesView: React.FC = () => {
                   value={userName}
                   onChange={(e) => setUserName(e.target.value)}
                   placeholder="Ex: João"
-                  className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] py-2.5 px-3.5 text-xs text-[#111111] focus:border-[#FF6B00] focus:bg-white focus:outline-hidden dark:border-[#292929] dark:bg-[#182030] dark:text-white dark:focus:border-[#FF6B00]"
+                  className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] py-2.5 px-3.5 text-xs text-[#111111] focus:border-[#F59E0B] focus:bg-white focus:outline-hidden dark:border-[#292929] dark:bg-[#1E293B] dark:text-white dark:focus:border-[#F59E0B]"
                 />
               </div>
 
@@ -283,7 +283,7 @@ export const ConfiguracoesView: React.FC = () => {
           <div className="flex justify-end">
             <button
               type="submit"
-              className="flex items-center gap-2 rounded-xl bg-[#FF6B00] hover:bg-[#E05D00] px-6 py-2.5 text-xs font-bold text-white shadow-xs"
+              className="flex items-center gap-2 rounded-xl bg-[#F59E0B] hover:bg-[#D97706] px-6 py-2.5 text-xs font-bold text-white shadow-xs"
             >
               <Save className="h-4 w-4" />
               <span>Salvar Alterações</span>
@@ -295,7 +295,7 @@ export const ConfiguracoesView: React.FC = () => {
       {/* Tab: Revisões */}
       {activeSubTab === "revisoes" && (
         <div className="space-y-6">
-          <div className="rounded-2xl border border-[#E2E8F0] bg-white p-6 dark:border-[#292929] dark:bg-[#111622]">
+          <div className="rounded-2xl border border-[#E2E8F0] bg-white p-6 dark:border-[#292929] dark:bg-[#0F172A]">
             <h3 className="text-sm font-black uppercase tracking-wider text-[#111111] dark:text-white">
               Curva do Esquecimento & Intervalos
             </h3>
@@ -307,7 +307,7 @@ export const ConfiguracoesView: React.FC = () => {
               {reviewIntervals.map((d) => (
                 <div
                   key={d}
-                  className="flex items-center gap-2 rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-3.5 py-1.5 text-xs font-bold text-[#111111] dark:border-[#292929] dark:bg-[#182030] dark:text-white"
+                  className="flex items-center gap-2 rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-3.5 py-1.5 text-xs font-bold text-[#111111] dark:border-[#292929] dark:bg-[#1E293B] dark:text-white"
                 >
                   <span className="font-mono">{d} {d === 1 ? "dia (24h)" : `dias`}</span>
                   <button
@@ -329,12 +329,12 @@ export const ConfiguracoesView: React.FC = () => {
                 placeholder="Ex: 45"
                 value={newInterval}
                 onChange={(e) => setNewInterval(e.target.value ? Number(e.target.value) : "")}
-                className="w-32 rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] py-2 px-3 text-xs font-mono text-[#111111] focus:border-[#FF6B00] focus:bg-white focus:outline-hidden dark:border-[#292929] dark:bg-[#182030] dark:text-white dark:focus:border-[#FF6B00]"
+                className="w-32 rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] py-2 px-3 text-xs font-mono text-[#111111] focus:border-[#F59E0B] focus:bg-white focus:outline-hidden dark:border-[#292929] dark:bg-[#1E293B] dark:text-white dark:focus:border-[#F59E0B]"
               />
               <button
                 type="button"
                 onClick={handleAddInterval}
-                className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-xs font-bold text-black hover:bg-orange-50 hover:text-[#FF6B00] hover:border-orange-300 dark:border-[#292929] dark:bg-[#182030] dark:text-white dark:hover:bg-[#292929]"
+                className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-xs font-bold text-black hover:bg-amber-50 hover:text-[#F59E0B] hover:border-amber-300 dark:border-[#292929] dark:bg-[#1E293B] dark:text-white dark:hover:bg-[#292929]"
               >
                 + Adicionar Intervalo
               </button>
@@ -346,7 +346,7 @@ export const ConfiguracoesView: React.FC = () => {
       {/* Tab: Conta & Segurança */}
       {activeSubTab === "conta" && (
         <div className="space-y-6">
-          <div className="rounded-2xl border border-[#E2E8F0] bg-white p-6 dark:border-[#292929] dark:bg-[#111622]">
+          <div className="rounded-2xl border border-[#E2E8F0] bg-white p-6 dark:border-[#292929] dark:bg-[#0F172A]">
             <h3 className="text-sm font-black uppercase tracking-wider text-[#111111] dark:text-white">
               Alterar Senha de Acesso
             </h3>
@@ -373,7 +373,7 @@ export const ConfiguracoesView: React.FC = () => {
                   value={currentPassword}
                   onChange={(e) => setCurrentPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] py-2.5 px-3.5 text-xs text-[#111111] focus:border-[#111111] focus:bg-white focus:outline-hidden dark:border-[#292929] dark:bg-[#182030] dark:text-white dark:focus:border-white"
+                  className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] py-2.5 px-3.5 text-xs text-[#111111] focus:border-[#111111] focus:bg-white focus:outline-hidden dark:border-[#292929] dark:bg-[#1E293B] dark:text-white dark:focus:border-white"
                 />
               </div>
 
@@ -386,7 +386,7 @@ export const ConfiguracoesView: React.FC = () => {
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
                   placeholder="Mínimo 6 caracteres"
-                  className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] py-2.5 px-3.5 text-xs text-[#111111] focus:border-[#111111] focus:bg-white focus:outline-hidden dark:border-[#292929] dark:bg-[#182030] dark:text-white dark:focus:border-white"
+                  className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] py-2.5 px-3.5 text-xs text-[#111111] focus:border-[#111111] focus:bg-white focus:outline-hidden dark:border-[#292929] dark:bg-[#1E293B] dark:text-white dark:focus:border-white"
                 />
               </div>
 
@@ -399,7 +399,7 @@ export const ConfiguracoesView: React.FC = () => {
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="Repita a nova senha"
-                  className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] py-2.5 px-3.5 text-xs text-[#111111] focus:border-[#111111] focus:bg-white focus:outline-hidden dark:border-[#292929] dark:bg-[#182030] dark:text-white dark:focus:border-white"
+                  className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] py-2.5 px-3.5 text-xs text-[#111111] focus:border-[#111111] focus:bg-white focus:outline-hidden dark:border-[#292929] dark:bg-[#1E293B] dark:text-white dark:focus:border-white"
                 />
               </div>
 
@@ -424,7 +424,7 @@ export const ConfiguracoesView: React.FC = () => {
             <div className="mt-4 flex flex-wrap gap-3">
               <button
                 onClick={logout}
-                className="flex items-center gap-2 rounded-xl border border-[#E2E8F0] bg-white px-4 py-2.5 text-xs font-bold text-red-600 hover:bg-red-50 dark:border-[#292929] dark:bg-[#111622] dark:text-red-400 dark:hover:bg-red-950/40"
+                className="flex items-center gap-2 rounded-xl border border-[#E2E8F0] bg-white px-4 py-2.5 text-xs font-bold text-red-600 hover:bg-red-50 dark:border-[#292929] dark:bg-[#0F172A] dark:text-red-400 dark:hover:bg-red-950/40"
               >
                 <LogOut className="h-4 w-4" />
                 <span>Desconectar em Todos os Dispositivos</span>
@@ -438,7 +438,7 @@ export const ConfiguracoesView: React.FC = () => {
       {activeSubTab === "dados" && (
         <div className="space-y-6">
           {/* Automatic Protection Card */}
-          <div className="rounded-2xl border border-[#E2E8F0] bg-white p-6 dark:border-[#292929] dark:bg-[#111622]">
+          <div className="rounded-2xl border border-[#E2E8F0] bg-white p-6 dark:border-[#292929] dark:bg-[#0F172A]">
             <div className="flex items-start gap-3.5">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-500">
                 <Database className="h-5 w-5" />
@@ -461,7 +461,7 @@ export const ConfiguracoesView: React.FC = () => {
           </div>
 
           {/* Manual Export & Restore Card */}
-          <div className="rounded-2xl border border-[#E2E8F0] bg-white p-6 dark:border-[#292929] dark:bg-[#111622]">
+          <div className="rounded-2xl border border-[#E2E8F0] bg-white p-6 dark:border-[#292929] dark:bg-[#0F172A]">
             <h3 className="text-sm font-black uppercase tracking-wider text-[#111111] dark:text-white">
               Exportação & Restauração Manual de Arquivos
             </h3>
@@ -480,7 +480,7 @@ export const ConfiguracoesView: React.FC = () => {
 
               <label
                 htmlFor="config-backup-file-input"
-                className="flex cursor-pointer items-center gap-2 rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-5 py-2.5 text-xs font-bold text-[#111111] hover:bg-[#E8E8E8] dark:border-[#292929] dark:bg-[#182030] dark:text-white dark:hover:bg-[#292929]"
+                className="flex cursor-pointer items-center gap-2 rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-5 py-2.5 text-xs font-bold text-[#111111] hover:bg-[#E8E8E8] dark:border-[#292929] dark:bg-[#1E293B] dark:text-white dark:hover:bg-[#292929]"
               >
                 <Upload className="h-4 w-4" />
                 <span>Importar Arquivo JSON</span>

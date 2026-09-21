@@ -44,7 +44,7 @@ export const NewEditalModal: React.FC<NewEditalModalProps> = ({ isOpen, onClose 
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs">
-      <div className="w-full max-w-xl rounded-2xl border border-[#E2E8F0] bg-white p-6 shadow-2xl dark:border-[#1E293B] dark:bg-[#1B2126]">
+      <div className="w-full max-w-xl rounded-2xl border border-[#E2E8F0] bg-white p-6 shadow-2xl dark:border-[#1E293B] dark:bg-[#1E293B]">
         {/* Header */}
         <div className="flex items-center justify-between border-b border-[#E2E8F0] pb-3 dark:border-[#1E293B]">
           <div className="flex items-center gap-2.5">
@@ -62,7 +62,7 @@ export const NewEditalModal: React.FC<NewEditalModalProps> = ({ isOpen, onClose 
           </div>
           <button
             onClick={onClose}
-            className="rounded-lg p-1 text-[#737D89] hover:bg-[#F8FAFC] hover:text-[#374151] dark:text-[#94A3B8] dark:hover:bg-[#182030] dark:hover:text-white"
+            className="rounded-lg p-1 text-[#737D89] hover:bg-[#F8FAFC] hover:text-[#374151] dark:text-[#94A3B8] dark:hover:bg-[#1E293B] dark:hover:text-white"
           >
             <X className="h-4 w-4" />
           </button>
@@ -81,7 +81,7 @@ export const NewEditalModal: React.FC<NewEditalModalProps> = ({ isOpen, onClose 
               placeholder="Ex: Guarda Civil Municipal de Manaus 2026"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="mt-1 w-full rounded-lg border border-[#E2E8F0] bg-white p-2 text-xs text-[#374151] focus:border-[#48C3A7] focus:outline-none dark:border-[#1E293B] dark:bg-[#111622] dark:text-white"
+              className="mt-1 w-full rounded-lg border border-[#E2E8F0] bg-white p-2 text-xs text-[#374151] focus:border-[#48C3A7] focus:outline-none dark:border-[#1E293B] dark:bg-[#0F172A] dark:text-white"
             />
           </div>
 
@@ -97,7 +97,7 @@ export const NewEditalModal: React.FC<NewEditalModalProps> = ({ isOpen, onClose 
                 placeholder="Ex: Prefeitura de Manaus, PF..."
                 value={organ}
                 onChange={(e) => setOrgan(e.target.value)}
-                className="mt-1 w-full rounded-lg border border-[#E2E8F0] bg-white p-2 text-xs text-[#374151] focus:border-[#48C3A7] focus:outline-none dark:border-[#1E293B] dark:bg-[#111622] dark:text-white"
+                className="mt-1 w-full rounded-lg border border-[#E2E8F0] bg-white p-2 text-xs text-[#374151] focus:border-[#48C3A7] focus:outline-none dark:border-[#1E293B] dark:bg-[#0F172A] dark:text-white"
               />
             </div>
             <div>
@@ -109,7 +109,7 @@ export const NewEditalModal: React.FC<NewEditalModalProps> = ({ isOpen, onClose 
                 placeholder="Ex: Guarda Civil, Agente, Escrivão..."
                 value={role}
                 onChange={(e) => setRole(e.target.value)}
-                className="mt-1 w-full rounded-lg border border-[#E2E8F0] bg-white p-2 text-xs text-[#374151] focus:border-[#48C3A7] focus:outline-none dark:border-[#1E293B] dark:bg-[#111622] dark:text-white"
+                className="mt-1 w-full rounded-lg border border-[#E2E8F0] bg-white p-2 text-xs text-[#374151] focus:border-[#48C3A7] focus:outline-none dark:border-[#1E293B] dark:bg-[#0F172A] dark:text-white"
               />
             </div>
           </div>
@@ -126,7 +126,7 @@ export const NewEditalModal: React.FC<NewEditalModalProps> = ({ isOpen, onClose 
                 placeholder="Ex: IBFC, Cebraspe, FGV..."
                 value={banca}
                 onChange={(e) => setBanca(e.target.value)}
-                className="mt-1 w-full rounded-lg border border-[#E2E8F0] bg-white p-2 text-xs text-[#374151] focus:border-[#48C3A7] focus:outline-none dark:border-[#1E293B] dark:bg-[#111622] dark:text-white"
+                className="mt-1 w-full rounded-lg border border-[#E2E8F0] bg-white p-2 text-xs text-[#374151] focus:border-[#48C3A7] focus:outline-none dark:border-[#1E293B] dark:bg-[#0F172A] dark:text-white"
               />
             </div>
             <div>
@@ -139,7 +139,7 @@ export const NewEditalModal: React.FC<NewEditalModalProps> = ({ isOpen, onClose 
                 placeholder="Ex: 200"
                 value={vacanciesCount}
                 onChange={(e) => setVacanciesCount(e.target.value ? parseInt(e.target.value) : "")}
-                className="mt-1 w-full rounded-lg border border-[#E2E8F0] bg-white p-2 text-xs text-[#374151] focus:border-[#48C3A7] focus:outline-none dark:border-[#1E293B] dark:bg-[#111622] dark:text-white"
+                className="mt-1 w-full rounded-lg border border-[#E2E8F0] bg-white p-2 text-xs text-[#374151] focus:border-[#48C3A7] focus:outline-none dark:border-[#1E293B] dark:bg-[#0F172A] dark:text-white"
               />
             </div>
           </div>
@@ -154,7 +154,7 @@ export const NewEditalModal: React.FC<NewEditalModalProps> = ({ isOpen, onClose 
                 type="date"
                 value={examDate}
                 onChange={(e) => setExamDate(e.target.value)}
-                className="mt-1 w-full rounded-lg border border-[#E2E8F0] bg-white p-2 text-xs text-[#374151] focus:border-[#48C3A7] focus:outline-none dark:border-[#1E293B] dark:bg-[#111622] dark:text-white"
+                className="mt-1 w-full rounded-lg border border-[#E2E8F0] bg-white p-2 text-xs text-[#374151] focus:border-[#48C3A7] focus:outline-none dark:border-[#1E293B] dark:bg-[#0F172A] dark:text-white"
               />
             </div>
             <div>
@@ -165,7 +165,7 @@ export const NewEditalModal: React.FC<NewEditalModalProps> = ({ isOpen, onClose 
                 type="number"
                 value={year}
                 onChange={(e) => setYear(parseInt(e.target.value) || 2026)}
-                className="mt-1 w-full rounded-lg border border-[#E2E8F0] bg-white p-2 text-xs text-[#374151] focus:border-[#48C3A7] focus:outline-none dark:border-[#1E293B] dark:bg-[#111622] dark:text-white"
+                className="mt-1 w-full rounded-lg border border-[#E2E8F0] bg-white p-2 text-xs text-[#374151] focus:border-[#48C3A7] focus:outline-none dark:border-[#1E293B] dark:bg-[#0F172A] dark:text-white"
               />
             </div>
           </div>
@@ -180,7 +180,7 @@ export const NewEditalModal: React.FC<NewEditalModalProps> = ({ isOpen, onClose 
               placeholder="Ex: Foco na prova discursiva e no TAF..."
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
-              className="mt-1 w-full rounded-lg border border-[#E2E8F0] bg-white p-2 text-xs text-[#374151] focus:border-[#48C3A7] focus:outline-none dark:border-[#1E293B] dark:bg-[#111622] dark:text-white"
+              className="mt-1 w-full rounded-lg border border-[#E2E8F0] bg-white p-2 text-xs text-[#374151] focus:border-[#48C3A7] focus:outline-none dark:border-[#1E293B] dark:bg-[#0F172A] dark:text-white"
             />
           </div>
 
@@ -189,7 +189,7 @@ export const NewEditalModal: React.FC<NewEditalModalProps> = ({ isOpen, onClose 
             <button
               type="button"
               onClick={onClose}
-              className="rounded-lg px-4 py-2 font-semibold text-[#737D89] hover:bg-[#F8FAFC] dark:text-[#94A3B8] dark:hover:bg-[#182030]"
+              className="rounded-lg px-4 py-2 font-semibold text-[#737D89] hover:bg-[#F8FAFC] dark:text-[#94A3B8] dark:hover:bg-[#1E293B]"
             >
               Cancelar
             </button>

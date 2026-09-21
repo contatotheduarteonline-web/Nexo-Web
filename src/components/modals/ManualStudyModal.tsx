@@ -111,7 +111,7 @@ export const ManualStudyModal: React.FC<ManualStudyModalProps> = ({
         {/* Header */}
         <div className="flex items-center justify-between border-b border-slate-100 bg-slate-50/80 px-6 py-4 dark:border-slate-800 dark:bg-slate-800/40">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-orange-500/15 text-[#FF6B00] border border-orange-500/30 shadow-xs dark:bg-orange-500/20">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500/15 text-[#F59E0B] border border-amber-500/30 shadow-xs dark:bg-amber-500/20">
               <Clock className="h-5 w-5" />
             </div>
             <div>
@@ -142,7 +142,7 @@ export const ManualStudyModal: React.FC<ManualStudyModalProps> = ({
               <select
                 value={disciplineId}
                 onChange={(e) => handleDisciplineChange(e.target.value)}
-                className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-xs font-medium text-slate-900 focus:border-[#FF6B00] focus:ring-1 focus:ring-[#FF6B00] focus:bg-white focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-xs font-medium text-slate-900 focus:border-[#F59E0B] focus:ring-1 focus:ring-[#F59E0B] focus:bg-white focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                 required
               >
                 {disciplines.map((d) => (
@@ -160,7 +160,7 @@ export const ManualStudyModal: React.FC<ManualStudyModalProps> = ({
               <select
                 value={topicId}
                 onChange={(e) => setTopicId(e.target.value)}
-                className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-xs font-medium text-slate-900 focus:border-[#FF6B00] focus:ring-1 focus:ring-[#FF6B00] focus:bg-white focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-xs font-medium text-slate-900 focus:border-[#F59E0B] focus:ring-1 focus:ring-[#F59E0B] focus:bg-white focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
               >
                 <option value="">Geral / Sem tópico específico</option>
                 {currentDisciplineTopics.map((t) => (
@@ -182,7 +182,7 @@ export const ManualStudyModal: React.FC<ManualStudyModalProps> = ({
                 type="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-xs text-slate-900 focus:border-[#FF6B00] focus:ring-1 focus:ring-[#FF6B00] focus:bg-white focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-xs text-slate-900 focus:border-[#F59E0B] focus:ring-1 focus:ring-[#F59E0B] focus:bg-white focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                 required
               />
             </div>
@@ -197,7 +197,7 @@ export const ManualStudyModal: React.FC<ManualStudyModalProps> = ({
                 step="5"
                 value={durationMinutes}
                 onChange={(e) => setDurationMinutes(Math.max(0, parseInt(e.target.value) || 0))}
-                className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-xs font-bold text-slate-900 focus:border-[#FF6B00] focus:ring-1 focus:ring-[#FF6B00] focus:bg-white focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-xs font-bold text-slate-900 focus:border-[#F59E0B] focus:ring-1 focus:ring-[#F59E0B] focus:bg-white focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                 placeholder="Ex: 50"
               />
             </div>
@@ -209,7 +209,7 @@ export const ManualStudyModal: React.FC<ManualStudyModalProps> = ({
               <select
                 value={modality}
                 onChange={(e) => setModality(e.target.value as StudyModality)}
-                className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-xs font-medium text-slate-900 focus:border-[#FF6B00] focus:ring-1 focus:ring-[#FF6B00] focus:bg-white focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-xs font-medium text-slate-900 focus:border-[#F59E0B] focus:ring-1 focus:ring-[#F59E0B] focus:bg-white focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
               >
                 <option value="Teoria">📖 Teoria</option>
                 <option value="Questões">📝 Questões</option>
@@ -240,7 +240,7 @@ export const ManualStudyModal: React.FC<ManualStudyModalProps> = ({
                     setQuestionsDone(done);
                     if (questionsCorrect > done) setQuestionsCorrect(done);
                   }}
-                  className="mt-1 w-full rounded-lg border border-slate-200 bg-white p-2 text-xs font-bold text-slate-900 focus:border-[#FF6B00] focus:ring-1 focus:ring-[#FF6B00] focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                  className="mt-1 w-full rounded-lg border border-slate-200 bg-white p-2 text-xs font-bold text-slate-900 focus:border-[#F59E0B] focus:ring-1 focus:ring-[#F59E0B] focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                 />
               </div>
 
@@ -283,7 +283,7 @@ export const ManualStudyModal: React.FC<ManualStudyModalProps> = ({
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="Ex: Focar nas exceções do art. 5º; mnemônico LIMPE..."
-              className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-xs text-slate-900 focus:border-[#FF6B00] focus:ring-1 focus:ring-[#FF6B00] focus:bg-white focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+              className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-xs text-slate-900 focus:border-[#F59E0B] focus:ring-1 focus:ring-[#F59E0B] focus:bg-white focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
             />
           </div>
 
@@ -302,7 +302,7 @@ export const ManualStudyModal: React.FC<ManualStudyModalProps> = ({
               </button>
               <button
                 type="submit"
-                className="flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#FF6B00] to-[#FF8A00] hover:from-[#E05D00] hover:to-[#FF6B00] px-5 py-2 text-xs font-bold text-white shadow-md shadow-orange-500/25 transition active:scale-98 cursor-pointer"
+                className="flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#F59E0B] to-[#FBBF24] hover:from-[#D97706] hover:to-[#F59E0B] px-5 py-2 text-xs font-bold text-white shadow-md shadow-amber-500/25 transition active:scale-98 cursor-pointer"
               >
                 <CheckCircle2 className="h-4 w-4" />
                 Salvar Registro

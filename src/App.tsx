@@ -120,7 +120,7 @@ const AuthenticatedApp: React.FC = () => {
   };
 
   return (
-    <div className="flex h-screen w-full flex-col overflow-hidden bg-[#E9EAEC] font-sans text-[#172033] antialiased dark:bg-[#0C0F17] dark:text-[#F1F5F9] relative">
+    <div className="flex h-screen w-full flex-col overflow-hidden bg-[#E9EAEC] font-sans text-[#172033] antialiased dark:bg-[#0F172A] dark:text-[#F1F5F9] relative">
       {/* Background Institutional Watermark Texture */}
       <GlobalWatermark />
 
@@ -148,7 +148,7 @@ const AuthenticatedApp: React.FC = () => {
         />
 
         {/* Scrollable View Canvas */}
-        <main className="flex-1 overflow-y-auto bg-[#F4F5F7] p-4 md:p-6 lg:p-7 dark:bg-[#0B0E14]">
+        <main className="flex-1 overflow-y-auto bg-[#F4F5F7] p-4 md:p-6 lg:p-7 dark:bg-[#0F172A]">
           <div className="mx-auto max-w-7xl">{renderActiveView()}</div>
         </main>
       </div>
@@ -188,7 +188,7 @@ const RootRouter: React.FC = () => {
     return (
       <div className="flex h-screen w-full items-center justify-center bg-[#07090E] text-white">
         <div className="flex flex-col items-center gap-4">
-          <div className="h-10 w-10 animate-spin rounded-full border-4 border-orange-500 border-t-transparent"></div>
+          <div className="h-10 w-10 animate-spin rounded-full border-4 border-amber-500 border-t-transparent"></div>
           <p className="text-sm font-medium tracking-wide text-zinc-400">Conectando sessão segura...</p>
         </div>
       </div>

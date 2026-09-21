@@ -158,7 +158,7 @@ export const PlanDetailView: React.FC<PlanDetailViewProps> = ({
                   }}
                 />
               ) : (
-                <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#FF6B00]/20 to-[#FF6B00]/5 text-[#FF6B00]">
+                <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#F59E0B]/20 to-[#F59E0B]/5 text-[#F59E0B]">
                   <Shield className="h-10 w-10" />
                 </div>
               )}
@@ -265,7 +265,7 @@ export const PlanDetailView: React.FC<PlanDetailViewProps> = ({
         <div className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-xs dark:border-zinc-800 dark:bg-zinc-900">
           <div className="flex items-center justify-between text-zinc-500 dark:text-zinc-400">
             <span className="text-xs font-bold uppercase tracking-wider">Horas Estudadas</span>
-            <div className="rounded-xl bg-orange-500/10 p-2 text-[#FF6B00]">
+            <div className="rounded-xl bg-amber-500/10 p-2 text-[#F59E0B]">
               <Clock className="h-4 w-4" />
             </div>
           </div>
@@ -319,7 +319,7 @@ export const PlanDetailView: React.FC<PlanDetailViewProps> = ({
         <div className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-xs dark:border-zinc-800 dark:bg-zinc-900">
           <div className="flex items-center justify-between text-zinc-500 dark:text-zinc-400">
             <span className="text-xs font-bold uppercase tracking-wider">Progresso Geral</span>
-            <div className="rounded-xl bg-orange-500/10 p-2 text-[#FF6B00]">
+            <div className="rounded-xl bg-amber-500/10 p-2 text-[#F59E0B]">
               <CheckCircle2 className="h-4 w-4" />
             </div>
           </div>
@@ -339,7 +339,7 @@ export const PlanDetailView: React.FC<PlanDetailViewProps> = ({
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-200 pb-3 dark:border-zinc-800">
           <div>
             <h2 className="text-base font-bold text-zinc-900 dark:text-white flex items-center gap-2">
-              <BookOpen className="h-4 w-4 text-[#FF6B00]" />
+              <BookOpen className="h-4 w-4 text-[#F59E0B]" />
               <span>Disciplinas do Plano</span>
               <span className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
                 ({disciplines.length})
@@ -353,7 +353,7 @@ export const PlanDetailView: React.FC<PlanDetailViewProps> = ({
           <div className="flex items-center gap-2">
             <button
               onClick={() => setIsAddDisciplineOpen(true)}
-              className="flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#FF6B00] to-[#FF8A00] hover:from-[#E05D00] hover:to-[#FF6B00] px-4 py-2 text-xs font-bold text-white shadow-md shadow-orange-500/20 active:scale-98 transition cursor-pointer"
+              className="flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#F59E0B] to-[#FBBF24] hover:from-[#D97706] hover:to-[#F59E0B] px-4 py-2 text-xs font-bold text-white shadow-md shadow-amber-500/20 active:scale-98 transition cursor-pointer"
             >
               <Plus className="h-3.5 w-3.5" />
               <span>Nova Disciplina</span>
@@ -364,7 +364,7 @@ export const PlanDetailView: React.FC<PlanDetailViewProps> = ({
         {/* Empty state or Grid */}
         {disciplines.length === 0 ? (
           <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-zinc-200 bg-white p-12 text-center dark:border-zinc-800 dark:bg-zinc-900">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-orange-500/10 text-[#FF6B00]">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-500/10 text-[#F59E0B]">
               <BookOpen className="h-6 w-6" />
             </div>
             <h3 className="mt-3 text-sm font-bold text-zinc-900 dark:text-white">
@@ -375,7 +375,7 @@ export const PlanDetailView: React.FC<PlanDetailViewProps> = ({
             </p>
             <button
               onClick={() => setIsAddDisciplineOpen(true)}
-              className="mt-4 flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#FF6B00] to-[#FF8A00] hover:from-[#E05D00] hover:to-[#FF6B00] px-4 py-2 text-xs font-bold text-white shadow-md shadow-orange-500/20 transition cursor-pointer"
+              className="mt-4 flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#F59E0B] to-[#FBBF24] hover:from-[#D97706] hover:to-[#F59E0B] px-4 py-2 text-xs font-bold text-white shadow-md shadow-amber-500/20 transition cursor-pointer"
             >
               <Plus className="h-3.5 w-3.5" />
               <span>Adicionar Primeira Disciplina</span>
@@ -420,7 +420,7 @@ export const PlanDetailView: React.FC<PlanDetailViewProps> = ({
                 <div
                   key={disc.id}
                   onClick={() => setSelectedDisciplineForEdit(disc)}
-                  className="group relative flex flex-col justify-between rounded-2xl border border-zinc-200 bg-white p-5 shadow-xs transition hover:border-[#FF6B00] hover:shadow-md cursor-pointer dark:border-zinc-800 dark:bg-zinc-900"
+                  className="group relative flex flex-col justify-between rounded-2xl border border-zinc-200 bg-white p-5 shadow-xs transition hover:border-[#F59E0B] hover:shadow-md cursor-pointer dark:border-zinc-800 dark:bg-zinc-900"
                 >
                   <div>
                     {/* Header: Color Indicator + Title + Tag */}
@@ -428,9 +428,9 @@ export const PlanDetailView: React.FC<PlanDetailViewProps> = ({
                       <div className="flex items-center gap-2.5 min-w-0">
                         <span
                           className="h-3 w-3 rounded-full shrink-0 shadow-xs"
-                          style={{ backgroundColor: disc.color || "#FF6B00" }}
+                          style={{ backgroundColor: disc.color || "#F59E0B" }}
                         />
-                        <h3 className="font-bold text-zinc-900 group-hover:text-[#FF6B00] dark:text-white dark:group-hover:text-[#FFA726] truncate text-sm transition">
+                        <h3 className="font-bold text-zinc-900 group-hover:text-[#F59E0B] dark:text-white dark:group-hover:text-[#FBBF24] truncate text-sm transition">
                           {disc.name}
                         </h3>
                       </div>
@@ -455,7 +455,7 @@ export const PlanDetailView: React.FC<PlanDetailViewProps> = ({
                       </div>
                       <div>
                         <span className="text-[10px] text-zinc-400 block">Desempenho</span>
-                        <span className="text-xs font-bold text-[#FF6B00] dark:text-[#FFA726]">
+                        <span className="text-xs font-bold text-[#F59E0B] dark:text-[#FBBF24]">
                           {discAccuracy}%
                         </span>
                       </div>
@@ -476,7 +476,7 @@ export const PlanDetailView: React.FC<PlanDetailViewProps> = ({
                           className="h-full rounded-full transition-all duration-500"
                           style={{
                             width: `${discProgress}%`,
-                            backgroundColor: disc.color || "#FF6B00",
+                            backgroundColor: disc.color || "#F59E0B",
                           }}
                         />
                       </div>
@@ -486,7 +486,7 @@ export const PlanDetailView: React.FC<PlanDetailViewProps> = ({
                   {/* Card Footer: Quick edit cue */}
                   <div className="mt-4 pt-3 border-t border-zinc-100 dark:border-zinc-800 flex items-center justify-between text-[11px] text-zinc-400 group-hover:text-zinc-600 dark:group-hover:text-zinc-300 transition">
                     <span>Clique para editar tópicos</span>
-                    <Edit2 className="h-3.5 w-3.5 text-zinc-400 group-hover:text-[#FF6B00] transition" />
+                    <Edit2 className="h-3.5 w-3.5 text-zinc-400 group-hover:text-[#F59E0B] transition" />
                   </div>
                 </div>
               );

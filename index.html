@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -41,19 +41,9 @@
           console.debug('[NEXO/Vite] Evento WebSocket HMR tratado sem impacto na aplicação:', msg);
         }
       });
-      (function() {
-        try {
-          const theme = localStorage.getItem('farda_theme_v3');
-          if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            document.documentElement.classList.add('dark');
-          } else {
-            document.documentElement.classList.remove('dark');
-          }
-        } catch (e) {}
-      })();
     </script>
   </head>
-  <body class="bg-[#F7F8FA] text-[#172033] antialiased dark:bg-[#0A0D14] dark:text-[#F1F5F9]">
+  <body class="bg-[#0F172A] text-[#F1F5F9] antialiased">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

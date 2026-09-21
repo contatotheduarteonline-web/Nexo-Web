@@ -38,7 +38,7 @@ export const CicloView: React.FC = () => {
 
   if (!activePlan) {
     return (
-      <div className="rounded-2xl border border-dashed border-[#E2E8F0] bg-white p-12 text-center dark:border-[#1E293B] dark:bg-[#111622]">
+      <div className="rounded-2xl border border-dashed border-[#E2E8F0] bg-white p-12 text-center dark:border-[#1E293B] dark:bg-[#0F172A]">
         <Layers className="mx-auto h-12 w-12 text-[#737D89]" />
         <h3 className="mt-3 text-base font-bold text-[#374151] dark:text-white">
           Nenhum Plano de Estudos Ativo
@@ -48,7 +48,7 @@ export const CicloView: React.FC = () => {
         </p>
         <button
           onClick={() => setActiveTab("planos")}
-          className="mt-4 rounded-xl bg-[#FF6B00] hover:bg-[#E05D00] px-5 py-2.5 text-xs font-bold text-white transition active:scale-98"
+          className="mt-4 rounded-xl bg-[#F59E0B] hover:bg-[#D97706] px-5 py-2.5 text-xs font-bold text-white transition active:scale-98"
         >
           Ir para Meus Planos
         </button>
@@ -118,7 +118,7 @@ export const CicloView: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Top Header */}
-      <div className="flex flex-col justify-between gap-4 rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-xs sm:flex-row sm:items-center dark:border-[#1E293B] dark:bg-[#111622]">
+      <div className="flex flex-col justify-between gap-4 rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-xs sm:flex-row sm:items-center dark:border-[#1E293B] dark:bg-[#0F172A]">
         <div>
           <h2 className="text-xl font-bold text-[#374151] dark:text-white">
             Ciclo de Estudos
@@ -128,7 +128,7 @@ export const CicloView: React.FC = () => {
         <div className="flex flex-wrap items-center gap-2">
           <button
             onClick={() => setIsEditingCycle(!isEditingCycle)}
-            className="flex items-center gap-1.5 rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-3.5 py-2 text-xs font-bold text-[#374151] hover:bg-[#E2E8F0] dark:border-[#1E293B] dark:bg-[#182030] dark:text-white"
+            className="flex items-center gap-1.5 rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-3.5 py-2 text-xs font-bold text-[#374151] hover:bg-[#E2E8F0] dark:border-[#1E293B] dark:bg-[#1E293B] dark:text-white"
           >
             <Sliders className="h-3.5 w-3.5" />
             <span>{isEditingCycle ? "Concluir Ajustes" : "Personalizar Blocos"}</span>
@@ -136,7 +136,7 @@ export const CicloView: React.FC = () => {
 
           <button
             onClick={() => setActiveTab("planejamento")}
-            className="flex items-center gap-1.5 rounded-xl bg-[#FF6B00] hover:bg-[#E05D00] px-4 py-2 text-xs font-bold text-white shadow-xs"
+            className="flex items-center gap-1.5 rounded-xl bg-[#F59E0B] hover:bg-[#D97706] px-4 py-2 text-xs font-bold text-white shadow-xs"
           >
             <Sparkles className="h-3.5 w-3.5" />
             <span>Replanejar / Algoritmo</span>
@@ -146,18 +146,18 @@ export const CicloView: React.FC = () => {
 
       {/* Active Step Highlight Banner */}
       {currentDiscipline && (
-        <div className="relative overflow-hidden rounded-2xl border border-orange-500/40 bg-gradient-to-r from-orange-50/80 via-white to-white p-6 shadow-sm dark:border-orange-500/30 dark:from-[#2A1508]/60 dark:via-[#111622] dark:to-[#111622]">
+        <div className="relative overflow-hidden rounded-2xl border border-amber-500/40 bg-gradient-to-r from-amber-50/80 via-white to-white p-6 shadow-sm dark:border-amber-500/30 dark:from-[#2A1508]/60 dark:via-[#0F172A] dark:to-[#0F172A]">
           <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-center">
             {/* Left: Step Info */}
             <div className="space-y-3">
               <div className="flex items-center gap-2">
-                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#FF6B00] text-xs font-black text-white">
+                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#F59E0B] text-xs font-black text-white">
                   {currentIndex + 1}
                 </span>
-                <span className="text-xs font-extrabold uppercase tracking-wider text-[#FF6B00] dark:text-[#FFA726]">
+                <span className="text-xs font-extrabold uppercase tracking-wider text-[#F59E0B] dark:text-[#FBBF24]">
                   Vez Atual no Ciclo (Bloco {currentIndex + 1} de {cycleSteps.length})
                 </span>
-                <span className="rounded-full bg-white/80 px-2 py-0.5 text-[10px] font-bold text-[#737D89] shadow-2xs dark:bg-[#182030] dark:text-[#94A3B8]">
+                <span className="rounded-full bg-white/80 px-2 py-0.5 text-[10px] font-bold text-[#737D89] shadow-2xs dark:bg-[#1E293B] dark:text-[#94A3B8]">
                   {activePlan.completedCycles || 0} voltas concluídas
                 </span>
               </div>
@@ -180,7 +180,7 @@ export const CicloView: React.FC = () => {
                   </div>
                   <div className="h-2 w-full overflow-hidden rounded-full bg-[#E2E8F0] dark:bg-[#1E293B]">
                     <div
-                      className="h-full rounded-full bg-[#FF6B00]"
+                      className="h-full rounded-full bg-[#F59E0B]"
                       style={{ width: `${stepProgressPct}%` }}
                     />
                   </div>
@@ -192,7 +192,7 @@ export const CicloView: React.FC = () => {
             <div className="flex flex-wrap items-center gap-2.5">
               <button
                 onClick={() => launchStudySessionForTopic(currentDiscipline.id)}
-                className="flex items-center gap-2 rounded-xl bg-[#FF6B00] hover:bg-[#E05D00] px-5 py-3 text-xs font-bold text-white shadow-md shadow-orange-500/20 transition active:scale-98"
+                className="flex items-center gap-2 rounded-xl bg-[#F59E0B] hover:bg-[#D97706] px-5 py-3 text-xs font-bold text-white shadow-md shadow-amber-500/20 transition active:scale-98"
               >
                 <Play className="h-4 w-4 fill-white" />
                 <span>Iniciar Estudo Agora</span>
@@ -200,16 +200,16 @@ export const CicloView: React.FC = () => {
 
               <button
                 onClick={advanceCycleStep}
-                className="flex items-center gap-1.5 rounded-xl border border-[#E2E8F0] bg-white px-4 py-3 text-xs font-bold text-[#374151] hover:bg-[#F8FAFC] dark:border-[#1E293B] dark:bg-[#182030] dark:text-white"
+                className="flex items-center gap-1.5 rounded-xl border border-[#E2E8F0] bg-white px-4 py-3 text-xs font-bold text-[#374151] hover:bg-[#F8FAFC] dark:border-[#1E293B] dark:bg-[#1E293B] dark:text-white"
               >
-                <CheckCircle2 className="h-4 w-4 text-[#FF6B00]" />
+                <CheckCircle2 className="h-4 w-4 text-[#F59E0B]" />
                 <span>Concluir & Avançar</span>
               </button>
 
               <button
                 onClick={advanceCycleStep}
                 title="Pular para o próximo bloco"
-                className="rounded-xl border border-[#E2E8F0] bg-white p-3 text-[#737D89] hover:bg-[#F8FAFC] dark:border-[#1E293B] dark:bg-[#182030] dark:text-[#94A3B8]"
+                className="rounded-xl border border-[#E2E8F0] bg-white p-3 text-[#737D89] hover:bg-[#F8FAFC] dark:border-[#1E293B] dark:bg-[#1E293B] dark:text-[#94A3B8]"
               >
                 <ArrowRight className="h-4 w-4" />
               </button>
@@ -219,7 +219,7 @@ export const CicloView: React.FC = () => {
       )}
 
       {/* Cycle Queue Visualizer */}
-      <div className="rounded-2xl border border-[#E2E8F0] bg-white p-6 shadow-xs dark:border-[#1E293B] dark:bg-[#111622]">
+      <div className="rounded-2xl border border-[#E2E8F0] bg-white p-6 shadow-xs dark:border-[#1E293B] dark:bg-[#0F172A]">
         <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-center">
           <div>
             <h4 className="text-base font-bold text-[#374151] dark:text-white">
@@ -236,7 +236,7 @@ export const CicloView: React.FC = () => {
                 resetCycleProgress(activePlan.id);
               }
             }}
-            className="flex items-center gap-1 text-xs font-bold text-[#737D89] hover:text-[#FF6B00] dark:text-[#94A3B8]"
+            className="flex items-center gap-1 text-xs font-bold text-[#737D89] hover:text-[#F59E0B] dark:text-[#94A3B8]"
           >
             <RotateCw className="h-3 w-3" />
             Reiniciar Ponteiro
@@ -258,8 +258,8 @@ export const CicloView: React.FC = () => {
                 }}
                 className={`group relative flex flex-col justify-between rounded-xl border p-4 transition-all duration-200 ${
                   isCurrent
-                    ? "border-orange-500 bg-orange-50/80 shadow-md shadow-orange-500/15 dark:border-orange-500 dark:bg-[#2A1508]/60"
-                    : "border-[#E2E8F0] bg-white hover:border-orange-500/60 hover:shadow-xs dark:border-[#1E293B] dark:bg-[#182030]/60"
+                    ? "border-amber-500 bg-amber-50/80 shadow-md shadow-amber-500/15 dark:border-amber-500 dark:bg-[#2A1508]/60"
+                    : "border-[#E2E8F0] bg-white hover:border-amber-500/60 hover:shadow-xs dark:border-[#1E293B] dark:bg-[#1E293B]/60"
                 }`}
               >
                 <div>
@@ -267,8 +267,8 @@ export const CicloView: React.FC = () => {
                     <span
                       className={`flex h-6 w-6 items-center justify-center rounded-full text-xs font-black ${
                         isCurrent
-                          ? "bg-[#FF6B00] text-white"
-                          : "bg-[#F8FAFC] text-[#737D89] dark:bg-[#111622] dark:text-[#94A3B8]"
+                          ? "bg-[#F59E0B] text-white"
+                          : "bg-[#F8FAFC] text-[#737D89] dark:bg-[#0F172A] dark:text-[#94A3B8]"
                       }`}
                     >
                       {idx + 1}
@@ -289,11 +289,11 @@ export const CicloView: React.FC = () => {
                   <div className="flex items-center justify-between font-semibold text-[#737D89] dark:text-[#94A3B8]">
                     <span>{step.targetMinutes} min</span>
                     {isCurrent ? (
-                      <span className="font-bold text-[#FF6B00] dark:text-[#FFA726]">
+                      <span className="font-bold text-[#F59E0B] dark:text-[#FBBF24]">
                         ▶ Vez Atual
                       </span>
                     ) : (
-                      <span className="text-slate-400 group-hover:text-[#FF6B00]">
+                      <span className="text-slate-400 group-hover:text-[#F59E0B]">
                         Iniciar →
                       </span>
                     )}
@@ -344,7 +344,7 @@ export const CicloView: React.FC = () => {
 
         {/* Add block inline form if editing */}
         {isEditingCycle && (
-          <div className="mt-5 rounded-xl border border-dashed border-orange-500/50 bg-orange-50/30 p-4 dark:border-orange-500/40 dark:bg-orange-500/10">
+          <div className="mt-5 rounded-xl border border-dashed border-amber-500/50 bg-amber-50/30 p-4 dark:border-amber-500/40 dark:bg-amber-500/10">
             <h5 className="text-xs font-bold text-[#374151] dark:text-white">
               Adicionar Bloco ao Ciclo
             </h5>
@@ -352,7 +352,7 @@ export const CicloView: React.FC = () => {
               <select
                 value={selectedDisciplineToAdd}
                 onChange={(e) => setSelectedDisciplineToAdd(e.target.value)}
-                className="rounded-xl border border-[#E2E8F0] bg-white px-3 py-2 text-xs text-[#374151] dark:border-[#1E293B] dark:bg-[#182030] dark:text-white"
+                className="rounded-xl border border-[#E2E8F0] bg-white px-3 py-2 text-xs text-[#374151] dark:border-[#1E293B] dark:bg-[#1E293B] dark:text-white"
               >
                 <option value="">Selecione a disciplina...</option>
                 {activeEdital?.disciplines.map((d) => (
@@ -365,7 +365,7 @@ export const CicloView: React.FC = () => {
               <select
                 value={addBlockMinutes}
                 onChange={(e) => setAddBlockMinutes(Number(e.target.value))}
-                className="rounded-xl border border-[#E2E8F0] bg-white px-3 py-2 text-xs text-[#374151] dark:border-[#1E293B] dark:bg-[#182030] dark:text-white"
+                className="rounded-xl border border-[#E2E8F0] bg-white px-3 py-2 text-xs text-[#374151] dark:border-[#1E293B] dark:bg-[#1E293B] dark:text-white"
               >
                 <option value={30}>30 minutos</option>
                 <option value={45}>45 minutos</option>
@@ -379,7 +379,7 @@ export const CicloView: React.FC = () => {
                 type="button"
                 onClick={handleAddBlockToCycle}
                 disabled={!selectedDisciplineToAdd}
-                className="flex items-center gap-1.5 rounded-xl bg-[#FF6B00] hover:bg-[#E05D00] px-4 py-2 text-xs font-bold text-white disabled:opacity-40"
+                className="flex items-center gap-1.5 rounded-xl bg-[#F59E0B] hover:bg-[#D97706] px-4 py-2 text-xs font-bold text-white disabled:opacity-40"
               >
                 <Plus className="h-3.5 w-3.5" />
                 Adicionar Bloco

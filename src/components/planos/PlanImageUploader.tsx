@@ -73,7 +73,7 @@ export const PlanImageUploader: React.FC<PlanImageUploaderProps> = ({
     <div className="rounded-2xl border border-[#E2E8F0] bg-[#F9FAFB] p-4 dark:border-[#1E293B] dark:bg-[#1A2228]">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
         {/* 96x96 Image / Icon Container */}
-        <div className="relative flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-[#E2E8F0] bg-white shadow-xs dark:border-[#1E293B] dark:bg-[#111622]">
+        <div className="relative flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-[#E2E8F0] bg-white shadow-xs dark:border-[#1E293B] dark:bg-[#0F172A]">
           {displayUrl ? (
             <img
               src={displayUrl}
@@ -81,8 +81,8 @@ export const PlanImageUploader: React.FC<PlanImageUploaderProps> = ({
               className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
             />
           ) : (
-            <div className="flex h-full w-full flex-col items-center justify-center bg-gradient-to-br from-orange-50 to-orange-100 text-[#FF6B00] dark:from-orange-500/20 dark:to-orange-600/10 dark:text-[#FFA726]">
-              <Shield className="h-10 w-10 text-[#FF6B00] dark:text-[#FFA726]" />
+            <div className="flex h-full w-full flex-col items-center justify-center bg-gradient-to-br from-amber-50 to-amber-100 text-[#F59E0B] dark:from-amber-500/20 dark:to-amber-600/10 dark:text-[#FBBF24]">
+              <Shield className="h-10 w-10 text-[#F59E0B] dark:text-[#FBBF24]" />
             </div>
           )}
 
@@ -137,7 +137,7 @@ export const PlanImageUploader: React.FC<PlanImageUploaderProps> = ({
               type="button"
               onClick={handleChooseClick}
               disabled={disabled || isUploading}
-              className="flex items-center gap-1.5 rounded-xl border border-[#E2E8F0] bg-white px-3.5 py-1.5 text-xs font-bold text-[#374151] shadow-2xs transition hover:bg-[#F3F4F6] disabled:opacity-50 dark:border-[#1E293B] dark:bg-[#182030] dark:text-white dark:hover:bg-[#1E293B] cursor-pointer"
+              className="flex items-center gap-1.5 rounded-xl border border-[#E2E8F0] bg-white px-3.5 py-1.5 text-xs font-bold text-[#374151] shadow-2xs transition hover:bg-[#F3F4F6] disabled:opacity-50 dark:border-[#1E293B] dark:bg-[#1E293B] dark:text-white dark:hover:bg-[#1E293B] cursor-pointer"
             >
               {isUploading ? (
                 <>
@@ -146,7 +146,7 @@ export const PlanImageUploader: React.FC<PlanImageUploaderProps> = ({
                 </>
               ) : (
                 <>
-                  <Upload className="h-3.5 w-3.5 text-[#FF6B00] dark:text-[#FFA726]" />
+                  <Upload className="h-3.5 w-3.5 text-[#F59E0B] dark:text-[#FBBF24]" />
                   <span>{displayUrl ? "Trocar imagem" : "Escolher imagem"}</span>
                 </>
               )}

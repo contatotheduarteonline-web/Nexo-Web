@@ -91,14 +91,14 @@ export const LoginView: React.FC = () => {
   };
 
   return (
-    <div className="flex min-h-screen w-full bg-[#0d0f12] text-white antialiased selection:bg-[#fca326]/30 selection:text-[#fca326] lg:h-screen lg:overflow-hidden relative">
+    <div className="flex min-h-screen w-full bg-[#0d0f12] text-white antialiased selection:bg-[#F59E0B]/30 selection:text-[#F59E0B] lg:h-screen lg:overflow-hidden relative">
       {/* Desktop Left Institutional Section (52%) */}
       <div className="hidden lg:flex lg:w-[52%] flex-col justify-between border-r border-[#1b1e24] bg-gradient-to-br from-[#12151a] via-[#0d0f12] to-[#0a0c10] p-10 xl:p-14 2xl:p-16 relative overflow-y-auto overflow-x-hidden">
         {/* Layer 0: Decorative Watermark Background */}
         <div className="absolute inset-0 pointer-events-none select-none z-0 overflow-hidden">
           {/* Subtle warm ambient glows */}
-          <div className="absolute -top-20 -left-20 h-80 w-80 rounded-full bg-[#fca326]/[0.03] blur-3xl" />
-          <div className="absolute -bottom-24 -right-24 h-96 w-96 rounded-full bg-[#fca326]/[0.02] blur-3xl" />
+          <div className="absolute -top-20 -left-20 h-80 w-80 rounded-full bg-[#F59E0B]/[0.03] blur-3xl" />
+          <div className="absolute -bottom-24 -right-24 h-96 w-96 rounded-full bg-[#F59E0B]/[0.02] blur-3xl" />
 
           {/* Large NEXO Wordmark Watermark */}
           <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/4 select-none pointer-events-none leading-none">
@@ -130,13 +130,13 @@ export const LoginView: React.FC = () => {
         {/* Central Presentation (Foreground: z-10) */}
         <div className="relative z-10 my-auto max-w-[480px] space-y-10 py-8">
           <h1 className="text-3xl xl:text-[40px] font-black uppercase tracking-tight text-white leading-[1.15]">
-            Estude com <span className="text-[#fca326]">estratégia</span>, não no escuro.
+            Estude com <span className="text-[#F59E0B]">estratégia</span>, não no escuro.
           </h1>
 
           {/* 3 Numbered Feature Items */}
           <div className="space-y-6">
             <div className="flex items-start gap-4">
-              <span className="text-sm font-bold text-[#fca326]/90 border border-[#fca326]/40 rounded-md px-2 py-0.5 leading-relaxed select-none">
+              <span className="text-sm font-bold text-[#F59E0B]/90 border border-[#F59E0B]/40 rounded-md px-2 py-0.5 leading-relaxed select-none">
                 01
               </span>
               <div className="pt-0.5">
@@ -148,7 +148,7 @@ export const LoginView: React.FC = () => {
             </div>
 
             <div className="flex items-start gap-4">
-              <span className="text-sm font-bold text-[#fca326]/90 border border-[#fca326]/40 rounded-md px-2 py-0.5 leading-relaxed select-none">
+              <span className="text-sm font-bold text-[#F59E0B]/90 border border-[#F59E0B]/40 rounded-md px-2 py-0.5 leading-relaxed select-none">
                 02
               </span>
               <div className="pt-0.5">
@@ -160,7 +160,7 @@ export const LoginView: React.FC = () => {
             </div>
 
             <div className="flex items-start gap-4">
-              <span className="text-sm font-bold text-[#fca326]/90 border border-[#fca326]/40 rounded-md px-2 py-0.5 leading-relaxed select-none">
+              <span className="text-sm font-bold text-[#F59E0B]/90 border border-[#F59E0B]/40 rounded-md px-2 py-0.5 leading-relaxed select-none">
                 03
               </span>
               <div className="pt-0.5">
@@ -184,7 +184,7 @@ export const LoginView: React.FC = () => {
         {/* Layer 0: Subtle Watermark Background for Right Side */}
         <div className="absolute inset-0 pointer-events-none select-none z-0 overflow-hidden">
           {/* Soft ambient depth glow */}
-          <div className="absolute top-1/3 right-0 h-72 w-72 rounded-full bg-[#fca326]/[0.015] blur-3xl" />
+          <div className="absolute top-1/3 right-0 h-72 w-72 rounded-full bg-[#F59E0B]/[0.015] blur-3xl" />
 
           {/* Subtle Wordmark Watermark on right edge */}
           <div className="hidden lg:block absolute -right-6 bottom-16 select-none pointer-events-none leading-none">
@@ -226,7 +226,7 @@ export const LoginView: React.FC = () => {
               onClick={() => setActiveTab("entrar")}
               className={
                 activeTab === "entrar"
-                  ? "flex-1 rounded-lg bg-[#fca326] px-4 py-2.5 text-sm font-semibold text-[#0d0f12] transition-colors cursor-pointer"
+                  ? "flex-1 rounded-lg bg-[#F59E0B] px-4 py-2.5 text-sm font-semibold text-[#0d0f12] transition-colors cursor-pointer"
                   : "flex-1 rounded-lg px-4 py-2.5 text-sm font-semibold text-[#a0a0a0] hover:text-white transition-colors cursor-pointer"
               }
             >
@@ -237,7 +237,7 @@ export const LoginView: React.FC = () => {
               onClick={() => setActiveTab("cadastrar")}
               className={
                 activeTab === "cadastrar"
-                  ? "flex-1 rounded-lg bg-[#fca326] px-4 py-2.5 text-sm font-semibold text-[#0d0f12] transition-colors cursor-pointer"
+                  ? "flex-1 rounded-lg bg-[#F59E0B] px-4 py-2.5 text-sm font-semibold text-[#0d0f12] transition-colors cursor-pointer"
                   : "flex-1 rounded-lg px-4 py-2.5 text-sm font-semibold text-[#a0a0a0] hover:text-white transition-colors cursor-pointer"
               }
             >
@@ -327,7 +327,7 @@ export const LoginView: React.FC = () => {
                     type="button"
                     onClick={handleGoogleLogin}
                     disabled={isLoading || isGoogleLoading}
-                    className="mt-1 inline-flex items-center gap-1.5 rounded-lg bg-[#fca326] px-3 py-1.5 text-xs font-semibold text-[#0d0f12] hover:bg-[#ffb04d] transition-colors cursor-pointer"
+                    className="mt-1 inline-flex items-center gap-1.5 rounded-lg bg-[#F59E0B] px-3 py-1.5 text-xs font-semibold text-[#0d0f12] hover:bg-[#ffb04d] transition-colors cursor-pointer"
                   >
                     <span>Entrar com Conta Google</span>
                     <ArrowRight className="h-3.5 w-3.5" />
@@ -355,7 +355,7 @@ export const LoginView: React.FC = () => {
                     if (error) setError("");
                   }}
                   placeholder="voce@exemplo.com"
-                  className="h-[50px] w-full rounded-xl border border-[#2a2e35] bg-[#1b1e24] pl-10 pr-4 text-sm text-white placeholder:text-[#a0a0a0]/50 transition-colors focus:border-[#fca326] focus:ring-1 focus:ring-[#fca326]/30 focus:outline-none"
+                  className="h-[50px] w-full rounded-xl border border-[#2a2e35] bg-[#1b1e24] pl-10 pr-4 text-sm text-white placeholder:text-[#a0a0a0]/50 transition-colors focus:border-[#F59E0B] focus:ring-1 focus:ring-[#F59E0B]/30 focus:outline-none"
                 />
                 <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[#a0a0a0]/60 pointer-events-none" />
               </div>
@@ -369,7 +369,7 @@ export const LoginView: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setIsForgotModalOpen(true)}
-                  className="text-xs text-[#a0a0a0] hover:text-[#fca326] transition-colors cursor-pointer"
+                  className="text-xs text-[#a0a0a0] hover:text-[#F59E0B] transition-colors cursor-pointer"
                 >
                   Esqueci minha senha
                 </button>
@@ -386,7 +386,7 @@ export const LoginView: React.FC = () => {
                     if (error) setError("");
                   }}
                   placeholder="Mínimo de 8 caracteres"
-                  className="h-[50px] w-full rounded-xl border border-[#2a2e35] bg-[#1b1e24] pl-10 pr-11 text-sm text-white placeholder:text-[#a0a0a0]/50 transition-colors focus:border-[#fca326] focus:ring-1 focus:ring-[#fca326]/30 focus:outline-none"
+                  className="h-[50px] w-full rounded-xl border border-[#2a2e35] bg-[#1b1e24] pl-10 pr-11 text-sm text-white placeholder:text-[#a0a0a0]/50 transition-colors focus:border-[#F59E0B] focus:ring-1 focus:ring-[#F59E0B]/30 focus:outline-none"
                 />
                 <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[#a0a0a0]/60 pointer-events-none" />
                 <button
@@ -406,7 +406,7 @@ export const LoginView: React.FC = () => {
               <button
                 type="submit"
                 disabled={isLoading || isGoogleLoading}
-                className="flex h-[50px] w-full items-center justify-center gap-2 rounded-xl bg-[#fca326] hover:bg-[#ffb04d] text-sm font-bold text-[#0d0f12] transition-colors duration-150 active:scale-[0.99] disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
+                className="flex h-[50px] w-full items-center justify-center gap-2 rounded-xl bg-[#F59E0B] hover:bg-[#ffb04d] text-sm font-bold text-[#0d0f12] transition-colors duration-150 active:scale-[0.99] disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
               >
                 <span>{isLoading ? "Validando credenciais..." : "Entrar na plataforma"}</span>
                 {!isLoading && <ArrowRight className="h-4 w-4" />}
@@ -456,7 +456,7 @@ export const LoginView: React.FC = () => {
             <button
               type="button"
               onClick={() => setActiveTab("cadastrar")}
-              className="font-semibold text-[#fca326] hover:text-[#ffb04d] transition-colors cursor-pointer underline-offset-4 hover:underline"
+              className="font-semibold text-[#F59E0B] hover:text-[#ffb04d] transition-colors cursor-pointer underline-offset-4 hover:underline"
             >
               Criar conta
             </button>
