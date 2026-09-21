@@ -2,6 +2,11 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+@theme {
+  --font-sans: "Manrope", Arial, sans-serif;
+  --font-display: "Manrope", Arial, sans-serif;
+}
+
 @layer base {
   :root {
     /* TEMA ÚNICO NEXO — ARDÓSIA + ÂMBAR */
@@ -33,7 +38,7 @@
   body {
     background-color: var(--background);
     color: var(--text-primary);
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: "Manrope", Arial, sans-serif;
     font-size: 14px;
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
@@ -42,41 +47,96 @@
     letter-spacing: -0.011em;
   }
 
+  /* ===== HIERARQUIA TIPOGRÁFICA — MANROPE ===== */
+
   h1 {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: "Manrope", Arial, sans-serif;
     font-size: 1.625rem; /* 26px */
-    font-weight: 700;
-    line-height: 1.25;
-    letter-spacing: -0.02em;
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: -0.025em;
     color: var(--text-primary);
   }
 
   h2 {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: "Manrope", Arial, sans-serif;
     font-size: 1.1875rem; /* 19px */
-    font-weight: 650;
+    font-weight: 700;
     line-height: 1.35;
-    letter-spacing: -0.015em;
+    letter-spacing: -0.018em;
     color: var(--text-primary);
   }
 
   h3 {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: "Manrope", Arial, sans-serif;
     font-size: 0.9375rem; /* 15px */
     font-weight: 600;
     line-height: 1.4;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.012em;
     color: var(--text-primary);
   }
 
   h4, h5, h6 {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    letter-spacing: -0.01em;
+    font-family: "Manrope", Arial, sans-serif;
+    font-weight: 600;
+    letter-spacing: -0.012em;
+    color: var(--text-primary);
   }
 
   button, input, select, textarea {
     font-family: inherit;
     letter-spacing: inherit;
+  }
+
+  button {
+    font-weight: 600;
+    cursor: pointer;
+  }
+}
+
+/* ===== MICROINTERAÇÕES E REFINAMENTO GLOBAL ===== */
+
+@layer base {
+  button, a, [role="button"], summary {
+    transition-property: color, background-color, border-color, box-shadow, transform, filter, opacity;
+    transition-duration: 180ms;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  button:not(:disabled):active {
+    transform: scale(0.98);
+  }
+
+  /* Foco âmbar elegante em campos de formulário */
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible {
+    outline: 2px solid rgba(245, 158, 11, 0.5);
+    outline-offset: 1px;
+  }
+
+  /* Checkboxes e radios nativos seguem o âmbar */
+  input[type="checkbox"],
+  input[type="radio"] {
+    accent-color: #F59E0B;
+  }
+
+  ::selection {
+    background: rgba(245, 158, 11, 0.35);
+    color: #F1F5F9;
+  }
+}
+
+/* ===== PROFUNDIDADE VISUAL DOS CARDS (superfície ardósia) ===== */
+
+@layer base {
+  [class*="bg-[#1E293B]"] {
+    box-shadow: 0 1px 2px rgba(2, 6, 23, 0.4), 0 8px 24px -16px rgba(2, 6, 23, 0.5);
+  }
+
+  /* Botões âmbar recebem sombra muito sutil */
+  button[class*="bg-[#F59E0B]"] {
+    box-shadow: 0 1px 2px rgba(245, 158, 11, 0.35);
   }
 }
 
