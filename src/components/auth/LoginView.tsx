@@ -6,14 +6,12 @@ import {
   AlertCircle,
   Eye,
   EyeOff,
-  CheckCircle2,
   BookOpen,
   Calendar,
   Clock,
   Timer,
   TrendingUp,
   Glasses,
-  Laptop,
   Trophy,
   Pencil,
   GraduationCap,
@@ -95,14 +93,14 @@ export const LoginView: React.FC<LoginViewProps> = ({ onGoToCadastro }) => {
   };
 
   return (
-    <div className="flex min-h-screen w-full bg-[#0B0E14] text-zinc-100 antialiased selection:bg-[#FF6B00]/30 selection:text-orange-200 lg:h-screen lg:overflow-hidden relative">
+    <div className="flex min-h-screen w-full bg-[#0d0f12] text-white antialiased selection:bg-[#fca326]/30 selection:text-[#fca326] lg:h-screen lg:overflow-hidden relative">
       {/* Desktop Left Institutional Section (52%) */}
-      <div className="hidden lg:flex lg:w-[52%] flex-col justify-between border-r border-zinc-800/40 bg-gradient-to-br from-[#11151F] via-[#0E121B] to-[#0A0D13] p-10 xl:p-14 2xl:p-16 relative overflow-y-auto overflow-x-hidden">
+      <div className="hidden lg:flex lg:w-[52%] flex-col justify-between border-r border-[#1b1e24] bg-gradient-to-br from-[#12151a] via-[#0d0f12] to-[#0a0c10] p-10 xl:p-14 2xl:p-16 relative overflow-y-auto overflow-x-hidden">
         {/* Layer 0: Decorative Watermark Background */}
         <div className="absolute inset-0 pointer-events-none select-none z-0 overflow-hidden">
           {/* Subtle warm ambient glows */}
-          <div className="absolute -top-20 -left-20 h-80 w-80 rounded-full bg-[#FF6B00]/[0.025] blur-3xl" />
-          <div className="absolute -bottom-24 -right-24 h-96 w-96 rounded-full bg-[#FF6B00]/[0.02] blur-3xl" />
+          <div className="absolute -top-20 -left-20 h-80 w-80 rounded-full bg-[#fca326]/[0.03] blur-3xl" />
+          <div className="absolute -bottom-24 -right-24 h-96 w-96 rounded-full bg-[#fca326]/[0.02] blur-3xl" />
 
           {/* Large NEXO Wordmark Watermark */}
           <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/4 select-none pointer-events-none leading-none">
@@ -116,20 +114,13 @@ export const LoginView: React.FC<LoginViewProps> = ({ onGoToCadastro }) => {
             <Logo variant="symbol" size="hero" />
           </div>
 
-          {/* Outline Study Icons (Watermark line art: 7% - 10% opacity, stroke-[1.25]) */}
-          {/* Top-Right: Book */}
+          {/* Outline Study Icons (Watermark line art) */}
           <BookOpen className="absolute top-12 right-14 h-11 w-11 text-white/[0.09] stroke-[1.25] rotate-6" />
-          {/* Upper-Right: Calendar */}
           <Calendar className="absolute top-36 right-8 h-9 w-9 text-white/[0.08] stroke-[1.25] -rotate-6" />
-          {/* Mid-Left: Timer / Chronometer */}
           <Timer className="absolute top-[46%] left-10 h-10 w-10 text-white/[0.09] stroke-[1.25] -rotate-12" />
-          {/* Mid-Right: Performance Chart */}
           <TrendingUp className="absolute top-[58%] right-14 h-10 w-10 text-white/[0.09] stroke-[1.25] rotate-12" />
-          {/* Lower-Left: Glasses */}
           <Glasses className="absolute bottom-32 left-16 h-8 w-8 text-white/[0.08] stroke-[1.25] rotate-12" />
-          {/* Lower-Center: Trophy */}
           <Trophy className="absolute bottom-16 right-28 h-10 w-10 text-white/[0.09] stroke-[1.25] -rotate-6" />
-          {/* Bottom-Right: Pencil */}
           <Pencil className="absolute bottom-8 right-10 h-7 w-7 text-white/[0.07] stroke-[1.25] rotate-45" />
         </div>
 
@@ -139,9 +130,9 @@ export const LoginView: React.FC<LoginViewProps> = ({ onGoToCadastro }) => {
             <Logo variant="symbol" size="sm" />
             <div className="flex flex-col justify-center">
               <span className="text-base font-black tracking-[0.16em] text-white leading-tight">
-                NEXO
+                NEXO.
               </span>
-              <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#FF6B00] mt-0.5">
+              <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#fca326] mt-0.5">
                 Plataforma de Estudos
               </span>
             </div>
@@ -149,53 +140,63 @@ export const LoginView: React.FC<LoginViewProps> = ({ onGoToCadastro }) => {
         </div>
 
         {/* Central Presentation (Foreground: z-10) */}
-        <div className="relative z-10 my-auto max-w-[460px] space-y-7 py-8">
-          <div className="space-y-3">
-            <h1 className="text-2xl xl:text-3xl font-bold tracking-tight text-white leading-snug">
-              Planeje seus estudos, organize seu conteúdo e acompanhe sua evolução.
-            </h1>
-            <p className="text-sm text-zinc-400 font-normal leading-relaxed">
-              Uma plataforma completa para organizar sua preparação, acompanhar seu desempenho e evoluir com consistência.
-            </p>
-          </div>
+        <div className="relative z-10 my-auto max-w-[480px] space-y-10 py-8">
+          <h1 className="text-3xl xl:text-[40px] font-black uppercase tracking-tight text-white leading-[1.15]">
+            Estude com <span className="text-[#fca326]">estratégia</span>, não no escuro.
+          </h1>
 
-          {/* 3 Compact Benefit Items */}
-          <div className="space-y-2 pt-1">
-            <div className="flex items-center gap-3 rounded-xl border border-zinc-800/60 bg-[#121620]/50 px-3.5 py-2.5 text-xs text-zinc-200 transition-colors hover:border-zinc-700/60 hover:bg-[#141A26]">
-              <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-[#FF6B00]/10 text-[#FF6B00]">
-                <CheckCircle2 className="h-3.5 w-3.5" />
+          {/* 3 Numbered Feature Items */}
+          <div className="space-y-6">
+            <div className="flex items-start gap-4">
+              <span className="text-sm font-bold text-[#fca326]/90 border border-[#fca326]/40 rounded-md px-2 py-0.5 leading-relaxed select-none">
+                01
+              </span>
+              <div className="pt-0.5">
+                <p className="text-sm font-semibold text-white">Diagnóstico por disciplina</p>
+                <p className="text-xs text-[#a0a0a0] mt-1 leading-relaxed">
+                  Radar de desempenho mostra onde seu tempo rende mais pontos.
+                </p>
               </div>
-              <span className="font-medium">Planejamento personalizado</span>
             </div>
 
-            <div className="flex items-center gap-3 rounded-xl border border-zinc-800/60 bg-[#121620]/50 px-3.5 py-2.5 text-xs text-zinc-200 transition-colors hover:border-zinc-700/60 hover:bg-[#141A26]">
-              <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-[#FF6B00]/10 text-[#FF6B00]">
-                <CheckCircle2 className="h-3.5 w-3.5" />
+            <div className="flex items-start gap-4">
+              <span className="text-sm font-bold text-[#fca326]/90 border border-[#fca326]/40 rounded-md px-2 py-0.5 leading-relaxed select-none">
+                02
+              </span>
+              <div className="pt-0.5">
+                <p className="text-sm font-semibold text-white">Gamificação com XP</p>
+                <p className="text-xs text-[#a0a0a0] mt-1 leading-relaxed">
+                  Cada sessão de estudo vira experiência, níveis e sequências.
+                </p>
               </div>
-              <span className="font-medium">Controle de estudos e revisões</span>
             </div>
 
-            <div className="flex items-center gap-3 rounded-xl border border-zinc-800/60 bg-[#121620]/50 px-3.5 py-2.5 text-xs text-zinc-200 transition-colors hover:border-zinc-700/60 hover:bg-[#141A26]">
-              <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-[#FF6B00]/10 text-[#FF6B00]">
-                <CheckCircle2 className="h-3.5 w-3.5" />
+            <div className="flex items-start gap-4">
+              <span className="text-sm font-bold text-[#fca326]/90 border border-[#fca326]/40 rounded-md px-2 py-0.5 leading-relaxed select-none">
+                03
+              </span>
+              <div className="pt-0.5">
+                <p className="text-sm font-semibold text-white">Contagem regressiva</p>
+                <p className="text-xs text-[#a0a0a0] mt-1 leading-relaxed">
+                  Sua prova sempre à vista, com metas semanais realistas.
+                </p>
               </div>
-              <span className="font-medium">Edital e desempenho organizados</span>
             </div>
           </div>
         </div>
 
         {/* Footer (Foreground: z-10) */}
-        <div className="relative z-10 text-xs text-zinc-500/80 font-normal pt-4">
+        <div className="relative z-10 text-xs text-[#a0a0a0]/70 font-normal pt-4">
           © 2026 NEXO. Todos os direitos reservados.
         </div>
       </div>
 
       {/* Right Side: Clean Login Form (48% on desktop) */}
-      <div className="flex w-full lg:w-[48%] flex-col justify-center items-center p-6 sm:p-10 lg:p-12 xl:p-16 h-full overflow-y-auto overflow-x-hidden bg-[#0B0E14] relative">
-        {/* Layer 0: Subtle Watermark Background for Right Side (discreet 5% - 7% opacity, perimeter only) */}
+      <div className="flex w-full lg:w-[48%] flex-col justify-center items-center p-6 sm:p-10 lg:p-12 xl:p-16 h-full overflow-y-auto overflow-x-hidden bg-[#0d0f12] relative">
+        {/* Layer 0: Subtle Watermark Background for Right Side */}
         <div className="absolute inset-0 pointer-events-none select-none z-0 overflow-hidden">
           {/* Soft ambient depth glow */}
-          <div className="absolute top-1/3 right-0 h-72 w-72 rounded-full bg-[#FF6B00]/[0.015] blur-3xl" />
+          <div className="absolute top-1/3 right-0 h-72 w-72 rounded-full bg-[#fca326]/[0.015] blur-3xl" />
 
           {/* Subtle Wordmark Watermark on right edge */}
           <div className="hidden lg:block absolute -right-6 bottom-16 select-none pointer-events-none leading-none">
@@ -204,18 +205,10 @@ export const LoginView: React.FC<LoginViewProps> = ({ onGoToCadastro }) => {
             </span>
           </div>
 
-          {/* Outline Study Icons - Perimeter Placement only (leaves center form 100% clean) */}
-          {/* Top-Right: Laptop */}
-          <Laptop className="absolute top-8 right-8 sm:top-10 sm:right-12 h-9 w-9 text-white/[0.06] stroke-[1.25] -rotate-6" />
-          {/* Top-Left: Clock (Desktop only) */}
-          <Clock className="hidden lg:block absolute top-12 left-10 h-8 w-8 text-white/[0.06] stroke-[1.25] rotate-12" />
-          {/* Mid-Right Edge: Graduation Cap (Desktop only) */}
+          {/* Outline Study Icons - Perimeter Placement only */}
           <GraduationCap className="hidden lg:block absolute top-1/2 right-6 -translate-y-1/2 h-10 w-10 text-white/[0.05] stroke-[1.25] rotate-6" />
-          {/* Bottom-Right: Book (Desktop + Mobile corner) */}
           <BookOpen className="absolute bottom-8 right-8 sm:bottom-10 sm:right-12 h-8 w-8 text-white/[0.06] stroke-[1.25] rotate-12" />
-          {/* Bottom-Left: Pencil (Desktop + Mobile corner) */}
           <Pencil className="absolute bottom-10 left-8 sm:bottom-12 sm:left-12 h-7 w-7 text-white/[0.05] stroke-[1.25] -rotate-12" />
-          {/* Mobile Top-Left subtle Trophy */}
           <Trophy className="lg:hidden absolute top-6 left-6 h-7 w-7 text-white/[0.05] stroke-[1.25] -rotate-6" />
         </div>
 
@@ -227,9 +220,9 @@ export const LoginView: React.FC<LoginViewProps> = ({ onGoToCadastro }) => {
               <Logo variant="symbol" size="sm" />
               <div className="flex flex-col text-left">
                 <span className="text-lg font-black tracking-[0.18em] text-white leading-none">
-                  NEXO
+                  NEXO.
                 </span>
-                <span className="text-[9px] font-bold uppercase tracking-[0.22em] text-[#FF6B00] mt-0.5">
+                <span className="text-[9px] font-bold uppercase tracking-[0.22em] text-[#fca326] mt-0.5">
                   Plataforma de Estudos
                 </span>
               </div>
@@ -237,13 +230,31 @@ export const LoginView: React.FC<LoginViewProps> = ({ onGoToCadastro }) => {
           </div>
 
           {/* Form Header */}
-          <div className="mb-8 space-y-1.5 text-left">
-            <h2 className="text-2xl font-bold tracking-tight text-white">
-              Entrar no NEXO
+          <div className="mb-6 space-y-2 text-left">
+            <h2 className="text-2xl font-black uppercase tracking-tight text-white">
+              Bem-vindo de volta
             </h2>
-            <p className="text-sm text-zinc-400 font-normal">
-              Continue sua preparação de onde parou.
+            <p className="text-sm text-[#a0a0a0] font-normal">
+              Entre para continuar sua preparação.
             </p>
+          </div>
+
+          {/* Tab Switcher */}
+          <div className="mb-6 flex rounded-xl bg-[#1b1e24] p-1">
+            <button
+              type="button"
+              className="flex-1 rounded-lg bg-[#fca326] px-4 py-2.5 text-sm font-semibold text-[#0d0f12] transition-colors cursor-default"
+            >
+              Entrar
+            </button>
+            <button
+              type="button"
+              onClick={onGoToCadastro}
+              disabled={!onGoToCadastro}
+              className="flex-1 rounded-lg px-4 py-2.5 text-sm font-semibold text-[#a0a0a0] hover:text-white transition-colors cursor-pointer disabled:cursor-default"
+            >
+              Cadastrar
+            </button>
           </div>
 
           {/* Unauthorized Domain Helper Notification */}
@@ -326,7 +337,7 @@ export const LoginView: React.FC<LoginViewProps> = ({ onGoToCadastro }) => {
                     type="button"
                     onClick={handleGoogleLogin}
                     disabled={isLoading || isGoogleLoading}
-                    className="mt-1 inline-flex items-center gap-1.5 rounded-lg bg-[#FF6B00] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#FF7A1A] transition-colors cursor-pointer"
+                    className="mt-1 inline-flex items-center gap-1.5 rounded-lg bg-[#fca326] px-3 py-1.5 text-xs font-semibold text-[#0d0f12] hover:bg-[#ffb04d] transition-colors cursor-pointer"
                   >
                     <span>Entrar com Conta Google</span>
                     <ArrowRight className="h-3.5 w-3.5" />
@@ -339,7 +350,7 @@ export const LoginView: React.FC<LoginViewProps> = ({ onGoToCadastro }) => {
           {/* Email + Password Form */}
           <form onSubmit={handleEmailLogin} className="space-y-4" noValidate>
             <div>
-              <label htmlFor="login-email" className="block text-xs font-medium text-zinc-300 mb-1.5">
+              <label htmlFor="login-email" className="block text-xs font-medium text-[#a0a0a0] mb-1.5">
                 E-mail
               </label>
               <div className="relative">
@@ -353,22 +364,22 @@ export const LoginView: React.FC<LoginViewProps> = ({ onGoToCadastro }) => {
                     setEmail(e.target.value);
                     if (error) setError("");
                   }}
-                  placeholder="seu.email@exemplo.com"
-                  className="h-[50px] w-full rounded-xl border border-zinc-800 bg-[#121620] pl-10 pr-4 text-sm text-white placeholder:text-zinc-500 transition-colors focus:border-[#FF6B00] focus:ring-1 focus:ring-[#FF6B00]/30 focus:outline-none"
+                  placeholder="voce@exemplo.com"
+                  className="h-[50px] w-full rounded-xl border border-[#2a2e35] bg-[#1b1e24] pl-10 pr-4 text-sm text-white placeholder:text-[#a0a0a0]/50 transition-colors focus:border-[#fca326] focus:ring-1 focus:ring-[#fca326]/30 focus:outline-none"
                 />
-                <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500 pointer-events-none" />
+                <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[#a0a0a0]/60 pointer-events-none" />
               </div>
             </div>
 
             <div>
               <div className="flex items-center justify-between mb-1.5">
-                <label htmlFor="login-password" className="block text-xs font-medium text-zinc-300">
+                <label htmlFor="login-password" className="block text-xs font-medium text-[#a0a0a0]">
                   Senha
                 </label>
                 <button
                   type="button"
                   onClick={() => setIsForgotModalOpen(true)}
-                  className="text-xs text-zinc-400 hover:text-[#FF6B00] transition-colors cursor-pointer"
+                  className="text-xs text-[#a0a0a0] hover:text-[#fca326] transition-colors cursor-pointer"
                 >
                   Esqueci minha senha
                 </button>
@@ -384,14 +395,14 @@ export const LoginView: React.FC<LoginViewProps> = ({ onGoToCadastro }) => {
                     setPassword(e.target.value);
                     if (error) setError("");
                   }}
-                  placeholder="••••••••"
-                  className="h-[50px] w-full rounded-xl border border-zinc-800 bg-[#121620] pl-10 pr-11 text-sm text-white placeholder:text-zinc-500 transition-colors focus:border-[#FF6B00] focus:ring-1 focus:ring-[#FF6B00]/30 focus:outline-none"
+                  placeholder="Mínimo de 8 caracteres"
+                  className="h-[50px] w-full rounded-xl border border-[#2a2e35] bg-[#1b1e24] pl-10 pr-11 text-sm text-white placeholder:text-[#a0a0a0]/50 transition-colors focus:border-[#fca326] focus:ring-1 focus:ring-[#fca326]/30 focus:outline-none"
                 />
-                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500 pointer-events-none" />
+                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[#a0a0a0]/60 pointer-events-none" />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-300 transition-colors p-1 cursor-pointer"
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#a0a0a0]/60 hover:text-[#a0a0a0] transition-colors p-1 cursor-pointer"
                   aria-label={showPassword ? "Ocultar senha" : "Ver senha"}
                   title={showPassword ? "Ocultar senha" : "Ver senha"}
                 >
@@ -405,9 +416,9 @@ export const LoginView: React.FC<LoginViewProps> = ({ onGoToCadastro }) => {
               <button
                 type="submit"
                 disabled={isLoading || isGoogleLoading}
-                className="flex h-[50px] w-full items-center justify-center gap-2 rounded-xl bg-[#FF6B00] hover:bg-[#FF7A1A] text-sm font-semibold text-white transition-colors duration-150 active:scale-[0.99] disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
+                className="flex h-[50px] w-full items-center justify-center gap-2 rounded-xl bg-[#fca326] hover:bg-[#ffb04d] text-sm font-bold text-[#0d0f12] transition-colors duration-150 active:scale-[0.99] disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
               >
-                <span>{isLoading ? "Validando credenciais..." : "Acessar NEXO"}</span>
+                <span>{isLoading ? "Validando credenciais..." : "Entrar na plataforma"}</span>
                 {!isLoading && <ArrowRight className="h-4 w-4" />}
               </button>
             </div>
@@ -415,8 +426,8 @@ export const LoginView: React.FC<LoginViewProps> = ({ onGoToCadastro }) => {
 
           {/* Divider */}
           <div className="relative flex items-center justify-center my-6">
-            <div className="w-full border-t border-zinc-800/80"></div>
-            <span className="absolute bg-[#0B0E14] px-3 text-xs text-zinc-500 font-normal">
+            <div className="w-full border-t border-[#1b1e24]"></div>
+            <span className="absolute bg-[#0d0f12] px-3 text-xs text-[#a0a0a0]/70 font-normal">
               ou continue com
             </span>
           </div>
@@ -426,7 +437,7 @@ export const LoginView: React.FC<LoginViewProps> = ({ onGoToCadastro }) => {
             type="button"
             onClick={handleGoogleLogin}
             disabled={isLoading || isGoogleLoading}
-            className="flex h-[50px] w-full items-center justify-center gap-3 rounded-xl border border-zinc-800 bg-[#121620] hover:bg-[#161B26] hover:border-zinc-700 text-sm font-medium text-zinc-200 transition-colors duration-150 active:scale-[0.99] disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
+            className="flex h-[50px] w-full items-center justify-center gap-3 rounded-xl border border-[#2a2e35] bg-[#1b1e24] hover:bg-[#22262d] hover:border-[#3a3f47] text-sm font-medium text-zinc-200 transition-colors duration-150 active:scale-[0.99] disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
           >
             <svg className="h-4 w-4 shrink-0" viewBox="0 0 24 24">
               <path
@@ -451,12 +462,12 @@ export const LoginView: React.FC<LoginViewProps> = ({ onGoToCadastro }) => {
 
           {/* Registration Link */}
           {onGoToCadastro && (
-            <p className="mt-8 text-center text-xs text-zinc-400">
+            <p className="mt-8 text-center text-xs text-[#a0a0a0]">
               Ainda não tem acesso?{" "}
               <button
                 type="button"
                 onClick={onGoToCadastro}
-                className="font-semibold text-[#FF6B00] hover:text-[#FF8533] transition-colors cursor-pointer underline-offset-4 hover:underline"
+                className="font-semibold text-[#fca326] hover:text-[#ffb04d] transition-colors cursor-pointer underline-offset-4 hover:underline"
               >
                 Criar conta
               </button>
