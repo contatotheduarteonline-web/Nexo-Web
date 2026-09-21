@@ -1,0 +1,11 @@
+{
+  "provider": "smtp",
+  "smtpHost": "smtp.gmail.com",
+  "smtpPort": 587,
+  "smtpUser": "suporte.projetofarda@gmail.com",
+  "smtpPass": "kyuuzvtrdkadlenf",
+  "smtpSecure": false,
+  "resendApiKey": "",
+  "senderEmail": "suporte.projetofarda@gmail.com",
+  "senderName": "Projeto Farda"
+}

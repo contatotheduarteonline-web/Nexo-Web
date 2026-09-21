@@ -1,0 +1,305 @@
+{
+  "entities": {
+    "userProfile": {
+      "title": "UserProfile",
+      "description": "User profile with role, name, email and onboarding status",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 200 },
+        "email": { "type": "string", "maxLength": 200 },
+        "avatarUrl": { "type": "string", "maxLength": 1000 },
+        "loginMethod": { "type": "string", "enum": ["google", "email"] },
+        "role": { "type": "string", "enum": ["admin", "aluno_vip", "aluno"] },
+        "status": { "type": "string", "enum": ["ativo", "bloqueado", "pendente"] },
+        "createdAt": { "type": "string", "maxLength": 64 },
+        "lastLoginAt": { "type": "string", "maxLength": 64 },
+        "onboardingCompleted": { "type": "boolean" },
+        "onboardingStep": { "type": "number" }
+      },
+      "required": ["id", "email", "name", "createdAt"]
+    },
+    "edital": {
+      "title": "Edital",
+      "description": "Edital containing disciplines, topics and verticalized progress",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "userId": { "type": "string", "maxLength": 128 },
+        "title": { "type": "string", "maxLength": 250 },
+        "organ": { "type": "string", "maxLength": 200 },
+        "banca": { "type": "string", "maxLength": 200 },
+        "cargo": { "type": "string", "maxLength": 200 },
+        "year": { "type": "number" },
+        "region": { "type": "string", "maxLength": 100 },
+        "category": { "type": "string", "maxLength": 100 },
+        "disciplines": { "type": "array" },
+        "topics": { "type": "array" },
+        "isCustom": { "type": "boolean" },
+        "createdAt": { "type": "string", "maxLength": 64 },
+        "updatedAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["id", "userId", "title", "createdAt"]
+    },
+    "studyPlan": {
+      "title": "StudyPlan",
+      "description": "Study plan with cycle configuration, steps and weekly schedule",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "userId": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 200 },
+        "editalId": { "type": "string", "maxLength": 128 },
+        "category": { "type": "string", "maxLength": 100 },
+        "organizationType": { "type": "string", "enum": ["ciclo", "semanal"] },
+        "planningMode": { "type": "string", "enum": ["CYCLE", "WEEKLY"] },
+        "weeklyGoalHours": { "type": "number" },
+        "minSessionMinutes": { "type": "number" },
+        "maxSessionMinutes": { "type": "number" },
+        "cycle": { "type": "array" },
+        "weeklySchedule": { "type": "array" },
+        "currentCycleIndex": { "type": "number" },
+        "completedCycles": { "type": "number" },
+        "active": { "type": "boolean" },
+        "createdAt": { "type": "string", "maxLength": 64 },
+        "updatedAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["id", "userId", "name", "createdAt"]
+    },
+    "studySession": {
+      "title": "StudySession",
+      "description": "Study log entry with duration, modality, questions and topic reference",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "userId": { "type": "string", "maxLength": 128 },
+        "editalId": { "type": "string", "maxLength": 128 },
+        "disciplineId": { "type": "string", "maxLength": 128 },
+        "disciplineName": { "type": "string", "maxLength": 200 },
+        "topicId": { "type": "string", "maxLength": 128 },
+        "topicName": { "type": "string", "maxLength": 250 },
+        "date": { "type": "string", "maxLength": 64 },
+        "durationMinutes": { "type": "number" },
+        "modality": { "type": "string", "maxLength": 64 },
+        "questionsDone": { "type": "number" },
+        "questionsCorrect": { "type": "number" },
+        "notes": { "type": "string", "maxLength": 2000 }
+      },
+      "required": ["id", "userId", "disciplineId", "date", "durationMinutes"]
+    },
+    "scheduledReview": {
+      "title": "ScheduledReview",
+      "description": "Spaced review entry with interval, due date and retention level",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "userId": { "type": "string", "maxLength": 128 },
+        "editalId": { "type": "string", "maxLength": 128 },
+        "disciplineId": { "type": "string", "maxLength": 128 },
+        "disciplineName": { "type": "string", "maxLength": 200 },
+        "topicId": { "type": "string", "maxLength": 128 },
+        "topicName": { "type": "string", "maxLength": 250 },
+        "stage": { "type": "string", "maxLength": 32 },
+        "dueDate": { "type": "string", "maxLength": 32 },
+        "completed": { "type": "boolean" },
+        "completedAt": { "type": "string", "maxLength": 64 },
+        "notes": { "type": "string", "maxLength": 2000 }
+      },
+      "required": ["id", "userId", "disciplineId", "stage", "dueDate", "completed"]
+    },
+    "reminder": {
+      "title": "Reminder",
+      "description": "Calendar reminder and alert for exams, registrations, payments",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "userId": { "type": "string", "maxLength": 128 },
+        "title": { "type": "string", "maxLength": 300 },
+        "category": { "type": "string", "maxLength": 64 },
+        "date": { "type": "string", "maxLength": 32 },
+        "completed": { "type": "boolean" },
+        "editalId": { "type": "string", "maxLength": 128 },
+        "notes": { "type": "string", "maxLength": 2000 }
+      },
+      "required": ["id", "userId", "title", "date", "completed"]
+    },
+    "simulado": {
+      "title": "Simulado",
+      "description": "Mock exam / test score and discipline breakdown",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "userId": { "type": "string", "maxLength": 128 },
+        "editalId": { "type": "string", "maxLength": 128 },
+        "title": { "type": "string", "maxLength": 300 },
+        "date": { "type": "string", "maxLength": 64 },
+        "durationMinutes": { "type": "number" },
+        "totalQuestions": { "type": "number" },
+        "totalCorrect": { "type": "number" },
+        "totalWrong": { "type": "number" },
+        "totalBlank": { "type": "number" },
+        "overallScorePercentage": { "type": "number" },
+        "targetScorePercentage": { "type": "number" },
+        "resultsByDiscipline": { "type": "array" },
+        "notes": { "type": "string", "maxLength": 2000 }
+      },
+      "required": ["id", "userId", "title", "totalQuestions"]
+    },
+    "userSettings": {
+      "title": "UserSettings",
+      "description": "User preferences, goals and theme configuration",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 200 },
+        "email": { "type": "string", "maxLength": 200 },
+        "targetRole": { "type": "string", "maxLength": 200 },
+        "dailyGoalHours": { "type": "number" },
+        "weeklyGoalQuestions": { "type": "number" },
+        "weeklyGoalHours": { "type": "number" },
+        "reviewIntervals": { "type": "array" },
+        "theme": { "type": "string", "enum": ["light", "dark", "system"] },
+        "notificationsEnabled": { "type": "boolean" },
+        "updatedAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["userId", "dailyGoalHours", "weeklyGoalHours"]
+    },
+    "catalogEdital": {
+      "title": "CatalogEdital",
+      "description": "Official catalog edital record with metadata, provenance and versioning",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "title": { "type": "string", "maxLength": 300 },
+        "institution": { "type": "string", "maxLength": 200 },
+        "acronym": { "type": "string", "maxLength": 50 },
+        "state": { "type": "string", "maxLength": 10 },
+        "year": { "type": "number" },
+        "editalNumber": { "type": "string", "maxLength": 50 },
+        "board": { "type": "string", "maxLength": 100 },
+        "publicationDate": { "type": "string", "maxLength": 32 },
+        "sourceFileName": { "type": "string", "maxLength": 255 },
+        "sourceType": { "type": "string", "maxLength": 32 },
+        "sourceHash": { "type": "string", "maxLength": 128 },
+        "status": { "type": "string", "enum": ["draft", "pending_review", "published", "archived"] },
+        "version": { "type": "number" },
+        "createdAt": { "type": "string", "maxLength": 64 },
+        "updatedAt": { "type": "string", "maxLength": 64 },
+        "createdBy": { "type": "string", "maxLength": 128 },
+        "validatedBy": { "type": "string", "maxLength": 128 },
+        "description": { "type": "string", "maxLength": 2000 }
+      },
+      "required": ["id", "title", "institution", "year", "editalNumber", "status", "version", "createdAt"]
+    },
+    "catalogCargo": {
+      "title": "CatalogCargo",
+      "description": "Specific cargo under an official catalog edital",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 200 },
+        "level": { "type": "string", "maxLength": 64 },
+        "vacancies": { "type": "string", "maxLength": 64 },
+        "order": { "type": "number" }
+      },
+      "required": ["id", "name", "order"]
+    },
+    "catalogDiscipline": {
+      "title": "CatalogDiscipline",
+      "description": "Discipline under a specific catalog cargo",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 200 },
+        "order": { "type": "number" },
+        "group": { "type": "string", "maxLength": 100 },
+        "questionCount": { "type": "number" },
+        "weight": { "type": "number" }
+      },
+      "required": ["id", "name", "order"]
+    },
+    "catalogTopic": {
+      "title": "CatalogTopic",
+      "description": "Topic under a catalog discipline with exact source reference",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "title": { "type": "string", "maxLength": 300 },
+        "order": { "type": "number" },
+        "sourceReference": { "type": "string", "maxLength": 255 }
+      },
+      "required": ["id", "title", "order"]
+    },
+    "editalSubmission": {
+      "title": "EditalSubmission",
+      "description": "User edital submission for catalog evaluation and review",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "userId": { "type": "string", "maxLength": 128 },
+        "submittedAt": { "type": "string", "maxLength": 64 },
+        "status": { "type": "string", "enum": ["pending", "under_review", "approved", "rejected"] },
+        "sourceFileName": { "type": "string", "maxLength": 255 },
+        "sourceHash": { "type": "string", "maxLength": 128 },
+        "personalEditalId": { "type": "string", "maxLength": 128 },
+        "linkedCatalogEditalId": { "type": "string", "maxLength": 128 },
+        "notes": { "type": "string", "maxLength": 2000 }
+      },
+      "required": ["id", "userId", "submittedAt", "status", "sourceFileName", "sourceHash"]
+    }
+  },
+  "firestore": {
+    "/catalogEditais/{editalId}": {
+      "schema": "catalogEdital",
+      "description": "Official catalog editais repository"
+    },
+    "/catalogEditais/{editalId}/cargos/{cargoId}": {
+      "schema": "catalogCargo",
+      "description": "Cargos for official catalog edital"
+    },
+    "/catalogEditais/{editalId}/cargos/{cargoId}/disciplines/{disciplineId}": {
+      "schema": "catalogDiscipline",
+      "description": "Disciplines for official catalog cargo"
+    },
+    "/catalogEditais/{editalId}/cargos/{cargoId}/disciplines/{disciplineId}/topics/{topicId}": {
+      "schema": "catalogTopic",
+      "description": "Programmatic topics for official catalog discipline"
+    },
+    "/editalSubmissions/{submissionId}": {
+      "schema": "editalSubmission",
+      "description": "Submissions sent by users for catalog inclusion"
+    },
+    "/users/{userId}": {
+      "schema": "userProfile",
+      "description": "User profile with status and metadata"
+    },
+    "/users/{userId}/editais/{editalId}": {
+      "schema": "edital",
+      "description": "User editais with verticalized topics and disciplines"
+    },
+    "/users/{userId}/studyPlans/{planId}": {
+      "schema": "studyPlan",
+      "description": "User study plans and study cycles"
+    },
+    "/users/{userId}/studySessions/{sessionId}": {
+      "schema": "studySession",
+      "description": "User study sessions and logged study hours"
+    },
+    "/users/{userId}/scheduledReviews/{reviewId}": {
+      "schema": "scheduledReview",
+      "description": "User scheduled reviews for spaced repetition"
+    },
+    "/users/{userId}/reminders/{reminderId}": {
+      "schema": "reminder",
+      "description": "User reminders and calendar items"
+    },
+    "/users/{userId}/simulados/{simuladoId}": {
+      "schema": "simulado",
+      "description": "User simulados and exam scores"
+    },
+    "/users/{userId}/settings/{settingId}": {
+      "schema": "userSettings",
+      "description": "User settings and goals"
+    }
+  }
+}

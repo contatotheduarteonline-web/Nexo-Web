@@ -1,0 +1,6 @@
+{
+  "name": "NEXO",
+  "description": "Planeje seus estudos, organize seu conteúdo e acompanhe sua evolução em um só lugar. Plataforma completa para concursos públicos, vestibulares, OAB, certificações e rotinas acadêmicas.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

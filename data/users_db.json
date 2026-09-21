@@ -1,0 +1,33 @@
+[
+  {
+    "id": "admin-master-1",
+    "name": "João Vitor da Silva Duarte",
+    "email": "contato.theduarteonline@gmail.com",
+    "passwordHash": "$2b$10$d0IEtWEJ8LiTK8m/bqX7xu6DueXxjQkON4LFBCl9tU2sq9QRzgpgO",
+    "role": "admin",
+    "status": "ativo",
+    "notes": "Conta mestre proprietária da plataforma",
+    "createdAt": "2026-08-31T15:28:27.220Z",
+    "lastLoginAt": "2026-08-31T17:51:30.532Z"
+  },
+  {
+    "id": "user-aluno-joao",
+    "name": "João Duarte",
+    "email": "joao.v.duarte@outlook.com",
+    "passwordHash": "$2b$10$d0IEtWEJ8LiTK8m/bqX7xu6DueXxjQkON4LFBCl9tU2sq9QRzgpgO",
+    "role": "aluno_vip",
+    "status": "ativo",
+    "notes": "Conta de Aluno (João Duarte)",
+    "createdAt": "2026-08-31T15:28:27.220Z"
+  },
+  {
+    "id": "user-aluno-1",
+    "name": "Aluno Policial (Demonstração)",
+    "email": "aluno.policial@projetofarda.com.br",
+    "passwordHash": "$2b$10$hj0zMehYzKWyp6IDxEowPOCL8Qr997GMZYoV29pcg0JVKKuaIM9Qm",
+    "role": "aluno_vip",
+    "status": "ativo",
+    "notes": "Aluno liberado - Turma Especial",
+    "createdAt": "2026-08-31T15:28:27.347Z"
+  }
+]

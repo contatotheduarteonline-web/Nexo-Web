@@ -1,0 +1,395 @@
+import React, { useState, useMemo } from "react";
+import { useStudy } from "../../context/StudyContext";
+import { useAuth } from "../../context/AuthContext";
+import { computeGamificationData } from "../../utils/gamificationBadges";
+import { ReviewDetailModal } from "../revisoes/ReviewDetailModal";
+import { FloatingTimerWidget } from "./FloatingTimerWidget";
+import { ScheduledReview } from "../../types";
+
+import { StatCardsRow } from "./StatCardsRow";
+import { OfensivaCard } from "./OfensivaCard";
+import { TodayScheduleSection, PlannedBlockItem } from "./TodayScheduleSection";
+import { ReviewsSection } from "./ReviewsSection";
+import { DisciplinePerformanceSection, UnifiedDisciplineStat } from "./DisciplinePerformanceSection";
+import { WeeklyGoalsSection, WeeklyChartData } from "./WeeklyGoalsSection";
+import { RecentActivitiesSection } from "./RecentActivitiesSection";
+import { RemindersSection } from "./RemindersSection";
+
+interface DashboardViewProps {
+  onOpenManualStudy: () => void;
+}
+
+export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy }) => {
+  const {
+    activeEdital,
+    activePlan,
+    userSettings,
+    metrics,
+    studySessions,
+    scheduledReviews,
+    simulados,
+    setActiveTab,
+    reminders,
+    toggleReminder,
+    addReminder,
+    setTimerConfig,
+    startTimer,
+  } = useStudy();
+
+  const { user } = useAuth();
+
+  // Offset for weekly chart navigation
+  const [weekOffset, setWeekOffset] = useState(0);
+
+  // Review Detail Modal
+  const [selectedReviewForModal, setSelectedReviewForModal] = useState<ScheduledReview | null>(null);
+
+  // Greeting & User Name
+  const greeting = useMemo(() => {
+    const hour = new Date().getHours();
+    if (hour < 12) return "Bom dia";
+    if (hour < 18) return "Boa tarde";
+    return "Boa noite";
+  }, []);
+
+  const userName = user?.name ? user.name.split(" ")[0] : "Estudante";
+
+  // Gamification Computation (strictly for progress percentage and streaks)
+  const gamification = useMemo(() => {
+    return computeGamificationData(activeEdital, studySessions, scheduledReviews, simulados);
+  }, [activeEdital, studySessions, scheduledReviews, simulados]);
+
+  // Today's Study Sessions and metrics derived dynamically from studySessions
+  const todaySessions = useMemo(() => {
+    const todayStr = new Date().toISOString().split("T")[0];
+    return studySessions.filter((s) => s.date.startsWith(todayStr));
+  }, [studySessions]);
+
+  const todayMinutes = useMemo(() => {
+    return todaySessions.reduce((acc, s) => acc + s.durationMinutes, 0);
+  }, [todaySessions]);
+
+  const todayQuestionsDone = useMemo(() => {
+    return todaySessions.reduce((acc, s) => acc + (s.questionsDone || 0), 0);
+  }, [todaySessions]);
+
+  const todayQuestionsCorrect = useMemo(() => {
+    return todaySessions.reduce((acc, s) => acc + (s.questionsCorrect || 0), 0);
+  }, [todaySessions]);
+
+  const todayAccuracy = useMemo(() => {
+    if (todayQuestionsDone > 0) {
+      return Math.round((todayQuestionsCorrect / todayQuestionsDone) * 100);
+    }
+    return null;
+  }, [todayQuestionsDone, todayQuestionsCorrect]);
+
+  // Handle Quick Start Study for a planned block or discipline
+  const handleStartStudy = (disciplineId: string, durationMinutes: number = 60) => {
+    const disc = activeEdital?.disciplines.find((d) => d.id === disciplineId);
+    if (!disc) {
+      onOpenManualStudy();
+      return;
+    }
+
+    const firstTopic =
+      activeEdital?.topics.find((t) => t.disciplineId === disc.id && !t.isStudied) ||
+      activeEdital?.topics.find((t) => t.disciplineId === disc.id);
+
+    setTimerConfig({
+      disciplineId: disc.id,
+      disciplineName: disc.name,
+      topicId: firstTopic?.id || "",
+      topicName: firstTopic?.name || "Estudo da Disciplina",
+      modality: "Teoria",
+      targetMinutes: durationMinutes,
+      mode: "stopwatch",
+    });
+
+    startTimer();
+    setActiveTab("cronometro");
+  };
+
+  // Planned blocks for today (completely generic, derived from activePlan or activeEdital)
+  const todayPlannedBlocks: PlannedBlockItem[] = useMemo(() => {
+    let list: PlannedBlockItem[] = [];
+
+    if (activePlan) {
+      const isWeekly = activePlan.organizationType === "semanal";
+      if (isWeekly) {
+        const dayKeys: Array<"dom" | "seg" | "ter" | "qua" | "qui" | "sex" | "sab"> = [
+          "dom", "seg", "ter", "qua", "qui", "sex", "sab"
+        ];
+        const todayKey = dayKeys[new Date().getDay()];
+        const todaySchedule = (activePlan.weeklySchedule || []).filter((b) => b.day === todayKey);
+
+        if (todaySchedule.length > 0) {
+          list = todaySchedule.map((b) => {
+            const disc = activeEdital?.disciplines.find((d) => d.id === b.disciplineId);
+            return {
+              id: b.id,
+              disciplineId: b.disciplineId,
+              disciplineName: disc?.name || "Disciplina",
+              targetMinutes: b.targetMinutes || 60,
+            };
+          });
+        }
+      } else {
+        const cycle = activePlan.cycle || [];
+        if (cycle.length > 0) {
+          const currIdx = activePlan.currentCycleIndex || 0;
+          const currentStep = cycle[currIdx % cycle.length];
+          const nextStep = cycle[(currIdx + 1) % cycle.length];
+
+          const steps = [currentStep, nextStep].filter(Boolean);
+          list = steps.map((step) => {
+            const disc = activeEdital?.disciplines.find((d) => d.id === step.disciplineId);
+            return {
+              id: step.id,
+              disciplineId: step.disciplineId,
+              disciplineName: disc?.name || "Disciplina",
+              targetMinutes: step.targetMinutes || 60,
+            };
+          });
+        }
+      }
+    }
+
+    // Se o plano não possuir blocos agendados hoje, mas o edital ativo tiver disciplinas cadastradas
+    if (list.length === 0 && activeEdital && activeEdital.disciplines.length > 0) {
+      const fallbackDiscs = activeEdital.disciplines.slice(0, 2);
+      list = fallbackDiscs.map((d) => ({
+        id: `block-${d.id}`,
+        disciplineId: d.id,
+        disciplineName: d.name,
+        targetMinutes: 60,
+      }));
+    }
+
+    return list;
+  }, [activePlan, activeEdital]);
+
+  // Today's Scheduled Reviews (Clean filtered list)
+  const todayReviews = useMemo(() => {
+    const todayStr = new Date().toISOString().split("T")[0];
+    return scheduledReviews.filter(
+      (r) => (!activeEdital || r.editalId === activeEdital.id) && !r.completed && r.dueDate <= todayStr
+    );
+  }, [scheduledReviews, activeEdital]);
+
+  // Unified Discipline Performance (Combines Questions, Accuracy, Time and Topic Progress)
+  const unifiedDisciplineStats: UnifiedDisciplineStat[] = useMemo(() => {
+    if (!activeEdital) return [];
+
+    return activeEdital.disciplines.map((disc) => {
+      const discTopics = activeEdital.topics.filter((t) => t.disciplineId === disc.id);
+      const discSessions = studySessions.filter(
+        (s) => s.disciplineId === disc.id || s.disciplineName === disc.name
+      );
+
+      const qDone = discSessions.reduce((acc, s) => acc + (s.questionsDone || 0), 0);
+      const qCorrect = discSessions.reduce((acc, s) => acc + (s.questionsCorrect || 0), 0);
+
+      const totalMinutes = discSessions.reduce((acc, s) => acc + (s.durationMinutes || 0), 0);
+      const hoursInt = Math.floor(totalMinutes / 60);
+      const minsInt = totalMinutes % 60;
+      const timeFormatted = `${hoursInt}h${minsInt.toString().padStart(2, "0")}m`;
+
+      const accuracy = qDone > 0 ? Math.round((qCorrect / qDone) * 100) : null;
+      const studiedTopicsCount = discTopics.filter((t) => t.isStudied).length;
+      const topicsProgressPercent =
+        discTopics.length > 0 ? Math.round((studiedTopicsCount / discTopics.length) * 100) : 0;
+
+      return {
+        id: disc.id,
+        name: disc.name,
+        color: disc.color || "#F97316",
+        qDone,
+        qCorrect,
+        accuracy,
+        timeFormatted,
+        totalMinutes,
+        studiedTopicsCount,
+        topicsCount: discTopics.length,
+        topicsProgressPercent,
+      };
+    });
+  }, [activeEdital, studySessions]);
+
+  // Weekly Goals & Chart calculation
+  const weeklyChartData: WeeklyChartData = useMemo(() => {
+    const daysLabels = ["SEG", "TER", "QUA", "QUI", "SEX", "SÁB", "DOM"];
+    const now = new Date();
+    const dayOfWeek = now.getDay();
+    const diffToMonday = now.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1) + weekOffset * 7;
+
+    const monday = new Date(now);
+    monday.setDate(diffToMonday);
+    monday.setHours(0, 0, 0, 0);
+
+    const sunday = new Date(monday);
+    sunday.setDate(monday.getDate() + 6);
+    sunday.setHours(23, 59, 59, 999);
+
+    const weekRangeLabel = `${monday.toLocaleDateString("pt-BR", {
+      day: "2-digit",
+      month: "2-digit",
+    })} – ${sunday.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" })}`;
+
+    const dayMinutes = [0, 0, 0, 0, 0, 0, 0];
+    const dayQuestions = [0, 0, 0, 0, 0, 0, 0];
+
+    studySessions.forEach((s) => {
+      const sDate = new Date(s.date);
+      if (sDate >= monday && sDate <= sunday) {
+        const jsDay = sDate.getDay();
+        const chartIdx = jsDay === 0 ? 6 : jsDay - 1;
+        dayMinutes[chartIdx] += s.durationMinutes;
+        dayQuestions[chartIdx] += s.questionsDone || 0;
+      }
+    });
+
+    const totalWeekMinutes = dayMinutes.reduce((a, b) => a + b, 0);
+    const totalWeekQuestions = dayQuestions.reduce((a, b) => a + b, 0);
+    const maxMinute = Math.max(...dayMinutes, 120);
+
+    return {
+      weekRangeLabel,
+      totalWeekHoursFormatted: `${Math.floor(totalWeekMinutes / 60)}h${(totalWeekMinutes % 60)
+        .toString()
+        .padStart(2, "0")}m`,
+      totalWeekHoursNumber: (totalWeekMinutes / 60).toFixed(1),
+      totalWeekQuestions,
+      days: daysLabels.map((label, idx) => ({
+        label,
+        minutes: dayMinutes[idx],
+        questions: dayQuestions[idx],
+        heightPercent: Math.min(100, Math.max(8, Math.round((dayMinutes[idx] / maxMinute) * 100))),
+        formatted: `${Math.floor(dayMinutes[idx] / 60)}h${(dayMinutes[idx] % 60)
+          .toString()
+          .padStart(2, "0")}m`,
+        hasStudied: dayMinutes[idx] > 0,
+      })),
+    };
+  }, [studySessions, weekOffset]);
+
+  // Recent Study Sessions (Clean 4 items)
+  const recentActivities = useMemo(() => {
+    return studySessions
+      .filter((s) => !activeEdital || s.editalId === activeEdital.id)
+      .slice(0, 4);
+  }, [studySessions, activeEdital]);
+
+  // Handle Quick Reminder Creation
+  const handleAddReminder = (data: { title: string; date: string }) => {
+    addReminder({
+      title: data.title,
+      category: "GERAL",
+      date: data.date,
+      completed: false,
+      editalId: activeEdital?.id,
+    });
+  };
+
+  return (
+    <div className="space-y-6 pb-20 max-w-7xl mx-auto">
+      {/* ========================================================================= */}
+      {/* CABEÇALHO LIMPO E ELEGANTE                                                */}
+      {/* ========================================================================= */}
+      <div className="pt-1 pb-1">
+        <h1 className="text-[26px] sm:text-[30px] font-bold text-[#172033] dark:text-white tracking-tight">
+          {greeting}, {userName}
+        </h1>
+      </div>
+
+      {/* ========================================================================= */}
+      {/* 1 A 4. CARDS DE MÉTRICAS: TEMPO, QUESTÕES, PRECISÃO E PROGRESSO           */}
+      {/* ========================================================================= */}
+      <StatCardsRow
+        todayMinutes={todayMinutes}
+        todaySessionsCount={todaySessions.length}
+        todayQuestionsDone={todayQuestionsDone}
+        todayQuestionsCorrect={todayQuestionsCorrect}
+        accuracyRate={todayAccuracy}
+        overallAccuracyRate={metrics.overallAccuracyRate}
+        globalProgressPercentage={gamification.globalProgressPercentage}
+        completedTopicsCount={gamification.completedTopicsCount}
+        totalTopicsCount={gamification.totalTopicsCount}
+        onNavigateToEdital={() => setActiveTab("edital")}
+      />
+
+      {/* ========================================================================= */}
+      {/* 5. OFENSIVA: QUADRANTE LONGO PREENCHIDO COM OS DIAS DA SEMANA             */}
+      {/* ========================================================================= */}
+      <OfensivaCard />
+
+      {/* ========================================================================= */}
+      {/* 6. PLANEJAMENTO DE HOJE                                                   */}
+      {/* ========================================================================= */}
+      <TodayScheduleSection
+        plannedBlocks={todayPlannedBlocks}
+        onStartStudy={handleStartStudy}
+        onNavigateToPlanning={() => setActiveTab("planejamento")}
+      />
+
+      {/* ========================================================================= */}
+      {/* 7. REVISÕES                                                               */}
+      {/* ========================================================================= */}
+      <ReviewsSection
+        todayReviews={todayReviews}
+        onOpenReview={(rev) => setSelectedReviewForModal(rev)}
+        onNavigateToReviews={() => setActiveTab("revisoes")}
+      />
+
+      {/* ========================================================================= */}
+      {/* 8. DESEMPENHO POR DISCIPLINA                                              */}
+      {/* ========================================================================= */}
+      <DisciplinePerformanceSection
+        disciplines={unifiedDisciplineStats}
+        onStartStudy={handleStartStudy}
+        onNavigateToDisciplines={() => setActiveTab("disciplinas")}
+      />
+
+      {/* ========================================================================= */}
+      {/* 9. META DA SEMANA                                                         */}
+      {/* ========================================================================= */}
+      <WeeklyGoalsSection
+        weeklyChartData={weeklyChartData}
+        weeklyGoalHours={userSettings?.weeklyGoalHours || 20}
+        weeklyGoalQuestions={userSettings?.weeklyGoalQuestions || 100}
+        weekOffset={weekOffset}
+        onPrevWeek={() => setWeekOffset((prev) => prev - 1)}
+        onNextWeek={() => setWeekOffset((prev) => Math.min(0, prev + 1))}
+      />
+
+      {/* ========================================================================= */}
+      {/* 10 E 11. GRID: ÚLTIMAS ATIVIDADES E LEMBRETES                             */}
+      {/* ========================================================================= */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* 10. Últimas atividades */}
+        <RecentActivitiesSection
+          activities={recentActivities}
+          onNavigateToHistory={() => setActiveTab("historico")}
+        />
+
+        {/* 11. Lembretes */}
+        <RemindersSection
+          reminders={reminders}
+          onToggleReminder={toggleReminder}
+          onAddReminder={handleAddReminder}
+        />
+      </div>
+
+      {/* Review Detail Modal */}
+      {selectedReviewForModal && (
+        <ReviewDetailModal
+          review={selectedReviewForModal}
+          onClose={() => setSelectedReviewForModal(null)}
+        />
+      )}
+
+      {/* Floating Clock / Study Tracker Widget in Bottom Right */}
+      <FloatingTimerWidget />
+    </div>
+  );
+};

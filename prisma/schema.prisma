@@ -1,0 +1,186 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String         @id @default(cuid())
+  email           String         @unique
+  name            String
+  avatarUrl       String?        @db.Text
+  passwordHash    String?
+  role            String         @default("aluno") // "admin" | "aluno_vip" | "aluno"
+  status          String         @default("ativo") // "ativo" | "bloqueado" | "pendente"
+  accessExpiresAt DateTime?
+  notes           String?        @db.Text
+  lastLoginAt     DateTime?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  onboardingCompleted   Boolean   @default(false)
+  onboardingCompletedAt DateTime?
+  onboardingStep        Int       @default(0)
+  onboardingData        Json?
+
+  plans           Plan[]
+  studySessions   StudySession[]
+  revisions       Revision[]
+  timerLogs       TimerLog[]
+}
+
+model Voucher {
+  id          String    @id @default(cuid())
+  code        String    @unique
+  role        String    @default("aluno_vip")
+  maxUses     Int       @default(100)
+  usedCount   Int       @default(0)
+  expiresAt   DateTime?
+  description String?   @db.Text
+  createdAt   DateTime  @default(now())
+}
+
+model Plan {
+  id             String         @id @default(cuid())
+  userId         String
+  user           User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title          String
+  description    String?        @db.Text
+  targetExam     String?
+  targetHours    Float?
+  planningMode   String         @default("CYCLE") // "CYCLE" | "WEEKLY"
+  cycleDataJson  String?        @db.Text // Serialized StudyCycle or schedule configuration
+  coverImage     String?        @db.Text
+  status         String         @default("ativo") // "ativo" | "concluido" | "arquivado"
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  studySessions  StudySession[]
+  revisions      Revision[]
+  timerLogs      TimerLog[]
+}
+
+model Template {
+  id          String   @id @default(cuid())
+  title       String
+  category    String   @default("geral") // "policia_militar" | "policia_civil" | "policia_federal" | "prf" | "geral"
+  description String?  @db.Text
+  subjects    String   @db.Text // JSON string of subjects & weights
+  isOfficial  Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model EditalTemplate {
+  id                String             @id @default(cuid())
+  slug              String             @unique
+  orgao             String
+  sigla             String?
+  cargo             String
+  esfera            String             @default("Federal") // "Federal" | "Estadual" | "Municipal" | "Distrital"
+  banca             String
+  ano               Int
+  editalNumero      String?
+  logoUrl           String?            @db.Text
+  logoSourceUrl     String?            @db.Text
+  officialSourceUrl String?            @db.Text
+  verified          Boolean            @default(false)
+  verifiedAt        DateTime?
+  sourceVersion     String?
+  description       String?            @db.Text
+  category          String             @default("seguranca_publica")
+  active            Boolean            @default(true)
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+
+  disciplines       EditalDiscipline[]
+
+  @@index([slug])
+  @@index([orgao])
+  @@index([banca])
+  @@index([esfera])
+  @@index([category])
+}
+
+model EditalDiscipline {
+  id          String         @id @default(cuid())
+  templateId  String
+  template    EditalTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  name        String
+  order       Int            @default(0)
+  weight      Int            @default(2)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  topics      EditalTopic[]
+
+  @@index([templateId])
+}
+
+model EditalTopic {
+  id           String           @id @default(cuid())
+  disciplineId String
+  discipline   EditalDiscipline @relation(fields: [disciplineId], references: [id], onDelete: Cascade)
+  parentId     String?
+  parent       EditalTopic?     @relation("TopicHierarchy", fields: [parentId], references: [id], onDelete: Cascade)
+  children     EditalTopic[]    @relation("TopicHierarchy")
+  title        String
+  order        Int              @default(0)
+  level        Int              @default(1)
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+
+  @@index([disciplineId])
+  @@index([parentId])
+}
+
+model StudySession {
+  id             String    @id @default(cuid())
+  userId         String
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  planId         String?
+  plan           Plan?     @relation(fields: [planId], references: [id], onDelete: Cascade)
+  subjectId      String?
+  subjectName    String
+  topicName      String?
+  durationMin    Int       @default(0)
+  questionsTotal Int       @default(0)
+  questionsRight Int       @default(0)
+  studyType      String    @default("teoria") // "teoria" | "questoes" | "revisao" | "lei_seca" | "simulado"
+  date           DateTime  @default(now())
+  notes          String?   @db.Text
+  createdAt      DateTime  @default(now())
+}
+
+model Revision {
+  id             String    @id @default(cuid())
+  userId         String
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  planId         String?
+  plan           Plan?     @relation(fields: [planId], references: [id], onDelete: Cascade)
+  subjectName    String
+  topicName      String
+  scheduledFor   DateTime
+  completedAt    DateTime?
+  intervalDays   Int       @default(1)
+  reviewStage    Int       @default(1)
+  status         String    @default("pendente") // "pendente" | "concluida" | "atrasada"
+  createdAt      DateTime  @default(now())
+}
+
+model TimerLog {
+  id             String    @id @default(cuid())
+  userId         String
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  planId         String?
+  plan           Plan?     @relation(fields: [planId], references: [id], onDelete: Cascade)
+  subjectName    String
+  topicName      String?
+  seconds        Int       @default(0)
+  startedAt      DateTime  @default(now())
+  endedAt        DateTime  @default(now())
+  createdAt      DateTime  @default(now())
+}

@@ -1,0 +1,92 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isSignedIn()
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin";
+    }
+
+    function isParentEditalPublished(editalId) {
+      return get(/databases/$(database)/documents/catalogEditais/$(editalId)).data.status == "published";
+    }
+
+    // Direct access to the user profile document
+    // Usuários podem ler e criar seus dados, atualizar campos normais (sem alterar role),
+    // enquanto administradores possuem controle completo.
+    match /users/{userId} {
+      allow read: if isSignedIn()
+        && (request.auth.uid == userId || isAdmin());
+
+      allow create: if isSignedIn() && (
+        isAdmin() || (
+          request.auth.uid == userId
+          && (!("role" in request.resource.data) || request.resource.data.role != "admin")
+        )
+      );
+
+      allow update: if isSignedIn() && (
+        isAdmin() || (
+          request.auth.uid == userId
+          && !("role" in request.resource.data.diff(resource.data).affectedKeys())
+        )
+      );
+
+      allow delete: if isAdmin();
+    }
+
+    // Access to all subcollections under users/{userId} (studyPlans, editais, studySessions, etc.)
+    // Isolamento estrito por UID de editais pessoais e progresso
+    match /users/{userId}/{document=**} {
+      allow read, write:
+        if isSignedIn()
+        && (request.auth.uid == userId || isAdmin());
+    }
+
+    // Official Edital Catalog
+    // Published editais are readable by any authenticated user.
+    // Drafts and writes require admin role stored in users/{uid}.
+    match /catalogEditais/{editalId} {
+      allow read: if isSignedIn()
+        && (isAdmin() || resource.data.status == "published");
+      allow write: if isAdmin();
+
+      // Subcoleções: cargos, disciplines, topics
+      match /cargos/{cargoId} {
+        allow read: if isSignedIn()
+          && (isAdmin() || isParentEditalPublished(editalId));
+        allow write: if isAdmin();
+
+        match /disciplines/{disciplineId} {
+          allow read: if isSignedIn()
+            && (isAdmin() || isParentEditalPublished(editalId));
+          allow write: if isAdmin();
+
+          match /topics/{topicId} {
+            allow read: if isSignedIn()
+              && (isAdmin() || isParentEditalPublished(editalId));
+            allow write: if isAdmin();
+          }
+        }
+      }
+    }
+
+    // User Submissions for Catalog Inclusion
+    // Authenticated users can create submissions for themselves and read their own.
+    // Only admins can approve, update, delete or review submissions.
+    match /editalSubmissions/{submissionId} {
+      allow create: if isSignedIn()
+        && request.resource.data.userId == request.auth.uid;
+      allow read: if isSignedIn()
+        && (resource.data.userId == request.auth.uid || isAdmin());
+      allow update, delete: if isAdmin();
+    }
+  }
+}
+

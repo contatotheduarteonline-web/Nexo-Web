@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NEXO</title>
+    <meta name="description" content="Planeje seus estudos, organize seu conteúdo e acompanhe sua evolução em um só lugar. Plataforma completa para concursos públicos, vestibulares, OAB, certificações e rotinas acadêmicas." />
+    <meta property="og:title" content="NEXO" />
+    <meta property="og:description" content="Planeje seus estudos, organize seu conteúdo e acompanhe sua evolução em um só lugar. Plataforma completa para concursos públicos, vestibulares, OAB, certificações e rotinas acadêmicas." />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Crect x='60' y='14' width='65' height='65' rx='16' transform='rotate(45 60 14)' fill='%23111111' stroke='%23FF6B00' stroke-width='6'/%3E%3Cpath d='M38 60 L60 38 L82 60 L60 82 Z' fill='none' stroke='%23FF6B00' stroke-width='4'/%3E%3Ccircle cx='60' cy='60' r='6' fill='%23FFA726'/%3E%3C/svg%3E" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+        letter-spacing: -0.011em;
+      }
+      h1, h2, h3, h4, h5, h6, .font-display {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        letter-spacing: -0.015em;
+      }
+      code, pre, .font-mono {
+        font-family: 'JetBrains Mono', monospace;
+      }
+    </style>
+    <script>
+      // Tratamento gracioso de eventos de WebSocket/HMR para prevenir rejeições não tratadas no navegador
+      window.addEventListener('unhandledrejection', function(event) {
+        var reason = event.reason;
+        var msg = (reason && (reason.message || String(reason))) || '';
+        if (
+          msg.includes('WebSocket') ||
+          msg.includes('websocket') ||
+          msg.includes('fechado sem ter sido aberto') ||
+          msg.includes('closed without being opened') ||
+          msg.includes('closed without opened')
+        ) {
+          event.preventDefault();
+          console.debug('[NEXO/Vite] Evento WebSocket HMR tratado sem impacto na aplicação:', msg);
+        }
+      });
+      (function() {
+        try {
+          const theme = localStorage.getItem('farda_theme_v3');
+          if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.classList.remove('dark');
+          }
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body class="bg-[#F7F8FA] text-[#172033] antialiased dark:bg-[#0A0D14] dark:text-[#F1F5F9]">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

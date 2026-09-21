@@ -1,0 +1,20 @@
+[
+  {
+    "id": "voucher-default-1",
+    "code": "FARDA2026",
+    "role": "aluno_vip",
+    "maxUses": 100,
+    "usedCount": 0,
+    "description": "Voucher de Liberação Direta - Turma 2026",
+    "createdAt": "2026-08-31T15:28:27.347Z"
+  },
+  {
+    "id": "voucher-default-2",
+    "code": "ELITE-POLICIAL",
+    "role": "aluno_vip",
+    "maxUses": 50,
+    "usedCount": 0,
+    "description": "Voucher Alunos VIP Elite",
+    "createdAt": "2026-08-31T15:28:27.347Z"
+  }
+]
