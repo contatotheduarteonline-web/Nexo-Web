@@ -1,16 +1,25 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useStudy } from "../../context/StudyContext";
 import { StudyModality } from "../../types";
 import {
   X,
   Clock,
   BookOpen,
-  HelpCircle,
-  Calendar,
-  CheckCircle2,
-  AlertCircle,
-  FileText,
+  Target,
   RotateCw,
+  Video,
+  Scale,
+  FileText,
+  Play,
+  Pause,
+  RotateCcw,
+  Plus,
+  Minus,
+  Check,
+  Calendar,
+  Timer as TimerIcon,
+  PenLine,
+  CheckCircle2,
 } from "lucide-react";
 
 interface ManualStudyModalProps {
@@ -18,6 +27,24 @@ interface ManualStudyModalProps {
   onClose: () => void;
   preselectedDisciplineId?: string;
   preselectedTopicId?: string;
+}
+
+// ---------- Date helpers (local, no timezone drift) ----------
+function getTodayYmd(): string {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
+
+function getYesterdayYmd(): string {
+  const d = new Date();
+  d.setDate(d.getDate() - 1);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
+
+function formatDatePtBr(ymd: string): string {
+  const [y, m, d] = ymd.split("T")[0].split("-");
+  if (y && m && d) return `${d}/${m}/${y}`;
+  return ymd;
 }
 
 export const ManualStudyModal: React.FC<ManualStudyModalProps> = ({
@@ -30,13 +57,28 @@ export const ManualStudyModal: React.FC<ManualStudyModalProps> = ({
 
   const [disciplineId, setDisciplineId] = useState<string>("");
   const [topicId, setTopicId] = useState<string>("");
-  const [date, setDate] = useState<string>(new Date().toISOString().split("T")[0]);
-  const [durationMinutes, setDurationMinutes] = useState<number>(50);
   const [modality, setModality] = useState<StudyModality>("Teoria");
+
+  // Time mode: local stopwatch or manual entry
+  const [timeMode, setTimeMode] = useState<"stopwatch" | "manual">("stopwatch");
+  const [elapsedSeconds, setElapsedSeconds] = useState<number>(0);
+  const [isRunning, setIsRunning] = useState<boolean>(false);
+  const [manualHours, setManualHours] = useState<number>(0);
+  const [manualMinutes, setManualMinutes] = useState<number>(0);
+
+  // Questions: questões = acertos + erros
   const [questionsDone, setQuestionsDone] = useState<number>(0);
   const [questionsCorrect, setQuestionsCorrect] = useState<number>(0);
+  const wrongQuestions = Math.max(0, questionsDone - questionsCorrect);
+
+  // Study date
+  const [dateSelectionType, setDateSelectionType] = useState<"today" | "yesterday" | "custom">("today");
+  const [customDate, setCustomDate] = useState<string>(getTodayYmd());
+
+  // Notes
   const [notes, setNotes] = useState<string>("");
-  const [scheduleReview, setScheduleReview] = useState<boolean>(true);
+
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // Set defaults when opening
   useEffect(() => {
@@ -48,17 +90,35 @@ export const ManualStudyModal: React.FC<ManualStudyModalProps> = ({
       const topId = preselectedTopicId || availableTopics[0]?.id || "";
       setTopicId(topId);
 
-      setDate(new Date().toISOString().split("T")[0]);
-      setDurationMinutes(50);
       setModality("Teoria");
+      setTimeMode("stopwatch");
+      setElapsedSeconds(0);
+      setIsRunning(false);
+      setManualHours(0);
+      setManualMinutes(0);
       setQuestionsDone(0);
       setQuestionsCorrect(0);
+      setDateSelectionType("today");
+      setCustomDate(getTodayYmd());
       setNotes("");
-      setScheduleReview(true);
     }
   }, [isOpen, activeEdital, preselectedDisciplineId, preselectedTopicId]);
 
-  // When discipline changes, update topic dropdown
+  // Local stopwatch loop
+  useEffect(() => {
+    if (isRunning) {
+      intervalRef.current = setInterval(() => {
+        setElapsedSeconds((prev) => prev + 1);
+      }, 1000);
+    } else if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
+  }, [isRunning]);
+
   const handleDisciplineChange = (newDiscId: string) => {
     setDisciplineId(newDiscId);
     const available = activeEdital?.topics.filter((t) => t.disciplineId === newDiscId) || [];
@@ -73,18 +133,76 @@ export const ManualStudyModal: React.FC<ManualStudyModalProps> = ({
   const selectedDiscipline = disciplines.find((d) => d.id === disciplineId);
   const selectedTopic = activeEdital.topics.find((t) => t.id === topicId);
 
-  const accuracyPct =
-    questionsDone > 0 ? Math.round((questionsCorrect / questionsDone) * 100) : 0;
+  const formatTime = (totalSeconds: number) => {
+    const hours = Math.floor(totalSeconds / 3600);
+    const mins = Math.floor((totalSeconds % 3600) / 60);
+    const secs = totalSeconds % 60;
+    if (hours > 0) {
+      return `${String(hours).padStart(2, "0")}:${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+    }
+    return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+  };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleAdjustMinutes = (mins: number) => {
+    setElapsedSeconds((prev) => Math.max(0, prev + mins * 60));
+  };
+
+  // Questions handlers (strict invariant: done = correct + wrong)
+  const handleAddCorrect = () => {
+    setQuestionsCorrect((p) => p + 1);
+    setQuestionsDone((p) => p + 1);
+  };
+  const handleSubtractCorrect = () => {
+    if (questionsCorrect > 0) {
+      setQuestionsCorrect((p) => p - 1);
+      setQuestionsDone((p) => Math.max(0, p - 1));
+    }
+  };
+  const handleAddWrong = () => setQuestionsDone((p) => p + 1);
+  const handleSubtractWrong = () => {
+    if (wrongQuestions > 0) setQuestionsDone((p) => Math.max(questionsCorrect, p - 1));
+  };
+
+  const effectiveStudyDate =
+    dateSelectionType === "today"
+      ? getTodayYmd()
+      : dateSelectionType === "yesterday"
+      ? getYesterdayYmd()
+      : customDate || getTodayYmd();
+
+  const durationMinutes =
+    timeMode === "manual"
+      ? Math.max(0, manualHours * 60 + manualMinutes)
+      : Math.round(elapsedSeconds / 60);
+
+  const durationLabel =
+    durationMinutes >= 60
+      ? `${Math.floor(durationMinutes / 60)}h${durationMinutes % 60 > 0 ? ` ${durationMinutes % 60}min` : ""}`
+      : `${durationMinutes} min`;
+
+  const appendQuickTag = (tagText: string) => {
+    setNotes((prev) => {
+      const prefix = prev.trim() ? `${prev.trim()} ` : "";
+      return `${prefix}[${tagText}] `;
+    });
+  };
+
+  const modalities: { key: StudyModality; label: string; icon: React.FC<{ className?: string }> }[] = [
+    { key: "Teoria", label: "Teoria", icon: BookOpen },
+    { key: "Questões", label: "Questões", icon: Target },
+    { key: "Revisão", label: "Revisão", icon: RotateCw },
+    { key: "Videoaula", label: "Vídeo", icon: Video },
+    { key: "Lei Seca", label: "Lei Seca", icon: Scale },
+    { key: "Simulado", label: "Simulado", icon: FileText },
+  ];
+
+  const handleFinish = () => {
     if (!disciplineId) {
       alert("Selecione uma disciplina.");
       return;
     }
-
     if (durationMinutes <= 0 && questionsDone <= 0) {
-      alert("Informe a duração em minutos ou a quantidade de questões.");
+      alert("Informe o tempo estudado ou registre questões para salvar.");
       return;
     }
 
@@ -94,73 +212,73 @@ export const ManualStudyModal: React.FC<ManualStudyModalProps> = ({
       disciplineName: selectedDiscipline?.name || "Disciplina",
       topicId,
       topicName: selectedTopic?.name || "Geral",
-      date: new Date(date).toISOString(),
-      durationMinutes: Number(durationMinutes) || 0,
+      date: new Date(`${effectiveStudyDate}T12:00:00`).toISOString(),
+      durationMinutes: Math.max(1, durationMinutes),
       modality,
-      questionsDone: Number(questionsDone) || 0,
-      questionsCorrect: Number(questionsCorrect) || 0,
+      questionsDone,
+      questionsCorrect,
       notes,
     });
 
+    setIsRunning(false);
     onClose();
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 p-4 backdrop-blur-xs">
-      <div className="relative w-full max-w-xl overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl transition-all dark:border-slate-800 dark:bg-slate-900">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#0d0f12]/70 p-4 backdrop-blur-md">
+      <div className="relative flex max-h-[92vh] w-full max-w-xl flex-col overflow-hidden rounded-2xl border border-[#384154] bg-[#11151F] shadow-2xl">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-slate-100 bg-slate-50/80 px-6 py-4 dark:border-slate-800 dark:bg-slate-800/40">
+        <div className="flex items-center justify-between border-b border-[#384154] px-6 py-4">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500/15 text-[#F59E0B] border border-amber-500/30 shadow-xs dark:bg-amber-500/20">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#F3AA2D]/25 bg-[#F3AA2D]/10 text-[#F3AA2D]">
               <Clock className="h-5 w-5" />
             </div>
-            <div>
-              <h2 className="text-base font-bold text-slate-900 dark:text-white">
-                Registrar Estudo Manual
-              </h2>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                Lance estudos realizados offline, leituras ou baterias de questões
-              </p>
-            </div>
+            <h2 className="font-condensed text-[20px] font-bold text-[#F5F4EF]">
+              Registro de Estudos
+            </h2>
           </div>
           <button
+            type="button"
             onClick={onClose}
-            className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700 dark:hover:bg-slate-800 dark:hover:text-slate-200 cursor-pointer"
+            className="rounded-lg p-1.5 text-[#76829B] hover:bg-[#252B38] hover:text-[#F5F4EF] cursor-pointer transition-colors"
           >
             <X className="h-5 w-5" />
           </button>
         </div>
 
-        {/* Form Content */}
-        <form onSubmit={handleSubmit} className="p-6 space-y-4">
-          {/* Row 1: Disciplina & Assunto */}
+        {/* Scrollable Content */}
+        <div className="overflow-y-auto px-6 py-5 space-y-5">
+          {/* Disciplina & Tópico */}
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div>
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
-                Disciplina <span className="text-red-500">*</span>
+              <label className="text-[11px] font-bold uppercase tracking-wider text-[#76829B]">
+                Disciplina
               </label>
               <select
                 value={disciplineId}
                 onChange={(e) => handleDisciplineChange(e.target.value)}
-                className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-xs font-medium text-slate-900 focus:border-[#F59E0B] focus:ring-1 focus:ring-[#F59E0B] focus:bg-white focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
-                required
+                className="mt-1.5 w-full rounded-xl border border-[#384154] bg-[#252B38] px-3 py-2.5 text-xs font-semibold text-[#F5F4EF] focus:border-[#F3AA2D] focus:outline-none cursor-pointer"
               >
-                {disciplines.map((d) => (
-                  <option key={d.id} value={d.id}>
-                    {d.name} (Peso {d.weight})
-                  </option>
-                ))}
+                {disciplines.length === 0 ? (
+                  <option value="">Nenhuma disciplina</option>
+                ) : (
+                  disciplines.map((d) => (
+                    <option key={d.id} value={d.id}>
+                      {d.name}
+                    </option>
+                  ))
+                )}
               </select>
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
-                Assunto / Tópico
+              <label className="text-[11px] font-bold uppercase tracking-wider text-[#76829B]">
+                Tópico
               </label>
               <select
                 value={topicId}
                 onChange={(e) => setTopicId(e.target.value)}
-                className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-xs font-medium text-slate-900 focus:border-[#F59E0B] focus:ring-1 focus:ring-[#F59E0B] focus:bg-white focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                className="mt-1.5 w-full rounded-xl border border-[#384154] bg-[#252B38] px-3 py-2.5 text-xs font-semibold text-[#F5F4EF] focus:border-[#F3AA2D] focus:outline-none cursor-pointer"
               >
                 <option value="">Geral / Sem tópico específico</option>
                 {currentDisciplineTopics.map((t) => (
@@ -172,144 +290,345 @@ export const ManualStudyModal: React.FC<ManualStudyModalProps> = ({
             </div>
           </div>
 
-          {/* Row 2: Data, Duração e Modalidade */}
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-            <div>
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
-                Data do Estudo
-              </label>
-              <input
-                type="date"
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
-                className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-xs text-slate-900 focus:border-[#F59E0B] focus:ring-1 focus:ring-[#F59E0B] focus:bg-white focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
-                required
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
-                Tempo Líquido (minutos)
-              </label>
-              <input
-                type="number"
-                min="0"
-                step="5"
-                value={durationMinutes}
-                onChange={(e) => setDurationMinutes(Math.max(0, parseInt(e.target.value) || 0))}
-                className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-xs font-bold text-slate-900 focus:border-[#F59E0B] focus:ring-1 focus:ring-[#F59E0B] focus:bg-white focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
-                placeholder="Ex: 50"
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
-                Modalidade
-              </label>
-              <select
-                value={modality}
-                onChange={(e) => setModality(e.target.value as StudyModality)}
-                className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-xs font-medium text-slate-900 focus:border-[#F59E0B] focus:ring-1 focus:ring-[#F59E0B] focus:bg-white focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
-              >
-                <option value="Teoria">📖 Teoria</option>
-                <option value="Questões">📝 Questões</option>
-                <option value="Revisão">🔄 Revisão</option>
-                <option value="Lei Seca">⚖️ Lei Seca</option>
-                <option value="Videoaula">🎥 Videoaula</option>
-                <option value="Simulado">🎯 Simulado</option>
-              </select>
-            </div>
+          {/* Modalidades */}
+          <div className="grid grid-cols-3 gap-1.5 sm:grid-cols-6">
+            {modalities.map((item) => {
+              const IconComp = item.icon;
+              const isSelected = modality === item.key;
+              return (
+                <button
+                  key={item.key}
+                  type="button"
+                  onClick={() => setModality(item.key)}
+                  className={`flex items-center justify-center gap-1.5 rounded-xl px-1 py-2 text-xs font-semibold transition-colors cursor-pointer ${
+                    isSelected
+                      ? "bg-[#F3AA2D] text-[#11151F]"
+                      : "border border-[#384154] bg-[#252B38] text-[#A5B0C2] hover:border-[#F3AA2D]/40"
+                  }`}
+                >
+                  <IconComp className="h-3.5 w-3.5" />
+                  <span>{item.label}</span>
+                </button>
+              );
+            })}
           </div>
 
-          {/* Row 3: Bateria de Questões */}
-          <div className="rounded-xl border border-slate-100 bg-slate-50/70 p-3.5 dark:border-slate-800 dark:bg-slate-800/40">
-            <span className="block text-[11px] font-bold uppercase tracking-wider text-slate-400">
-              Exercícios & Questões Resolvidas
-            </span>
-            <div className="mt-2 grid grid-cols-3 gap-3">
-              <div>
-                <label className="text-[11px] font-medium text-slate-600 dark:text-slate-300">
-                  Total Feitas
-                </label>
-                <input
-                  type="number"
-                  min="0"
-                  value={questionsDone}
-                  onChange={(e) => {
-                    const done = Math.max(0, parseInt(e.target.value) || 0);
-                    setQuestionsDone(done);
-                    if (questionsCorrect > done) setQuestionsCorrect(done);
-                  }}
-                  className="mt-1 w-full rounded-lg border border-slate-200 bg-white p-2 text-xs font-bold text-slate-900 focus:border-[#F59E0B] focus:ring-1 focus:ring-[#F59E0B] focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
-                />
+          {/* Cronômetro / Tempo manual */}
+          <div className="nx-card p-5 text-center">
+            {/* Alternador */}
+            <div className="mb-4 inline-flex items-center rounded-xl border border-[#384154] bg-[#171B25] p-1">
+              <button
+                type="button"
+                onClick={() => setTimeMode("stopwatch")}
+                className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors cursor-pointer ${
+                  timeMode === "stopwatch"
+                    ? "bg-[#F3AA2D] text-[#11151F]"
+                    : "text-[#76829B] hover:text-[#F5F4EF]"
+                }`}
+              >
+                <TimerIcon className="h-3.5 w-3.5" />
+                <span>Cronômetro</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setTimeMode("manual")}
+                className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors cursor-pointer ${
+                  timeMode === "manual"
+                    ? "bg-[#F3AA2D] text-[#11151F]"
+                    : "text-[#76829B] hover:text-[#F5F4EF]"
+                }`}
+              >
+                <PenLine className="h-3.5 w-3.5" />
+                <span>Registrar tempo manual</span>
+              </button>
+            </div>
+
+            {timeMode === "stopwatch" ? (
+              <>
+                {/* Display do tempo */}
+                <div className="num-condensed text-[56px] font-bold leading-none tracking-tight text-[#F5F4EF]">
+                  {formatTime(elapsedSeconds)}
+                </div>
+
+                {/* Disciplina e tópico em foco */}
+                <div className="mt-3">
+                  <div className="text-[11px] font-bold uppercase tracking-wider text-[#F3AA2D]">
+                    {selectedDiscipline?.name || "Disciplina"}
+                  </div>
+                  <div className="mt-0.5 text-[13px] font-medium text-[#A5B0C2]">
+                    {selectedTopic?.name || "Geral"}
+                  </div>
+                </div>
+
+                {/* Ajustes rápidos */}
+                <div className="mt-4 flex items-center justify-center gap-2 text-xs">
+                  {[-5, 5, 15, 30].map((mins) => (
+                    <button
+                      key={mins}
+                      type="button"
+                      onClick={() => handleAdjustMinutes(mins)}
+                      className="rounded-lg border border-[#384154] bg-[#171B25] px-2.5 py-1 font-mono text-[#A5B0C2] hover:border-[#F3AA2D]/40 hover:text-[#F3AA2D] cursor-pointer transition-colors"
+                    >
+                      {mins > 0 ? `+${mins}` : `−${Math.abs(mins)}`}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Ações */}
+                <div className="mt-5 flex items-center justify-center gap-3">
+                  {isRunning ? (
+                    <button
+                      type="button"
+                      onClick={() => setIsRunning(false)}
+                      className="nx-btn-primary inline-flex items-center gap-2 px-6 py-2.5 text-[13px]"
+                    >
+                      <Pause className="h-4 w-4 fill-[#11151F]" />
+                      Pausar
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => setIsRunning(true)}
+                      className="nx-btn-primary inline-flex items-center gap-2 px-7 py-2.5 text-[13px]"
+                    >
+                      <Play className="h-4 w-4 fill-[#11151F]" />
+                      {elapsedSeconds > 0 ? "Continuar" : "Iniciar"}
+                    </button>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsRunning(false);
+                      setElapsedSeconds(0);
+                    }}
+                    className="rounded-xl border border-[#384154] px-3.5 py-2.5 text-[#76829B] hover:border-[#F3AA2D]/40 hover:text-[#F5F4EF] cursor-pointer transition-colors"
+                    title="Zerar"
+                  >
+                    <RotateCcw className="h-4 w-4" />
+                  </button>
+                </div>
+              </>
+            ) : (
+              <div className="py-2">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-[#76829B]">
+                  Tempo estudado
+                </span>
+                <div className="mt-3 flex items-center justify-center gap-2.5">
+                  <div className="flex flex-col items-center">
+                    <input
+                      type="number"
+                      min={0}
+                      max={23}
+                      value={manualHours}
+                      onChange={(e) =>
+                        setManualHours(Math.max(0, Math.min(23, parseInt(e.target.value) || 0)))
+                      }
+                      className="num-condensed h-16 w-[72px] rounded-2xl border border-[#384154] bg-[#171B25] text-center text-[32px] font-bold text-[#F5F4EF] focus:border-[#F3AA2D] focus:outline-none"
+                    />
+                    <span className="mt-1 text-[10px] font-bold text-[#76829B]">Horas</span>
+                  </div>
+                  <span className="num-condensed text-[32px] font-bold text-[#384154]">:</span>
+                  <div className="flex flex-col items-center">
+                    <input
+                      type="number"
+                      min={0}
+                      max={59}
+                      value={manualMinutes}
+                      onChange={(e) =>
+                        setManualMinutes(Math.max(0, Math.min(59, parseInt(e.target.value) || 0)))
+                      }
+                      className="num-condensed h-16 w-[72px] rounded-2xl border border-[#384154] bg-[#171B25] text-center text-[32px] font-bold text-[#F5F4EF] focus:border-[#F3AA2D] focus:outline-none"
+                    />
+                    <span className="mt-1 text-[10px] font-bold text-[#76829B]">Minutos</span>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Questões */}
+          <div className="nx-card p-4">
+            <div className="flex items-center justify-between">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-[#76829B]">
+                Questões
+              </span>
+              {questionsDone > 0 && (
+                <span className="text-xs font-bold text-[#F3AA2D]">
+                  {Math.round((questionsCorrect / questionsDone) * 100)}% aproveitamento
+                </span>
+              )}
+            </div>
+
+            <div className="mt-3 grid grid-cols-3 gap-2.5 text-center">
+              {/* Questões */}
+              <div className="nx-deep rounded-xl p-3">
+                <div className="num-condensed text-[24px] font-bold text-[#F5F4EF]">
+                  {questionsDone}
+                </div>
+                <div className="mt-0.5 text-[11px] text-[#76829B]">Questões</div>
+                <div className="mt-2 flex items-center justify-center gap-1">
+                  <button
+                    type="button"
+                    onClick={() => setQuestionsDone((p) => Math.max(questionsCorrect, p - 1))}
+                    className="flex h-6 w-6 items-center justify-center rounded-lg border border-[#384154] text-[#A5B0C2] hover:border-[#F3AA2D]/40 cursor-pointer"
+                  >
+                    <Minus className="h-3 w-3" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleAddWrong}
+                    className="flex h-6 w-6 items-center justify-center rounded-lg bg-[#384154] text-[#F5F4EF] hover:bg-[#4A556E] cursor-pointer"
+                  >
+                    <Plus className="h-3 w-3" />
+                  </button>
+                </div>
               </div>
 
-              <div>
-                <label className="text-[11px] font-medium text-emerald-600 dark:text-emerald-400">
-                  Acertos
-                </label>
-                <input
-                  type="number"
-                  min="0"
-                  max={questionsDone}
-                  value={questionsCorrect}
-                  onChange={(e) => {
-                    const correct = Math.max(0, parseInt(e.target.value) || 0);
-                    setQuestionsCorrect(correct);
-                    if (correct > questionsDone) setQuestionsDone(correct);
-                  }}
-                  className="mt-1 w-full rounded-lg border border-slate-200 bg-white p-2 text-xs font-bold text-emerald-600 focus:border-emerald-500 focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-emerald-400"
-                />
+              {/* Acertos */}
+              <div className="nx-deep rounded-xl p-3">
+                <div className="num-condensed text-[24px] font-bold text-[#34D399]">
+                  {questionsCorrect}
+                </div>
+                <div className="mt-0.5 text-[11px] text-[#34D399]/70">Acertos</div>
+                <div className="mt-2 flex items-center justify-center gap-1">
+                  <button
+                    type="button"
+                    onClick={handleSubtractCorrect}
+                    className="flex h-6 w-6 items-center justify-center rounded-lg border border-[#384154] text-[#A5B0C2] hover:border-[#34D399]/40 cursor-pointer"
+                  >
+                    <Minus className="h-3 w-3" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleAddCorrect}
+                    className="flex h-6 w-6 items-center justify-center rounded-lg bg-[#34D399] text-[#11151F] cursor-pointer"
+                  >
+                    <Plus className="h-3 w-3" />
+                  </button>
+                </div>
               </div>
 
-              <div>
-                <label className="text-[11px] font-medium text-slate-500">
-                  Aproveitamento
-                </label>
-                <div className="mt-1 flex h-[34px] items-center justify-center rounded-lg bg-slate-200/70 font-bold text-xs text-slate-800 dark:bg-slate-700 dark:text-slate-100">
-                  {accuracyPct}%
+              {/* Erros */}
+              <div className="nx-deep rounded-xl p-3">
+                <div className="num-condensed text-[24px] font-bold text-[#F87171]">
+                  {wrongQuestions}
+                </div>
+                <div className="mt-0.5 text-[11px] text-[#F87171]/70">Erros</div>
+                <div className="mt-2 flex items-center justify-center gap-1">
+                  <button
+                    type="button"
+                    onClick={handleSubtractWrong}
+                    className="flex h-6 w-6 items-center justify-center rounded-lg border border-[#384154] text-[#A5B0C2] hover:border-[#F87171]/40 cursor-pointer"
+                  >
+                    <Minus className="h-3 w-3" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleAddWrong}
+                    className="flex h-6 w-6 items-center justify-center rounded-lg bg-[#F87171] text-[#11151F] cursor-pointer"
+                  >
+                    <Plus className="h-3 w-3" />
+                  </button>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Row 4: Observações */}
-          <div>
-            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
-              Observações / Artigos de Lei / Pegadinhas
-            </label>
+          {/* Data do estudo */}
+          <div className="nx-card p-4">
+            <div className="flex items-center justify-between">
+              <label className="text-[11px] font-bold uppercase tracking-wider text-[#76829B]">
+                Data do estudo
+              </label>
+              <div className="flex items-center rounded-xl border border-[#384154] bg-[#171B25] p-0.5">
+                {(["today", "yesterday", "custom"] as const).map((type) => {
+                  const label =
+                    type === "today" ? "Hoje" : type === "yesterday" ? "Ontem" : "Outra data";
+                  return (
+                    <button
+                      key={type}
+                      type="button"
+                      onClick={() => setDateSelectionType(type)}
+                      className={`rounded-lg px-2.5 py-1 text-xs font-semibold transition-colors cursor-pointer ${
+                        dateSelectionType === type
+                          ? "bg-[#F3AA2D] text-[#11151F]"
+                          : "text-[#76829B] hover:text-[#F5F4EF]"
+                      }`}
+                    >
+                      {label}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {dateSelectionType === "custom" && (
+              <input
+                type="date"
+                value={customDate}
+                onChange={(e) => setCustomDate(e.target.value)}
+                className="mt-3 w-full rounded-xl border border-[#384154] bg-[#171B25] px-3 py-2 text-xs font-semibold text-[#F5F4EF] focus:border-[#F3AA2D] focus:outline-none cursor-pointer"
+              />
+            )}
+
+            <div className="mt-3 flex items-center justify-between border-t border-[#384154] pt-2.5 text-[11px] text-[#A5B0C2]">
+              <span className="flex items-center gap-1">
+                <Calendar className="h-3 w-3 text-[#76829B]" />
+                Data de referência:
+              </span>
+              <span className="font-semibold text-[#F5F4EF]">
+                {formatDatePtBr(effectiveStudyDate)}
+              </span>
+            </div>
+          </div>
+
+          {/* Anotações */}
+          <div className="nx-card p-4">
+            <h3 className="text-[11px] font-bold uppercase tracking-wider text-[#76829B]">
+              Anotações
+            </h3>
             <textarea
               rows={2}
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
-              placeholder="Ex: Focar nas exceções do art. 5º; mnemônico LIMPE..."
-              className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-xs text-slate-900 focus:border-[#F59E0B] focus:ring-1 focus:ring-[#F59E0B] focus:bg-white focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+              placeholder="O que você precisa lembrar deste estudo?"
+              className="mt-2 w-full resize-none rounded-xl border border-[#384154] bg-[#171B25] p-2.5 text-xs text-[#F5F4EF] placeholder:text-[#4A556E] focus:border-[#F3AA2D] focus:outline-none"
             />
-          </div>
-
-          {/* Footer Buttons */}
-          <div className="mt-6 flex items-center justify-between pt-2">
-            <span className="text-[11px] text-slate-400">
-              Atualiza edital e estatísticas imediatamente
-            </span>
-            <div className="flex gap-2">
-              <button
-                type="button"
-                onClick={onClose}
-                className="rounded-xl px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 cursor-pointer"
-              >
-                Cancelar
-              </button>
-              <button
-                type="submit"
-                className="flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#F59E0B] to-[#FBBF24] hover:from-[#D97706] hover:to-[#F59E0B] px-5 py-2 text-xs font-bold text-white shadow-md shadow-amber-500/25 transition active:scale-98 cursor-pointer"
-              >
-                <CheckCircle2 className="h-4 w-4" />
-                Salvar Registro
-              </button>
+            <div className="mt-2 flex flex-wrap gap-1.5">
+              {["Lei Seca", "Pegadinha", "Ponto-chave", "Dúvida"].map((tag) => (
+                <button
+                  key={tag}
+                  type="button"
+                  onClick={() => appendQuickTag(tag)}
+                  className="rounded-lg border border-[#384154] bg-[#171B25] px-2 py-1 text-[11px] font-medium text-[#A5B0C2] hover:border-[#F3AA2D]/40 hover:text-[#F3AA2D] cursor-pointer transition-colors"
+                >
+                  {tag}
+                </button>
+              ))}
             </div>
           </div>
-        </form>
+        </div>
+
+        {/* Footer: resumo + finalizar */}
+        <div className="flex items-center justify-between gap-4 border-t border-[#384154] bg-[#171B25] px-6 py-4">
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-[#A5B0C2]">
+            <span className="font-semibold text-[#F5F4EF]">
+              {formatDatePtBr(effectiveStudyDate)}
+            </span>
+            <span>·</span>
+            <span className="font-semibold text-[#F5F4EF]">{durationLabel}</span>
+            <span>·</span>
+            <span>{modality}</span>
+          </div>
+          <button
+            type="button"
+            onClick={handleFinish}
+            className="nx-btn-primary inline-flex shrink-0 items-center gap-2 px-5 py-2.5 text-[13px] font-bold"
+          >
+            <CheckCircle2 className="h-4 w-4" />
+            Finalizar estudo
+          </button>
+        </div>
       </div>
     </div>
   );
