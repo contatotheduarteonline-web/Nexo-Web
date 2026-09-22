@@ -146,6 +146,9 @@ export interface CatalogEdital {
   sourceHash: string;
   normalizedIdentity?: string;
   logoUrl?: string;
+  cargoPretendido?: string;
+  imagemTipo?: "logo_oficial";
+  dadosVerificados?: boolean;
   status: CatalogEditalStatus;
   version: number;
   createdAt: string;

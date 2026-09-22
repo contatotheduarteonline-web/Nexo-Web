@@ -19,6 +19,8 @@ import {
   checkCatalogDuplicity,
   submitUserEdital,
   getPublishedEditaisByCareer,
+  validateCatalogEditalData,
+  VALID_CATALOG_UFS,
 } from "../../lib/catalogEditalService";
 import {
   parseEditalPdf,
@@ -197,7 +199,8 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
   const [organAcronym, setOrganAcronym] = useState("");
   const [editalUf, setEditalUf] = useState("");
   const [editalBoard, setEditalBoard] = useState("");
-  const [editalYear, setEditalYear] = useState<number>(new Date().getFullYear());
+  // Ano do Certame: sem valor padrão automático — deve corresponder ao certame real.
+  const [editalYear, setEditalYear] = useState<number | "">("");
   const [editalNotes, setEditalNotes] = useState("");
   const [weeklyGoalHours, setWeeklyGoalHours] = useState<number>(20);
 
@@ -224,6 +227,9 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
   // Image Upload State
   const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null);
   const [previewImageUrl, setPreviewImageUrl] = useState<string | null>(null);
+
+  // Validação obrigatória do catálogo oficial (8 campos)
+  const [catalogValidationErrors, setCatalogValidationErrors] = useState<string[]>([]);
 
   // Manual Page Selection Fallback State
   const [isManualPageSelectionOpen, setIsManualPageSelectionOpen] = useState(false);
@@ -1031,24 +1037,48 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
       // 4. Se for admin e solicitou publicar ou salvar no catálogo
       let publishedCatalogId: string | undefined = selectedCatalogEdital?.id;
       if (isAdmin && (publishToCatalog || isDraft) && !selectedCatalogEdital) {
+        // REGRA OFICIAL DO CATÁLOGO: os 8 campos obrigatórios devem estar
+        // verificados antes de salvar. Sem fallbacks genéricos — dados
+        // ausentes ou inválidos impedem o salvamento do registro oficial.
+        const catalogValidation = validateCatalogEditalData({
+          title: planTitle.trim(),
+          cargoPretendido: cargoPretendido.trim(),
+          institution: organ.trim(),
+          acronym: organAcronym.trim(),
+          uf: editalUf.trim(),
+          board: editalBoard.trim(),
+          year: Number(editalYear),
+          logoUrl: selectedImageFile ? selectedImageFile.name : "",
+        });
+
+        if (!catalogValidation.valid) {
+          setCatalogValidationErrors(catalogValidation.errors);
+          setStep("review");
+          setIsSaving(false);
+          return;
+        }
+        setCatalogValidationErrors([]);
+
         try {
           const newCatalogEdital = await createCatalogEdital(
             {
-              title: finalTitle,
-              institution: organ.trim() || finalTitle,
-              acronym: organAcronym.trim() || organ.slice(0, 6).toUpperCase(),
-              state: editalUf.trim() || "BR",
-              uf: editalUf.trim() || "BR",
+              title: planTitle.trim(),
+              cargoPretendido: cargoPretendido.trim(),
+              institution: organ.trim(),
+              acronym: organAcronym.trim(),
+              state: editalUf.trim().toUpperCase(),
+              uf: editalUf.trim().toUpperCase(),
               year: Number(editalYear),
               careerId: selectedCareerId,
               objectiveType: selectedObjective,
               editalNumber: parsedData?.editalNumber || "01",
-              board: editalBoard.trim() || "A definir",
+              board: editalBoard.trim(),
               publicationDate: parsedData?.publicationDate || new Date().toISOString(),
               sourceFileName: editalFile?.name || "importacao_direta.pdf",
               sourceType: "pdf",
               sourceHash: parsedData?.sourceHash || `manual-${Date.now()}`,
               normalizedIdentity: parsedData?.normalizedIdentity,
+              logoUrl: selectedImageFile ? `plan-image:${planId}` : "",
               status: publishToCatalog ? "published" : "draft",
               description: editalNotes || undefined,
             },
@@ -1797,7 +1827,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                     value={planTitle}
                     onChange={(e) => setPlanTitle(e.target.value)}
                     required
-                    placeholder="Ex: Polícia Federal"
+                    placeholder="Ex: Concurso Público da Polícia Federal – 2021"
                     className="mt-1 w-full rounded-xl border border-[#384154] bg-[#171B25] px-3.5 py-2 text-xs font-bold text-white focus:border-[#F3AA2D] focus:bg-[#252B38] focus:outline-hidden dark:border-[#384154] dark:bg-[#171B25] dark:text-white"
                   />
                 </div>
@@ -1839,7 +1869,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <div className="sm:col-span-2">
                     <label className="text-xs font-bold uppercase tracking-wider text-white dark:text-white">
-                      Órgão / Instituição
+                      Órgão / Instituição *
                     </label>
                     <input
                       type="text"
@@ -1852,7 +1882,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
 
                   <div>
                     <label className="text-xs font-bold uppercase tracking-wider text-white dark:text-white">
-                      Sigla
+                      Sigla *
                     </label>
                     <input
                       type="text"
@@ -1868,21 +1898,25 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <div>
                     <label className="text-xs font-bold uppercase tracking-wider text-white dark:text-white">
-                      UF (Estado)
+                      UF (Estado) *
                     </label>
-                    <input
-                      type="text"
+                    <select
                       value={editalUf}
-                      onChange={(e) => setEditalUf(e.target.value.toUpperCase())}
-                      placeholder="Ex: DF ou Nacional"
-                      maxLength={15}
-                      className="mt-1 w-full rounded-xl border border-[#384154] bg-[#171B25] px-3.5 py-2 text-xs font-bold text-white focus:border-[#F3AA2D] focus:bg-[#252B38] focus:outline-hidden dark:border-[#384154] dark:bg-[#171B25] dark:text-white uppercase"
-                    />
+                      onChange={(e) => setEditalUf(e.target.value)}
+                      className="mt-1 w-full rounded-xl border border-[#384154] bg-[#171B25] px-3.5 py-2 text-xs font-bold text-white focus:border-[#F3AA2D] focus:bg-[#252B38] focus:outline-hidden dark:border-[#384154] dark:bg-[#171B25] dark:text-white"
+                    >
+                      <option value="">Selecione a UF</option>
+                      {VALID_CATALOG_UFS.map((uf) => (
+                        <option key={uf} value={uf}>
+                          {uf}
+                        </option>
+                      ))}
+                    </select>
                   </div>
 
                   <div>
                     <label className="text-xs font-bold uppercase tracking-wider text-white dark:text-white">
-                      Banca Examinadora
+                      Banca Examinadora *
                     </label>
                     <input
                       type="text"
@@ -1895,14 +1929,17 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
 
                   <div>
                     <label className="text-xs font-bold uppercase tracking-wider text-white dark:text-white">
-                      Ano do Certame
+                      Ano do Certame *
                     </label>
                     <input
                       type="number"
                       min="2000"
                       max="2035"
+                      placeholder="Ex: 2021"
                       value={editalYear}
-                      onChange={(e) => setEditalYear(Number(e.target.value))}
+                      onChange={(e) =>
+                        setEditalYear(e.target.value === "" ? "" : Number(e.target.value))
+                      }
                       className="mt-1 w-full rounded-xl border border-[#384154] bg-[#171B25] px-3.5 py-2 text-xs font-bold text-white focus:border-[#F3AA2D] focus:bg-[#252B38] focus:outline-hidden dark:border-[#384154] dark:bg-[#171B25] dark:text-white"
                     />
                   </div>
@@ -1911,7 +1948,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                 {/* Imagem do Plano */}
                 <div>
                   <label className="text-xs font-bold uppercase tracking-wider text-white dark:text-white">
-                    Imagem do Plano (JPG, PNG, WebP)
+                    Imagem do Plano *
                   </label>
                   <input
                     ref={imageInputRef}
@@ -2684,6 +2721,20 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                 </p>
               </div>
 
+              {/* Bloqueio de publicação no catálogo oficial: campos obrigatórios ausentes/inválidos */}
+              {catalogValidationErrors.length > 0 && (
+                <div className="rounded-xl border border-red-500/40 bg-red-500/10 p-3.5 space-y-1.5">
+                  <p className="text-xs font-bold text-red-400">
+                    Publicação no catálogo bloqueada — dados obrigatórios ausentes ou inválidos:
+                  </p>
+                  <ul className="space-y-0.5 text-[11px] text-red-300 list-disc list-inside">
+                    {catalogValidationErrors.map((validationError, vIdx) => (
+                      <li key={vIdx}>{validationError}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
               {/* Card Executivo de Resumo */}
               <div className="rounded-2xl border border-[#384154] bg-[#171B25] p-4 sm:p-5 space-y-3 dark:border-[#384154] dark:bg-[#2D3442]">
                 <div className="flex items-start justify-between border-b border-[#384154] pb-3 dark:border-[#384154]">
@@ -2736,7 +2787,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                   <div>
                     <span className="text-white block text-[10px] uppercase font-bold">Banca • Ano</span>
                     <span className="font-semibold text-white dark:text-white">
-                      {editalBoard || "A definir"} • {editalYear}
+                      {editalBoard || "A definir"} • {editalYear || "—"}
                     </span>
                   </div>
                   <div>

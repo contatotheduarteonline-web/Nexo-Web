@@ -420,8 +420,124 @@ export async function checkForPlanEditalUpdate(plan: {
 // ADMINISTRAÇÃO DO CATÁLOGO (EXIGE ROLE === 'admin')
 // ============================================================================
 
+// ============================================================================
+// VALIDAÇÃO OBRIGATÓRIA DO CATÁLOGO OFICIAL (8 CAMPOS EXIGIDOS)
+// ============================================================================
+
+/** UFs válidas para o catálogo oficial (inclui certames de abrangência NACIONAL). */
+export const VALID_CATALOG_UFS: readonly string[] = [
+  "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MG", "MS", "MT",
+  "PA", "PB", "PE", "PI", "PR", "RJ", "RN", "RO", "RR", "RS", "SC", "SE", "SP",
+  "TO", "NACIONAL",
+];
+
+/** Formatos de imagem permitidos para a Imagem do Plano. */
+export const ALLOWED_CATALOG_IMAGE_EXTENSIONS: readonly string[] = ["jpg", "jpeg", "png", "webp"];
+
+/** Valores genéricos proibidos como Título do Edital real. */
+const FORBIDDEN_TITLE_VALUES = ["plano de estudos personalizado", "plano de estudos", "geral"];
+
+/** Valores genéricos proibidos como Cargo Pretendido real. */
+const FORBIDDEN_CARGO_VALUES = ["geral", "policial", "administrativo", "diversos", "cargo não identificado"];
+
+export interface CatalogEditalValidationInput {
+  title?: string;
+  cargoPretendido?: string;
+  institution?: string;
+  acronym?: string;
+  uf?: string;
+  board?: string;
+  year?: number | string;
+  logoUrl?: string;
+}
+
+export interface CatalogEditalValidationResult {
+  valid: boolean;
+  errors: string[];
+}
+
+/**
+ * Regra oficial do catálogo: nenhum registro pode ser criado sem os 8 campos
+ * obrigatórios (Título, Cargo, Órgão, Sigla, UF, Banca, Ano e Imagem do Plano).
+ * Não preenche por estimativa — dados ausentes ou genéricos bloqueiam o salvamento.
+ */
+export function validateCatalogEditalData(
+  input: CatalogEditalValidationInput
+): CatalogEditalValidationResult {
+  const errors: string[] = [];
+  const norm = (v?: string) => (v || "").trim();
+
+  // 1. Título do Edital
+  const title = norm(input.title);
+  if (!title) {
+    errors.push("Título do Edital é obrigatório.");
+  } else if (FORBIDDEN_TITLE_VALUES.includes(title.toLowerCase())) {
+    errors.push('Título do Edital inválido: informe o título real do edital (não utilize "Plano de Estudos Personalizado").');
+  }
+
+  // 2. Cargo Pretendido
+  const cargo = norm(input.cargoPretendido);
+  if (!cargo) {
+    errors.push("Cargo Pretendido é obrigatório.");
+  } else if (FORBIDDEN_CARGO_VALUES.includes(cargo.toLowerCase())) {
+    errors.push('Cargo Pretendido inválido: informe o cargo real do edital (não utilize valores genéricos como "Geral" ou "Policial").');
+  }
+
+  // 3. Órgão / Instituição
+  const institution = norm(input.institution);
+  if (!institution) {
+    errors.push("Órgão / Instituição é obrigatório.");
+  } else if (institution.toLowerCase() === "geral") {
+    errors.push('Órgão / Instituição inválido: informe o órgão real do concurso (não utilize "Geral").');
+  }
+
+  // 4. Sigla
+  if (!norm(input.acronym)) {
+    errors.push("Sigla é obrigatória e deve corresponder ao órgão informado.");
+  }
+
+  // 5. UF (Estado)
+  const uf = norm(input.uf).toUpperCase();
+  if (!uf) {
+    errors.push("UF (Estado) é obrigatória.");
+  } else if (!VALID_CATALOG_UFS.includes(uf)) {
+    errors.push("UF inválida: utilize a sigla de um estado brasileiro ou NACIONAL.");
+  }
+
+  // 6. Banca Examinadora
+  const board = norm(input.board);
+  if (!board) {
+    errors.push("Banca Examinadora é obrigatória.");
+  } else if (board.toLowerCase() === "a definir") {
+    errors.push('Banca Examinadora inválida: informe a banca real do certame (não utilize "A definir").');
+  }
+
+  // 7. Ano do Certame
+  const year = Number(input.year);
+  if (!input.year || !Number.isInteger(year) || year < 1990 || year > 2035) {
+    errors.push("Ano do Certame é obrigatório: informe um ano real de 4 dígitos.");
+  }
+
+  // 8. Imagem do Plano
+  const logoUrl = norm(input.logoUrl);
+  if (!logoUrl) {
+    errors.push("Imagem do Plano é obrigatória (JPG, JPEG, PNG ou WebP).");
+  } else {
+    // "plan-image:" é a referência interna da imagem gerenciada pela plataforma
+    // (formato já restrito a JPG/JPEG/PNG/WebP no input do wizard).
+    const isManagedImageRef = logoUrl.startsWith("plan-image:");
+    const extension = logoUrl.split("?")[0].split(".").pop()?.toLowerCase() || "";
+    if (!isManagedImageRef && !ALLOWED_CATALOG_IMAGE_EXTENSIONS.includes(extension)) {
+      errors.push("Imagem do Plano em formato inválido: utilize JPG, JPEG, PNG ou WebP.");
+    }
+  }
+
+  return { valid: errors.length === 0, errors };
+}
+
 export interface CreateCatalogEditalInput {
   title: string;
+  cargoPretendido: string;
   institution: string;
   acronym: string;
   state: string;
@@ -436,7 +552,7 @@ export interface CreateCatalogEditalInput {
   sourceType: string;
   sourceHash: string;
   normalizedIdentity?: string;
-  logoUrl?: string;
+  logoUrl: string;
   status?: CatalogEditalStatus;
   description?: string;
 }
@@ -450,6 +566,24 @@ export async function createCatalogEdital(
   userUid: string
 ): Promise<CatalogEdital> {
   await assertAdminRole(userUid);
+
+  // Regra oficial: os 8 campos obrigatórios devem estar presentes e verificados.
+  // Nenhum registro do catálogo oficial pode ser salvo incompleto.
+  const validation = validateCatalogEditalData({
+    title: data.title,
+    cargoPretendido: data.cargoPretendido,
+    institution: data.institution,
+    acronym: data.acronym,
+    uf: data.uf || data.state,
+    board: data.board,
+    year: data.year,
+    logoUrl: data.logoUrl,
+  });
+  if (!validation.valid) {
+    throw new Error(
+      `Cadastro no catálogo bloqueado — dados obrigatórios ausentes ou inválidos:\n- ${validation.errors.join("\n- ")}`
+    );
+  }
 
   // Prevenção de duplicidade
   const dupCheck = await checkCatalogDuplicity({
@@ -485,6 +619,9 @@ export async function createCatalogEdital(
     sourceHash: data.sourceHash,
     normalizedIdentity: data.normalizedIdentity,
     logoUrl: data.logoUrl,
+    cargoPretendido: data.cargoPretendido.trim(),
+    imagemTipo: "logo_oficial",
+    dadosVerificados: true,
     status: data.status || "draft",
     version: 1,
     createdAt: now,
