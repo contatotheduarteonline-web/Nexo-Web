@@ -7,18 +7,13 @@ import {
   Clock,
   Target,
   Repeat,
-  Download,
-  Upload,
-  RotateCcw,
   Check,
-  Shield,
   Save,
   Key,
   LogOut,
   Trash2,
   Lock,
   Camera,
-  Database,
   CheckCircle2,
 } from "lucide-react";
 import { ProfilePictureModal } from "../modals/ProfilePictureModal";
@@ -27,14 +22,11 @@ export const ConfiguracoesView: React.FC = () => {
   const {
     userSettings,
     updateUserSettings,
-    exportBackup,
-    importBackup,
-    resetToInitialData,
   } = useStudy();
 
   const { user, logout, updateProfile, isAdmin } = useAuth();
 
-  const [activeSubTab, setActiveSubTab] = useState<"perfil" | "revisoes" | "conta" | "dados">("perfil");
+  const [activeSubTab, setActiveSubTab] = useState<"perfil" | "revisoes" | "conta">("perfil");
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
 
   // Profile states
@@ -115,23 +107,7 @@ export const ConfiguracoesView: React.FC = () => {
     setReviewIntervals(reviewIntervals.filter((i) => i !== intervalToRemove));
   };
 
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const content = event.target?.result as string;
-      if (content) {
-        const success = importBackup(content);
-        if (success) {
-          alert("Backup do NEXO restaurado com sucesso!");
-        } else {
-          alert("Erro: Arquivo de backup inválido.");
-        }
-      }
-    };
-    reader.readAsText(file);
-  };
+
 
   return (
     <div className="mx-auto max-w-4xl space-y-6 pb-16">
@@ -189,17 +165,6 @@ export const ConfiguracoesView: React.FC = () => {
           <span>Conta & Segurança</span>
         </button>
 
-        <button
-          onClick={() => setActiveSubTab("dados")}
-          className={`flex items-center gap-2 border-b-2 px-4 py-2.5 text-xs font-bold transition whitespace-nowrap ${
-            activeSubTab === "dados"
-              ? "border-[#F59E0B] text-[#F59E0B] dark:border-[#F59E0B] dark:text-white"
-              : "border-transparent text-[#6B6B6B] hover:text-[#111111] dark:text-[#A6A6A6] dark:hover:text-white"
-          }`}
-        >
-          <Shield className="h-4 w-4" />
-          <span>Backup & Dados</span>
-        </button>
       </div>
 
       {/* Tab: Perfil */}
@@ -428,95 +393,6 @@ export const ConfiguracoesView: React.FC = () => {
               >
                 <LogOut className="h-4 w-4" />
                 <span>Desconectar em Todos os Dispositivos</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Tab: Backup & Dados */}
-      {activeSubTab === "dados" && (
-        <div className="space-y-6">
-          {/* Automatic Protection Card */}
-          <div className="rounded-2xl border border-[#E2E8F0] bg-white p-6 dark:border-[#292929] dark:bg-[#0F172A]">
-            <div className="flex items-start gap-3.5">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-500">
-                <Database className="h-5 w-5" />
-              </div>
-              <div className="flex-1">
-                <div className="flex items-center gap-2.5">
-                  <h3 className="text-sm font-black uppercase tracking-wider text-[#111111] dark:text-white">
-                    Backup & Sincronização Inteligente
-                  </h3>
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-100 px-2.5 py-0.5 text-[10px] font-extrabold text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-400 border border-emerald-300 dark:border-emerald-800">
-                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                    100% Automático
-                  </span>
-                </div>
-                <p className="mt-1.5 text-xs text-[#6B6B6B] dark:text-[#A6A6A6]">
-                  Todos os seus editais verticalizados, horas de estudo, questões resolvidas, revisões espaçadas, ciclo e simulados são salvos e preservados automaticamente em segundo plano pela inteligência da plataforma, sem necessidade de ações manuais.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Manual Export & Restore Card */}
-          <div className="rounded-2xl border border-[#E2E8F0] bg-white p-6 dark:border-[#292929] dark:bg-[#0F172A]">
-            <h3 className="text-sm font-black uppercase tracking-wider text-[#111111] dark:text-white">
-              Exportação & Restauração Manual de Arquivos
-            </h3>
-            <p className="mt-1 text-xs text-[#6B6B6B] dark:text-[#A6A6A6]">
-              Exporte uma cópia avulsa em formato JSON para transferir entre computadores ou importe um arquivo salvo anteriormente.
-            </p>
-
-            <div className="mt-6 flex flex-wrap gap-3">
-              <button
-                onClick={exportBackup}
-                className="flex items-center gap-2 rounded-xl bg-[#111111] px-5 py-2.5 text-xs font-bold text-white hover:bg-[#242424] dark:bg-white dark:text-[#111111] dark:hover:bg-[#E5E5E5]"
-              >
-                <Download className="h-4 w-4" />
-                <span>Exportar Arquivo Local (JSON)</span>
-              </button>
-
-              <label
-                htmlFor="config-backup-file-input"
-                className="flex cursor-pointer items-center gap-2 rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-5 py-2.5 text-xs font-bold text-[#111111] hover:bg-[#E8E8E8] dark:border-[#292929] dark:bg-[#1E293B] dark:text-white dark:hover:bg-[#292929]"
-              >
-                <Upload className="h-4 w-4" />
-                <span>Importar Arquivo JSON</span>
-                <input
-                  id="config-backup-file-input"
-                  type="file"
-                  accept=".json"
-                  onChange={handleFileUpload}
-                  className="hidden"
-                />
-              </label>
-            </div>
-          </div>
-
-          {/* Clean slate & Reset */}
-          <div className="rounded-2xl border border-red-200 bg-red-50/40 p-6 dark:border-red-900/30 dark:bg-red-950/10">
-            <h3 className="text-sm font-black uppercase tracking-wider text-red-600 dark:text-red-400">
-              Gerenciamento e Limpeza de Dados do Usuário
-            </h3>
-            <p className="mt-1 text-xs text-[#6B6B6B] dark:text-[#A6A6A6]">
-              Opções para apagar histórico, zerar horas e questões acumuladas ou reiniciar sua conta completamente limpa (clean slate).
-            </p>
-
-            <div className="mt-6 flex flex-wrap gap-3">
-              <button
-                type="button"
-                onClick={() => {
-                  if (confirm("Deseja apagar todo o histórico de estudos e sessões cronometradas?")) {
-                    resetToInitialData();
-                    alert("Histórico e registros zerados com sucesso!");
-                  }
-                }}
-                className="flex items-center gap-2 rounded-xl bg-red-600 px-5 py-2.5 text-xs font-bold text-white hover:bg-red-700 shadow-xs transition"
-              >
-                <RotateCcw className="h-4 w-4" />
-                <span>Zerar Todos os Dados & Histórico</span>
               </button>
             </div>
           </div>
