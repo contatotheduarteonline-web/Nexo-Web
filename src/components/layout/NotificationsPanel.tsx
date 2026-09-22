@@ -40,15 +40,11 @@ export const NotificationsPanel: React.FC<NotificationsPanelProps> = ({
             Notificações
           </span>
         </div>
-        <span
-          className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold ${
-            total > 0
-              ? "border border-[#F3AA2D]/30 bg-[#F3AA2D]/10 text-[#F3AA2D]"
-              : "border border-emerald-500/30 bg-emerald-500/10 text-emerald-400"
-          }`}
-        >
-          {total > 0 ? `${total} pendente${total > 1 ? "s" : ""}` : "Em dia"}
-        </span>
+        {total > 0 && (
+          <span className="rounded-full border border-[#F3AA2D]/30 bg-[#F3AA2D]/10 px-2.5 py-0.5 text-[10px] font-bold text-[#F3AA2D]">
+            {total} pendente{total > 1 ? "s" : ""}
+          </span>
+        )}
       </div>
 
       {/* Body */}
