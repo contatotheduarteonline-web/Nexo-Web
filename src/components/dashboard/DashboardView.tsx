@@ -299,8 +299,8 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy 
       {/* ========================================================================= */}
       <div className="relative pt-1 pb-1">
         <h1 className="font-condensed text-[32px] sm:text-[36px] font-bold leading-tight tracking-[0.01em]">
-          <span className="text-[#A5B0C2]">{greeting}, </span>
-          <span className="text-[#F5F4EF]">{userName}</span>
+          <span className="text-white">{greeting}, </span>
+          <span className="text-white">{userName}</span>
         </h1>
       </div>
 

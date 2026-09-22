@@ -139,7 +139,7 @@ export const AddContentModal: React.FC<AddContentModalProps> = ({
               <Plus className="h-5 w-5" />
             </div>
             <div>
-              <h2 className="text-base font-bold text-[#374151] dark:text-white">
+              <h2 className="text-base font-bold text-white dark:text-white">
                 {mode === "choose"
                   ? "Adicionar Conteúdo ao Edital"
                   : mode === "discipline"
@@ -148,7 +148,7 @@ export const AddContentModal: React.FC<AddContentModalProps> = ({
                   ? "Novo Tópico"
                   : "Novo Subtópico"}
               </h2>
-              <p className="text-xs text-[#737D89] dark:text-[#94A3B8]">
+              <p className="text-xs text-white dark:text-white">
                 {activeEdital.title}
               </p>
             </div>
@@ -166,7 +166,7 @@ export const AddContentModal: React.FC<AddContentModalProps> = ({
         <div className="p-6">
           {mode === "choose" && (
             <div className="space-y-3">
-              <p className="text-xs text-[#737D89] dark:text-[#94A3B8]">
+              <p className="text-xs text-white dark:text-white">
                 Selecione o nível de conteúdo que deseja cadastrar no edital:
               </p>
 
@@ -180,15 +180,15 @@ export const AddContentModal: React.FC<AddContentModalProps> = ({
                     <BookOpen className="h-5 w-5" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-bold text-[#374151] group-hover:text-[#F59E0B] dark:text-white dark:group-hover:text-[#FBBF24]">
+                    <h3 className="text-sm font-bold text-white group-hover:text-[#F59E0B] dark:text-white dark:group-hover:text-[#FBBF24]">
                       Nova Disciplina
                     </h3>
-                    <p className="text-xs text-[#737D89] dark:text-[#94A3B8]">
+                    <p className="text-xs text-white dark:text-white">
                       Ex: Direito Constitucional, Raciocínio Lógico, Informática
                     </p>
                   </div>
                 </div>
-                <ChevronRight className="h-5 w-5 text-[#CCD2D8] group-hover:text-[#F59E0B] dark:text-[#3A454F] dark:group-hover:text-[#FBBF24]" />
+                <ChevronRight className="h-5 w-5 text-white group-hover:text-[#F59E0B] dark:text-white dark:group-hover:text-[#FBBF24]" />
               </button>
 
               {/* Option 2: Tópico */}
@@ -201,15 +201,15 @@ export const AddContentModal: React.FC<AddContentModalProps> = ({
                     <ListPlus className="h-5 w-5" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-bold text-[#374151] group-hover:text-[#F59E0B] dark:text-white dark:group-hover:text-[#FBBF24]">
+                    <h3 className="text-sm font-bold text-white group-hover:text-[#F59E0B] dark:text-white dark:group-hover:text-[#FBBF24]">
                       Novo Tópico
                     </h3>
-                    <p className="text-xs text-[#737D89] dark:text-[#94A3B8]">
+                    <p className="text-xs text-white dark:text-white">
                       Ex: Direitos e Garantias Fundamentais, Concordância Verbal
                     </p>
                   </div>
                 </div>
-                <ChevronRight className="h-5 w-5 text-[#CCD2D8] group-hover:text-[#F59E0B] dark:text-[#3A454F] dark:group-hover:text-[#FBBF24]" />
+                <ChevronRight className="h-5 w-5 text-white group-hover:text-[#F59E0B] dark:text-white dark:group-hover:text-[#FBBF24]" />
               </button>
 
               {/* Option 3: Subtópico */}
@@ -222,15 +222,15 @@ export const AddContentModal: React.FC<AddContentModalProps> = ({
                     <Layers className="h-5 w-5" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-bold text-[#374151] group-hover:text-[#F59E0B] dark:text-white dark:group-hover:text-[#FBBF24]">
+                    <h3 className="text-sm font-bold text-white group-hover:text-[#F59E0B] dark:text-white dark:group-hover:text-[#FBBF24]">
                       Novo Subtópico
                     </h3>
-                    <p className="text-xs text-[#737D89] dark:text-[#94A3B8]">
+                    <p className="text-xs text-white dark:text-white">
                       Ex: Habeas Corpus, Inviolabilidade de Domicílio, Art. 5º
                     </p>
                   </div>
                 </div>
-                <ChevronRight className="h-5 w-5 text-[#CCD2D8] group-hover:text-[#F59E0B] dark:text-[#3A454F] dark:group-hover:text-[#FBBF24]" />
+                <ChevronRight className="h-5 w-5 text-white group-hover:text-[#F59E0B] dark:text-white dark:group-hover:text-[#FBBF24]" />
               </button>
             </div>
           )}
@@ -238,7 +238,7 @@ export const AddContentModal: React.FC<AddContentModalProps> = ({
           {mode === "discipline" && (
             <form onSubmit={handleCreateDiscipline} className="space-y-4">
               <div>
-                <label className="block text-xs font-bold text-[#374151] dark:text-white">
+                <label className="block text-xs font-bold text-white dark:text-white">
                   Nome da Disciplina *
                 </label>
                 <input
@@ -253,7 +253,7 @@ export const AddContentModal: React.FC<AddContentModalProps> = ({
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-[#374151] dark:text-white">
+                <label className="block text-xs font-bold text-white dark:text-white">
                   Cor da Disciplina
                 </label>
                 <div className="mt-2 flex flex-wrap gap-2">
@@ -273,7 +273,7 @@ export const AddContentModal: React.FC<AddContentModalProps> = ({
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-[#374151] dark:text-white">
+                  <label className="block text-xs font-bold text-white dark:text-white">
                     Peso na Prova
                   </label>
                   <select
@@ -288,7 +288,7 @@ export const AddContentModal: React.FC<AddContentModalProps> = ({
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-[#374151] dark:text-white">
+                  <label className="block text-xs font-bold text-white dark:text-white">
                     Prioridade de Estudo
                   </label>
                   <select
@@ -307,7 +307,7 @@ export const AddContentModal: React.FC<AddContentModalProps> = ({
                 <button
                   type="button"
                   onClick={() => setMode("choose")}
-                  className="text-xs font-semibold text-[#737D89] hover:underline dark:text-[#94A3B8] cursor-pointer"
+                  className="text-xs font-semibold text-white hover:underline dark:text-white cursor-pointer"
                 >
                   ← Voltar
                 </button>
@@ -334,7 +334,7 @@ export const AddContentModal: React.FC<AddContentModalProps> = ({
           {mode === "topic" && (
             <form onSubmit={handleCreateTopic} className="space-y-4">
               <div>
-                <label className="block text-xs font-bold text-[#374151] dark:text-white">
+                <label className="block text-xs font-bold text-white dark:text-white">
                   Disciplina *
                 </label>
                 <select
@@ -352,7 +352,7 @@ export const AddContentModal: React.FC<AddContentModalProps> = ({
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-[#374151] dark:text-white">
+                <label className="block text-xs font-bold text-white dark:text-white">
                   Nome do Tópico / Assunto *
                 </label>
                 <input
@@ -368,7 +368,7 @@ export const AddContentModal: React.FC<AddContentModalProps> = ({
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-[#374151] dark:text-white">
+                  <label className="block text-xs font-bold text-white dark:text-white">
                     Prioridade
                   </label>
                   <select
@@ -383,7 +383,7 @@ export const AddContentModal: React.FC<AddContentModalProps> = ({
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-[#374151] dark:text-white">
+                  <label className="block text-xs font-bold text-white dark:text-white">
                     Dificuldade Estimada
                   </label>
                   <select
@@ -399,7 +399,7 @@ export const AddContentModal: React.FC<AddContentModalProps> = ({
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-[#374151] dark:text-white">
+                <label className="block text-xs font-bold text-white dark:text-white">
                   Subtópicos Iniciais (opcional, 1 por linha)
                 </label>
                 <textarea
@@ -415,7 +415,7 @@ export const AddContentModal: React.FC<AddContentModalProps> = ({
                 <button
                   type="button"
                   onClick={() => setMode("choose")}
-                  className="text-xs font-semibold text-[#737D89] hover:underline dark:text-[#94A3B8] cursor-pointer"
+                  className="text-xs font-semibold text-white hover:underline dark:text-white cursor-pointer"
                 >
                   ← Voltar
                 </button>
@@ -442,7 +442,7 @@ export const AddContentModal: React.FC<AddContentModalProps> = ({
           {mode === "subtopic" && (
             <form onSubmit={handleCreateSubtopic} className="space-y-4">
               <div>
-                <label className="block text-xs font-bold text-[#374151] dark:text-white">
+                <label className="block text-xs font-bold text-white dark:text-white">
                   Tópico Pai *
                 </label>
                 <select
@@ -463,7 +463,7 @@ export const AddContentModal: React.FC<AddContentModalProps> = ({
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-[#374151] dark:text-white">
+                <label className="block text-xs font-bold text-white dark:text-white">
                   Nome do Subtópico *
                 </label>
                 <input
@@ -481,7 +481,7 @@ export const AddContentModal: React.FC<AddContentModalProps> = ({
                 <button
                   type="button"
                   onClick={() => setMode("choose")}
-                  className="text-xs font-semibold text-[#737D89] hover:underline dark:text-[#94A3B8] cursor-pointer"
+                  className="text-xs font-semibold text-white hover:underline dark:text-white cursor-pointer"
                 >
                   ← Voltar
                 </button>

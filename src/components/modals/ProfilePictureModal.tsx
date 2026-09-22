@@ -129,10 +129,10 @@ export const ProfilePictureModal: React.FC<ProfilePictureModalProps> = ({
               <Camera className="h-5 w-5" />
             </div>
             <div>
-              <h2 className="text-base font-black text-slate-900 dark:text-white">
+              <h2 className="text-base font-black text-white dark:text-white">
                 Foto de Perfil
               </h2>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
+              <p className="text-xs text-white dark:text-white">
                 Personalize seu avatar na plataforma e no menu superior
               </p>
             </div>
@@ -141,7 +141,7 @@ export const ProfilePictureModal: React.FC<ProfilePictureModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 rounded-xl text-slate-400 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-800 dark:hover:text-white transition"
+            className="p-1.5 rounded-xl text-white hover:bg-slate-100 hover:text-white dark:hover:bg-slate-800 dark:hover:text-white transition"
           >
             <X className="h-4 w-4" />
           </button>
@@ -177,10 +177,10 @@ export const ProfilePictureModal: React.FC<ProfilePictureModalProps> = ({
           </div>
 
           <div>
-            <h3 className="text-sm font-black text-slate-900 dark:text-white">
+            <h3 className="text-sm font-black text-white dark:text-white">
               {user?.name || "Operador"}
             </h3>
-            <p className="text-xs text-slate-400">{user?.email}</p>
+            <p className="text-xs text-white">{user?.email}</p>
           </div>
         </div>
 
@@ -212,34 +212,34 @@ export const ProfilePictureModal: React.FC<ProfilePictureModalProps> = ({
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#249D84]/10 text-[#249D84] mb-2">
             <Upload className="h-5 w-5" />
           </div>
-          <p className="text-xs font-bold text-slate-800 dark:text-slate-200">
+          <p className="text-xs font-bold text-white dark:text-white">
             Clique para enviar ou arraste sua foto aqui
           </p>
-          <p className="text-[10px] text-slate-400 mt-0.5">
+          <p className="text-[10px] text-white mt-0.5">
             PNG, JPG, GIF ou WEBP (Máx. 5MB)
           </p>
         </div>
 
         {/* Direct URL Input */}
         <form onSubmit={handleApplyCustomUrl} className="space-y-1.5">
-          <label className="block text-[11px] font-semibold text-slate-600 dark:text-slate-400">
+          <label className="block text-[11px] font-semibold text-white dark:text-white">
             Ou cole o Link Direto de uma Imagem:
           </label>
           <div className="flex gap-2">
             <div className="relative flex-1">
-              <LinkIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400" />
+              <LinkIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-white" />
               <input
                 type="url"
                 value={customUrlInput}
                 onChange={(e) => setCustomUrlInput(e.target.value)}
                 placeholder="https://exemplo.com/minha-foto.jpg"
-                className="w-full pl-8 pr-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#151D2A] text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-hidden focus:ring-1 focus:ring-[#249D84]"
+                className="w-full pl-8 pr-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#151D2A] text-white dark:text-white placeholder:text-white focus:outline-hidden focus:ring-1 focus:ring-[#249D84]"
               />
             </div>
             <button
               type="submit"
               disabled={!customUrlInput.trim()}
-              className="px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 disabled:opacity-40 transition"
+              className="px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-white dark:text-white disabled:opacity-40 transition"
             >
               Aplicar
             </button>
@@ -266,7 +266,7 @@ export const ProfilePictureModal: React.FC<ProfilePictureModalProps> = ({
               type="button"
               disabled={isSaving}
               onClick={onClose}
-              className="px-4 py-2 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 disabled:opacity-50 transition"
+              className="px-4 py-2 rounded-xl text-xs font-bold text-white dark:text-white hover:bg-slate-100 dark:hover:bg-slate-800 disabled:opacity-50 transition"
             >
               Cancelar
             </button>

@@ -26,16 +26,16 @@ export const EditalProgressCard: React.FC<EditalProgressCardProps> = ({
       <div className="flex flex-col lg:flex-row lg:items-center gap-5 lg:gap-8">
         {/* Identificação do edital */}
         <div className="min-w-0 flex-1">
-          <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-[#A5B0C2]">
+          <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-white">
             Progresso no edital
           </span>
 
-          <h2 className="font-condensed mt-1.5 text-[24px] sm:text-[28px] font-bold leading-tight text-[#F5F4EF] truncate">
+          <h2 className="font-condensed mt-1.5 text-[24px] sm:text-[28px] font-bold leading-tight text-white truncate">
             {hasEdital ? title : "Nenhum edital ativo"}
           </h2>
 
           {hasEdital && cargo && (
-            <span className="mt-2 inline-flex items-center rounded-full border border-[#384154] bg-[#2D3442] px-2.5 py-0.5 text-[11px] font-semibold text-[#A5B0C2]">
+            <span className="mt-2 inline-flex items-center rounded-full border border-[#384154] bg-[#2D3442] px-2.5 py-0.5 text-[11px] font-semibold text-white">
               {cargo}
             </span>
           )}
@@ -59,7 +59,7 @@ export const EditalProgressCard: React.FC<EditalProgressCardProps> = ({
         </div>
 
         <div className="mt-3 flex items-center justify-between gap-3 text-[12px]">
-          <span className="num-condensed font-semibold text-[#A5B0C2] truncate">
+          <span className="num-condensed font-semibold text-white truncate">
             {hasEdital
               ? `${completedTopicsCount} de ${totalTopicsCount} tópicos`
               : "Selecione um edital"}

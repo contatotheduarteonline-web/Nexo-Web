@@ -69,7 +69,7 @@ export const LembretesView: React.FC = () => {
       case "PAGAMENTOS":
         return "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-900";
       default:
-        return "bg-slate-50 text-slate-700 border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700";
+        return "bg-slate-50 text-white border-slate-200 dark:bg-slate-800 dark:text-white dark:border-slate-700";
     }
   };
 
@@ -78,7 +78,7 @@ export const LembretesView: React.FC = () => {
       {/* Top Header */}
       <div className="flex flex-col justify-between gap-3 border-b border-[#E2E8F0] pb-3 sm:flex-row sm:items-center dark:border-[#1E293B]">
         <div>
-          <h1 className="text-lg font-bold text-[#374151] dark:text-white">
+          <h1 className="text-lg font-bold text-white dark:text-white">
             Lembretes
           </h1>
         </div>
@@ -95,16 +95,16 @@ export const LembretesView: React.FC = () => {
       {/* KPI Cards */}
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
         <div className="rounded-xl border border-[#E2E8F0] bg-white p-4 shadow-[0_1px_3px_rgba(0,0,0,0.02)] dark:border-[#1E293B] dark:bg-[#252B38]">
-          <div className="text-[10px] font-bold text-[#737D89] uppercase dark:text-[#94A3B8]">Total de Lembretes</div>
-          <div className="mt-1 text-2xl font-extrabold text-[#374151] dark:text-white">{stats.total}</div>
+          <div className="text-[10px] font-bold text-white uppercase dark:text-white">Total de Lembretes</div>
+          <div className="mt-1 text-2xl font-extrabold text-white dark:text-white">{stats.total}</div>
         </div>
         <div className="rounded-xl border border-[#E2E8F0] bg-white p-4 shadow-[0_1px_3px_rgba(0,0,0,0.02)] dark:border-[#1E293B] dark:bg-[#252B38]">
           <div className="text-[10px] font-bold text-[#F59E0B] uppercase dark:text-[#FBBF24]">Pendentes</div>
-          <div className="mt-1 text-2xl font-extrabold text-[#374151] dark:text-white">{stats.pending}</div>
+          <div className="mt-1 text-2xl font-extrabold text-white dark:text-white">{stats.pending}</div>
         </div>
         <div className="rounded-xl border border-[#E2E8F0] bg-white p-4 shadow-[0_1px_3px_rgba(0,0,0,0.02)] dark:border-[#1E293B] dark:bg-[#252B38]">
           <div className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase">Concluídos</div>
-          <div className="mt-1 text-2xl font-extrabold text-[#374151] dark:text-white">{stats.completed}</div>
+          <div className="mt-1 text-2xl font-extrabold text-white dark:text-white">{stats.completed}</div>
         </div>
       </div>
 
@@ -120,7 +120,7 @@ export const LembretesView: React.FC = () => {
 
           <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-3">
             <div className="sm:col-span-3">
-              <label className="text-xs font-semibold text-[#374151] dark:text-[#E5EAEF]">
+              <label className="text-xs font-semibold text-white dark:text-white">
                 Título do lembrete <span className="text-red-500">*</span>
               </label>
               <input
@@ -134,7 +134,7 @@ export const LembretesView: React.FC = () => {
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-[#374151] dark:text-[#E5EAEF]">
+              <label className="text-xs font-semibold text-white dark:text-white">
                 Categoria
               </label>
               <select
@@ -150,7 +150,7 @@ export const LembretesView: React.FC = () => {
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-[#374151] dark:text-[#E5EAEF]">
+              <label className="text-xs font-semibold text-white dark:text-white">
                 Data limite
               </label>
               <input
@@ -165,7 +165,7 @@ export const LembretesView: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setIsAdding(false)}
-                className="rounded-xl px-3 py-2 text-xs font-semibold text-[#737D89] hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
+                className="rounded-xl px-3 py-2 text-xs font-semibold text-white hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
               >
                 Cancelar
               </button>
@@ -208,7 +208,7 @@ export const LembretesView: React.FC = () => {
               className={`rounded-lg px-2.5 py-1 transition ${
                 filterStatus === st
                   ? "bg-white text-[#F59E0B] shadow-xs dark:bg-[#1E293B] dark:text-[#FBBF24]"
-                  : "text-[#737D89] dark:text-[#94A3B8]"
+                  : "text-white dark:text-white"
               }`}
             >
               {st}
@@ -245,13 +245,13 @@ export const LembretesView: React.FC = () => {
                   <p
                     className={`text-xs font-semibold ${
                       rem.completed
-                        ? "text-[#737D89] line-through dark:text-[#94A3B8]"
-                        : "text-[#374151] dark:text-white"
+                        ? "text-white line-through dark:text-white"
+                        : "text-white dark:text-white"
                     }`}
                   >
                     {rem.title}
                   </p>
-                  <div className="mt-1 flex items-center gap-2 text-[11px] text-[#737D89] dark:text-[#94A3B8]">
+                  <div className="mt-1 flex items-center gap-2 text-[11px] text-white dark:text-white">
                     <Calendar className="h-3 w-3" />
                     <span>{rem.date}</span>
                   </div>
@@ -269,7 +269,7 @@ export const LembretesView: React.FC = () => {
 
                 <button
                   onClick={() => deleteReminder(rem.id)}
-                  className="rounded-lg p-1 text-[#737D89] hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950/40 dark:hover:text-red-400"
+                  className="rounded-lg p-1 text-white hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950/40 dark:hover:text-red-400"
                   title="Excluir lembrete"
                 >
                   <Trash2 className="h-4 w-4" />

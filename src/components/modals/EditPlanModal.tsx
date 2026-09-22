@@ -179,10 +179,10 @@ export const EditPlanModal: React.FC<EditPlanModalProps> = ({ plan, onClose }) =
         {/* Header */}
         <div className="flex items-center justify-between border-b border-[#E2E8F0] px-6 py-4 dark:border-[#1E293B]">
           <div>
-            <h2 className="text-base font-bold text-[#374151] dark:text-white">
+            <h2 className="text-base font-bold text-white dark:text-white">
               {isConfirmingDelete ? "Excluir Plano de Estudos" : "Editar Dados do Plano"}
             </h2>
-            <p className="text-xs text-[#737D89] dark:text-[#94A3B8]">
+            <p className="text-xs text-white dark:text-white">
               {isConfirmingDelete
                 ? "Confirmação de exclusão permanente"
                 : "Atualize as informações do concurso, imagem e metas"}
@@ -211,12 +211,12 @@ export const EditPlanModal: React.FC<EditPlanModalProps> = ({ plan, onClose }) =
               <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-red-50 text-red-600 dark:bg-red-950/40 dark:text-red-400">
                 <AlertTriangle className="h-7 w-7" />
               </div>
-              <h3 className="mt-4 text-base font-extrabold text-[#374151] dark:text-white">
+              <h3 className="mt-4 text-base font-extrabold text-white dark:text-white">
                 Deseja realmente excluir este plano?
               </h3>
-              <p className="mt-2 max-w-md text-xs text-[#737D89] dark:text-[#94A3B8]">
+              <p className="mt-2 max-w-md text-xs text-white dark:text-white">
                 Você está prestes a excluir o plano{" "}
-                <strong className="text-[#374151] dark:text-white">"{plan.name}"</strong>.
+                <strong className="text-white dark:text-white">"{plan.name}"</strong>.
                 Esta ação é irreversível e removerá as configurações e planejamento deste plano.
               </p>
             </div>
@@ -271,7 +271,7 @@ export const EditPlanModal: React.FC<EditPlanModalProps> = ({ plan, onClose }) =
             />
 
             <div>
-              <label className="text-xs font-bold text-[#374151] dark:text-white">
+              <label className="text-xs font-bold text-white dark:text-white">
                 Nome do Plano
               </label>
               <input
@@ -285,7 +285,7 @@ export const EditPlanModal: React.FC<EditPlanModalProps> = ({ plan, onClose }) =
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div>
-                <label className="text-xs font-bold text-[#374151] dark:text-white">
+                <label className="text-xs font-bold text-white dark:text-white">
                   Órgão / Instituição
                 </label>
                 <input
@@ -298,7 +298,7 @@ export const EditPlanModal: React.FC<EditPlanModalProps> = ({ plan, onClose }) =
               </div>
 
               <div>
-                <label className="text-xs font-bold text-[#374151] dark:text-white">
+                <label className="text-xs font-bold text-white dark:text-white">
                   Cargo
                 </label>
                 <input
@@ -311,7 +311,7 @@ export const EditPlanModal: React.FC<EditPlanModalProps> = ({ plan, onClose }) =
               </div>
 
               <div>
-                <label className="text-xs font-bold text-[#374151] dark:text-white">
+                <label className="text-xs font-bold text-white dark:text-white">
                   Banca
                 </label>
                 <input
@@ -324,7 +324,7 @@ export const EditPlanModal: React.FC<EditPlanModalProps> = ({ plan, onClose }) =
               </div>
 
               <div>
-                <label className="text-xs font-bold text-[#374151] dark:text-white">
+                <label className="text-xs font-bold text-white dark:text-white">
                   Meta Semanal (Horas)
                 </label>
                 <input

@@ -37,7 +37,7 @@ export const StatCardsRow: React.FC<StatCardsRowProps> = ({
         className="nx-card nx-card-hover p-5 flex flex-col justify-between"
       >
         <div className="flex items-center justify-between">
-          <span className="text-[12px] font-semibold text-[#A5B0C2]">
+          <span className="text-[12px] font-semibold text-white">
             Tempo de estudo
           </span>
           <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#384154] bg-[#171B25] text-[#F3AA2D]">
@@ -46,12 +46,12 @@ export const StatCardsRow: React.FC<StatCardsRowProps> = ({
         </div>
 
         <div className="mt-4">
-          <span className="num-condensed block text-[32px] font-bold leading-none text-[#F5F4EF]">
+          <span className="num-condensed block text-[32px] font-bold leading-none text-white">
             {timeFormatted}
           </span>
         </div>
 
-        <div className="mt-4 pt-3 border-t border-[#384154] flex items-center gap-1.5 text-[12px] text-[#A5B0C2]">
+        <div className="mt-4 pt-3 border-t border-[#384154] flex items-center gap-1.5 text-[12px] text-white">
           <span
             className={`h-2 w-2 rounded-full shrink-0 transition-colors ${
               todaySessionsCount > 0 ? "bg-[#F3AA2D]" : "bg-[#4A556E]"
@@ -71,7 +71,7 @@ export const StatCardsRow: React.FC<StatCardsRowProps> = ({
         className="nx-card nx-card-hover p-5 flex flex-col justify-between"
       >
         <div className="flex items-center justify-between">
-          <span className="text-[12px] font-semibold text-[#A5B0C2]">
+          <span className="text-[12px] font-semibold text-white">
             Questões
           </span>
           <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#384154] bg-[#171B25] text-[#F3AA2D]">
@@ -80,15 +80,15 @@ export const StatCardsRow: React.FC<StatCardsRowProps> = ({
         </div>
 
         <div className="mt-4 flex items-baseline gap-1.5">
-          <span className="num-condensed block text-[32px] font-bold leading-none text-[#F5F4EF]">
+          <span className="num-condensed block text-[32px] font-bold leading-none text-white">
             {todayQuestionsDone}
           </span>
-          <span className="text-[13px] font-medium text-[#A5B0C2]">
+          <span className="text-[13px] font-medium text-white">
             resolvidas
           </span>
         </div>
 
-        <div className="mt-4 pt-3 border-t border-[#384154] flex items-center gap-1.5 text-[12px] text-[#A5B0C2]">
+        <div className="mt-4 pt-3 border-t border-[#384154] flex items-center gap-1.5 text-[12px] text-white">
           <span
             className={`h-2 w-2 rounded-full shrink-0 transition-colors ${
               todayQuestionsCorrect > 0 ? "bg-[#F3AA2D]" : "bg-[#4A556E]"
@@ -108,7 +108,7 @@ export const StatCardsRow: React.FC<StatCardsRowProps> = ({
         className="nx-card nx-card-hover p-5 flex flex-col justify-between"
       >
         <div className="flex items-center justify-between">
-          <span className="text-[12px] font-semibold text-[#A5B0C2]">
+          <span className="text-[12px] font-semibold text-white">
             Precisão
           </span>
           <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#384154] bg-[#171B25] text-[#F3AA2D]">
@@ -117,12 +117,12 @@ export const StatCardsRow: React.FC<StatCardsRowProps> = ({
         </div>
 
         <div className="mt-4">
-          <span className="num-condensed block text-[32px] font-bold leading-none text-[#F5F4EF]">
+          <span className="num-condensed block text-[32px] font-bold leading-none text-white">
             {displayAccuracy}
           </span>
         </div>
 
-        <div className="mt-4 pt-3 border-t border-[#384154] flex items-center gap-1.5 text-[12px] text-[#A5B0C2]">
+        <div className="mt-4 pt-3 border-t border-[#384154] flex items-center gap-1.5 text-[12px] text-white">
           <span className="h-2 w-2 rounded-full bg-[#4A556E] shrink-0" />
           <span className="truncate">
             {todayQuestionsDone > 0 ? "Média de hoje" : "Média geral"}

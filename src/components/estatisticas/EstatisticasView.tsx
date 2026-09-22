@@ -78,7 +78,7 @@ export const EstatisticasView: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col justify-between gap-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-xs sm:flex-row sm:items-center dark:border-slate-800 dark:bg-[#252B38]">
         <div>
-          <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
+          <h2 className="text-2xl font-bold text-white dark:text-white">
             Estatísticas
           </h2>
         </div>
@@ -90,7 +90,7 @@ export const EstatisticasView: React.FC = () => {
             className={`rounded-lg px-3 py-1.5 text-xs font-bold transition ${
               timeRange === "7d"
                 ? "bg-[#F59E0B] text-white shadow-xs"
-                : "text-slate-500 hover:text-slate-900 dark:text-slate-400"
+                : "text-white hover:text-white dark:text-white"
             }`}
           >
             Últimos 7 Dias
@@ -100,7 +100,7 @@ export const EstatisticasView: React.FC = () => {
             className={`rounded-lg px-3 py-1.5 text-xs font-bold transition ${
               timeRange === "30d"
                 ? "bg-[#F59E0B] text-white shadow-xs"
-                : "text-slate-500 hover:text-slate-900 dark:text-slate-400"
+                : "text-white hover:text-white dark:text-white"
             }`}
           >
             Últimos 30 Dias
@@ -110,7 +110,7 @@ export const EstatisticasView: React.FC = () => {
             className={`rounded-lg px-3 py-1.5 text-xs font-bold transition ${
               timeRange === "all"
                 ? "bg-[#F59E0B] text-white shadow-xs"
-                : "text-slate-500 hover:text-slate-900 dark:text-slate-400"
+                : "text-white hover:text-white dark:text-white"
             }`}
           >
             Todo o Histórico
@@ -121,35 +121,35 @@ export const EstatisticasView: React.FC = () => {
       {/* Top Metric Cards */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-xs dark:border-slate-800 dark:bg-[#252B38]">
-          <span className="text-xs font-semibold text-slate-400 uppercase">Horas Totais</span>
-          <div className="mt-2 text-2xl font-bold text-slate-900 dark:text-white">
+          <span className="text-xs font-semibold text-white uppercase">Horas Totais</span>
+          <div className="mt-2 text-2xl font-bold text-white dark:text-white">
             {metrics.totalHoursStudied}h
           </div>
-          <p className="mt-1 text-xs text-slate-500">{studySessions.length} sessões registradas</p>
+          <p className="mt-1 text-xs text-white">{studySessions.length} sessões registradas</p>
         </div>
 
         <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-xs dark:border-slate-800 dark:bg-[#252B38]">
-          <span className="text-xs font-semibold text-slate-400 uppercase">Questões Feitas</span>
-          <div className="mt-2 text-2xl font-bold text-slate-900 dark:text-white">
+          <span className="text-xs font-semibold text-white uppercase">Questões Feitas</span>
+          <div className="mt-2 text-2xl font-bold text-white dark:text-white">
             {metrics.totalQuestionsDone}
           </div>
-          <p className="mt-1 text-xs text-slate-500">{metrics.totalQuestionsCorrect} corretas ({metrics.overallAccuracyRate}%)</p>
+          <p className="mt-1 text-xs text-white">{metrics.totalQuestionsCorrect} corretas ({metrics.overallAccuracyRate}%)</p>
         </div>
 
         <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-xs dark:border-slate-800 dark:bg-[#252B38]">
-          <span className="text-xs font-semibold text-slate-400 uppercase">Média Diária</span>
+          <span className="text-xs font-semibold text-white uppercase">Média Diária</span>
           <div className="mt-2 text-2xl font-bold text-[#F59E0B] dark:text-[#FBBF24]">
             {(metrics.hoursThisWeek / 7).toFixed(1)}h/dia
           </div>
-          <p className="mt-1 text-xs text-slate-500">Ritmo sustentável</p>
+          <p className="mt-1 text-xs text-white">Ritmo sustentável</p>
         </div>
 
         <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-xs dark:border-slate-800 dark:bg-[#252B38]">
-          <span className="text-xs font-semibold text-slate-400 uppercase">Cobertura do Edital</span>
+          <span className="text-xs font-semibold text-white uppercase">Cobertura do Edital</span>
           <div className="mt-2 text-2xl font-bold text-[#F59E0B] dark:text-[#FBBF24]">
             {metrics.editalStudiedPercentage}%
           </div>
-          <p className="mt-1 text-xs text-slate-500">{metrics.studiedTopicsCount} de {metrics.totalTopicsCount} tópicos</p>
+          <p className="mt-1 text-xs text-white">{metrics.studiedTopicsCount} de {metrics.totalTopicsCount} tópicos</p>
         </div>
       </div>
 
@@ -158,10 +158,10 @@ export const EstatisticasView: React.FC = () => {
         {/* Horas por Dia (Bar Chart) */}
         <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs lg:col-span-8 dark:border-slate-800 dark:bg-[#252B38]">
           <div className="flex items-center justify-between">
-            <h3 className="text-base font-bold text-slate-900 dark:text-white">
+            <h3 className="text-base font-bold text-white dark:text-white">
               Horas Líquidas por Dia da Semana
             </h3>
-            <span className="text-xs text-slate-500">Tempo cronometrado</span>
+            <span className="text-xs text-white">Tempo cronometrado</span>
           </div>
 
           <div className="mt-6 h-72 w-full">
@@ -182,14 +182,14 @@ export const EstatisticasView: React.FC = () => {
 
         {/* Modalidade de Estudo (Pie Chart) */}
         <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs lg:col-span-4 dark:border-slate-800 dark:bg-[#252B38]">
-          <h3 className="text-base font-bold text-slate-900 dark:text-white">
+          <h3 className="text-base font-bold text-white dark:text-white">
             Distribuição por Modalidade
           </h3>
-          <p className="text-xs text-slate-500">Teoria x Questões x Revisão</p>
+          <p className="text-xs text-white">Teoria x Questões x Revisão</p>
 
           <div className="mt-4 flex h-60 items-center justify-center">
             {modalityData.length === 0 ? (
-              <div className="text-xs text-slate-400">Sem dados suficientes</div>
+              <div className="text-xs text-white">Sem dados suficientes</div>
             ) : (
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
@@ -221,9 +221,9 @@ export const EstatisticasView: React.FC = () => {
                     className="h-2.5 w-2.5 rounded-full"
                     style={{ backgroundColor: MODALITY_COLORS[idx % MODALITY_COLORS.length] }}
                   />
-                  <span className="text-slate-700 dark:text-slate-300">{item.name}</span>
+                  <span className="text-white dark:text-white">{item.name}</span>
                 </div>
-                <span className="font-semibold text-slate-900 dark:text-white">{item.hours}h</span>
+                <span className="font-semibold text-white dark:text-white">{item.hours}h</span>
               </div>
             ))}
           </div>
@@ -232,13 +232,13 @@ export const EstatisticasView: React.FC = () => {
 
       {/* Disciplines Horas & Acertos Breakdown Table */}
       <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs dark:border-slate-800 dark:bg-[#252B38]">
-        <h3 className="text-base font-bold text-slate-900 dark:text-white">
+        <h3 className="text-base font-bold text-white dark:text-white">
           Desempenho Detalhado por Disciplina
         </h3>
 
         <div className="mt-4 overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="border-b border-slate-100 bg-slate-50 text-[11px] font-semibold text-slate-400 uppercase dark:border-slate-800 dark:bg-slate-800/40">
+            <thead className="border-b border-slate-100 bg-slate-50 text-[11px] font-semibold text-white uppercase dark:border-slate-800 dark:bg-slate-800/40">
               <tr>
                 <th className="px-4 py-3">Disciplina</th>
                 <th className="px-3 py-3 text-center">Horas Estudadas</th>
@@ -250,7 +250,7 @@ export const EstatisticasView: React.FC = () => {
             <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
               {disciplineHoursData.map((item) => (
                 <tr key={item.name} className="hover:bg-slate-50 dark:hover:bg-slate-800/40">
-                  <td className="px-4 py-3 font-semibold text-slate-900 dark:text-white">
+                  <td className="px-4 py-3 font-semibold text-white dark:text-white">
                     <div className="flex items-center gap-2">
                       <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: item.color }} />
                       <span>{item.name}</span>

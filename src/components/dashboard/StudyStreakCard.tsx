@@ -70,10 +70,10 @@ export const StudyStreakCard: React.FC = () => {
             <Flame className="h-5 w-5 fill-amber-500 text-amber-500" />
           </div>
           <div>
-            <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+            <h3 className="text-sm font-bold text-white dark:text-white">
               Constância nos Estudos — {streakData.monthName}
             </h3>
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-white">
               Acompanhe seu hábito diário e preserve sua sequência de estudo
             </p>
           </div>
@@ -86,7 +86,7 @@ export const StudyStreakCard: React.FC = () => {
             <span>{streakData.currentStreak} dias seguidos</span>
           </div>
 
-          <div className="flex items-center gap-1.5 rounded-xl border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
+          <div className="flex items-center gap-1.5 rounded-xl border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-semibold text-white dark:border-slate-700 dark:bg-slate-800 dark:text-white">
             <Trophy className="h-3.5 w-3.5 text-amber-500" />
             <span>Recorde: {streakData.recordStreak} dias</span>
           </div>
@@ -102,16 +102,16 @@ export const StudyStreakCard: React.FC = () => {
             const isToday = day === streakData.todayNum;
             const isFuture = day > streakData.todayNum;
 
-            let bgColor = "bg-slate-50 border-slate-200 text-slate-400 dark:bg-slate-800/40 dark:border-slate-800";
+            let bgColor = "bg-slate-50 border-slate-200 text-white dark:bg-slate-800/40 dark:border-slate-800";
             if (hasStudied) {
               bgColor = "bg-emerald-500 border-emerald-600 text-white font-bold shadow-2xs";
             } else if (isToday) {
               bgColor = "border-2 border-dashed border-[#F59E0B] bg-amber-50 text-[#F59E0B] font-bold dark:bg-amber-950/40 dark:text-amber-300";
             } else if (isFuture) {
-              bgColor = "bg-slate-50/50 border-slate-100 text-slate-300 dark:bg-slate-900/30 dark:border-slate-800/60 dark:text-slate-600";
+              bgColor = "bg-slate-50/50 border-slate-100 text-white dark:bg-slate-900/30 dark:border-slate-800/60 dark:text-white";
             } else {
               // Past day missed
-              bgColor = "bg-slate-100 border-slate-200 text-slate-400 dark:bg-slate-800/70 dark:border-slate-700 dark:text-slate-500";
+              bgColor = "bg-slate-100 border-slate-200 text-white dark:bg-slate-800/70 dark:border-slate-700 dark:text-white";
             }
 
             return (
@@ -145,7 +145,7 @@ export const StudyStreakCard: React.FC = () => {
       </div>
 
       {/* Summary Footer */}
-      <div className="mt-4 flex flex-wrap items-center justify-between border-t border-slate-100 pt-3 text-xs text-slate-500 dark:border-slate-800 dark:text-slate-400">
+      <div className="mt-4 flex flex-wrap items-center justify-between border-t border-slate-100 pt-3 text-xs text-white dark:border-slate-800 dark:text-white">
         <div className="flex items-center gap-4">
           <span className="flex items-center gap-1.5">
             <span className="h-2.5 w-2.5 rounded-full bg-emerald-500" />
@@ -157,7 +157,7 @@ export const StudyStreakCard: React.FC = () => {
           </span>
         </div>
 
-        <span className="text-[11px] font-medium text-slate-400">
+        <span className="text-[11px] font-medium text-white">
           Regra: Registrar ao menos 1 sessão ativa/manual no dia conta para a constância.
         </span>
       </div>

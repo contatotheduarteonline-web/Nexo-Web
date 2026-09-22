@@ -37,11 +37,11 @@ export const DisciplinesTableView: React.FC<DisciplinesTableViewProps> = ({
   if (!activeEdital) {
     return (
       <div className="rounded-xl border border-[#E2E8F0] bg-white p-8 text-center dark:border-[#1E293B] dark:bg-[#252B38]">
-        <BookOpen className="mx-auto h-8 w-8 text-[#737D89]" />
-        <h3 className="mt-3 text-sm font-bold text-[#374151] dark:text-white">
+        <BookOpen className="mx-auto h-8 w-8 text-white" />
+        <h3 className="mt-3 text-sm font-bold text-white dark:text-white">
           Nenhum Edital Ativo
         </h3>
-        <p className="mt-1 text-xs text-[#737D89] dark:text-[#94A3B8]">
+        <p className="mt-1 text-xs text-white dark:text-white">
           Selecione ou crie um edital para gerenciar disciplinas e assuntos.
         </p>
       </div>
@@ -88,7 +88,7 @@ export const DisciplinesTableView: React.FC<DisciplinesTableViewProps> = ({
       {/* Disciplines Data Table */}
       <div className="overflow-hidden rounded-xl border border-[#E2E8F0] bg-white shadow-[0_1px_3px_rgba(0,0,0,0.02)] dark:border-[#1E293B] dark:bg-[#252B38]">
         <div className="border-b border-[#E2E8F0] bg-[#F8FAFC]/60 px-4 py-3 dark:border-[#1E293B] dark:bg-[#0F172A]/40">
-          <h3 className="text-xs font-bold uppercase tracking-wider text-[#374151] dark:text-white">
+          <h3 className="text-xs font-bold uppercase tracking-wider text-white dark:text-white">
             Quadro Comparativo de Desempenho
           </h3>
         </div>
@@ -126,10 +126,10 @@ export const DisciplinesTableView: React.FC<DisciplinesTableViewProps> = ({
                           style={{ backgroundColor: row.discipline.color }}
                         />
                         <div>
-                          <span className="font-semibold text-slate-900 dark:text-white">
+                          <span className="font-semibold text-white dark:text-white">
                             {row.discipline.name}
                           </span>
-                          <span className="block text-[10px] text-slate-400">
+                          <span className="block text-[10px] text-white">
                             {row.topicsCount} tópicos
                           </span>
                         </div>
@@ -137,12 +137,12 @@ export const DisciplinesTableView: React.FC<DisciplinesTableViewProps> = ({
                     </td>
 
                     <td className="px-3 py-3 text-center">
-                      <span className="rounded bg-slate-100 px-1.5 py-0.5 text-[10px] font-bold text-slate-600 dark:bg-[#1E293B] dark:text-slate-300">
+                      <span className="rounded bg-slate-100 px-1.5 py-0.5 text-[10px] font-bold text-white dark:bg-[#1E293B] dark:text-white">
                         {row.discipline.weight}x
                       </span>
                     </td>
 
-                    <td className="px-3 py-3 font-mono font-medium text-slate-900 dark:text-white">
+                    <td className="px-3 py-3 font-mono font-medium text-white dark:text-white">
                       {row.hoursFormatted}
                     </td>
 
@@ -154,7 +154,7 @@ export const DisciplinesTableView: React.FC<DisciplinesTableViewProps> = ({
                       {row.questionsWrong}
                     </td>
 
-                    <td className="px-3 py-3 text-center font-medium text-slate-900 dark:text-[#E5EAEF]">
+                    <td className="px-3 py-3 text-center font-medium text-white dark:text-white">
                       {row.questionsDone}
                     </td>
 
@@ -174,9 +174,9 @@ export const DisciplinesTableView: React.FC<DisciplinesTableViewProps> = ({
 
                     <td className="px-4 py-3">
                       <div className="w-28 space-y-1">
-                        <div className="flex justify-between text-[10px] text-slate-400">
+                        <div className="flex justify-between text-[10px] text-white">
                           <span>{row.studiedTopics}/{row.topicsCount}</span>
-                          <span className="font-semibold text-slate-900 dark:text-white">{row.coveragePct}%</span>
+                          <span className="font-semibold text-white dark:text-white">{row.coveragePct}%</span>
                         </div>
                         <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-[#1E293B]">
                           <div
@@ -225,7 +225,7 @@ export const DisciplinesTableView: React.FC<DisciplinesTableViewProps> = ({
                 className="h-3.5 w-3.5 rounded-full"
                 style={{ backgroundColor: selectedStats.discipline.color }}
               />
-              <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+              <h3 className="text-sm font-bold text-white dark:text-white">
                 {selectedStats.discipline.name} — Tópicos e Assuntos
               </h3>
             </div>
@@ -248,21 +248,21 @@ export const DisciplinesTableView: React.FC<DisciplinesTableViewProps> = ({
                 className="flex items-center justify-between rounded-lg bg-slate-50 p-2 text-xs transition dark:bg-[#0F172A]"
               >
                 <div className="flex items-center gap-2.5 truncate max-w-[280px] sm:max-w-[400px]">
-                  <span className="font-bold text-slate-400">{idx + 1}.</span>
-                  <span className="font-medium text-slate-900 dark:text-white truncate">
+                  <span className="font-bold text-white">{idx + 1}.</span>
+                  <span className="font-medium text-white dark:text-white truncate">
                     {t.name}
                   </span>
                 </div>
 
                 <div className="flex items-center gap-3">
-                  <span className="text-[10px] text-slate-400">
+                  <span className="text-[10px] text-white">
                     {t.questionsCorrect}/{t.questionsDone} q ({t.accuracyRate}%)
                   </span>
                   <span
                     className={`rounded-full px-2 py-0.5 text-[9px] font-bold ${
                       t.isStudied
                         ? "bg-amber-50 text-[#F59E0B] border border-amber-500/30 dark:bg-amber-500/15 dark:text-[#FBBF24]"
-                        : "bg-slate-200 text-slate-500 dark:bg-slate-800 dark:text-slate-400"
+                        : "bg-slate-200 text-white dark:bg-slate-800 dark:text-white"
                     }`}
                   >
                     {t.isStudied ? "✓ Estudado" : "○ Pendente"}

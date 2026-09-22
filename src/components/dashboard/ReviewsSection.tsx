@@ -20,10 +20,10 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({
     >
       <div className="flex items-center justify-between pb-4 border-b border-[#384154]">
         <div className="flex items-center gap-2.5">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#384154] bg-[#171B25] text-[#A5B0C2]">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#384154] bg-[#171B25] text-white">
             <RotateCcw className="h-4 w-4" />
           </div>
-          <h2 className="font-condensed text-[19px] font-bold text-[#F5F4EF]">
+          <h2 className="font-condensed text-[19px] font-bold text-white">
             Revisões
           </h2>
           {todayReviews.length > 0 ? (
@@ -47,7 +47,7 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({
       <div className="mt-4">
         {todayReviews.length === 0 ? (
           <div className="nx-deep border-dashed p-7 text-center">
-            <p className="text-[14px] font-semibold text-[#F5F4EF]">
+            <p className="text-[14px] font-semibold text-white">
               Nenhuma revisão pendente
             </p>
           </div>
@@ -62,10 +62,10 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({
                   className="nx-deep nx-deep-hover flex items-center justify-between p-3.5 text-[13px] hover:border-[#F3AA2D]/40 cursor-pointer group"
                 >
                   <div className="min-w-0 pr-3">
-                    <p className="font-semibold text-[#F5F4EF] truncate group-hover:text-[#F3AA2D] transition-colors duration-200">
+                    <p className="font-semibold text-white truncate group-hover:text-[#F3AA2D] transition-colors duration-200">
                       {rev.topicName}
                     </p>
-                    <p className="text-[12px] text-[#A5B0C2] truncate mt-0.5">
+                    <p className="text-[12px] text-white truncate mt-0.5">
                       {rev.disciplineName} &bull; {rev.stage ? `Etapa ${rev.stage}` : "Revisão"}
                     </p>
                   </div>

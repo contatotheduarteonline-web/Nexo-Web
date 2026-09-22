@@ -33,10 +33,10 @@ export const DisciplinePerformanceSection: React.FC<DisciplinePerformanceSection
     >
       <div className="flex items-center justify-between pb-4 border-b border-[#384154]">
         <div className="flex items-center gap-2.5">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#384154] bg-[#171B25] text-[#A5B0C2]">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#384154] bg-[#171B25] text-white">
             <Layers className="h-4 w-4" />
           </div>
-          <h2 className="font-condensed text-[19px] font-bold text-[#F5F4EF]">
+          <h2 className="font-condensed text-[19px] font-bold text-white">
             Desempenho por disciplina
           </h2>
         </div>
@@ -54,13 +54,13 @@ export const DisciplinePerformanceSection: React.FC<DisciplinePerformanceSection
 
       <div className="mt-3 overflow-x-auto">
         {disciplines.length === 0 ? (
-          <p className="text-[14px] text-[#A5B0C2] py-8 text-center">
+          <p className="text-[14px] text-white py-8 text-center">
             Nenhuma disciplina cadastrada no edital ativo.
           </p>
         ) : (
           <table className="w-full text-left text-[13px]">
             <thead>
-              <tr className="border-b border-[#384154] text-[11px] font-semibold uppercase tracking-[0.08em] text-[#A5B0C2]">
+              <tr className="border-b border-[#384154] text-[11px] font-semibold uppercase tracking-[0.08em] text-white">
                 <th className="pb-3 pr-4 font-semibold">Disciplina</th>
                 <th className="pb-3 px-4 font-semibold text-center">Questões</th>
                 <th className="pb-3 px-4 font-semibold text-center">Precisão</th>
@@ -82,16 +82,16 @@ export const DisciplinePerformanceSection: React.FC<DisciplinePerformanceSection
                         className="h-2.5 w-2.5 rounded-full shrink-0"
                         style={{ backgroundColor: d.color || "#F3AA2D" }}
                       />
-                      <span className="font-semibold text-[#F5F4EF]">
+                      <span className="font-semibold text-white">
                         {d.name}
                       </span>
                     </div>
                   </td>
 
-                  <td className="py-3.5 px-4 text-center text-[12px] text-[#A5B0C2]">
+                  <td className="py-3.5 px-4 text-center text-[12px] text-white">
                     {d.qDone > 0 ? (
                       <span className="nx-deep inline-flex items-center rounded-md px-2 py-0.5">
-                        <strong className="num-condensed text-[13px] font-bold text-[#F5F4EF] mr-1">{d.qDone}</strong>
+                        <strong className="num-condensed text-[13px] font-bold text-white mr-1">{d.qDone}</strong>
                       </span>
                     ) : (
                       "—"
@@ -112,21 +112,21 @@ export const DisciplinePerformanceSection: React.FC<DisciplinePerformanceSection
                         {d.accuracy}%
                       </span>
                     ) : (
-                      <span className="text-[#A5B0C2]">—</span>
+                      <span className="text-white">—</span>
                     )}
                   </td>
 
-                  <td className="num-condensed py-3.5 px-4 text-center text-[13px] text-[#F5F4EF] font-bold">
+                  <td className="num-condensed py-3.5 px-4 text-center text-[13px] text-white font-bold">
                     {d.timeFormatted}
                   </td>
 
                   <td className="py-3.5 px-4 min-w-[150px]">
                     <div className="space-y-1">
-                      <div className="flex justify-between text-[11px] text-[#A5B0C2] font-medium">
+                      <div className="flex justify-between text-[11px] text-white font-medium">
                         <span>
                           {d.studiedTopicsCount}/{d.topicsCount} tópicos
                         </span>
-                        <span className="num-condensed text-[#F5F4EF] font-bold">{d.topicsProgressPercent}%</span>
+                        <span className="num-condensed text-white font-bold">{d.topicsProgressPercent}%</span>
                       </div>
                       <div className="h-1.5 w-full overflow-hidden rounded-full border border-[#384154] bg-[#171B25]">
                         <div
@@ -144,7 +144,7 @@ export const DisciplinePerformanceSection: React.FC<DisciplinePerformanceSection
                       type="button"
                       id={`btn-estudar-disciplina-${d.id}`}
                       onClick={() => onStartStudy(d.id, 45)}
-                      className="nx-deep nx-deep-hover inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[12px] font-semibold text-[#F5F4EF] hover:border-[#F3AA2D]/50 hover:text-[#F3AA2D] cursor-pointer"
+                      className="nx-deep nx-deep-hover inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[12px] font-semibold text-white hover:border-[#F3AA2D]/50 hover:text-[#F3AA2D] cursor-pointer"
                     >
                       <Play className="h-3 w-3 fill-current" />
                       <span>Estudar</span>

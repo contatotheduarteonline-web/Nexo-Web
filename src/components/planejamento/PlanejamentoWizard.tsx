@@ -382,7 +382,7 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
   // Helper colors for Mastery (1 to 5)
   const getKnowledgeButtonColor = (val: number, active: boolean) => {
     if (!active) {
-      return "bg-slate-100 text-slate-500 hover:bg-slate-200 dark:bg-[#1E293B] dark:text-slate-400 dark:hover:bg-slate-800";
+      return "bg-slate-100 text-white hover:bg-slate-200 dark:bg-[#1E293B] dark:text-white dark:hover:bg-slate-800";
     }
     switch (val) {
       case 1:
@@ -390,7 +390,7 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
       case 2:
         return "bg-amber-500 text-white font-semibold shadow-xs";
       case 3:
-        return "bg-amber-400 text-slate-900 font-semibold shadow-xs";
+        return "bg-amber-400 text-white font-semibold shadow-xs";
       case 4:
         return "bg-emerald-500 text-white font-semibold shadow-xs";
       case 5:
@@ -408,7 +408,7 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
       <div className="rounded-2xl border border-slate-200/80 bg-white/90 p-4.5 shadow-2xs backdrop-blur-xs dark:border-[#1E293B] dark:bg-[#252B38]">
         <div className="flex items-center justify-between gap-3">
           <div>
-            <h2 className="text-base font-bold tracking-tight text-slate-900 dark:text-white flex items-center gap-2">
+            <h2 className="text-base font-bold tracking-tight text-white dark:text-white flex items-center gap-2">
               <Sparkles className="h-4 w-4 text-[#F59E0B]" />
               Assistente de Planejamento
             </h2>
@@ -437,8 +437,8 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
                     isActive
                       ? "text-[#F59E0B] font-semibold dark:text-[#FBBF24]"
                       : isDone
-                      ? "text-slate-700 dark:text-slate-300 hover:text-[#F59E0B]"
-                      : "text-slate-400 opacity-50 cursor-not-allowed"
+                      ? "text-white dark:text-white hover:text-[#F59E0B]"
+                      : "text-white opacity-50 cursor-not-allowed"
                   }`}
                 >
                   <div
@@ -447,7 +447,7 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
                         ? "bg-[#F59E0B] text-white shadow-xs"
                         : isDone
                         ? "bg-emerald-500 text-white"
-                        : "bg-slate-100 text-slate-500 dark:bg-[#1E293B] dark:text-slate-400"
+                        : "bg-slate-100 text-white dark:bg-[#1E293B] dark:text-white"
                     }`}
                   >
                     {isDone ? <Check className="h-3 w-3 stroke-[2.5]" /> : s.num}
@@ -475,7 +475,7 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
       {currentStep === 1 && (
         <div className="rounded-2xl border border-slate-200/80 bg-white/90 p-5 shadow-2xs dark:border-[#1E293B] dark:bg-[#252B38]">
           <div className="mb-4">
-            <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+            <h3 className="text-sm font-bold text-white dark:text-white">
               Escolha o formato dos estudos
             </h3>
           </div>
@@ -501,18 +501,18 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
                 </div>
 
                 <div className="mt-3">
-                  <h4 className="text-sm font-bold text-slate-900 dark:text-white flex items-center justify-between">
+                  <h4 className="text-sm font-bold text-white dark:text-white flex items-center justify-between">
                     <span>Ciclo de Estudos</span>
                     {planningMode === "CYCLE" && (
                       <CheckCircle2 className="h-4 w-4 text-[#F59E0B]" />
                     )}
                   </h4>
-                  <p className="mt-1 text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                  <p className="mt-1 text-xs text-white dark:text-white leading-relaxed">
                     Fila contínua e sequencial. Sem acúmulo de matéria caso surjam imprevistos.
                   </p>
                 </div>
 
-                <div className="mt-3 pt-3 border-t border-slate-100 dark:border-[#1E293B] space-y-1 text-xs text-slate-600 dark:text-slate-400">
+                <div className="mt-3 pt-3 border-t border-slate-100 dark:border-[#1E293B] space-y-1 text-xs text-white dark:text-white">
                   <div className="flex items-center gap-2">
                     <Check className="h-3.5 w-3.5 text-emerald-500 shrink-0" />
                     <span>Sessões de até 90 min</span>
@@ -539,24 +539,24 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
                   <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-500/10 text-blue-600 dark:bg-blue-500/20 dark:text-blue-400">
                     <CalendarDays className="h-4.5 w-4.5" />
                   </div>
-                  <span className="rounded-md bg-slate-100 px-2 py-0.5 text-[10px] font-semibold text-slate-600 dark:bg-[#1E293B] dark:text-slate-300">
+                  <span className="rounded-md bg-slate-100 px-2 py-0.5 text-[10px] font-semibold text-white dark:bg-[#1E293B] dark:text-white">
                     Grade Fixa
                   </span>
                 </div>
 
                 <div className="mt-3">
-                  <h4 className="text-sm font-bold text-slate-900 dark:text-white flex items-center justify-between">
+                  <h4 className="text-sm font-bold text-white dark:text-white flex items-center justify-between">
                     <span>Grade Semanal</span>
                     {planningMode === "WEEKLY" && (
                       <CheckCircle2 className="h-4 w-4 text-[#F59E0B]" />
                     )}
                   </h4>
-                  <p className="mt-1 text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                  <p className="mt-1 text-xs text-white dark:text-white leading-relaxed">
                     Disciplinas fixadas por dias da semana, de Segunda a Domingo.
                   </p>
                 </div>
 
-                <div className="mt-3 pt-3 border-t border-slate-100 dark:border-[#1E293B] space-y-1 text-xs text-slate-600 dark:text-slate-400">
+                <div className="mt-3 pt-3 border-t border-slate-100 dark:border-[#1E293B] space-y-1 text-xs text-white dark:text-white">
                   <div className="flex items-center gap-2">
                     <Check className="h-3.5 w-3.5 text-emerald-500 shrink-0" />
                     <span>Visão de calendário semanal</span>
@@ -591,7 +591,7 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
         <div className="rounded-2xl border border-slate-200/80 bg-white/90 p-5 shadow-2xs dark:border-[#1E293B] dark:bg-[#252B38]">
           <div className="flex items-center justify-between gap-2 mb-4">
             <div>
-              <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+              <h3 className="text-sm font-bold text-white dark:text-white">
                 Disponibilidade por dia
               </h3>
             </div>
@@ -648,7 +648,7 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
                   key={day.key}
                   className="flex flex-col items-center justify-between rounded-xl border border-slate-200/80 bg-slate-50/50 p-2.5 transition hover:bg-slate-100/60 dark:border-[#1E293B] dark:bg-[#090D16]"
                 >
-                  <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">
+                  <span className="text-[11px] font-semibold text-white dark:text-white">
                     {day.short}
                   </span>
                   <div className="my-1.5">
@@ -673,7 +673,7 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
             <button
               type="button"
               onClick={() => setCurrentStep(1)}
-              className="flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 transition cursor-pointer"
+              className="flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-semibold text-white hover:bg-slate-100 dark:text-white dark:hover:bg-slate-800 transition cursor-pointer"
             >
               <ArrowLeft className="h-3.5 w-3.5" />
               <span>Voltar</span>
@@ -698,11 +698,11 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
         <div className="rounded-2xl border border-slate-200/80 bg-white/90 p-5 shadow-2xs dark:border-[#1E293B] dark:bg-[#252B38]">
           <div className="flex items-center justify-between gap-2 mb-3.5">
             <div>
-              <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+              <h3 className="text-sm font-bold text-white dark:text-white">
                 Nível de domínio por disciplina
               </h3>
             </div>
-            <span className="text-[11px] font-medium text-slate-400">
+            <span className="text-[11px] font-medium text-white">
               1 = Básico • 5 = Avançado
             </span>
           </div>
@@ -742,7 +742,7 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
                       style={{ backgroundColor: disc.color || "#F59E0B" }}
                     />
                     <div className="min-w-0">
-                      <p className="text-xs font-semibold text-slate-900 dark:text-white truncate">
+                      <p className="text-xs font-semibold text-white dark:text-white truncate">
                         {disc.name}
                       </p>
                     </div>
@@ -783,7 +783,7 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
                         {calc.hours}h ({calc.weightPercentage}%)
                       </span>
                     ) : (
-                      <span className="text-xs text-slate-400">-</span>
+                      <span className="text-xs text-white">-</span>
                     )}
                   </div>
                 </div>
@@ -796,7 +796,7 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
             <button
               type="button"
               onClick={() => setCurrentStep(2)}
-              className="flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 transition cursor-pointer"
+              className="flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-semibold text-white hover:bg-slate-100 dark:text-white dark:hover:bg-slate-800 transition cursor-pointer"
             >
               <ArrowLeft className="h-3.5 w-3.5" />
               <span>Voltar</span>
@@ -821,12 +821,12 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
         <div className="rounded-2xl border border-slate-200/80 bg-white/90 p-5 shadow-2xs dark:border-[#1E293B] dark:bg-[#252B38]">
           <div className="flex items-center justify-between gap-2 mb-4">
             <div>
-              <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+              <h3 className="text-sm font-bold text-white dark:text-white">
                 Resumo do Planejamento
               </h3>
             </div>
 
-            <span className="rounded-lg bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-800 dark:bg-[#090D16] dark:text-slate-200 border border-slate-200 dark:border-slate-800">
+            <span className="rounded-lg bg-slate-100 px-2.5 py-1 text-xs font-semibold text-white dark:bg-[#090D16] dark:text-white border border-slate-200 dark:border-slate-800">
               {planningMode === "CYCLE" ? "Ciclo" : "Grade"} • {totalWeeklyHours}h
             </span>
           </div>
@@ -844,20 +844,20 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
                       className="h-2 w-2 rounded-full shrink-0"
                       style={{ backgroundColor: item.discipline.color || "#F59E0B" }}
                     />
-                    <span className="truncate text-xs font-semibold text-slate-900 dark:text-white">
+                    <span className="truncate text-xs font-semibold text-white dark:text-white">
                       {item.discipline.name}
                     </span>
                   </div>
-                  <span className="font-mono text-[11px] font-semibold text-slate-700 dark:text-slate-300">
+                  <span className="font-mono text-[11px] font-semibold text-white dark:text-white">
                     {item.weightPercentage}%
                   </span>
                 </div>
 
                 <div className="mt-2.5 flex items-baseline justify-between">
-                  <span className="font-mono text-sm font-bold text-slate-900 dark:text-white">
+                  <span className="font-mono text-sm font-bold text-white dark:text-white">
                     {item.hours}h
                   </span>
-                  <span className="text-[10px] text-slate-500 dark:text-slate-400">
+                  <span className="text-[10px] text-white dark:text-white">
                     {item.blockCount} {item.blockCount === 1 ? "sessão" : "sessões"} (~{item.minutesPerBlock}m)
                   </span>
                 </div>
@@ -880,7 +880,7 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
             <button
               type="button"
               onClick={() => setCurrentStep(3)}
-              className="flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 transition cursor-pointer"
+              className="flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-semibold text-white hover:bg-slate-100 dark:text-white dark:hover:bg-slate-800 transition cursor-pointer"
             >
               <ArrowLeft className="h-3.5 w-3.5" />
               <span>Ajustar</span>

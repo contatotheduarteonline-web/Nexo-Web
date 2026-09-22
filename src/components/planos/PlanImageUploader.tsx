@@ -97,7 +97,7 @@ export const PlanImageUploader: React.FC<PlanImageUploaderProps> = ({
         <div className="flex-1 space-y-2">
           <div>
             <div className="flex items-center gap-2">
-              <h3 className="text-xs font-bold text-[#374151] dark:text-white">
+              <h3 className="text-xs font-bold text-white dark:text-white">
                 Imagem do plano
               </h3>
               
@@ -117,7 +117,7 @@ export const PlanImageUploader: React.FC<PlanImageUploaderProps> = ({
                 </span>
               )}
             </div>
-            <p className="mt-0.5 text-xs text-[#737D89] dark:text-[#94A3B8]">
+            <p className="mt-0.5 text-xs text-white dark:text-white">
               Escolha uma imagem para identificar este objetivo (JPG, PNG ou WebP até 5MB).
             </p>
           </div>

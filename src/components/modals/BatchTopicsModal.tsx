@@ -41,12 +41,12 @@ export const BatchTopicsModal: React.FC<BatchTopicsModalProps> = ({
               <Layers className="h-5 w-5" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-zinc-900 dark:text-white">
+              <h3 className="text-base font-bold text-white dark:text-white">
                 Adicionar Tópicos em Lote
               </h3>
-              <p className="text-xs text-zinc-500 dark:text-zinc-400">
+              <p className="text-xs text-white dark:text-white">
                 Disciplina:{" "}
-                <span className="font-bold text-zinc-800 dark:text-zinc-200">
+                <span className="font-bold text-white dark:text-white">
                   {disciplineName}
                 </span>
               </p>
@@ -54,7 +54,7 @@ export const BatchTopicsModal: React.FC<BatchTopicsModalProps> = ({
           </div>
           <button
             onClick={onClose}
-            className="rounded-lg p-2 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-zinc-800 dark:hover:text-zinc-200 transition cursor-pointer"
+            className="rounded-lg p-2 text-white hover:bg-zinc-100 hover:text-white dark:hover:bg-zinc-800 dark:hover:text-white transition cursor-pointer"
           >
             <X className="h-5 w-5" />
           </button>
@@ -63,7 +63,7 @@ export const BatchTopicsModal: React.FC<BatchTopicsModalProps> = ({
         {/* Body */}
         <div className="py-4 space-y-2.5">
           <div className="flex items-center justify-between">
-            <label className="text-xs font-bold text-zinc-700 dark:text-zinc-300">
+            <label className="text-xs font-bold text-white dark:text-white">
               Cole ou digite os tópicos (um por linha):
             </label>
             <div className="flex items-center gap-2">
@@ -71,7 +71,7 @@ export const BatchTopicsModal: React.FC<BatchTopicsModalProps> = ({
                 className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold transition-all ${
                   validTopics.length > 0
                     ? "bg-[#249D84]/15 text-[#249D84] dark:bg-[#249D84]/25"
-                    : "bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400"
+                    : "bg-zinc-100 text-white dark:bg-zinc-800 dark:text-white"
                 }`}
               >
                 {validTopics.length > 0 && <CheckCircle2 className="h-3 w-3" />}
@@ -82,7 +82,7 @@ export const BatchTopicsModal: React.FC<BatchTopicsModalProps> = ({
                 <button
                   type="button"
                   onClick={() => setText("")}
-                  className="text-xs text-zinc-400 hover:text-red-500 flex items-center gap-1 transition cursor-pointer"
+                  className="text-xs text-white hover:text-red-500 flex items-center gap-1 transition cursor-pointer"
                   title="Limpar texto"
                 >
                   <Trash2 className="h-3 w-3" />
@@ -108,7 +108,7 @@ export const BatchTopicsModal: React.FC<BatchTopicsModalProps> = ({
             className="w-full min-h-[280px] sm:min-h-[340px] rounded-xl border border-zinc-200 bg-zinc-50 p-4 text-xs sm:text-sm font-mono leading-relaxed text-zinc-900 focus:border-[#249D84] focus:bg-white focus:outline-hidden dark:border-zinc-850 dark:bg-zinc-950 dark:text-zinc-100 dark:focus:bg-zinc-900 resize-y shadow-inner"
           />
 
-          <div className="flex items-center justify-between text-[11px] text-zinc-400">
+          <div className="flex items-center justify-between text-[11px] text-white">
             <span>
               Cada linha não vazia será convertida em um tópico individual na ordem fornecida.
             </span>
@@ -123,7 +123,7 @@ export const BatchTopicsModal: React.FC<BatchTopicsModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="rounded-xl px-4 py-2.5 text-xs font-semibold text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800 transition cursor-pointer"
+            className="rounded-xl px-4 py-2.5 text-xs font-semibold text-white hover:bg-zinc-100 dark:text-white dark:hover:bg-zinc-800 transition cursor-pointer"
           >
             Cancelar
           </button>

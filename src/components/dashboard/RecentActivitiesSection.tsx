@@ -19,10 +19,10 @@ export const RecentActivitiesSection: React.FC<RecentActivitiesSectionProps> = (
       <div>
         <div className="flex items-center justify-between pb-3.5 border-b border-[#384154]">
           <div className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#384154] bg-[#171B25] text-[#A5B0C2]">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#384154] bg-[#171B25] text-white">
               <History className="h-4 w-4" />
             </div>
-            <h3 className="font-condensed text-[19px] font-bold text-[#F5F4EF]">
+            <h3 className="font-condensed text-[19px] font-bold text-white">
               Últimas atividades
             </h3>
           </div>
@@ -41,7 +41,7 @@ export const RecentActivitiesSection: React.FC<RecentActivitiesSectionProps> = (
         <div className="mt-3.5">
           {activities.length === 0 ? (
             <div className="py-7 text-center">
-              <p className="text-[13px] text-[#A5B0C2]">
+              <p className="text-[13px] text-white">
                 Nenhuma atividade registrada ainda.
               </p>
             </div>
@@ -54,19 +54,19 @@ export const RecentActivitiesSection: React.FC<RecentActivitiesSectionProps> = (
                   className="nx-deep nx-deep-hover p-3 text-[12px]"
                 >
                   <div className="flex items-center justify-between">
-                    <span className="font-semibold text-[#F5F4EF] truncate max-w-[220px]">
+                    <span className="font-semibold text-white truncate max-w-[220px]">
                       {sess.topicName || sess.disciplineName}
                     </span>
                     <span className="num-condensed text-[11px] font-bold text-[#F3AA2D] border border-[#F3AA2D]/25 bg-[#F3AA2D]/10 px-2 py-0.5 rounded-md">
                       {sess.durationMinutes} min
                     </span>
                   </div>
-                  <div className="mt-1 flex items-center justify-between text-[11px] text-[#A5B0C2]">
-                    <span className="font-medium text-[#F5F4EF]/80">
+                  <div className="mt-1 flex items-center justify-between text-[11px] text-white">
+                    <span className="font-medium text-white/80">
                       {sess.disciplineName}
                     </span>
                     {sess.questionsDone ? (
-                      <span className="font-medium text-[#F5F4EF]">
+                      <span className="font-medium text-white">
                         {sess.questionsCorrect}/{sess.questionsDone} acertos
                       </span>
                     ) : (

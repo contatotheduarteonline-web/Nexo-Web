@@ -181,10 +181,10 @@ export const DisciplinasView: React.FC<DisciplinasViewProps> = ({
       {/* Header */}
       <div className="flex flex-col justify-between gap-4 border-b border-zinc-200 pb-4 sm:flex-row sm:items-center dark:border-zinc-800">
         <div>
-          <h1 className="text-xl font-bold text-zinc-900 dark:text-white">
+          <h1 className="text-xl font-bold text-white dark:text-white">
             Disciplinas
           </h1>
-          <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
+          <p className="text-xs text-white dark:text-white mt-0.5">
             Acompanhe todas as matérias dos seus planos em um único lugar.
           </p>
         </div>
@@ -197,7 +197,7 @@ export const DisciplinasView: React.FC<DisciplinasViewProps> = ({
               className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-bold transition ${
                 viewMode === "cards"
                   ? "bg-white text-zinc-900 shadow-xs dark:bg-zinc-900 dark:text-white"
-                  : "text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"
+                  : "text-white hover:text-white dark:text-white dark:hover:text-white"
               }`}
               title="Visualização em Cards"
             >
@@ -209,7 +209,7 @@ export const DisciplinasView: React.FC<DisciplinasViewProps> = ({
               className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-bold transition ${
                 viewMode === "table"
                   ? "bg-white text-zinc-900 shadow-xs dark:bg-zinc-900 dark:text-white"
-                  : "text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"
+                  : "text-white hover:text-white dark:text-white dark:hover:text-white"
               }`}
               title="Visualização em Tabela"
             >
@@ -232,7 +232,7 @@ export const DisciplinasView: React.FC<DisciplinasViewProps> = ({
       <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
         {/* Search */}
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-zinc-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-white" />
           <input
             type="text"
             value={searchQuery}
@@ -290,10 +290,10 @@ export const DisciplinasView: React.FC<DisciplinasViewProps> = ({
           <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-500/10 text-[#F59E0B]">
             <BookOpen className="h-6 w-6" />
           </div>
-          <h3 className="mt-3 text-sm font-bold text-zinc-900 dark:text-white">
+          <h3 className="mt-3 text-sm font-bold text-white dark:text-white">
             Nenhuma disciplina encontrada
           </h3>
-          <p className="mt-1 max-w-sm text-xs text-zinc-500 dark:text-zinc-400">
+          <p className="mt-1 max-w-sm text-xs text-white dark:text-white">
             {allDisciplinesWithPlans.length === 0
               ? "As disciplinas aparecerão aqui quando forem adicionadas aos seus planos de estudo."
               : "Nenhuma matéria corresponde aos filtros selecionados."}

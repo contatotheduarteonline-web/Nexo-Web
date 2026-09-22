@@ -153,7 +153,7 @@ export const OfensivaCard: React.FC<OfensivaCardProps> = ({ className = "" }) =>
             <Flame className="h-5 w-5 fill-[#F3AA2D] text-[#F3AA2D]" />
           </div>
           <div className="flex items-baseline gap-2.5">
-            <h2 className="font-condensed text-[19px] font-bold text-[#F5F4EF]">
+            <h2 className="font-condensed text-[19px] font-bold text-white">
               Ofensiva
             </h2>
             <span className="num-condensed text-[26px] font-bold leading-none text-[#F3AA2D]">
@@ -165,8 +165,8 @@ export const OfensivaCard: React.FC<OfensivaCardProps> = ({ className = "" }) =>
         {/* Lado Direito: Recorde e Status resumido sem poluição de texto */}
         <div className="flex items-center gap-2.5 text-[12px]">
           <div className="nx-deep flex items-center gap-1.5 px-3 py-1.5">
-            <span className="text-[#A5B0C2]">Recorde:</span>
-            <span className="num-condensed font-bold text-[#F5F4EF]">
+            <span className="text-white">Recorde:</span>
+            <span className="num-condensed font-bold text-white">
               {recordStreak} {recordStreak === 1 ? "dia" : "dias"}
             </span>
           </div>
@@ -200,7 +200,7 @@ export const OfensivaCard: React.FC<OfensivaCardProps> = ({ className = "" }) =>
                       ? "text-[#F3AA2D]"
                       : day.isStudied
                       ? "text-[#F3AA2D]"
-                      : "text-[#A5B0C2]"
+                      : "text-white"
                   }`}
                 >
                   {day.label}
@@ -212,10 +212,10 @@ export const OfensivaCard: React.FC<OfensivaCardProps> = ({ className = "" }) =>
                     day.isStudied
                       ? "text-[#F3AA2D]"
                       : day.isToday
-                      ? "text-[#F5F4EF]"
+                      ? "text-white"
                       : day.isFuture
-                      ? "text-[#76829B]"
-                      : "text-[#A5B0C2]"
+                      ? "text-white"
+                      : "text-white"
                   }`}
                 >
                   {day.dayNumber}

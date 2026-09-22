@@ -133,7 +133,7 @@ export const MetasView: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col justify-between gap-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-xs sm:flex-row sm:items-center dark:border-slate-800 dark:bg-[#252B38]">
         <div>
-          <h2 className="text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tight">
+          <h2 className="text-2xl font-black text-white dark:text-white uppercase tracking-tight">
             Metas de Estudo
           </h2>
         </div>
@@ -153,7 +153,7 @@ export const MetasView: React.FC = () => {
         {/* Meta Diária */}
         <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs dark:border-slate-800 dark:bg-[#252B38]">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-white dark:text-white">
               Meta Diária (Hoje)
             </span>
             <div className="rounded-xl bg-emerald-50 p-2 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400">
@@ -161,10 +161,10 @@ export const MetasView: React.FC = () => {
             </div>
           </div>
           <div className="mt-3 flex items-baseline gap-2">
-            <span className="text-2xl font-black text-slate-900 dark:text-white">
+            <span className="text-2xl font-black text-white dark:text-white">
               {dailyHoursDone}h
             </span>
-            <span className="text-xs font-medium text-slate-500 dark:text-slate-400">
+            <span className="text-xs font-medium text-white dark:text-white">
               / {dailyGoalHours}h planejadas
             </span>
           </div>
@@ -174,7 +174,7 @@ export const MetasView: React.FC = () => {
               style={{ width: `${dailyHoursPercent}%` }}
             />
           </div>
-          <p className="mt-2 text-[11px] font-semibold text-slate-500 dark:text-slate-400">
+          <p className="mt-2 text-[11px] font-semibold text-white dark:text-white">
             {dailyHoursPercent >= 100 ? "🎉 Meta atingida hoje!" : `${dailyHoursPercent}% concluído hoje`}
           </p>
         </div>
@@ -182,7 +182,7 @@ export const MetasView: React.FC = () => {
         {/* Meta Semanal de Horas */}
         <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs dark:border-slate-800 dark:bg-[#252B38]">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-white dark:text-white">
               Meta Semanal (Horas)
             </span>
             <div className="rounded-xl bg-blue-50 p-2 text-blue-600 dark:bg-blue-950/40 dark:text-blue-400">
@@ -190,10 +190,10 @@ export const MetasView: React.FC = () => {
             </div>
           </div>
           <div className="mt-3 flex items-baseline gap-2">
-            <span className="text-2xl font-black text-slate-900 dark:text-white">
+            <span className="text-2xl font-black text-white dark:text-white">
               {weeklyHoursDone}h
             </span>
-            <span className="text-xs font-medium text-slate-500 dark:text-slate-400">
+            <span className="text-xs font-medium text-white dark:text-white">
               / {weeklyGoalHours}h semanais
             </span>
           </div>
@@ -203,7 +203,7 @@ export const MetasView: React.FC = () => {
               style={{ width: `${weeklyHoursPercent}%` }}
             />
           </div>
-          <p className="mt-2 text-[11px] font-semibold text-slate-500 dark:text-slate-400">
+          <p className="mt-2 text-[11px] font-semibold text-white dark:text-white">
             {weeklyHoursPercent >= 100 ? "🔥 Meta semanal batida!" : `${weeklyHoursPercent}% da meta semanal`}
           </p>
         </div>
@@ -211,7 +211,7 @@ export const MetasView: React.FC = () => {
         {/* Meta de Questões */}
         <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs dark:border-slate-800 dark:bg-[#252B38]">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-white dark:text-white">
               Questões na Semana
             </span>
             <div className="rounded-xl bg-purple-50 p-2 text-purple-600 dark:bg-purple-950/40 dark:text-purple-400">
@@ -219,10 +219,10 @@ export const MetasView: React.FC = () => {
             </div>
           </div>
           <div className="mt-3 flex items-baseline gap-2">
-            <span className="text-2xl font-black text-slate-900 dark:text-white">
+            <span className="text-2xl font-black text-white dark:text-white">
               {weeklyQuestionsDone}
             </span>
-            <span className="text-xs font-medium text-slate-500 dark:text-slate-400">
+            <span className="text-xs font-medium text-white dark:text-white">
               / {weeklyGoalQuestions} questões
             </span>
           </div>
@@ -232,7 +232,7 @@ export const MetasView: React.FC = () => {
               style={{ width: `${questionsProgressPercent}%` }}
             />
           </div>
-          <p className="mt-2 text-[11px] font-semibold text-slate-500 dark:text-slate-400">
+          <p className="mt-2 text-[11px] font-semibold text-white dark:text-white">
             {questionsProgressPercent >= 100 ? "🎯 Meta de questões batida!" : `${questionsProgressPercent}% concluído`}
           </p>
         </div>
@@ -240,7 +240,7 @@ export const MetasView: React.FC = () => {
         {/* Sequência / Taxa de Acertos */}
         <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs dark:border-slate-800 dark:bg-[#252B38]">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-white dark:text-white">
               Taxa Geral de Acertos
             </span>
             <div className="rounded-xl bg-amber-50 p-2 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400">
@@ -248,10 +248,10 @@ export const MetasView: React.FC = () => {
             </div>
           </div>
           <div className="mt-3 flex items-baseline gap-2">
-            <span className="text-2xl font-black text-slate-900 dark:text-white">
+            <span className="text-2xl font-black text-white dark:text-white">
               {metrics.overallAccuracyRate}%
             </span>
-            <span className="text-xs font-medium text-slate-500 dark:text-slate-400">
+            <span className="text-xs font-medium text-white dark:text-white">
               (Alvo: {targetAccuracy}%)
             </span>
           </div>
@@ -263,7 +263,7 @@ export const MetasView: React.FC = () => {
               style={{ width: `${Math.min(100, metrics.overallAccuracyRate)}%` }}
             />
           </div>
-          <p className="mt-2 text-[11px] font-semibold text-slate-500 dark:text-slate-400">
+          <p className="mt-2 text-[11px] font-semibold text-white dark:text-white">
             {metrics.totalQuestionsCorrect} de {metrics.totalQuestionsDone} acertos no total
           </p>
         </div>
@@ -274,7 +274,7 @@ export const MetasView: React.FC = () => {
         <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs dark:border-slate-800 dark:bg-[#252B38]">
           <div className="flex items-center gap-2 border-b border-slate-100 pb-4 dark:border-slate-800">
             <Sliders className="h-5 w-5 text-[#F59E0B]" />
-            <h3 className="text-base font-bold text-slate-900 dark:text-white">
+            <h3 className="text-base font-bold text-white dark:text-white">
               Configurar Objetivos & Cargas Horárias
             </h3>
           </div>
@@ -282,7 +282,7 @@ export const MetasView: React.FC = () => {
           <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-3">
             {/* Meta Diária (Horas) */}
             <div>
-              <label className="text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300">
+              <label className="text-xs font-bold uppercase tracking-wider text-white dark:text-white">
                 Meta Diária (Horas Líquidas)
               </label>
               <div className="mt-2 flex items-center gap-2">
@@ -293,18 +293,18 @@ export const MetasView: React.FC = () => {
                   step="0.5"
                   value={dailyGoalHours}
                   onChange={(e) => setDailyGoalHours(parseFloat(e.target.value) || 0)}
-                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-sm font-bold text-slate-900 focus:border-[#F59E0B] focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-sm font-bold text-white focus:border-[#F59E0B] focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                 />
-                <span className="text-xs font-bold text-slate-500 dark:text-slate-400">horas/dia</span>
+                <span className="text-xs font-bold text-white dark:text-white">horas/dia</span>
               </div>
-              <p className="mt-1 text-[11px] text-slate-400">
+              <p className="mt-1 text-[11px] text-white">
                 Tempo recomendado para manter a constância diária.
               </p>
             </div>
 
             {/* Meta Semanal de Questões */}
             <div>
-              <label className="text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300">
+              <label className="text-xs font-bold uppercase tracking-wider text-white dark:text-white">
                 Meta Semanal de Questões
               </label>
               <div className="mt-2 flex items-center gap-2">
@@ -315,18 +315,18 @@ export const MetasView: React.FC = () => {
                   step="10"
                   value={weeklyGoalQuestions}
                   onChange={(e) => setWeeklyGoalQuestions(parseInt(e.target.value, 10) || 0)}
-                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-sm font-bold text-slate-900 focus:border-[#F59E0B] focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-sm font-bold text-white focus:border-[#F59E0B] focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                 />
-                <span className="text-xs font-bold text-slate-500 dark:text-slate-400">questões</span>
+                <span className="text-xs font-bold text-white dark:text-white">questões</span>
               </div>
-              <p className="mt-1 text-[11px] text-slate-400">
+              <p className="mt-1 text-[11px] text-white">
                 Resolução prática semanal para fixação dos tópicos do edital.
               </p>
             </div>
 
             {/* Meta Alvo de Precisão (%) */}
             <div>
-              <label className="text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300">
+              <label className="text-xs font-bold uppercase tracking-wider text-white dark:text-white">
                 Meta Alvo de Acertos (%)
               </label>
               <div className="mt-2 flex items-center gap-2">
@@ -337,11 +337,11 @@ export const MetasView: React.FC = () => {
                   step="1"
                   value={targetAccuracy}
                   onChange={(e) => setTargetAccuracy(parseInt(e.target.value, 10) || 80)}
-                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-sm font-bold text-slate-900 focus:border-[#F59E0B] focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-sm font-bold text-white focus:border-[#F59E0B] focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                 />
-                <span className="text-xs font-bold text-slate-500 dark:text-slate-400">% de acertos</span>
+                <span className="text-xs font-bold text-white dark:text-white">% de acertos</span>
               </div>
-              <p className="mt-1 text-[11px] text-slate-400">
+              <p className="mt-1 text-[11px] text-white">
                 Índice de aproveitamento desejado para aprovação no concurso.
               </p>
             </div>
@@ -351,15 +351,15 @@ export const MetasView: React.FC = () => {
           <div className="mt-8 border-t border-slate-100 pt-6 dark:border-slate-800">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div>
-                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-200">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-white dark:text-white">
                   Disponibilidade & Meta Diária por Dia da Semana
                 </h4>
-                <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                <p className="text-[11px] text-white dark:text-white">
                   Ajuste as horas disponíveis em cada dia para calibrar automaticamente a meta semanal.
                 </p>
               </div>
               <div className="text-right">
-                <span className="text-xs text-slate-500">Total da semana: </span>
+                <span className="text-xs text-white">Total da semana: </span>
                 <span className="text-sm font-black text-[#F59E0B] dark:text-[#FBBF24]">{weeklyGoalHours}h</span>
               </div>
             </div>
@@ -380,7 +380,7 @@ export const MetasView: React.FC = () => {
                     key={d.key}
                     className="flex flex-col items-center rounded-xl border border-slate-200 bg-slate-50/50 p-3 dark:border-slate-700/60 dark:bg-slate-800/40"
                   >
-                    <span className="text-[11px] font-bold text-slate-600 dark:text-slate-300">
+                    <span className="text-[11px] font-bold text-white dark:text-white">
                       {d.label}
                     </span>
                     <input
@@ -394,7 +394,7 @@ export const MetasView: React.FC = () => {
                       }
                       className="mt-2 w-16 text-center rounded-lg border border-slate-200 bg-white py-1.5 text-xs font-black text-slate-900 focus:border-[#F59E0B] focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                     />
-                    <span className="mt-1 text-[10px] text-slate-400">horas</span>
+                    <span className="mt-1 text-[10px] text-white">horas</span>
                   </div>
                 );
               })}
@@ -422,10 +422,10 @@ export const MetasView: React.FC = () => {
               <Sparkles className="h-5 w-5" />
             </div>
             <div>
-              <h4 className="text-sm font-bold text-slate-900 dark:text-white">
+              <h4 className="text-sm font-bold text-white dark:text-white">
                 Deseja sincronizar suas metas com o Planejamento de Estudos?
               </h4>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
+              <p className="text-xs text-white dark:text-white">
                 Seu ciclo e cronograma semanal serão ajustados automaticamente com as novas cargas horárias configuradas.
               </p>
             </div>
@@ -434,7 +434,7 @@ export const MetasView: React.FC = () => {
           <button
             type="button"
             onClick={() => setActiveTab("planejamento")}
-            className="flex items-center gap-1.5 rounded-xl border border-slate-200 px-4 py-2 text-xs font-bold text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800 transition"
+            className="flex items-center gap-1.5 rounded-xl border border-slate-200 px-4 py-2 text-xs font-bold text-white hover:bg-slate-50 dark:border-slate-700 dark:text-white dark:hover:bg-slate-800 transition"
           >
             <span>Ir para Planejamento</span>
             <ChevronRight className="h-4 w-4" />

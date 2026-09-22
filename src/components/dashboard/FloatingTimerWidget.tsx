@@ -244,7 +244,7 @@ export const FloatingTimerWidget: React.FC = () => {
             animate={{ opacity: 1, x: 0, scale: 1 }}
             exit={{ opacity: 0, x: 10, scale: 0.9 }}
             onClick={() => setIsOpen(true)}
-            className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#2D3442] text-[#F5F4EF] shadow-xl border border-[#384154] hover:border-[#4A556E] cursor-pointer transition-colors duration-200"
+            className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#2D3442] text-white shadow-xl border border-[#384154] hover:border-[#4A556E] cursor-pointer transition-colors duration-200"
           >
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
@@ -267,7 +267,7 @@ export const FloatingTimerWidget: React.FC = () => {
           aria-label="Abrir Cronômetro e Registro de Estudos"
           className={`relative flex h-16 w-16 items-center justify-center rounded-2xl sm:rounded-3xl cursor-pointer select-none transition-colors duration-200 border ${
             timer.isRunning
-              ? "border-emerald-400/40 bg-[#10B981] text-[#11151F] shadow-[0_10px_28px_-8px_rgba(16,185,129,0.5)]"
+              ? "border-emerald-400/40 bg-[#10B981] text-white shadow-[0_10px_28px_-8px_rgba(16,185,129,0.5)]"
               : "border-[#F3AA2D]/40 bg-[#F3AA2D] text-[#11151F] shadow-[0_10px_28px_-8px_rgba(243,170,45,0.5)] hover:bg-[#D98F20]"
           }`}
         >
@@ -306,7 +306,7 @@ export const FloatingTimerWidget: React.FC = () => {
                   <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#F3AA2D] text-[#11151F]">
                     <Clock className="h-5 w-5" />
                   </div>
-                  <h3 className="font-condensed text-[17px] font-bold text-[#F5F4EF]">
+                  <h3 className="font-condensed text-[17px] font-bold text-white">
                     Registro de Estudos
                   </h3>
                 </div>
@@ -318,7 +318,7 @@ export const FloatingTimerWidget: React.FC = () => {
                       setIsOpen(false);
                       setActiveTab("cronometro");
                     }}
-                    className="p-1.5 rounded-xl text-[#76829B] hover:bg-[#252B38] hover:text-[#F5F4EF] transition cursor-pointer"
+                    className="p-1.5 rounded-xl text-white hover:bg-[#252B38] hover:text-white transition cursor-pointer"
                     title="Abrir Cronômetro em Tela Cheia"
                   >
                     <Maximize2 className="h-4 w-4" />
@@ -327,7 +327,7 @@ export const FloatingTimerWidget: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setIsOpen(false)}
-                    className="p-1.5 rounded-xl text-[#76829B] hover:bg-[#252B38] hover:text-[#F5F4EF] transition cursor-pointer"
+                    className="p-1.5 rounded-xl text-white hover:bg-[#252B38] hover:text-white transition cursor-pointer"
                     title="Fechar Janela"
                   >
                     <X className="h-5 w-5" />
@@ -340,7 +340,7 @@ export const FloatingTimerWidget: React.FC = () => {
                 {/* Disciplina & Tópico */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-[11px] font-bold uppercase tracking-wider text-[#76829B] mb-1.5">
+                    <label className="block text-[11px] font-bold uppercase tracking-wider text-white mb-1.5">
                       Disciplina
                     </label>
                     <select
@@ -356,7 +356,7 @@ export const FloatingTimerWidget: React.FC = () => {
                           topicName: firstTopic?.name || "Geral",
                         });
                       }}
-                      className="w-full rounded-xl border border-[#384154] bg-[#252B38] px-3 py-2 text-xs font-semibold text-[#F5F4EF] focus:border-[#F3AA2D] focus:outline-none cursor-pointer"
+                      className="w-full rounded-xl border border-[#384154] bg-[#252B38] px-3 py-2 text-xs font-semibold text-white focus:border-[#F3AA2D] focus:outline-none cursor-pointer"
                     >
                       {activeEdital?.disciplines.map((d) => (
                         <option key={d.id} value={d.id}>
@@ -367,7 +367,7 @@ export const FloatingTimerWidget: React.FC = () => {
                   </div>
 
                   <div>
-                    <label className="block text-[11px] font-bold uppercase tracking-wider text-[#76829B] mb-1.5">
+                    <label className="block text-[11px] font-bold uppercase tracking-wider text-white mb-1.5">
                       Tópico
                     </label>
                     <select
@@ -380,7 +380,7 @@ export const FloatingTimerWidget: React.FC = () => {
                           topicName: t?.name || "Estudo Geral",
                         });
                       }}
-                      className="w-full rounded-xl border border-[#384154] bg-[#252B38] px-3 py-2 text-xs font-semibold text-[#F5F4EF] focus:border-[#F3AA2D] focus:outline-none cursor-pointer truncate"
+                      className="w-full rounded-xl border border-[#384154] bg-[#252B38] px-3 py-2 text-xs font-semibold text-white focus:border-[#F3AA2D] focus:outline-none cursor-pointer truncate"
                     >
                       {disciplineTopics.length === 0 ? (
                         <option value="">Sem tópicos específicos</option>
@@ -408,7 +408,7 @@ export const FloatingTimerWidget: React.FC = () => {
                         className={`flex items-center justify-center gap-1.5 rounded-xl px-1 py-2 text-xs font-semibold transition cursor-pointer ${
                           isSelected
                             ? "bg-[#F3AA2D] text-[#11151F]"
-                            : "border border-[#384154] bg-[#252B38] text-[#A5B0C2] hover:border-[#F3AA2D]/40"
+                            : "border border-[#384154] bg-[#252B38] text-white hover:border-[#F3AA2D]/40"
                         }`}
                       >
                         <IconComp className="h-3.5 w-3.5" />
@@ -428,7 +428,7 @@ export const FloatingTimerWidget: React.FC = () => {
                       className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition cursor-pointer ${
                         timeMode === "stopwatch"
                           ? "bg-[#F3AA2D] text-[#11151F]"
-                          : "text-[#76829B] hover:text-[#F5F4EF]"
+                          : "text-white hover:text-white"
                       }`}
                     >
                       <Timer className="h-3.5 w-3.5" />
@@ -440,7 +440,7 @@ export const FloatingTimerWidget: React.FC = () => {
                       className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition cursor-pointer ${
                         timeMode === "manual"
                           ? "bg-[#F3AA2D] text-[#11151F]"
-                          : "text-[#76829B] hover:text-[#F5F4EF]"
+                          : "text-white hover:text-white"
                       }`}
                     >
                       <PenLine className="h-3.5 w-3.5" />
@@ -451,7 +451,7 @@ export const FloatingTimerWidget: React.FC = () => {
                   {timeMode === "stopwatch" ? (
                     <>
                       {/* Display do tempo */}
-                      <div className="num-condensed text-[52px] font-bold leading-none tracking-tight text-[#F5F4EF] tabular-nums">
+                      <div className="num-condensed text-[52px] font-bold leading-none tracking-tight text-white tabular-nums">
                         {formatTime(timer.elapsedSeconds)}
                       </div>
 
@@ -460,7 +460,7 @@ export const FloatingTimerWidget: React.FC = () => {
                         <div className="text-[11px] font-bold uppercase tracking-wider text-[#F3AA2D]">
                           {activeDiscipline?.name || "Disciplina"}
                         </div>
-                        <div className="mt-0.5 text-[13px] font-medium text-[#A5B0C2] truncate">
+                        <div className="mt-0.5 text-[13px] font-medium text-white truncate">
                           {activeTopic?.name || "Estudo Geral"}
                         </div>
                       </div>
@@ -472,7 +472,7 @@ export const FloatingTimerWidget: React.FC = () => {
                             key={mins}
                             type="button"
                             onClick={() => handleAdjustMinutes(mins)}
-                            className="rounded-lg border border-[#384154] bg-[#171B25] px-2.5 py-1 font-mono text-[#A5B0C2] hover:border-[#F3AA2D]/40 hover:text-[#F3AA2D] cursor-pointer transition-colors"
+                            className="rounded-lg border border-[#384154] bg-[#171B25] px-2.5 py-1 font-mono text-white hover:border-[#F3AA2D]/40 hover:text-[#F3AA2D] cursor-pointer transition-colors"
                           >
                             {mins > 0 ? `+${mins}` : `−${Math.abs(mins)}`}
                           </button>
@@ -504,7 +504,7 @@ export const FloatingTimerWidget: React.FC = () => {
                           type="button"
                           onClick={resetTimer}
                           disabled={timer.elapsedSeconds === 0}
-                          className="rounded-xl border border-[#384154] px-3.5 py-2.5 text-[#76829B] hover:border-[#F3AA2D]/40 hover:text-[#F5F4EF] disabled:opacity-40 cursor-pointer transition-colors"
+                          className="rounded-xl border border-[#384154] px-3.5 py-2.5 text-white hover:border-[#F3AA2D]/40 hover:text-white disabled:opacity-40 cursor-pointer transition-colors"
                           title="Zerar"
                         >
                           <RotateCcw className="h-4 w-4" />
@@ -513,7 +513,7 @@ export const FloatingTimerWidget: React.FC = () => {
                     </>
                   ) : (
                     <div className="py-2">
-                      <span className="text-[11px] font-bold uppercase tracking-wider text-[#76829B]">
+                      <span className="text-[11px] font-bold uppercase tracking-wider text-white">
                         Tempo estudado
                       </span>
                       <div className="mt-3 flex items-center justify-center gap-2.5">
@@ -526,11 +526,11 @@ export const FloatingTimerWidget: React.FC = () => {
                             onChange={(e) =>
                               setManualHours(Math.max(0, Math.min(23, parseInt(e.target.value) || 0)))
                             }
-                            className="num-condensed h-16 w-[72px] rounded-2xl border border-[#384154] bg-[#171B25] text-center text-[32px] font-bold text-[#F5F4EF] focus:border-[#F3AA2D] focus:outline-none"
+                            className="num-condensed h-16 w-[72px] rounded-2xl border border-[#384154] bg-[#171B25] text-center text-[32px] font-bold text-white focus:border-[#F3AA2D] focus:outline-none"
                           />
-                          <span className="mt-1 text-[10px] font-bold text-[#76829B]">Horas</span>
+                          <span className="mt-1 text-[10px] font-bold text-white">Horas</span>
                         </div>
-                        <span className="num-condensed text-[32px] font-bold text-[#384154]">:</span>
+                        <span className="num-condensed text-[32px] font-bold text-white">:</span>
                         <div className="flex flex-col items-center">
                           <input
                             type="number"
@@ -540,9 +540,9 @@ export const FloatingTimerWidget: React.FC = () => {
                             onChange={(e) =>
                               setManualMinutes(Math.max(0, Math.min(59, parseInt(e.target.value) || 0)))
                             }
-                            className="num-condensed h-16 w-[72px] rounded-2xl border border-[#384154] bg-[#171B25] text-center text-[32px] font-bold text-[#F5F4EF] focus:border-[#F3AA2D] focus:outline-none"
+                            className="num-condensed h-16 w-[72px] rounded-2xl border border-[#384154] bg-[#171B25] text-center text-[32px] font-bold text-white focus:border-[#F3AA2D] focus:outline-none"
                           />
-                          <span className="mt-1 text-[10px] font-bold text-[#76829B]">Minutos</span>
+                          <span className="mt-1 text-[10px] font-bold text-white">Minutos</span>
                         </div>
                       </div>
                     </div>
@@ -552,7 +552,7 @@ export const FloatingTimerWidget: React.FC = () => {
                 {/* Questões */}
                 <div className="nx-card p-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#76829B]">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-white">
                       Questões
                     </span>
                     {questionsDone > 0 && (
@@ -565,22 +565,22 @@ export const FloatingTimerWidget: React.FC = () => {
                   <div className="mt-3 grid grid-cols-3 gap-2.5 text-center">
                     {/* Questões */}
                     <div className="nx-deep rounded-xl p-3">
-                      <div className="num-condensed text-[24px] font-bold text-[#F5F4EF]">
+                      <div className="num-condensed text-[24px] font-bold text-white">
                         {questionsDone}
                       </div>
-                      <div className="mt-0.5 text-[11px] text-[#76829B]">Questões</div>
+                      <div className="mt-0.5 text-[11px] text-white">Questões</div>
                       <div className="mt-2 flex items-center justify-center gap-1">
                         <button
                           type="button"
                           onClick={handleDecQuestionsDone}
-                          className="flex h-6 w-6 items-center justify-center rounded-lg border border-[#384154] text-[#A5B0C2] hover:border-[#F3AA2D]/40 cursor-pointer"
+                          className="flex h-6 w-6 items-center justify-center rounded-lg border border-[#384154] text-white hover:border-[#F3AA2D]/40 cursor-pointer"
                         >
                           <Minus className="h-3 w-3" />
                         </button>
                         <button
                           type="button"
                           onClick={handleIncQuestionsDone}
-                          className="flex h-6 w-6 items-center justify-center rounded-lg bg-[#384154] text-[#F5F4EF] hover:bg-[#4A556E] cursor-pointer"
+                          className="flex h-6 w-6 items-center justify-center rounded-lg bg-[#384154] text-white hover:bg-[#4A556E] cursor-pointer"
                         >
                           <Plus className="h-3 w-3" />
                         </button>
@@ -597,14 +597,14 @@ export const FloatingTimerWidget: React.FC = () => {
                         <button
                           type="button"
                           onClick={handleDecQuestionsCorrect}
-                          className="flex h-6 w-6 items-center justify-center rounded-lg border border-[#384154] text-[#A5B0C2] hover:border-[#34D399]/40 cursor-pointer"
+                          className="flex h-6 w-6 items-center justify-center rounded-lg border border-[#384154] text-white hover:border-[#34D399]/40 cursor-pointer"
                         >
                           <Minus className="h-3 w-3" />
                         </button>
                         <button
                           type="button"
                           onClick={handleIncQuestionsCorrect}
-                          className="flex h-6 w-6 items-center justify-center rounded-lg bg-[#34D399] text-[#11151F] cursor-pointer"
+                          className="flex h-6 w-6 items-center justify-center rounded-lg bg-[#34D399] text-white cursor-pointer"
                         >
                           <Plus className="h-3 w-3" />
                         </button>
@@ -621,14 +621,14 @@ export const FloatingTimerWidget: React.FC = () => {
                         <button
                           type="button"
                           onClick={handleDecQuestionsDone}
-                          className="flex h-6 w-6 items-center justify-center rounded-lg border border-[#384154] text-[#A5B0C2] hover:border-[#F87171]/40 cursor-pointer"
+                          className="flex h-6 w-6 items-center justify-center rounded-lg border border-[#384154] text-white hover:border-[#F87171]/40 cursor-pointer"
                         >
                           <Minus className="h-3 w-3" />
                         </button>
                         <button
                           type="button"
                           onClick={handleIncQuestionsDone}
-                          className="flex h-6 w-6 items-center justify-center rounded-lg bg-[#F87171] text-[#11151F] cursor-pointer"
+                          className="flex h-6 w-6 items-center justify-center rounded-lg bg-[#F87171] text-white cursor-pointer"
                         >
                           <Plus className="h-3 w-3" />
                         </button>
@@ -640,7 +640,7 @@ export const FloatingTimerWidget: React.FC = () => {
                 {/* Data do estudo */}
                 <div className="nx-card p-4">
                   <div className="flex items-center justify-between">
-                    <label className="text-[11px] font-bold uppercase tracking-wider text-[#76829B]">
+                    <label className="text-[11px] font-bold uppercase tracking-wider text-white">
                       Data do estudo
                     </label>
                     <div className="flex items-center rounded-xl border border-[#384154] bg-[#171B25] p-0.5">
@@ -655,7 +655,7 @@ export const FloatingTimerWidget: React.FC = () => {
                             className={`rounded-lg px-2.5 py-1 text-xs font-semibold transition cursor-pointer ${
                               dateSelectionType === type
                                 ? "bg-[#F3AA2D] text-[#11151F]"
-                                : "text-[#76829B] hover:text-[#F5F4EF]"
+                                : "text-white hover:text-white"
                             }`}
                           >
                             {label}
@@ -670,16 +670,16 @@ export const FloatingTimerWidget: React.FC = () => {
                       type="date"
                       value={customDate}
                       onChange={(e) => setCustomDate(e.target.value)}
-                      className="mt-3 w-full rounded-xl border border-[#384154] bg-[#171B25] px-3 py-2 text-xs font-semibold text-[#F5F4EF] focus:border-[#F3AA2D] focus:outline-none cursor-pointer"
+                      className="mt-3 w-full rounded-xl border border-[#384154] bg-[#171B25] px-3 py-2 text-xs font-semibold text-white focus:border-[#F3AA2D] focus:outline-none cursor-pointer"
                     />
                   )}
 
-                  <div className="mt-3 flex items-center justify-between border-t border-[#384154] pt-2.5 text-[11px] text-[#A5B0C2]">
+                  <div className="mt-3 flex items-center justify-between border-t border-[#384154] pt-2.5 text-[11px] text-white">
                     <span className="flex items-center gap-1">
-                      <Calendar className="h-3 w-3 text-[#76829B]" />
+                      <Calendar className="h-3 w-3 text-white" />
                       Data de referência:
                     </span>
-                    <span className="font-semibold text-[#F5F4EF]">
+                    <span className="font-semibold text-white">
                       {formatDatePtBr(effectiveStudyDate)}
                     </span>
                   </div>
@@ -687,7 +687,7 @@ export const FloatingTimerWidget: React.FC = () => {
 
                 {/* Anotações */}
                 <div className="nx-card p-4">
-                  <h3 className="text-[11px] font-bold uppercase tracking-wider text-[#76829B]">
+                  <h3 className="text-[11px] font-bold uppercase tracking-wider text-white">
                     Anotações
                   </h3>
                   <textarea
@@ -695,7 +695,7 @@ export const FloatingTimerWidget: React.FC = () => {
                     value={notes}
                     onChange={(e) => setNotes(e.target.value)}
                     placeholder="O que você precisa lembrar deste estudo?"
-                    className="mt-2 w-full resize-none rounded-xl border border-[#384154] bg-[#171B25] p-2.5 text-xs text-[#F5F4EF] placeholder:text-[#4A556E] focus:border-[#F3AA2D] focus:outline-none"
+                    className="mt-2 w-full resize-none rounded-xl border border-[#384154] bg-[#171B25] p-2.5 text-xs text-white placeholder:text-white focus:border-[#F3AA2D] focus:outline-none"
                   />
                   <div className="mt-2 flex flex-wrap gap-1.5">
                     {["Lei Seca", "Pegadinha", "Ponto-chave", "Dúvida"].map((tag) => (
@@ -703,7 +703,7 @@ export const FloatingTimerWidget: React.FC = () => {
                         key={tag}
                         type="button"
                         onClick={() => appendQuickTag(tag)}
-                        className="rounded-lg border border-[#384154] bg-[#171B25] px-2 py-1 text-[11px] font-medium text-[#A5B0C2] hover:border-[#F3AA2D]/40 hover:text-[#F3AA2D] cursor-pointer transition-colors"
+                        className="rounded-lg border border-[#384154] bg-[#171B25] px-2 py-1 text-[11px] font-medium text-white hover:border-[#F3AA2D]/40 hover:text-[#F3AA2D] cursor-pointer transition-colors"
                       >
                         {tag}
                       </button>
@@ -714,12 +714,12 @@ export const FloatingTimerWidget: React.FC = () => {
 
               {/* Footer: resumo + finalizar */}
               <div className="flex items-center justify-between gap-4 border-t border-[#384154] bg-[#171B25] px-5 py-3.5">
-                <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-[#A5B0C2]">
-                  <span className="font-semibold text-[#F5F4EF]">
+                <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-white">
+                  <span className="font-semibold text-white">
                     {formatDatePtBr(effectiveStudyDate)}
                   </span>
                   <span>·</span>
-                  <span className="font-semibold text-[#F5F4EF]">{durationLabel}</span>
+                  <span className="font-semibold text-white">{durationLabel}</span>
                   <span>·</span>
                   <span>{timer.modality || "Teoria"}</span>
                 </div>

@@ -102,10 +102,10 @@ export const PlanosView: React.FC<PlanosViewProps> = ({ onOpenNewTopicModal }) =
               <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-red-50 text-red-600 dark:bg-red-950/40 dark:text-red-400">
                 <AlertTriangle className="h-6 w-6" />
               </div>
-              <h3 className="mt-3 text-sm font-bold text-zinc-900 dark:text-white">
+              <h3 className="mt-3 text-sm font-bold text-white dark:text-white">
                 Excluir plano "{planToDelete.name}"?
               </h3>
-              <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
+              <p className="mt-1 text-xs text-white dark:text-white">
                 Esta ação excluirá o plano de estudo permanentemente.
               </p>
             </div>
@@ -115,7 +115,7 @@ export const PlanosView: React.FC<PlanosViewProps> = ({ onOpenNewTopicModal }) =
                 type="button"
                 onClick={() => setPlanToDelete(null)}
                 disabled={isDeleting}
-                className="rounded-xl border border-zinc-200 px-4 py-2 text-xs font-bold text-zinc-600 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800 transition"
+                className="rounded-xl border border-zinc-200 px-4 py-2 text-xs font-bold text-white hover:bg-zinc-100 dark:border-zinc-700 dark:text-white dark:hover:bg-zinc-800 transition"
               >
                 Cancelar
               </button>

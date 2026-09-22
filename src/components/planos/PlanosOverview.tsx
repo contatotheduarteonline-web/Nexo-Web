@@ -75,7 +75,7 @@ export const PlanosOverview: React.FC<PlanosOverviewProps> = ({
       {/* Header */}
       <div className="flex flex-col justify-between gap-4 border-b border-zinc-200 pb-4 sm:flex-row sm:items-center dark:border-zinc-800">
         <div>
-          <h1 className="text-xl font-bold text-zinc-900 dark:text-white">
+          <h1 className="text-xl font-bold text-white dark:text-white">
             Planos de Estudo
           </h1>
         </div>
@@ -98,7 +98,7 @@ export const PlanosOverview: React.FC<PlanosOverviewProps> = ({
             className={`flex items-center gap-1.5 rounded-lg px-3.5 py-1.5 text-xs font-bold transition ${
               activeFilter === "ativos"
                 ? "bg-white text-zinc-900 shadow-xs dark:bg-zinc-900 dark:text-white"
-                : "text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"
+                : "text-white hover:text-white dark:text-white dark:hover:text-white"
             }`}
           >
             <span>Meus Planos</span>
@@ -111,7 +111,7 @@ export const PlanosOverview: React.FC<PlanosOverviewProps> = ({
             className={`flex items-center gap-1.5 rounded-lg px-3.5 py-1.5 text-xs font-bold transition ${
               activeFilter === "arquivados"
                 ? "bg-white text-zinc-900 shadow-xs dark:bg-zinc-900 dark:text-white"
-                : "text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"
+                : "text-white hover:text-white dark:text-white dark:hover:text-white"
             }`}
           >
             <Archive className="h-3.5 w-3.5" />
@@ -124,7 +124,7 @@ export const PlanosOverview: React.FC<PlanosOverviewProps> = ({
 
         {/* Search */}
         <div className="relative flex-1 max-w-sm">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-zinc-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-white" />
           <input
             type="text"
             value={searchQuery}
@@ -141,12 +141,12 @@ export const PlanosOverview: React.FC<PlanosOverviewProps> = ({
           <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-500/10 text-[#F59E0B]">
             <Layers className="h-6 w-6" />
           </div>
-          <h3 className="mt-3 text-sm font-bold text-zinc-900 dark:text-white">
+          <h3 className="mt-3 text-sm font-bold text-white dark:text-white">
             {activeFilter === "ativos"
               ? "Você ainda não criou nenhum plano"
               : "Nenhum plano arquivado"}
           </h3>
-          <p className="mt-1 max-w-sm text-xs text-zinc-500 dark:text-zinc-400">
+          <p className="mt-1 max-w-sm text-xs text-white dark:text-white">
             {activeFilter === "ativos"
               ? "Crie seu primeiro plano para começar a organizar sua preparação, disciplinas e ciclos de estudo."
               : "Os planos que você arquivar aparecerão aqui para consulta futura."}
@@ -199,10 +199,10 @@ export const PlanosOverview: React.FC<PlanosOverviewProps> = ({
               <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-red-50 text-red-600 dark:bg-red-950/40 dark:text-red-400">
                 <AlertTriangle className="h-6 w-6" />
               </div>
-              <h3 className="mt-3 text-sm font-bold text-zinc-900 dark:text-white">
+              <h3 className="mt-3 text-sm font-bold text-white dark:text-white">
                 Excluir plano "{planToDelete.name}"?
               </h3>
-              <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
+              <p className="mt-1 text-xs text-white dark:text-white">
                 Esta ação excluirá o plano de estudo. O histórico e matérias vinculadas poderão ser removidos permanentemente.
               </p>
             </div>
@@ -212,7 +212,7 @@ export const PlanosOverview: React.FC<PlanosOverviewProps> = ({
                 type="button"
                 onClick={() => setPlanToDelete(null)}
                 disabled={isDeleting}
-                className="rounded-xl border border-zinc-200 px-4 py-2 text-xs font-bold text-zinc-600 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800 transition"
+                className="rounded-xl border border-zinc-200 px-4 py-2 text-xs font-bold text-white hover:bg-zinc-100 dark:border-zinc-700 dark:text-white dark:hover:bg-zinc-800 transition"
               >
                 Cancelar
               </button>

@@ -27,10 +27,10 @@ export const TodayScheduleSection: React.FC<TodayScheduleSectionProps> = ({
       {/* Cabeçalho Limpo sem textos explicativos redundantes */}
       <div className="flex items-center justify-between pb-4 border-b border-[#384154]">
         <div className="flex items-center gap-2.5">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#384154] bg-[#171B25] text-[#A5B0C2]">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#384154] bg-[#171B25] text-white">
             <BookOpen className="h-4 w-4" />
           </div>
-          <h2 className="font-condensed text-[19px] font-bold text-[#F5F4EF]">
+          <h2 className="font-condensed text-[19px] font-bold text-white">
             Planejamento de hoje
           </h2>
 
@@ -50,7 +50,7 @@ export const TodayScheduleSection: React.FC<TodayScheduleSectionProps> = ({
       <div className="mt-4">
         {plannedBlocks.length === 0 ? (
           <div className="nx-deep border-dashed p-7 text-center">
-            <p className="text-[14px] font-semibold text-[#F5F4EF]">
+            <p className="text-[14px] font-semibold text-white">
               Nenhum bloco agendado para hoje
             </p>
             <button
@@ -76,13 +76,13 @@ export const TodayScheduleSection: React.FC<TodayScheduleSectionProps> = ({
                     <span className="inline-flex items-center rounded-md border border-[#F3AA2D]/25 bg-[#F3AA2D]/10 px-2 py-0.5 text-[11px] font-semibold text-[#F3AA2D]">
                       {idx === 0 ? "Próximo" : `Bloco ${idx + 1}`}
                     </span>
-                    <span className="inline-flex items-center gap-1 text-[12px] font-medium text-[#A5B0C2]">
-                      <Clock className="h-3 w-3 text-[#A5B0C2]" />
+                    <span className="inline-flex items-center gap-1 text-[12px] font-medium text-white">
+                      <Clock className="h-3 w-3 text-white" />
                       <span>{block.targetMinutes} min</span>
                     </span>
                   </div>
 
-                  <h3 className="text-[15px] font-semibold text-[#F5F4EF] truncate">
+                  <h3 className="text-[15px] font-semibold text-white truncate">
                     {block.disciplineName}
                   </h3>
                 </div>

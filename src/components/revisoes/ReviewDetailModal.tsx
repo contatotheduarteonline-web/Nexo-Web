@@ -181,19 +181,19 @@ export const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({
                   Prevista para Hoje
                 </span>
               ) : (
-                <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-[10px] font-medium text-slate-600 dark:bg-slate-800 dark:text-slate-300">
+                <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-[10px] font-medium text-white dark:bg-slate-800 dark:text-white">
                   Data: {review.dueDate}
                 </span>
               )}
             </div>
-            <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white">
+            <h2 className="text-base sm:text-lg font-bold text-white dark:text-white">
               {review.topicName}
             </h2>
           </div>
 
           <button
             onClick={onClose}
-            className="rounded-xl p-1.5 text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+            className="rounded-xl p-1.5 text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition"
           >
             <X className="h-5 w-5" />
           </button>
@@ -207,7 +207,7 @@ export const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({
             className={`flex items-center gap-2 border-b-2 px-4 py-2.5 text-xs font-bold transition ${
               activeTab === "study"
                 ? "border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400"
-                : "border-transparent text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"
+                : "border-transparent text-white hover:text-white dark:text-white dark:hover:text-white"
             }`}
           >
             <Edit3 className="h-4 w-4" />
@@ -220,7 +220,7 @@ export const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({
             className={`flex items-center gap-2 border-b-2 px-4 py-2.5 text-xs font-bold transition ${
               activeTab === "reschedule"
                 ? "border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400"
-                : "border-transparent text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"
+                : "border-transparent text-white hover:text-white dark:text-white dark:hover:text-white"
             }`}
           >
             <CalendarDays className="h-4 w-4" />
@@ -233,7 +233,7 @@ export const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({
             className={`ml-auto flex items-center gap-1.5 border-b-2 px-3 py-2.5 text-xs font-bold transition ${
               activeTab === "delete"
                 ? "border-red-600 text-red-600 dark:border-red-400 dark:text-red-400"
-                : "border-transparent text-slate-400 hover:text-red-600 dark:hover:text-red-400"
+                : "border-transparent text-white hover:text-red-600 dark:hover:text-red-400"
             }`}
           >
             <Trash2 className="h-3.5 w-3.5" />
@@ -253,10 +253,10 @@ export const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({
                     <Play className="h-4 w-4 fill-white" />
                   </div>
                   <div>
-                    <p className="text-xs font-bold text-slate-800 dark:text-slate-200">
+                    <p className="text-xs font-bold text-white dark:text-white">
                       Quer cronometrar esta revisão agora?
                     </p>
-                    <p className="text-[11px] text-slate-500">
+                    <p className="text-[11px] text-white">
                       Inicie o cronômetro com a disciplina e tópico já configurados.
                     </p>
                   </div>
@@ -272,10 +272,10 @@ export const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({
 
               {/* Textarea: O que você estudou / Anotações */}
               <div>
-                <label className="block text-xs font-bold text-slate-800 dark:text-slate-200">
+                <label className="block text-xs font-bold text-white dark:text-white">
                   O que você estudou nesta revisão? (Resumo & Anotações)
                 </label>
-                <p className="text-[11px] text-slate-500">
+                <p className="text-[11px] text-white">
                   Guarde pontos-chave, artigos de lei, fórmulas, exceções da banca ou dúvidas para as próximas revisões.
                 </p>
                 <textarea
@@ -289,7 +289,7 @@ export const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({
 
               {/* Método de Estudo / Revisão */}
               <div>
-                <label className="block text-xs font-bold text-slate-800 dark:text-slate-200">
+                <label className="block text-xs font-bold text-white dark:text-white">
                   Método de Revisão Utilizado
                 </label>
                 <div className="mt-2 flex flex-wrap gap-1.5">
@@ -301,7 +301,7 @@ export const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({
                       className={`rounded-lg px-2.5 py-1 text-xs font-medium transition ${
                         reviewMethod === method
                           ? "bg-blue-600 text-white shadow-xs font-bold"
-                          : "border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300"
+                          : "border border-slate-200 bg-slate-50 text-white hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                       }`}
                     >
                       {method}
@@ -314,7 +314,7 @@ export const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 {/* Tempo estudado */}
                 <div className="rounded-xl border border-slate-200 bg-slate-50/50 p-3.5 dark:border-slate-800 dark:bg-slate-800/40">
-                  <label className="flex items-center gap-1.5 text-xs font-bold text-slate-800 dark:text-slate-200">
+                  <label className="flex items-center gap-1.5 text-xs font-bold text-white dark:text-white">
                     <Clock className="h-4 w-4 text-blue-600 dark:text-blue-400" />
                     <span>Tempo de Revisão (minutos)</span>
                   </label>
@@ -349,7 +349,7 @@ export const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({
                 {/* Questões resolvidas */}
                 <div className="rounded-xl border border-slate-200 bg-slate-50/50 p-3.5 dark:border-slate-800 dark:bg-slate-800/40">
                   <div className="flex items-center justify-between">
-                    <label className="flex items-center gap-1.5 text-xs font-bold text-slate-800 dark:text-slate-200">
+                    <label className="flex items-center gap-1.5 text-xs font-bold text-white dark:text-white">
                       <Target className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
                       <span>Questões Feitas</span>
                     </label>
@@ -361,7 +361,7 @@ export const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({
                   </div>
                   <div className="mt-2 grid grid-cols-2 gap-2">
                     <div>
-                      <span className="text-[10px] font-medium text-slate-500">Total:</span>
+                      <span className="text-[10px] font-medium text-white">Total:</span>
                       <input
                         type="number"
                         min={0}
@@ -375,7 +375,7 @@ export const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({
                       />
                     </div>
                     <div>
-                      <span className="text-[10px] font-medium text-slate-500">Acertos:</span>
+                      <span className="text-[10px] font-medium text-white">Acertos:</span>
                       <input
                         type="number"
                         min={0}
@@ -395,11 +395,11 @@ export const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({
 
               {/* Nível de Retenção (Algoritmo Espaçado) */}
               <div>
-                <label className="flex items-center gap-1.5 text-xs font-bold text-slate-800 dark:text-slate-200">
+                <label className="flex items-center gap-1.5 text-xs font-bold text-white dark:text-white">
                   <Brain className="h-4 w-4 text-[#F59E0B] dark:text-[#FBBF24]" />
                   <span>Como foi seu domínio ao revisar? (Algoritmo Espaçado)</span>
                 </label>
-                <p className="text-[11px] text-slate-500">
+                <p className="text-[11px] text-white">
                   Se você errou muito ou esqueceu o assunto, o sistema reprogramará um reforço imediato para amanhã.
                 </p>
 
@@ -471,7 +471,7 @@ export const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({
                   onChange={(e) => setLogAsSession(e.target.checked)}
                   className="h-4 w-4 rounded text-blue-600 focus:ring-blue-500"
                 />
-                <label htmlFor="logAsSessionCheck" className="text-xs text-slate-700 dark:text-slate-300">
+                <label htmlFor="logAsSessionCheck" className="text-xs text-white dark:text-white">
                   Registrar automaticamente como sessão de estudo no histórico e gráficos
                 </label>
               </div>
@@ -482,17 +482,17 @@ export const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({
           {activeTab === "reschedule" && (
             <div className="space-y-5">
               <div className="rounded-xl border border-blue-100 bg-blue-50/50 p-4 dark:border-blue-900/40 dark:bg-blue-950/20">
-                <h4 className="text-xs font-bold text-slate-900 dark:text-white">
+                <h4 className="text-xs font-bold text-white dark:text-white">
                   Colocar para outro dia (Reagendamento)
                 </h4>
-                <p className="mt-0.5 text-[11px] text-slate-600 dark:text-slate-400">
+                <p className="mt-0.5 text-[11px] text-white dark:text-white">
                   Reorganize sua fila de revisões sem perder o histórico do edital.
                 </p>
               </div>
 
               {/* Quick Preset Buttons */}
               <div>
-                <label className="block text-xs font-bold text-slate-800 dark:text-slate-200">
+                <label className="block text-xs font-bold text-white dark:text-white">
                   Atalhos Rápidos de Reagendamento
                 </label>
                 <div className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-4">
@@ -528,7 +528,7 @@ export const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({
               {/* Specific Date & Cycle Stage Picker */}
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div>
-                  <label className="block text-xs font-bold text-slate-800 dark:text-slate-200">
+                  <label className="block text-xs font-bold text-white dark:text-white">
                     Data Personalizada
                   </label>
                   <input
@@ -541,7 +541,7 @@ export const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-800 dark:text-slate-200">
+                  <label className="block text-xs font-bold text-white dark:text-white">
                     Etapa / Ciclo de Repetição
                   </label>
                   <select
@@ -567,12 +567,12 @@ export const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({
                 <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-red-100 text-red-600 dark:bg-red-950/60 dark:text-red-400">
                   <AlertTriangle className="h-7 w-7" />
                 </div>
-                <h3 className="mt-4 text-base font-bold text-slate-900 dark:text-white">
+                <h3 className="mt-4 text-base font-bold text-white dark:text-white">
                   Excluir esta revisão programada?
                 </h3>
-                <p className="mt-1 max-w-md text-xs text-slate-500 dark:text-slate-400">
+                <p className="mt-1 max-w-md text-xs text-white dark:text-white">
                   Você está prestes a apagar a revisão de{" "}
-                  <strong className="text-slate-800 dark:text-slate-200">
+                  <strong className="text-white dark:text-white">
                     {review.disciplineName} — {review.topicName}
                   </strong>{" "}
                   (Etapa {review.stage}, data {review.dueDate}). Esta ação não pode ser desfeita.
@@ -595,7 +595,7 @@ export const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({
                 onClick={handleSaveNotesOnly}
                 className="flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-semibold text-slate-700 hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 cursor-pointer"
               >
-                <Save className="h-3.5 w-3.5 text-slate-500" />
+                <Save className="h-3.5 w-3.5 text-white" />
                 <span>Salvar Rascunho</span>
               </button>
 
@@ -603,7 +603,7 @@ export const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({
                 <button
                   type="button"
                   onClick={onClose}
-                  className="rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-600 hover:bg-slate-200/60 dark:text-slate-300 dark:hover:bg-slate-800 cursor-pointer"
+                  className="rounded-xl px-4 py-2.5 text-xs font-semibold text-white hover:bg-slate-200/60 dark:text-white dark:hover:bg-slate-800 cursor-pointer"
                 >
                   Cancelar
                 </button>
@@ -624,7 +624,7 @@ export const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({
               <button
                 type="button"
                 onClick={onClose}
-                className="rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-600 hover:bg-slate-200/60 dark:text-slate-300 dark:hover:bg-slate-800 cursor-pointer"
+                className="rounded-xl px-4 py-2.5 text-xs font-semibold text-white hover:bg-slate-200/60 dark:text-white dark:hover:bg-slate-800 cursor-pointer"
               >
                 Cancelar
               </button>
@@ -645,7 +645,7 @@ export const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({
               <button
                 type="button"
                 onClick={() => setActiveTab("study")}
-                className="rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-600 hover:bg-slate-200/60 dark:text-slate-300 dark:hover:bg-slate-800"
+                className="rounded-xl px-4 py-2.5 text-xs font-semibold text-white hover:bg-slate-200/60 dark:text-white dark:hover:bg-slate-800"
               >
                 Voltar
               </button>

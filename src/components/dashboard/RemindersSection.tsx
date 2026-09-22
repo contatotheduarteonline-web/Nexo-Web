@@ -36,10 +36,10 @@ export const RemindersSection: React.FC<RemindersSectionProps> = ({
       <div>
         <div className="flex items-center justify-between pb-3.5 border-b border-[#384154]">
           <div className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#384154] bg-[#171B25] text-[#A5B0C2]">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#384154] bg-[#171B25] text-white">
               <Calendar className="h-4 w-4" />
             </div>
-            <h3 className="font-condensed text-[19px] font-bold text-[#F5F4EF]">
+            <h3 className="font-condensed text-[19px] font-bold text-white">
               Lembretes
             </h3>
           </div>
@@ -66,20 +66,20 @@ export const RemindersSection: React.FC<RemindersSectionProps> = ({
               placeholder="Título do lembrete..."
               value={newReminderTitle}
               onChange={(e) => setNewReminderTitle(e.target.value)}
-              className="w-full rounded-lg border border-[#384154] bg-[#171B25] p-2 text-[12px] text-[#F5F4EF] placeholder:text-[#76829B] outline-hidden focus:border-[#F3AA2D] transition-colors duration-200 mb-2"
+              className="w-full rounded-lg border border-[#384154] bg-[#171B25] p-2 text-[12px] text-white placeholder:text-white outline-hidden focus:border-[#F3AA2D] transition-colors duration-200 mb-2"
             />
             <div className="flex items-center justify-between gap-2">
               <input
                 type="date"
                 value={newReminderDate}
                 onChange={(e) => setNewReminderDate(e.target.value)}
-                className="rounded-lg border border-[#384154] bg-[#171B25] p-1.5 text-[11px] text-[#F5F4EF] focus:border-[#F3AA2D] transition-colors duration-200"
+                className="rounded-lg border border-[#384154] bg-[#171B25] p-1.5 text-[11px] text-white focus:border-[#F3AA2D] transition-colors duration-200"
               />
               <div className="flex items-center gap-1.5">
                 <button
                   type="button"
                   onClick={() => setIsAddingReminder(false)}
-                  className="rounded-lg px-2.5 py-1 text-[11px] font-medium text-[#A5B0C2] hover:bg-[#384154] transition-colors duration-200 cursor-pointer"
+                  className="rounded-lg px-2.5 py-1 text-[11px] font-medium text-white hover:bg-[#384154] transition-colors duration-200 cursor-pointer"
                 >
                   Cancelar
                 </button>
@@ -97,7 +97,7 @@ export const RemindersSection: React.FC<RemindersSectionProps> = ({
         <div className="mt-3.5">
           {reminders.length === 0 ? (
             <div className="py-7 text-center">
-              <p className="text-[13px] text-[#A5B0C2]">
+              <p className="text-[13px] text-white">
                 Nenhum lembrete cadastrado.
               </p>
             </div>
@@ -120,14 +120,14 @@ export const RemindersSection: React.FC<RemindersSectionProps> = ({
                     <span
                       className={`truncate text-[12px] ${
                         rem.completed
-                          ? "text-[#76829B] line-through"
-                          : "font-semibold text-[#F5F4EF]"
+                          ? "text-white line-through"
+                          : "font-semibold text-white"
                       }`}
                     >
                       {rem.title}
                     </span>
                   </div>
-                  <span className="num-condensed text-[11px] font-semibold text-[#A5B0C2] shrink-0 bg-[#2D3442] px-2 py-0.5 rounded border border-[#384154]">
+                  <span className="num-condensed text-[11px] font-semibold text-white shrink-0 bg-[#2D3442] px-2 py-0.5 rounded border border-[#384154]">
                     {rem.date}
                   </span>
                 </div>

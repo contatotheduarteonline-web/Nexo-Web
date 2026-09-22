@@ -228,17 +228,17 @@ export const EditDisciplineModal: React.FC<EditDisciplineModalProps> = ({
               style={{ backgroundColor: color }}
             />
             <div>
-              <h2 className="text-base font-bold text-zinc-900 dark:text-white">
+              <h2 className="text-base font-bold text-white dark:text-white">
                 {isConfirmingDelete ? "Excluir Disciplina" : "Editar Disciplina"}
               </h2>
-              <p className="text-xs text-zinc-500 dark:text-zinc-400">
+              <p className="text-xs text-white dark:text-white">
                 {discipline.name}
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="rounded-lg p-1.5 text-zinc-500 hover:bg-zinc-200 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-white transition"
+            className="rounded-lg p-1.5 text-white hover:bg-zinc-200 hover:text-white dark:text-white dark:hover:bg-zinc-800 dark:hover:text-white transition"
           >
             <X className="h-5 w-5" />
           </button>
@@ -250,10 +250,10 @@ export const EditDisciplineModal: React.FC<EditDisciplineModalProps> = ({
               <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-red-50 text-red-600 dark:bg-red-950/40 dark:text-red-400">
                 <AlertTriangle className="h-6 w-6" />
               </div>
-              <h3 className="mt-3 text-sm font-bold text-zinc-900 dark:text-white">
+              <h3 className="mt-3 text-sm font-bold text-white dark:text-white">
                 Excluir disciplina "{discipline.name}"?
               </h3>
-              <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400 max-w-sm">
+              <p className="mt-1 text-xs text-white dark:text-white max-w-sm">
                 Todos os tópicos, histórico de estudo e métricas vinculadas a esta disciplina serão excluídos.
               </p>
             </div>
@@ -262,7 +262,7 @@ export const EditDisciplineModal: React.FC<EditDisciplineModalProps> = ({
               <button
                 type="button"
                 onClick={() => setIsConfirmingDelete(false)}
-                className="rounded-xl border border-zinc-200 px-4 py-2 text-xs font-bold text-zinc-600 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800 transition"
+                className="rounded-xl border border-zinc-200 px-4 py-2 text-xs font-bold text-white hover:bg-zinc-100 dark:border-zinc-700 dark:text-white dark:hover:bg-zinc-800 transition"
               >
                 Voltar
               </button>
@@ -279,7 +279,7 @@ export const EditDisciplineModal: React.FC<EditDisciplineModalProps> = ({
           <form onSubmit={handleSave} className="p-6 space-y-4 max-h-[82vh] overflow-y-auto">
             {/* Input Nome */}
             <div>
-              <label className="text-xs font-bold uppercase tracking-wider text-zinc-600 dark:text-zinc-400">
+              <label className="text-xs font-bold uppercase tracking-wider text-white dark:text-white">
                 Nome da Disciplina
               </label>
               <input
@@ -288,18 +288,18 @@ export const EditDisciplineModal: React.FC<EditDisciplineModalProps> = ({
                 onChange={(e) => setName(e.target.value)}
                 required
                 placeholder="Ex: Direito Constitucional"
-                className="mt-1.5 w-full rounded-xl border border-zinc-200 bg-zinc-50 px-3.5 py-2.5 text-xs font-bold text-zinc-900 focus:border-[#249D84] focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"
+                className="mt-1.5 w-full rounded-xl border border-zinc-200 bg-zinc-50 px-3.5 py-2.5 text-xs font-bold text-white focus:border-[#249D84] focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"
               />
             </div>
 
             {/* Seletor de Cor com Métrica de Cores Únicas */}
             <div>
               <div className="flex items-center justify-between">
-                <label className="text-xs font-bold uppercase tracking-wider text-zinc-600 dark:text-zinc-400">
+                <label className="text-xs font-bold uppercase tracking-wider text-white dark:text-white">
                   Cor da Disciplina
                 </label>
                 <div className="flex items-center gap-2">
-                  <span className="text-[10px] text-zinc-400">
+                  <span className="text-[10px] text-white">
                     Cores exclusivas (sem repetição)
                   </span>
                   <button
@@ -378,7 +378,7 @@ export const EditDisciplineModal: React.FC<EditDisciplineModalProps> = ({
                           className="h-6 w-6 cursor-pointer rounded-sm border-0 bg-transparent p-0"
                           title="Cor personalizada"
                         />
-                        <span className="font-mono text-[10px] text-zinc-500 dark:text-zinc-400 uppercase">
+                        <span className="font-mono text-[10px] text-white dark:text-white uppercase">
                           {normalizeHex(color)}
                         </span>
                       </div>
@@ -400,7 +400,7 @@ export const EditDisciplineModal: React.FC<EditDisciplineModalProps> = ({
             {/* Peso e Prioridade */}
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="text-xs font-bold uppercase tracking-wider text-zinc-600 dark:text-zinc-400">
+                <label className="text-xs font-bold uppercase tracking-wider text-white dark:text-white">
                   Peso no Ciclo
                 </label>
                 <div className="mt-1.5 flex items-center gap-1 bg-zinc-100 dark:bg-zinc-800 p-1 rounded-xl border border-zinc-200 dark:border-zinc-700">
@@ -412,7 +412,7 @@ export const EditDisciplineModal: React.FC<EditDisciplineModalProps> = ({
                       className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition ${
                         weight === w
                           ? "bg-white text-zinc-900 shadow-xs dark:bg-zinc-900 dark:text-white"
-                          : "text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"
+                          : "text-white hover:text-white dark:text-white dark:hover:text-white"
                       }`}
                     >
                       Peso {w}
@@ -422,13 +422,13 @@ export const EditDisciplineModal: React.FC<EditDisciplineModalProps> = ({
               </div>
 
               <div>
-                <label className="text-xs font-bold uppercase tracking-wider text-zinc-600 dark:text-zinc-400">
+                <label className="text-xs font-bold uppercase tracking-wider text-white dark:text-white">
                   Prioridade
                 </label>
                 <select
                   value={priority}
                   onChange={(e) => setPriority(e.target.value as any)}
-                  className="mt-1.5 w-full rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2.5 text-xs font-bold text-zinc-900 focus:border-[#249D84] focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"
+                  className="mt-1.5 w-full rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2.5 text-xs font-bold text-white focus:border-[#249D84] focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"
                 >
                   <option value="alta">Alta</option>
                   <option value="media">Média</option>
@@ -441,7 +441,7 @@ export const EditDisciplineModal: React.FC<EditDisciplineModalProps> = ({
             <div className="pt-2 border-t border-zinc-200 dark:border-zinc-800">
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
-                  <label className="text-xs font-bold uppercase tracking-wider text-zinc-600 dark:text-zinc-400">
+                  <label className="text-xs font-bold uppercase tracking-wider text-white dark:text-white">
                     Tópicos ({topicList.length})
                   </label>
                   {topicList.length > 0 && (
@@ -490,7 +490,7 @@ export const EditDisciplineModal: React.FC<EditDisciplineModalProps> = ({
                       setIsAddingTopic(false);
                       setNewTopicInput("");
                     }}
-                    className="rounded-lg p-1.5 text-zinc-500 hover:text-zinc-900 dark:text-zinc-400"
+                    className="rounded-lg p-1.5 text-white hover:text-white dark:text-white"
                   >
                     <X className="h-4 w-4" />
                   </button>
@@ -500,7 +500,7 @@ export const EditDisciplineModal: React.FC<EditDisciplineModalProps> = ({
               {/* Lista de Tópicos */}
               <div className="max-h-60 space-y-1.5 overflow-y-auto pr-1">
                 {topicList.length === 0 ? (
-                  <div className="rounded-xl border border-dashed border-zinc-200 p-4 text-center text-xs text-zinc-500 dark:border-zinc-800 dark:text-zinc-400">
+                  <div className="rounded-xl border border-dashed border-zinc-200 p-4 text-center text-xs text-white dark:border-zinc-800 dark:text-white">
                     Nenhum tópico cadastrado nesta matéria.
                   </div>
                 ) : (
@@ -517,7 +517,7 @@ export const EditDisciplineModal: React.FC<EditDisciplineModalProps> = ({
                             type="button"
                             disabled={idx === 0}
                             onClick={() => moveTopic(idx, "up")}
-                            className="text-zinc-400 hover:text-zinc-800 disabled:opacity-20 dark:hover:text-white"
+                            className="text-white hover:text-white disabled:opacity-20 dark:hover:text-white"
                             title="Mover para cima"
                           >
                             <ChevronUp className="h-3 w-3" />
@@ -526,7 +526,7 @@ export const EditDisciplineModal: React.FC<EditDisciplineModalProps> = ({
                             type="button"
                             disabled={idx === topicList.length - 1}
                             onClick={() => moveTopic(idx, "down")}
-                            className="text-zinc-400 hover:text-zinc-800 disabled:opacity-20 dark:hover:text-white"
+                            className="text-white hover:text-white disabled:opacity-20 dark:hover:text-white"
                             title="Mover para baixo"
                           >
                             <ChevronDown className="h-3 w-3" />
@@ -540,7 +540,7 @@ export const EditDisciplineModal: React.FC<EditDisciplineModalProps> = ({
                           className={`p-1 rounded-md transition ${
                             item.isStudied
                               ? "text-[#249D84] hover:text-[#1F826D]"
-                              : "text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300"
+                              : "text-white hover:text-white dark:hover:text-white"
                           }`}
                           title={item.isStudied ? "Marcado como concluído (clique para desmarcar)" : "Marcar como concluído"}
                         >
@@ -578,8 +578,8 @@ export const EditDisciplineModal: React.FC<EditDisciplineModalProps> = ({
                           <span
                             className={`font-medium truncate ${
                               item.isStudied
-                                ? "line-through text-zinc-400 dark:text-zinc-500"
-                                : "text-zinc-900 dark:text-white"
+                                ? "line-through text-white dark:text-white"
+                                : "text-white dark:text-white"
                             }`}
                           >
                             {item.name}
@@ -593,7 +593,7 @@ export const EditDisciplineModal: React.FC<EditDisciplineModalProps> = ({
                           <button
                             type="button"
                             onClick={() => startEditingTopic(item)}
-                            className="rounded p-1 text-zinc-500 hover:bg-zinc-200 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-white transition"
+                            className="rounded p-1 text-white hover:bg-zinc-200 hover:text-white dark:text-white dark:hover:bg-zinc-800 dark:hover:text-white transition"
                             title="Editar nome"
                           >
                             <Edit2 className="h-3.5 w-3.5" />
@@ -629,7 +629,7 @@ export const EditDisciplineModal: React.FC<EditDisciplineModalProps> = ({
                 <button
                   type="button"
                   onClick={onClose}
-                  className="rounded-xl border border-zinc-200 px-4 py-2.5 text-xs font-bold text-zinc-600 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800 transition"
+                  className="rounded-xl border border-zinc-200 px-4 py-2.5 text-xs font-bold text-white hover:bg-zinc-100 dark:border-zinc-700 dark:text-white dark:hover:bg-zinc-800 transition"
                 >
                   Cancelar
                 </button>

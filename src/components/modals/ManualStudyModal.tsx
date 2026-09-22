@@ -233,14 +233,14 @@ export const ManualStudyModal: React.FC<ManualStudyModalProps> = ({
             <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#F3AA2D]/25 bg-[#F3AA2D]/10 text-[#F3AA2D]">
               <Clock className="h-5 w-5" />
             </div>
-            <h2 className="font-condensed text-[20px] font-bold text-[#F5F4EF]">
+            <h2 className="font-condensed text-[20px] font-bold text-white">
               Registro de Estudos
             </h2>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg p-1.5 text-[#76829B] hover:bg-[#252B38] hover:text-[#F5F4EF] cursor-pointer transition-colors"
+            className="rounded-lg p-1.5 text-white hover:bg-[#252B38] hover:text-white cursor-pointer transition-colors"
           >
             <X className="h-5 w-5" />
           </button>
@@ -251,13 +251,13 @@ export const ManualStudyModal: React.FC<ManualStudyModalProps> = ({
           {/* Disciplina & Tópico */}
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div>
-              <label className="text-[11px] font-bold uppercase tracking-wider text-[#76829B]">
+              <label className="text-[11px] font-bold uppercase tracking-wider text-white">
                 Disciplina
               </label>
               <select
                 value={disciplineId}
                 onChange={(e) => handleDisciplineChange(e.target.value)}
-                className="mt-1.5 w-full rounded-xl border border-[#384154] bg-[#252B38] px-3 py-2.5 text-xs font-semibold text-[#F5F4EF] focus:border-[#F3AA2D] focus:outline-none cursor-pointer"
+                className="mt-1.5 w-full rounded-xl border border-[#384154] bg-[#252B38] px-3 py-2.5 text-xs font-semibold text-white focus:border-[#F3AA2D] focus:outline-none cursor-pointer"
               >
                 {disciplines.length === 0 ? (
                   <option value="">Nenhuma disciplina</option>
@@ -272,13 +272,13 @@ export const ManualStudyModal: React.FC<ManualStudyModalProps> = ({
             </div>
 
             <div>
-              <label className="text-[11px] font-bold uppercase tracking-wider text-[#76829B]">
+              <label className="text-[11px] font-bold uppercase tracking-wider text-white">
                 Tópico
               </label>
               <select
                 value={topicId}
                 onChange={(e) => setTopicId(e.target.value)}
-                className="mt-1.5 w-full rounded-xl border border-[#384154] bg-[#252B38] px-3 py-2.5 text-xs font-semibold text-[#F5F4EF] focus:border-[#F3AA2D] focus:outline-none cursor-pointer"
+                className="mt-1.5 w-full rounded-xl border border-[#384154] bg-[#252B38] px-3 py-2.5 text-xs font-semibold text-white focus:border-[#F3AA2D] focus:outline-none cursor-pointer"
               >
                 <option value="">Geral / Sem tópico específico</option>
                 {currentDisciplineTopics.map((t) => (
@@ -303,7 +303,7 @@ export const ManualStudyModal: React.FC<ManualStudyModalProps> = ({
                   className={`flex items-center justify-center gap-1.5 rounded-xl px-1 py-2 text-xs font-semibold transition-colors cursor-pointer ${
                     isSelected
                       ? "bg-[#F3AA2D] text-[#11151F]"
-                      : "border border-[#384154] bg-[#252B38] text-[#A5B0C2] hover:border-[#F3AA2D]/40"
+                      : "border border-[#384154] bg-[#252B38] text-white hover:border-[#F3AA2D]/40"
                   }`}
                 >
                   <IconComp className="h-3.5 w-3.5" />
@@ -323,7 +323,7 @@ export const ManualStudyModal: React.FC<ManualStudyModalProps> = ({
                 className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors cursor-pointer ${
                   timeMode === "stopwatch"
                     ? "bg-[#F3AA2D] text-[#11151F]"
-                    : "text-[#76829B] hover:text-[#F5F4EF]"
+                    : "text-white hover:text-white"
                 }`}
               >
                 <TimerIcon className="h-3.5 w-3.5" />
@@ -335,7 +335,7 @@ export const ManualStudyModal: React.FC<ManualStudyModalProps> = ({
                 className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors cursor-pointer ${
                   timeMode === "manual"
                     ? "bg-[#F3AA2D] text-[#11151F]"
-                    : "text-[#76829B] hover:text-[#F5F4EF]"
+                    : "text-white hover:text-white"
                 }`}
               >
                 <PenLine className="h-3.5 w-3.5" />
@@ -346,7 +346,7 @@ export const ManualStudyModal: React.FC<ManualStudyModalProps> = ({
             {timeMode === "stopwatch" ? (
               <>
                 {/* Display do tempo */}
-                <div className="num-condensed text-[56px] font-bold leading-none tracking-tight text-[#F5F4EF]">
+                <div className="num-condensed text-[56px] font-bold leading-none tracking-tight text-white">
                   {formatTime(elapsedSeconds)}
                 </div>
 
@@ -355,7 +355,7 @@ export const ManualStudyModal: React.FC<ManualStudyModalProps> = ({
                   <div className="text-[11px] font-bold uppercase tracking-wider text-[#F3AA2D]">
                     {selectedDiscipline?.name || "Disciplina"}
                   </div>
-                  <div className="mt-0.5 text-[13px] font-medium text-[#A5B0C2]">
+                  <div className="mt-0.5 text-[13px] font-medium text-white">
                     {selectedTopic?.name || "Geral"}
                   </div>
                 </div>
@@ -367,7 +367,7 @@ export const ManualStudyModal: React.FC<ManualStudyModalProps> = ({
                       key={mins}
                       type="button"
                       onClick={() => handleAdjustMinutes(mins)}
-                      className="rounded-lg border border-[#384154] bg-[#171B25] px-2.5 py-1 font-mono text-[#A5B0C2] hover:border-[#F3AA2D]/40 hover:text-[#F3AA2D] cursor-pointer transition-colors"
+                      className="rounded-lg border border-[#384154] bg-[#171B25] px-2.5 py-1 font-mono text-white hover:border-[#F3AA2D]/40 hover:text-[#F3AA2D] cursor-pointer transition-colors"
                     >
                       {mins > 0 ? `+${mins}` : `−${Math.abs(mins)}`}
                     </button>
@@ -401,7 +401,7 @@ export const ManualStudyModal: React.FC<ManualStudyModalProps> = ({
                       setIsRunning(false);
                       setElapsedSeconds(0);
                     }}
-                    className="rounded-xl border border-[#384154] px-3.5 py-2.5 text-[#76829B] hover:border-[#F3AA2D]/40 hover:text-[#F5F4EF] cursor-pointer transition-colors"
+                    className="rounded-xl border border-[#384154] px-3.5 py-2.5 text-white hover:border-[#F3AA2D]/40 hover:text-white cursor-pointer transition-colors"
                     title="Zerar"
                   >
                     <RotateCcw className="h-4 w-4" />
@@ -410,7 +410,7 @@ export const ManualStudyModal: React.FC<ManualStudyModalProps> = ({
               </>
             ) : (
               <div className="py-2">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-[#76829B]">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-white">
                   Tempo estudado
                 </span>
                 <div className="mt-3 flex items-center justify-center gap-2.5">
@@ -423,11 +423,11 @@ export const ManualStudyModal: React.FC<ManualStudyModalProps> = ({
                       onChange={(e) =>
                         setManualHours(Math.max(0, Math.min(23, parseInt(e.target.value) || 0)))
                       }
-                      className="num-condensed h-16 w-[72px] rounded-2xl border border-[#384154] bg-[#171B25] text-center text-[32px] font-bold text-[#F5F4EF] focus:border-[#F3AA2D] focus:outline-none"
+                      className="num-condensed h-16 w-[72px] rounded-2xl border border-[#384154] bg-[#171B25] text-center text-[32px] font-bold text-white focus:border-[#F3AA2D] focus:outline-none"
                     />
-                    <span className="mt-1 text-[10px] font-bold text-[#76829B]">Horas</span>
+                    <span className="mt-1 text-[10px] font-bold text-white">Horas</span>
                   </div>
-                  <span className="num-condensed text-[32px] font-bold text-[#384154]">:</span>
+                  <span className="num-condensed text-[32px] font-bold text-white">:</span>
                   <div className="flex flex-col items-center">
                     <input
                       type="number"
@@ -437,9 +437,9 @@ export const ManualStudyModal: React.FC<ManualStudyModalProps> = ({
                       onChange={(e) =>
                         setManualMinutes(Math.max(0, Math.min(59, parseInt(e.target.value) || 0)))
                       }
-                      className="num-condensed h-16 w-[72px] rounded-2xl border border-[#384154] bg-[#171B25] text-center text-[32px] font-bold text-[#F5F4EF] focus:border-[#F3AA2D] focus:outline-none"
+                      className="num-condensed h-16 w-[72px] rounded-2xl border border-[#384154] bg-[#171B25] text-center text-[32px] font-bold text-white focus:border-[#F3AA2D] focus:outline-none"
                     />
-                    <span className="mt-1 text-[10px] font-bold text-[#76829B]">Minutos</span>
+                    <span className="mt-1 text-[10px] font-bold text-white">Minutos</span>
                   </div>
                 </div>
               </div>
@@ -449,7 +449,7 @@ export const ManualStudyModal: React.FC<ManualStudyModalProps> = ({
           {/* Questões */}
           <div className="nx-card p-4">
             <div className="flex items-center justify-between">
-              <span className="text-[11px] font-bold uppercase tracking-wider text-[#76829B]">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-white">
                 Questões
               </span>
               {questionsDone > 0 && (
@@ -462,22 +462,22 @@ export const ManualStudyModal: React.FC<ManualStudyModalProps> = ({
             <div className="mt-3 grid grid-cols-3 gap-2.5 text-center">
               {/* Questões */}
               <div className="nx-deep rounded-xl p-3">
-                <div className="num-condensed text-[24px] font-bold text-[#F5F4EF]">
+                <div className="num-condensed text-[24px] font-bold text-white">
                   {questionsDone}
                 </div>
-                <div className="mt-0.5 text-[11px] text-[#76829B]">Questões</div>
+                <div className="mt-0.5 text-[11px] text-white">Questões</div>
                 <div className="mt-2 flex items-center justify-center gap-1">
                   <button
                     type="button"
                     onClick={() => setQuestionsDone((p) => Math.max(questionsCorrect, p - 1))}
-                    className="flex h-6 w-6 items-center justify-center rounded-lg border border-[#384154] text-[#A5B0C2] hover:border-[#F3AA2D]/40 cursor-pointer"
+                    className="flex h-6 w-6 items-center justify-center rounded-lg border border-[#384154] text-white hover:border-[#F3AA2D]/40 cursor-pointer"
                   >
                     <Minus className="h-3 w-3" />
                   </button>
                   <button
                     type="button"
                     onClick={handleAddWrong}
-                    className="flex h-6 w-6 items-center justify-center rounded-lg bg-[#384154] text-[#F5F4EF] hover:bg-[#4A556E] cursor-pointer"
+                    className="flex h-6 w-6 items-center justify-center rounded-lg bg-[#384154] text-white hover:bg-[#4A556E] cursor-pointer"
                   >
                     <Plus className="h-3 w-3" />
                   </button>
@@ -494,14 +494,14 @@ export const ManualStudyModal: React.FC<ManualStudyModalProps> = ({
                   <button
                     type="button"
                     onClick={handleSubtractCorrect}
-                    className="flex h-6 w-6 items-center justify-center rounded-lg border border-[#384154] text-[#A5B0C2] hover:border-[#34D399]/40 cursor-pointer"
+                    className="flex h-6 w-6 items-center justify-center rounded-lg border border-[#384154] text-white hover:border-[#34D399]/40 cursor-pointer"
                   >
                     <Minus className="h-3 w-3" />
                   </button>
                   <button
                     type="button"
                     onClick={handleAddCorrect}
-                    className="flex h-6 w-6 items-center justify-center rounded-lg bg-[#34D399] text-[#11151F] cursor-pointer"
+                    className="flex h-6 w-6 items-center justify-center rounded-lg bg-[#34D399] text-white cursor-pointer"
                   >
                     <Plus className="h-3 w-3" />
                   </button>
@@ -518,14 +518,14 @@ export const ManualStudyModal: React.FC<ManualStudyModalProps> = ({
                   <button
                     type="button"
                     onClick={handleSubtractWrong}
-                    className="flex h-6 w-6 items-center justify-center rounded-lg border border-[#384154] text-[#A5B0C2] hover:border-[#F87171]/40 cursor-pointer"
+                    className="flex h-6 w-6 items-center justify-center rounded-lg border border-[#384154] text-white hover:border-[#F87171]/40 cursor-pointer"
                   >
                     <Minus className="h-3 w-3" />
                   </button>
                   <button
                     type="button"
                     onClick={handleAddWrong}
-                    className="flex h-6 w-6 items-center justify-center rounded-lg bg-[#F87171] text-[#11151F] cursor-pointer"
+                    className="flex h-6 w-6 items-center justify-center rounded-lg bg-[#F87171] text-white cursor-pointer"
                   >
                     <Plus className="h-3 w-3" />
                   </button>
@@ -537,7 +537,7 @@ export const ManualStudyModal: React.FC<ManualStudyModalProps> = ({
           {/* Data do estudo */}
           <div className="nx-card p-4">
             <div className="flex items-center justify-between">
-              <label className="text-[11px] font-bold uppercase tracking-wider text-[#76829B]">
+              <label className="text-[11px] font-bold uppercase tracking-wider text-white">
                 Data do estudo
               </label>
               <div className="flex items-center rounded-xl border border-[#384154] bg-[#171B25] p-0.5">
@@ -552,7 +552,7 @@ export const ManualStudyModal: React.FC<ManualStudyModalProps> = ({
                       className={`rounded-lg px-2.5 py-1 text-xs font-semibold transition-colors cursor-pointer ${
                         dateSelectionType === type
                           ? "bg-[#F3AA2D] text-[#11151F]"
-                          : "text-[#76829B] hover:text-[#F5F4EF]"
+                          : "text-white hover:text-white"
                       }`}
                     >
                       {label}
@@ -567,16 +567,16 @@ export const ManualStudyModal: React.FC<ManualStudyModalProps> = ({
                 type="date"
                 value={customDate}
                 onChange={(e) => setCustomDate(e.target.value)}
-                className="mt-3 w-full rounded-xl border border-[#384154] bg-[#171B25] px-3 py-2 text-xs font-semibold text-[#F5F4EF] focus:border-[#F3AA2D] focus:outline-none cursor-pointer"
+                className="mt-3 w-full rounded-xl border border-[#384154] bg-[#171B25] px-3 py-2 text-xs font-semibold text-white focus:border-[#F3AA2D] focus:outline-none cursor-pointer"
               />
             )}
 
-            <div className="mt-3 flex items-center justify-between border-t border-[#384154] pt-2.5 text-[11px] text-[#A5B0C2]">
+            <div className="mt-3 flex items-center justify-between border-t border-[#384154] pt-2.5 text-[11px] text-white">
               <span className="flex items-center gap-1">
-                <Calendar className="h-3 w-3 text-[#76829B]" />
+                <Calendar className="h-3 w-3 text-white" />
                 Data de referência:
               </span>
-              <span className="font-semibold text-[#F5F4EF]">
+              <span className="font-semibold text-white">
                 {formatDatePtBr(effectiveStudyDate)}
               </span>
             </div>
@@ -584,7 +584,7 @@ export const ManualStudyModal: React.FC<ManualStudyModalProps> = ({
 
           {/* Anotações */}
           <div className="nx-card p-4">
-            <h3 className="text-[11px] font-bold uppercase tracking-wider text-[#76829B]">
+            <h3 className="text-[11px] font-bold uppercase tracking-wider text-white">
               Anotações
             </h3>
             <textarea
@@ -592,7 +592,7 @@ export const ManualStudyModal: React.FC<ManualStudyModalProps> = ({
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="O que você precisa lembrar deste estudo?"
-              className="mt-2 w-full resize-none rounded-xl border border-[#384154] bg-[#171B25] p-2.5 text-xs text-[#F5F4EF] placeholder:text-[#4A556E] focus:border-[#F3AA2D] focus:outline-none"
+              className="mt-2 w-full resize-none rounded-xl border border-[#384154] bg-[#171B25] p-2.5 text-xs text-white placeholder:text-white focus:border-[#F3AA2D] focus:outline-none"
             />
             <div className="mt-2 flex flex-wrap gap-1.5">
               {["Lei Seca", "Pegadinha", "Ponto-chave", "Dúvida"].map((tag) => (
@@ -600,7 +600,7 @@ export const ManualStudyModal: React.FC<ManualStudyModalProps> = ({
                   key={tag}
                   type="button"
                   onClick={() => appendQuickTag(tag)}
-                  className="rounded-lg border border-[#384154] bg-[#171B25] px-2 py-1 text-[11px] font-medium text-[#A5B0C2] hover:border-[#F3AA2D]/40 hover:text-[#F3AA2D] cursor-pointer transition-colors"
+                  className="rounded-lg border border-[#384154] bg-[#171B25] px-2 py-1 text-[11px] font-medium text-white hover:border-[#F3AA2D]/40 hover:text-[#F3AA2D] cursor-pointer transition-colors"
                 >
                   {tag}
                 </button>
@@ -611,12 +611,12 @@ export const ManualStudyModal: React.FC<ManualStudyModalProps> = ({
 
         {/* Footer: resumo + finalizar */}
         <div className="flex items-center justify-between gap-4 border-t border-[#384154] bg-[#171B25] px-6 py-4">
-          <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-[#A5B0C2]">
-            <span className="font-semibold text-[#F5F4EF]">
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-white">
+            <span className="font-semibold text-white">
               {formatDatePtBr(effectiveStudyDate)}
             </span>
             <span>·</span>
-            <span className="font-semibold text-[#F5F4EF]">{durationLabel}</span>
+            <span className="font-semibold text-white">{durationLabel}</span>
             <span>·</span>
             <span>{modality}</span>
           </div>

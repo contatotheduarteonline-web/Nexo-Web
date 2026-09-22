@@ -395,7 +395,7 @@ export const PlanejamentoViewContent: React.FC = () => {
       {/* ========================================================================= */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 rounded-3xl border border-slate-200/80 bg-white px-7 py-6 shadow-sm dark:border-slate-800 dark:bg-[#252B38]">
         <div>
-          <h1 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">
+          <h1 className="text-2xl font-black tracking-tight text-white dark:text-white">
             Planejamento de Estudos
           </h1>
         </div>
@@ -423,7 +423,7 @@ export const PlanejamentoViewContent: React.FC = () => {
             <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 w-full">
               {/* Card 1: CICLOS COMPLETOS */}
               <div className="sm:col-span-3 rounded-2xl border border-[#E2E8F0] bg-white p-4.5 shadow-xs dark:border-[#1E293B] dark:bg-[#252B38]">
-                <span className="text-[10px] font-black uppercase tracking-wider text-[#6B7280] dark:text-[#9CA3AF]">
+                <span className="text-[10px] font-black uppercase tracking-wider text-white dark:text-white">
                   CICLOS COMPLETOS
                 </span>
                 <div className="mt-2 flex items-center gap-3">
@@ -431,10 +431,10 @@ export const PlanejamentoViewContent: React.FC = () => {
                     {completedCycles}
                   </div>
                   <div>
-                    <p className="text-xs font-bold text-[#1F2937] dark:text-white">
+                    <p className="text-xs font-bold text-white dark:text-white">
                       Voltas Concluídas
                     </p>
-                    <p className="text-[10px] text-[#6B7280] dark:text-[#9CA3AF]">
+                    <p className="text-[10px] text-white dark:text-white">
                       No edital completo
                     </p>
                   </div>
@@ -444,11 +444,11 @@ export const PlanejamentoViewContent: React.FC = () => {
               {/* Card 2: PROGRESSO DO CICLO ATUAL */}
               <div className="sm:col-span-9 rounded-2xl border border-[#E2E8F0] bg-white p-4.5 shadow-xs dark:border-[#1E293B] dark:bg-[#252B38] flex flex-col justify-between">
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-black uppercase tracking-wider text-[#6B7280] dark:text-[#9CA3AF]">
+                  <span className="text-[10px] font-black uppercase tracking-wider text-white dark:text-white">
                     PROGRESSO DA RODADA ATUAL
                   </span>
                   <div className="flex items-center gap-2">
-                    <span className="font-mono text-xs font-bold text-[#1F2937] dark:text-white">
+                    <span className="font-mono text-xs font-bold text-white dark:text-white">
                       {cycleElapsedFormatted} / {totalCycleDurationFormatted}
                     </span>
                     <button
@@ -480,14 +480,14 @@ export const PlanejamentoViewContent: React.FC = () => {
               <div>
                 <div className="flex items-center justify-between border-b border-[#E2E8F0] pb-3 dark:border-[#1E293B]">
                   <div>
-                    <h3 className="text-sm font-black uppercase tracking-wider text-[#1F2937] dark:text-white">
+                    <h3 className="text-sm font-black uppercase tracking-wider text-white dark:text-white">
                       SEQUÊNCIA DOS ESTUDOS
                     </h3>
-                    <p className="text-xs text-[#6B7280] dark:text-[#9CA3AF] mt-0.5">
+                    <p className="text-xs text-white dark:text-white mt-0.5">
                       Ordem contínua dos blocos de estudo no ciclo
                     </p>
                   </div>
-                  <span className="rounded-full bg-[#F3F4F6] px-2.5 py-1 font-mono text-[10px] font-bold text-[#6B7280] dark:bg-[#1E293B] dark:text-[#9CA3AF]">
+                  <span className="rounded-full bg-[#F3F4F6] px-2.5 py-1 font-mono text-[10px] font-bold text-white dark:bg-[#1E293B] dark:text-white">
                     {(cycleSteps || []).length} Blocos
                   </span>
                 </div>
@@ -495,7 +495,7 @@ export const PlanejamentoViewContent: React.FC = () => {
                 {/* Vertical Sequence List Items */}
                 <div className="mt-4 space-y-2.5 max-h-[500px] overflow-y-auto pr-1 scrollbar-thin">
                   {(cycleSteps || []).length === 0 ? (
-                    <div className="py-12 text-center text-xs text-[#6B7280] dark:text-[#9CA3AF]">
+                    <div className="py-12 text-center text-xs text-white dark:text-white">
                       Nenhum bloco configurado no ciclo. Clique em "Ajustar Ciclo" para configurar.
                     </div>
                   ) : (
@@ -529,11 +529,11 @@ export const PlanejamentoViewContent: React.FC = () => {
                           />
 
                           <div className="pl-4 flex items-center gap-3">
-                            <span className="font-mono text-xs font-bold text-[#6B7280] dark:text-[#9CA3AF]">
+                            <span className="font-mono text-xs font-bold text-white dark:text-white">
                               #{idx + 1}
                             </span>
                             <div>
-                              <p className="text-xs font-bold text-[#1F2937] dark:text-white">
+                              <p className="text-xs font-bold text-white dark:text-white">
                                 {disc?.name || "Disciplina"}
                               </p>
                               {isCurrent && (
@@ -546,7 +546,7 @@ export const PlanejamentoViewContent: React.FC = () => {
 
                           <div className="flex items-center gap-3">
                             {/* Duration Indicator */}
-                            <span className="flex items-center gap-1 font-mono text-xs font-bold text-[#6B7280] dark:text-[#9CA3AF]">
+                            <span className="flex items-center gap-1 font-mono text-xs font-bold text-white dark:text-white">
                               <Clock className="h-3.5 w-3.5" />
                               {formatDurationHM(blockElapsed)} / {formatDurationHM(step.targetMinutes)}
                             </span>
@@ -586,10 +586,10 @@ export const PlanejamentoViewContent: React.FC = () => {
             <div className="lg:col-span-5 rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-xs dark:border-[#1E293B] dark:bg-[#252B38] flex flex-col justify-between">
               <div>
                 <div className="border-b border-[#E2E8F0] pb-3 dark:border-[#1E293B]">
-                  <span className="text-[10px] font-black uppercase tracking-wider text-[#6B7280] dark:text-[#9CA3AF]">
+                  <span className="text-[10px] font-black uppercase tracking-wider text-white dark:text-white">
                     CICLO COMPLETO
                   </span>
-                  <h3 className="text-sm font-black uppercase tracking-wider text-[#1F2937] dark:text-white">
+                  <h3 className="text-sm font-black uppercase tracking-wider text-white dark:text-white">
                     Distribuição Proporcional
                   </h3>
                 </div>
@@ -621,15 +621,15 @@ export const PlanejamentoViewContent: React.FC = () => {
                       </PieChart>
                     </ResponsiveContainer>
                   ) : (
-                    <div className="text-xs text-[#6B7280]">Sem matérias no ciclo</div>
+                    <div className="text-xs text-white">Sem matérias no ciclo</div>
                   )}
 
                   {/* Centered Total Time Label (ex: 25h00min) */}
                   <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center text-center">
-                    <span className="font-mono text-xl font-black text-[#1F2937] dark:text-white">
+                    <span className="font-mono text-xl font-black text-white dark:text-white">
                       {totalCycleDurationFormatted}
                     </span>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#6B7280] dark:text-[#9CA3AF]">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-white dark:text-white">
                       1 ROTAÇÃO
                     </span>
                   </div>
@@ -653,11 +653,11 @@ export const PlanejamentoViewContent: React.FC = () => {
                             style={{ backgroundColor: dotColor }}
                             className="h-3 w-3 rounded-full flex-shrink-0"
                           />
-                          <span className="font-medium text-[#374151] dark:text-[#E5EAEF] line-clamp-1">
+                          <span className="font-medium text-white dark:text-white line-clamp-1">
                             {disc.name}
                           </span>
                         </div>
-                        <span className="font-mono font-bold text-[#6B7280] dark:text-[#9CA3AF] ml-2">
+                        <span className="font-mono font-bold text-white dark:text-white ml-2">
                           {formatDurationHM(discMins)}
                         </span>
                       </div>
@@ -703,13 +703,13 @@ export const PlanejamentoViewContent: React.FC = () => {
                     prev.setMonth(prev.getMonth() - 1);
                     setCurrentCalendarDate(prev);
                   }}
-                  className="rounded-lg p-1 text-[#6B7280] hover:bg-[#F3F4F6] hover:text-[#1F2937] dark:text-[#9CA3AF] dark:hover:bg-[#1E293B] dark:hover:text-white"
+                  className="rounded-lg p-1 text-white hover:bg-[#F3F4F6] hover:text-white dark:text-white dark:hover:bg-[#1E293B] dark:hover:text-white"
                 >
                   <ChevronLeft className="h-4 w-4" />
                 </button>
 
                 <div className="text-center">
-                  <span className="font-mono text-xs font-black uppercase text-[#1F2937] dark:text-white">
+                  <span className="font-mono text-xs font-black uppercase text-white dark:text-white">
                     {monthNamesShort[currentCalendarDate.getMonth()]}. {currentCalendarDate.getFullYear()}
                   </span>
                 </div>
@@ -721,7 +721,7 @@ export const PlanejamentoViewContent: React.FC = () => {
                     next.setMonth(next.getMonth() + 1);
                     setCurrentCalendarDate(next);
                   }}
-                  className="rounded-lg p-1 text-[#6B7280] hover:bg-[#F3F4F6] hover:text-[#1F2937] dark:text-[#9CA3AF] dark:hover:bg-[#1E293B] dark:hover:text-white"
+                  className="rounded-lg p-1 text-white hover:bg-[#F3F4F6] hover:text-white dark:text-white dark:hover:bg-[#1E293B] dark:hover:text-white"
                 >
                   <ChevronRight className="h-4 w-4" />
                 </button>
@@ -732,7 +732,7 @@ export const PlanejamentoViewContent: React.FC = () => {
                 {["D", "S", "T", "Q", "Q", "S", "S"].map((letter, idx) => (
                   <span
                     key={idx}
-                    className="font-mono text-[10px] font-bold text-[#9CA3AF] dark:text-[#6B7280]"
+                    className="font-mono text-[10px] font-bold text-white dark:text-white"
                   >
                     {letter}
                   </span>
@@ -760,7 +760,7 @@ export const PlanejamentoViewContent: React.FC = () => {
                           ? "bg-[#249D84] font-bold text-white shadow-xs"
                           : item.isSelected
                           ? "bg-[#1F2937] text-white dark:bg-white dark:text-[#1F2937]"
-                          : "text-[#374151] hover:bg-[#F3F4F6] dark:text-[#E5EAEF] dark:hover:bg-[#1E293B]"
+                          : "text-white hover:bg-[#F3F4F6] dark:text-white dark:hover:bg-[#1E293B]"
                       }`}
                     >
                       {item.day}
@@ -771,7 +771,7 @@ export const PlanejamentoViewContent: React.FC = () => {
 
               {/* Divider & Minhas Agendas */}
               <div className="mt-5 border-t border-[#E2E8F0] pt-4 dark:border-[#1E293B]">
-                <h4 className="font-mono text-[10px] font-black uppercase tracking-wider text-[#6B7280] dark:text-[#9CA3AF]">
+                <h4 className="font-mono text-[10px] font-black uppercase tracking-wider text-white dark:text-white">
                   MINHAS AGENDAS
                 </h4>
 
@@ -780,7 +780,7 @@ export const PlanejamentoViewContent: React.FC = () => {
                   <label className="flex items-center justify-between cursor-pointer group">
                     <div className="flex items-center gap-2">
                       <span className="h-2.5 w-2.5 rounded-full bg-emerald-500" />
-                      <span className="font-mono text-xs font-bold text-[#1F2937] dark:text-white">
+                      <span className="font-mono text-xs font-bold text-white dark:text-white">
                         REVISÕES
                       </span>
                     </div>
@@ -795,7 +795,7 @@ export const PlanejamentoViewContent: React.FC = () => {
                   <label className="flex items-center justify-between cursor-pointer group">
                     <div className="flex items-center gap-2">
                       <span className="h-2.5 w-2.5 rounded-full bg-sky-500" />
-                      <span className="font-mono text-xs font-bold text-[#1F2937] dark:text-white">
+                      <span className="font-mono text-xs font-bold text-white dark:text-white">
                         HISTÓRICO
                       </span>
                     </div>
@@ -810,7 +810,7 @@ export const PlanejamentoViewContent: React.FC = () => {
                   <label className="flex items-center justify-between cursor-pointer group">
                     <div className="flex items-center gap-2">
                       <span className="h-2.5 w-2.5 rounded-full bg-[#249D84]" />
-                      <span className="font-mono text-xs font-bold text-[#1F2937] dark:text-white">
+                      <span className="font-mono text-xs font-bold text-white dark:text-white">
                         PLANEJAMENTO
                       </span>
                     </div>
@@ -838,11 +838,11 @@ export const PlanejamentoViewContent: React.FC = () => {
                       : "border border-slate-200/80 bg-slate-50/80 dark:border-slate-800 dark:bg-slate-900/40"
                   }`}>
                     <div className="flex items-center justify-between text-xs">
-                      <span className="font-medium text-slate-500 dark:text-slate-400">Alocado na Semana:</span>
+                      <span className="font-medium text-white dark:text-white">Alocado na Semana:</span>
                       <span className={`font-mono font-bold ${
                         isOverGoal
                           ? "text-amber-600 dark:text-amber-400"
-                          : "text-slate-900 dark:text-white"
+                          : "text-white dark:text-white"
                       }`}>
                         {totalWeeklyScheduledHours}h / {weeklyGoal}h
                       </span>
@@ -877,17 +877,17 @@ export const PlanejamentoViewContent: React.FC = () => {
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => setWeekOffset((prev) => prev - 1)}
-                  className="rounded-xl p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700 dark:hover:bg-slate-800 dark:hover:text-white transition"
+                  className="rounded-xl p-1.5 text-white hover:bg-slate-100 hover:text-white dark:hover:bg-slate-800 dark:hover:text-white transition"
                   title="Semana anterior"
                 >
                   <ChevronLeft className="h-4 w-4" />
                 </button>
-                <span className="font-mono text-xs font-bold text-slate-800 dark:text-white">
+                <span className="font-mono text-xs font-bold text-white dark:text-white">
                   {weekRangeLabel}
                 </span>
                 <button
                   onClick={() => setWeekOffset((prev) => prev + 1)}
-                  className="rounded-xl p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700 dark:hover:bg-slate-800 dark:hover:text-white transition"
+                  className="rounded-xl p-1.5 text-white hover:bg-slate-100 hover:text-white dark:hover:bg-slate-800 dark:hover:text-white transition"
                   title="Próxima semana"
                 >
                   <ChevronRight className="h-4 w-4" />
@@ -898,7 +898,7 @@ export const PlanejamentoViewContent: React.FC = () => {
                 {weekOffset !== 0 && (
                   <button
                     onClick={() => setWeekOffset(0)}
-                    className="rounded-xl bg-slate-100 px-3 py-1.5 text-xs font-bold text-slate-600 hover:text-slate-900 dark:bg-slate-800 dark:text-slate-300 dark:hover:text-white transition"
+                    className="rounded-xl bg-slate-100 px-3 py-1.5 text-xs font-bold text-white hover:text-white dark:bg-slate-800 dark:text-white dark:hover:text-white transition"
                   >
                     Hoje
                   </button>
@@ -942,13 +942,13 @@ export const PlanejamentoViewContent: React.FC = () => {
                       <div className={`mb-2 rounded-2xl p-2.5 text-center transition ${
                         day.isToday
                           ? "bg-[#249D84] text-white"
-                          : "bg-slate-50 text-slate-700 dark:bg-slate-900/60 dark:text-slate-300"
+                          : "bg-slate-50 text-white dark:bg-slate-900/60 dark:text-white"
                       }`}>
                         <p className="font-mono text-xs font-bold uppercase tracking-wider">
                           {day.shortLabel}
                         </p>
                         <p className={`font-mono text-[10px] ${
-                          day.isToday ? "text-emerald-100" : "text-slate-400 dark:text-slate-500"
+                          day.isToday ? "text-emerald-100" : "text-white dark:text-white"
                         }`}>
                           {formatDurationDigital(dayMinutes)}
                         </p>
@@ -1038,7 +1038,7 @@ export const PlanejamentoViewContent: React.FC = () => {
                           setAddDay(day.key);
                           setIsAddBlockModalOpen(true);
                         }}
-                        className="w-full flex items-center justify-center gap-1 rounded-xl py-1.5 text-xs font-semibold text-slate-500 hover:bg-slate-100 hover:text-slate-800 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white transition"
+                        className="w-full flex items-center justify-center gap-1 rounded-xl py-1.5 text-xs font-semibold text-white hover:bg-slate-100 hover:text-white dark:text-white dark:hover:bg-slate-800 dark:hover:text-white transition"
                       >
                         <Plus className="h-3.5 w-3.5" />
                         <span>Adicionar</span>
@@ -1057,13 +1057,13 @@ export const PlanejamentoViewContent: React.FC = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs">
           <div className="w-full max-w-md rounded-3xl border border-slate-200/80 bg-white p-6 shadow-2xl dark:border-slate-800 dark:bg-[#252B38]">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3 dark:border-slate-800">
-              <h3 className="text-sm font-black uppercase text-slate-900 dark:text-white">
+              <h3 className="text-sm font-black uppercase text-white dark:text-white">
                 Editar Bloco de Estudo
               </h3>
               <button
                 type="button"
                 onClick={() => setEditingBlock(null)}
-                className="rounded-lg p-1 text-slate-400 hover:text-slate-600 dark:hover:text-white"
+                className="rounded-lg p-1 text-white hover:text-white dark:hover:text-white"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -1071,14 +1071,14 @@ export const PlanejamentoViewContent: React.FC = () => {
 
             <form onSubmit={handleSaveEditBlock} className="mt-4 space-y-4">
               <div>
-                <label className="text-xs font-bold text-slate-700 dark:text-slate-300">
+                <label className="text-xs font-bold text-white dark:text-white">
                   Disciplina
                 </label>
                 <select
                   value={editDisciplineId}
                   onChange={(e) => setEditDisciplineId(e.target.value)}
                   required
-                  className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-xs font-bold text-slate-900 focus:border-[#249D84] focus:outline-none dark:border-slate-800 dark:bg-slate-900 dark:text-white"
+                  className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-xs font-bold text-white focus:border-[#249D84] focus:outline-none dark:border-slate-800 dark:bg-slate-900 dark:text-white"
                 >
                   {(disciplines || []).map((d) => (
                     <option key={d.id} value={d.id}>
@@ -1089,7 +1089,7 @@ export const PlanejamentoViewContent: React.FC = () => {
               </div>
 
               <div>
-                <label className="text-xs font-bold text-slate-700 dark:text-slate-300">
+                <label className="text-xs font-bold text-white dark:text-white">
                   Duração da Sessão
                 </label>
                 <div className="mt-1.5 grid grid-cols-4 gap-2">
@@ -1101,7 +1101,7 @@ export const PlanejamentoViewContent: React.FC = () => {
                       className={`rounded-xl border py-2 text-xs font-bold transition ${
                         editDurationMinutes === mins
                           ? "border-[#249D84] bg-[#249D84] text-white shadow-xs"
-                          : "border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300"
+                          : "border-slate-200 bg-slate-50 text-white hover:bg-slate-100 dark:border-slate-800 dark:bg-slate-900 dark:text-white"
                       }`}
                     >
                       {mins} min
@@ -1124,7 +1124,7 @@ export const PlanejamentoViewContent: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setEditingBlock(null)}
-                    className="rounded-xl border border-slate-200 px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-50 dark:border-slate-800 dark:text-slate-300"
+                    className="rounded-xl border border-slate-200 px-4 py-2 text-xs font-bold text-white hover:bg-slate-50 dark:border-slate-800 dark:text-white"
                   >
                     Cancelar
                   </button>
@@ -1146,13 +1146,13 @@ export const PlanejamentoViewContent: React.FC = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs">
           <div className="w-full max-w-md rounded-3xl border border-slate-200/80 bg-white p-6 shadow-2xl dark:border-slate-800 dark:bg-[#252B38]">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3 dark:border-slate-800">
-              <h3 className="text-sm font-black uppercase text-slate-900 dark:text-white">
+              <h3 className="text-sm font-black uppercase text-white dark:text-white">
                 Adicionar Bloco à Grade
               </h3>
               <button
                 type="button"
                 onClick={() => setIsAddBlockModalOpen(false)}
-                className="rounded-lg p-1 text-slate-400 hover:text-slate-600 dark:hover:text-white"
+                className="rounded-lg p-1 text-white hover:text-white dark:hover:text-white"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -1160,13 +1160,13 @@ export const PlanejamentoViewContent: React.FC = () => {
 
             <form onSubmit={handleAddWeeklyBlock} className="mt-4 space-y-4">
               <div>
-                <label className="text-xs font-bold text-slate-700 dark:text-slate-300">
+                <label className="text-xs font-bold text-white dark:text-white">
                   Dia da Semana
                 </label>
                 <select
                   value={addDay}
                   onChange={(e) => setAddDay(e.target.value as any)}
-                  className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-xs font-bold text-slate-900 focus:border-[#249D84] focus:outline-none dark:border-slate-800 dark:bg-slate-900 dark:text-white"
+                  className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-xs font-bold text-white focus:border-[#249D84] focus:outline-none dark:border-slate-800 dark:bg-slate-900 dark:text-white"
                 >
                   <option value="dom">Domingo (DOM)</option>
                   <option value="seg">Segunda-feira (SEG)</option>
@@ -1179,14 +1179,14 @@ export const PlanejamentoViewContent: React.FC = () => {
               </div>
 
               <div>
-                <label className="text-xs font-bold text-slate-700 dark:text-slate-300">
+                <label className="text-xs font-bold text-white dark:text-white">
                   Disciplina
                 </label>
                 <select
                   value={addDisciplineId}
                   onChange={(e) => setAddDisciplineId(e.target.value)}
                   required
-                  className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-xs font-bold text-slate-900 focus:border-[#249D84] focus:outline-none dark:border-slate-800 dark:bg-slate-900 dark:text-white"
+                  className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-xs font-bold text-white focus:border-[#249D84] focus:outline-none dark:border-slate-800 dark:bg-slate-900 dark:text-white"
                 >
                   <option value="">Selecione uma disciplina...</option>
                   {(disciplines || []).map((d) => (
@@ -1198,7 +1198,7 @@ export const PlanejamentoViewContent: React.FC = () => {
               </div>
 
               <div>
-                <label className="text-xs font-bold text-slate-700 dark:text-slate-300">
+                <label className="text-xs font-bold text-white dark:text-white">
                   Duração da Sessão
                 </label>
                 <div className="mt-1.5 grid grid-cols-4 gap-2">
@@ -1210,7 +1210,7 @@ export const PlanejamentoViewContent: React.FC = () => {
                       className={`rounded-xl border py-2 text-xs font-bold transition ${
                         addDurationMinutes === mins
                           ? "border-[#249D84] bg-[#249D84] text-white shadow-xs"
-                          : "border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300"
+                          : "border-slate-200 bg-slate-50 text-white hover:bg-slate-100 dark:border-slate-800 dark:bg-slate-900 dark:text-white"
                       }`}
                     >
                       {mins} min
@@ -1223,7 +1223,7 @@ export const PlanejamentoViewContent: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setIsAddBlockModalOpen(false)}
-                  className="rounded-xl border border-slate-200 px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-50 dark:border-slate-800 dark:text-slate-300"
+                  className="rounded-xl border border-slate-200 px-4 py-2 text-xs font-bold text-white hover:bg-slate-50 dark:border-slate-800 dark:text-white"
                 >
                   Cancelar
                 </button>

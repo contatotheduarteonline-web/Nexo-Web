@@ -52,10 +52,10 @@ export const NewEditalModal: React.FC<NewEditalModalProps> = ({ isOpen, onClose 
               <Shield className="h-4 w-4" />
             </div>
             <div>
-              <h3 className="text-sm font-bold text-[#374151] dark:text-white">
+              <h3 className="text-sm font-bold text-white dark:text-white">
                 Novo Plano de Estudo / Concurso
               </h3>
-              <p className="text-[11px] text-[#737D89] dark:text-[#94A3B8]">
+              <p className="text-[11px] text-white dark:text-white">
                 Cadastre as informações da sua preparação para o concurso
               </p>
             </div>
@@ -72,7 +72,7 @@ export const NewEditalModal: React.FC<NewEditalModalProps> = ({ isOpen, onClose 
         <form onSubmit={handleSubmit} className="mt-4 space-y-3 text-xs">
           {/* Nome do Plano / Concurso (Largura Total) */}
           <div>
-            <label className="font-semibold text-[#374151] dark:text-[#E5EAEF]">
+            <label className="font-semibold text-white dark:text-white">
               Nome do plano / concurso <span className="text-red-500">*</span>
             </label>
             <input
@@ -88,7 +88,7 @@ export const NewEditalModal: React.FC<NewEditalModalProps> = ({ isOpen, onClose 
           {/* Órgão e Cargo (Duas Colunas) */}
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div>
-              <label className="font-semibold text-[#374151] dark:text-[#E5EAEF]">
+              <label className="font-semibold text-white dark:text-white">
                 Órgão <span className="text-red-500">*</span>
               </label>
               <input
@@ -101,7 +101,7 @@ export const NewEditalModal: React.FC<NewEditalModalProps> = ({ isOpen, onClose 
               />
             </div>
             <div>
-              <label className="font-semibold text-[#374151] dark:text-[#E5EAEF]">
+              <label className="font-semibold text-white dark:text-white">
                 Cargo
               </label>
               <input
@@ -117,7 +117,7 @@ export const NewEditalModal: React.FC<NewEditalModalProps> = ({ isOpen, onClose 
           {/* Banca e Vagas (Duas Colunas) */}
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div>
-              <label className="font-semibold text-[#374151] dark:text-[#E5EAEF]">
+              <label className="font-semibold text-white dark:text-white">
                 Banca <span className="text-red-500">*</span>
               </label>
               <input
@@ -130,7 +130,7 @@ export const NewEditalModal: React.FC<NewEditalModalProps> = ({ isOpen, onClose 
               />
             </div>
             <div>
-              <label className="font-semibold text-[#374151] dark:text-[#E5EAEF]">
+              <label className="font-semibold text-white dark:text-white">
                 Vagas
               </label>
               <input
@@ -147,7 +147,7 @@ export const NewEditalModal: React.FC<NewEditalModalProps> = ({ isOpen, onClose 
           {/* Data da Prova */}
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div>
-              <label className="font-semibold text-[#374151] dark:text-[#E5EAEF]">
+              <label className="font-semibold text-white dark:text-white">
                 Data da prova
               </label>
               <input
@@ -158,7 +158,7 @@ export const NewEditalModal: React.FC<NewEditalModalProps> = ({ isOpen, onClose 
               />
             </div>
             <div>
-              <label className="font-semibold text-[#374151] dark:text-[#E5EAEF]">
+              <label className="font-semibold text-white dark:text-white">
                 Ano
               </label>
               <input
@@ -172,7 +172,7 @@ export const NewEditalModal: React.FC<NewEditalModalProps> = ({ isOpen, onClose 
 
           {/* Observações */}
           <div>
-            <label className="font-semibold text-[#374151] dark:text-[#E5EAEF]">
+            <label className="font-semibold text-white dark:text-white">
               Observações
             </label>
             <textarea
