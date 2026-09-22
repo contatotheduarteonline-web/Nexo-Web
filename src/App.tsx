@@ -3,7 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { ActiveTab } from "./types";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import { StudyProvider, useStudy } from "./context/StudyContext";
 import { ToastProvider } from "./context/ToastContext";
@@ -18,7 +19,7 @@ import { Sidebar } from "./components/layout/Sidebar";
 import { Header } from "./components/layout/Header";
 import { DashboardView } from "./components/dashboard/DashboardView";
 import { EditalView } from "./components/edital/EditalView";
-import { CronometroView } from "./components/cronometro/CronometroView";
+import { CronometroModal } from "./components/cronometro/CronometroModal";
 import { RevisoesView } from "./components/revisoes/RevisoesView";
 import { PlanosView } from "./components/planos/PlanosView";
 import { DiagnosticoView } from "./components/diagnostico/DiagnosticoView";
@@ -44,6 +45,16 @@ const AuthenticatedApp: React.FC = () => {
 
   // Watch for gamification XP and Rank milestones across the entire app
   useGamificationTracker();
+
+  // "Registro de Estudos" is no longer a sidebar destination — it renders as an
+  // overlay popup on top of the last visited view, opened by study actions.
+  const [lastMainTab, setLastMainTab] = useState<ActiveTab>("dashboard");
+  useEffect(() => {
+    if (activeTab && activeTab !== "cronometro") {
+      setLastMainTab(activeTab);
+    }
+  }, [activeTab]);
+  const mainTab: ActiveTab = activeTab === "cronometro" ? lastMainTab : activeTab;
 
   const [isAiModalOpen, setIsAiModalOpen] = useState(false);
   const [isNewEditalOpen, setIsNewEditalOpen] = useState(false);
@@ -77,14 +88,12 @@ const AuthenticatedApp: React.FC = () => {
   };
 
   const renderActiveView = () => {
-    switch (activeTab) {
+    switch (mainTab) {
       case "dashboard":
         return <DashboardView onOpenManualStudy={() => handleOpenManualStudy()} />;
       case "edital":
       case "edital_verticalizado":
         return <EditalView />;
-      case "cronometro":
-        return <CronometroView />;
       case "revisoes":
         return <RevisoesView />;
       case "planos":
@@ -138,7 +147,7 @@ const AuthenticatedApp: React.FC = () => {
       <div className="flex flex-1 overflow-hidden relative">
         {/* Left Sidebar below Topbar */}
         <Sidebar
-          activeTab={activeTab}
+          activeTab={mainTab}
           setActiveTab={setActiveTab}
           isCollapsed={isSidebarCollapsed}
           setIsCollapsed={setIsSidebarCollapsed}
@@ -151,6 +160,11 @@ const AuthenticatedApp: React.FC = () => {
       </div>
 
       {/* Modals */}
+      <CronometroModal
+        isOpen={activeTab === "cronometro"}
+        onClose={() => setActiveTab(lastMainTab)}
+      />
+
       <AiAssistantModal
         isOpen={isAiModalOpen}
         onClose={() => setIsAiModalOpen(false)}

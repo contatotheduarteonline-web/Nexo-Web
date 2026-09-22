@@ -5,7 +5,6 @@ import {
   BookOpen,
   FileCheck,
   CalendarRange,
-  Timer,
   RotateCcw,
   History,
   TrendingUp,
@@ -52,7 +51,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
       title: "ROTINA",
       items: [
         { id: "planejamento", label: "Planejamento", icon: CalendarRange },
-        { id: "cronometro", label: "Registro de Estudos", icon: Timer },
         {
           id: "revisoes",
           label: "Revisões",
