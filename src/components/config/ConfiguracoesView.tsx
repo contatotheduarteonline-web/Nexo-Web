@@ -10,7 +10,6 @@ import {
   Check,
   Save,
   Key,
-  LogOut,
   Trash2,
   Lock,
   Camera,
@@ -24,7 +23,7 @@ export const ConfiguracoesView: React.FC = () => {
     updateUserSettings,
   } = useStudy();
 
-  const { user, logout, updateProfile, isAdmin } = useAuth();
+  const { user, updateProfile, isAdmin } = useAuth();
 
   const [activeSubTab, setActiveSubTab] = useState<"perfil" | "revisoes" | "conta">("perfil");
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
@@ -162,7 +161,7 @@ export const ConfiguracoesView: React.FC = () => {
           }`}
         >
           <Key className="h-4 w-4" />
-          <span>Conta & Segurança</span>
+          <span>Segurança</span>
         </button>
 
       </div>
@@ -378,24 +377,6 @@ export const ConfiguracoesView: React.FC = () => {
             </form>
           </div>
 
-          <div className="rounded-2xl border border-red-200 bg-red-50/50 p-6 dark:border-red-900/30 dark:bg-red-950/10">
-            <h3 className="text-sm font-black uppercase tracking-wider text-red-600 dark:text-red-400">
-              Zona de Ação Crítica
-            </h3>
-            <p className="mt-1 text-xs text-[#6B6B6B] dark:text-[#A6A6A6]">
-              Encerre sessões ativas ou desconecte sua conta com segurança.
-            </p>
-
-            <div className="mt-4 flex flex-wrap gap-3">
-              <button
-                onClick={logout}
-                className="flex items-center gap-2 rounded-xl border border-[#E2E8F0] bg-white px-4 py-2.5 text-xs font-bold text-red-600 hover:bg-red-50 dark:border-[#292929] dark:bg-[#0F172A] dark:text-red-400 dark:hover:bg-red-950/40"
-              >
-                <LogOut className="h-4 w-4" />
-                <span>Desconectar em Todos os Dispositivos</span>
-              </button>
-            </div>
-          </div>
         </div>
       )}
 
