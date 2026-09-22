@@ -305,28 +305,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy 
       </div>
 
       {/* ========================================================================= */}
-      {/* 1. PRÓXIMA AÇÃO: PLANEJAMENTO DE HOJE                                     */}
-      {/* ========================================================================= */}
-      <TodayScheduleSection
-        plannedBlocks={todayPlannedBlocks}
-        onStartStudy={handleStartStudy}
-        onNavigateToPlanning={() => setActiveTab("planejamento")}
-      />
-
-      {/* ========================================================================= */}
-      {/* 2. PROGRESSO NO EDITAL — ELEMENTO-CHAVE DA HOME                           */}
-      {/* ========================================================================= */}
-      <EditalProgressCard
-        title={activeEdital?.title}
-        cargo={activeEdital?.cargo}
-        percentage={gamification.globalProgressPercentage}
-        completedTopicsCount={gamification.completedTopicsCount}
-        totalTopicsCount={gamification.totalTopicsCount}
-        onNavigateToEdital={() => setActiveTab("edital")}
-      />
-
-      {/* ========================================================================= */}
-      {/* 3. INDICADORES DE HOJE: TEMPO, QUESTÕES E PRECISÃO                        */}
+      {/* 1. INDICADORES DE HOJE: TEMPO, QUESTÕES E PRECISÃO                        */}
       {/* ========================================================================= */}
       <StatCardsRow
         todayMinutes={todayMinutes}
@@ -338,9 +317,30 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy 
       />
 
       {/* ========================================================================= */}
-      {/* 4. OFENSIVA                                                               */}
+      {/* 2. OFENSIVA                                                               */}
       {/* ========================================================================= */}
       <OfensivaCard />
+
+      {/* ========================================================================= */}
+      {/* 3. PROGRESSO NO EDITAL — ELEMENTO-CHAVE DA HOME                           */}
+      {/* ========================================================================= */}
+      <EditalProgressCard
+        title={activeEdital?.title}
+        cargo={activeEdital?.cargo}
+        percentage={gamification.globalProgressPercentage}
+        completedTopicsCount={gamification.completedTopicsCount}
+        totalTopicsCount={gamification.totalTopicsCount}
+        onNavigateToEdital={() => setActiveTab("edital")}
+      />
+
+      {/* ========================================================================= */}
+      {/* 4. PLANEJAMENTO DE HOJE                                                   */}
+      {/* ========================================================================= */}
+      <TodayScheduleSection
+        plannedBlocks={todayPlannedBlocks}
+        onStartStudy={handleStartStudy}
+        onNavigateToPlanning={() => setActiveTab("planejamento")}
+      />
 
       {/* ========================================================================= */}
       {/* 5. REVISÕES                                                               */}
@@ -352,7 +352,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy 
       />
 
       {/* ========================================================================= */}
-      {/* 8. DESEMPENHO POR DISCIPLINA                                              */}
+      {/* 6. DESEMPENHO POR DISCIPLINA                                              */}
       {/* ========================================================================= */}
       <DisciplinePerformanceSection
         disciplines={unifiedDisciplineStats}
@@ -361,7 +361,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy 
       />
 
       {/* ========================================================================= */}
-      {/* 9. META DA SEMANA                                                         */}
+      {/* 7. META DA SEMANA                                                         */}
       {/* ========================================================================= */}
       <WeeklyGoalsSection
         weeklyChartData={weeklyChartData}
@@ -373,7 +373,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy 
       />
 
       {/* ========================================================================= */}
-      {/* 10 E 11. GRID: ÚLTIMAS ATIVIDADES E LEMBRETES                             */}
+      {/* 8 E 9. GRID: ÚLTIMAS ATIVIDADES E LEMBRETES                              */}
       {/* ========================================================================= */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* 10. Últimas atividades */}
