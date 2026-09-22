@@ -30,7 +30,6 @@ import { CicloView } from "./components/ciclo/CicloView";
 import { QuadroSemanalView } from "./components/semanal/QuadroSemanalView";
 import { SimuladosView } from "./components/simulados/SimuladosView";
 import { MetasView } from "./components/metas/MetasView";
-import { MedalhasView } from "./components/medalhas/MedalhasView";
 import { LembretesView } from "./components/reminders/LembretesView";
 import { ConfiguracoesView } from "./components/config/ConfiguracoesView";
 import { GlobalWatermark } from "./components/brand/GlobalWatermark";
@@ -108,8 +107,6 @@ const AuthenticatedApp: React.FC = () => {
         return <SimuladosView />;
       case "metas":
         return <MetasView />;
-      case "medalhas":
-        return <MedalhasView />;
       case "lembretes":
         return <LembretesView />;
       case "configuracoes":
@@ -148,11 +145,7 @@ const AuthenticatedApp: React.FC = () => {
         />
 
         {/* Scrollable View Canvas */}
-        <main
-          className={`flex-1 overflow-y-auto bg-[#F4F5F7] p-4 md:p-6 lg:p-7 dark:bg-[#0F172A] ${
-            activeTab === "dashboard" ? "dark:bg-[#11151F]" : ""
-          }`}
-        >
+        <main className="flex-1 overflow-y-auto bg-[#F4F5F7] p-4 md:p-6 lg:p-7 dark:bg-[#11151F]">
           <div className="mx-auto max-w-7xl">{renderActiveView()}</div>
         </main>
       </div>

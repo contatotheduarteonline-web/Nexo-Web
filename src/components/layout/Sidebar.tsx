@@ -10,7 +10,6 @@ import {
   History,
   TrendingUp,
   Award,
-  Medal,
   Target,
   Bell,
 } from "lucide-react";
@@ -66,7 +65,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
     {
       title: "DESEMPENHO",
       items: [
-        { id: "medalhas", label: "Medalhas e Conquistas", icon: Medal },
         { id: "estatisticas", label: "Estatísticas", icon: TrendingUp },
         { id: "simulados", label: "Simulados", icon: Award },
         { id: "metas", label: "Metas", icon: Target },
