@@ -93,7 +93,7 @@ export const StatCardsRow: React.FC<StatCardsRowProps> = ({
 
         <div className="mt-4 flex items-end justify-end">
           <span className="num-condensed text-[36px] font-bold leading-none text-white">
-            {todayPercentage !== null ? `${todayPercentage}%` : "—"}
+            {todayPercentage !== null ? `${todayPercentage}%` : "0%"}
           </span>
         </div>
       </div>
