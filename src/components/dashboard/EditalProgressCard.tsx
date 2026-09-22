@@ -36,7 +36,7 @@ export const EditalProgressCard: React.FC<EditalProgressCardProps> = ({
 
       <div className="mt-4">
         <span className="num-condensed block text-[32px] font-bold leading-none text-white">
-          {hasEdital ? `${clamped}%` : "—"}
+          {hasEdital ? `${clamped}%` : "0%"}
         </span>
       </div>
 
