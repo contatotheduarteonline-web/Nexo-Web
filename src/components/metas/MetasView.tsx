@@ -7,14 +7,12 @@ import {
   TrendingUp,
   CheckCircle2,
   Calendar,
-  Sparkles,
   Flame,
   Award,
   Save,
   Check,
   RotateCcw,
   Sliders,
-  ChevronRight,
 } from "lucide-react";
 
 export const MetasView: React.FC = () => {
@@ -26,7 +24,6 @@ export const MetasView: React.FC = () => {
     metrics,
     studySessions,
     activeEdital,
-    setActiveTab,
   } = useStudy();
 
   // Local state for goals form
@@ -414,33 +411,6 @@ export const MetasView: React.FC = () => {
         </div>
       </form>
 
-      {/* Dica de Consistência e Atalhos */}
-      <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs dark:border-slate-800 dark:bg-[#252B38]">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-50 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400">
-              <Sparkles className="h-5 w-5" />
-            </div>
-            <div>
-              <h4 className="text-sm font-bold text-white dark:text-white">
-                Deseja sincronizar suas metas com o Planejamento de Estudos?
-              </h4>
-              <p className="text-xs text-white dark:text-white">
-                Seu ciclo e cronograma semanal serão ajustados automaticamente com as novas cargas horárias configuradas.
-              </p>
-            </div>
-          </div>
-
-          <button
-            type="button"
-            onClick={() => setActiveTab("planejamento")}
-            className="flex items-center gap-1.5 rounded-xl border border-slate-200 px-4 py-2 text-xs font-bold text-white hover:bg-slate-50 dark:border-slate-700 dark:text-white dark:hover:bg-slate-800 transition"
-          >
-            <span>Ir para Planejamento</span>
-            <ChevronRight className="h-4 w-4" />
-          </button>
-        </div>
-      </div>
     </div>
   );
 };
