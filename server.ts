@@ -3667,6 +3667,68 @@ app.post("/api/catalog/published-editais", async (req, res) => {
       dataJson: JSON.stringify(snapshot),
     };
 
+    // Fusão aditiva: se já existir um edital publicado do mesmo órgão + ano,
+    // os cargos enviados são adicionados a ele (com ids únicos) em vez de
+    // criar um registro separado duplicando a instituição no catálogo.
+    const existing = await prisma.publishedEdital.findFirst({
+      where: {
+        id: { not: row.id },
+        status: "published",
+        institution: row.institution,
+        year: row.year,
+      },
+    });
+
+    if (existing) {
+      const existingSnap = safeJsonParse<any>(existing.dataJson, null) || {};
+      const existingCargos: any[] = Array.isArray(existingSnap.cargos) ? existingSnap.cargos : [];
+      const existingNames = new Set(
+        existingCargos.map((c) => String(c?.name || "").trim().toLowerCase()).filter(Boolean)
+      );
+
+      const startIndex = existingCargos.length;
+      const newCargos = cargosList
+        .filter((c: any) => c && c.name && !existingNames.has(String(c.name).trim().toLowerCase()))
+        .map((cargo: any, idx: number) => {
+          const order = startIndex + idx + 1;
+          const disciplines = Array.isArray(cargo.disciplines) ? cargo.disciplines : [];
+          return {
+            ...cargo,
+            id: `cargo-${existing.id}-${order}`,
+            order,
+            disciplines: disciplines.map((d: any, dIdx: number) => ({
+              ...d,
+              id: `disc-${existing.id}-${order}-${dIdx + 1}`,
+              order: dIdx + 1,
+              topics: (Array.isArray(d?.topics) ? d.topics : []).map((t: any, tIdx: number) => ({
+                ...t,
+                id: `topic-${existing.id}-${order}-${dIdx + 1}-${tIdx + 1}`,
+                order: tIdx + 1,
+              })),
+            })),
+          };
+        });
+
+      const mergedCargos = [...existingCargos, ...newCargos];
+      const mergedSnap = {
+        ...edital,
+        ...existingSnap,
+        id: existing.id,
+        cargos: mergedCargos,
+        cargosCount: mergedCargos.length,
+      };
+
+      await prisma.publishedEdital.update({
+        where: { id: existing.id },
+        data: {
+          dataJson: JSON.stringify(mergedSnap),
+          updatedAt: new Date(),
+        },
+      });
+
+      return res.json({ success: true, edital: mergedSnap, mergedInto: existing.id });
+    }
+
     await prisma.publishedEdital.upsert({
       where: { id: row.id },
       create: row,
