@@ -13,6 +13,7 @@ import {
   getEditalCargos,
   getFullCargoStructure,
   createCatalogEdital,
+  updateCatalogEdital,
   addCargoToCatalogEdital,
   addDisciplineToCargo,
   addTopicToDiscipline,
@@ -22,10 +23,6 @@ import {
   validateCatalogEditalData,
   VALID_CATALOG_UFS,
 } from "../../lib/catalogEditalService";
-import {
-  publishEditalToServer,
-  PublishedEditalSnapshot,
-} from "../../lib/serverCatalogService";
 import {
   parseEditalPdf,
   parseManualPagesSelection,
@@ -354,11 +351,8 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
   useEffect(() => {
     if (isOpen && step === "edital" && editaisForCareer.length > 0) {
       editaisForCareer.forEach(async (ed) => {
-        const embedded = (ed as PublishedEditalSnapshot).cargos;
         if (ed.cargosCount !== undefined) {
           setEditalCargosCountMap((prev) => ({ ...prev, [ed.id]: ed.cargosCount! }));
-        } else if (embedded) {
-          setEditalCargosCountMap((prev) => ({ ...prev, [ed.id]: embedded.length }));
         } else if (editalCargosCountMap[ed.id] === undefined) {
           try {
             const c = await getEditalCargos(ed.id);
@@ -386,18 +380,8 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
     setIsCustomConcurso(false);
 
     try {
-      // Editais do catálogo oficial (banco do servidor) trazem o snapshot
-      // completo de cargos embutido — sem depender do Firestore.
-      const embedded = (ed as PublishedEditalSnapshot).cargos;
-      const cargos: CatalogCargo[] = embedded?.length
-        ? embedded.map((c) => ({
-            id: c.id,
-            name: c.name,
-            level: c.level,
-            vacancies: c.vacancies,
-            order: c.order,
-          }))
-        : await getEditalCargos(ed.id);
+      // O catálogo oficial mantém os cargos em subcoleção do Firestore.
+      const cargos: CatalogCargo[] = await getEditalCargos(ed.id);
       if (cargos.length === 0) {
         // Sem cargos cadastrados no catálogo, disponibiliza 1 cargo padrão
         const fallbackCargo: CatalogCargo = {
@@ -436,11 +420,8 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
     setEditalYear(ed.year || new Date().getFullYear());
 
     try {
-      // Prioriza o snapshot embutido do catálogo oficial (banco do servidor)
-      const embeddedStructure = (ed as PublishedEditalSnapshot).cargos?.find(
-        (c) => c.id === cargoItem.id
-      );
-      const structure = embeddedStructure ?? (await getFullCargoStructure(ed.id, cargoItem.id));
+      // A estrutura do cargo é carregada diretamente das subcoleções do Firestore.
+      const structure = await getFullCargoStructure(ed.id, cargoItem.id);
       const rawDisciplines: ExtractedDiscipline[] = (structure?.disciplines || []).map(
         (d, dIdx) => ({
           id: d.id || `disc-${dIdx + 1}`,
@@ -1106,6 +1087,15 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
           } catch (logoErr: any) {
             console.warn("[CATALOG] Falha ao processar imagem do edital:", logoErr);
           }
+
+          if (!catalogLogoDataUrl) {
+            setCatalogValidationErrors([
+              "Não foi possível preparar a imagem do edital para o catálogo. A publicação foi interrompida.",
+            ]);
+            setStep("review");
+            setIsSaving(false);
+            return;
+          }
         }
 
         // Snapshot completa do edital + cargos + disciplinas + tópicos (Step 5)
@@ -1131,16 +1121,15 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
           cargoPretendido: cargoPretendido.trim(),
           imagemTipo: "logo_oficial",
           dadosVerificados: true,
-          status: publishToCatalog ? "published" : "draft",
+          status: "draft",
           version: 1,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
           createdBy: userUid,
-          validatedBy: publishToCatalog ? userUid : undefined,
           description: editalNotes || undefined,
         };
 
-        const catalogCargos: PublishedEditalSnapshot["cargos"] = cargosList.map(
+        const catalogCargos = cargosList.map(
           (c, cIdx) => ({
             id: `cargo-${catalogEntry.id}-${cIdx + 1}`,
             name: c.name.trim(),
@@ -1162,24 +1151,9 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
           })
         );
 
-        // 4a. PUBLICA NO BANCO DE DADOS DO SERVIDOR (PostgreSQL) — fonte oficial
-        // do catálogo. Regra: publicou o edital, ele já aparece para todos os
-        // usuários como opção de plano disponível. Falhas são exibidas.
-        try {
-          await publishEditalToServer(catalogEntry, catalogCargos);
-          publishedCatalogId = catalogEntry.id;
-        } catch (pubErr: any) {
-          console.error("[CATALOG] Falha ao publicar no banco de dados:", pubErr);
-          setCatalogValidationErrors([
-            `Falha ao publicar o edital no catálogo oficial: ${pubErr?.message || pubErr}`,
-          ]);
-          setStep("review");
-          setIsSaving(false);
-          return;
-        }
-
-        // 4b. Espelhamento best-effort no Firestore (compatibilidade com
-        // clientes legados). Falhas aqui não bloqueiam a publicação oficial.
+        // 4a. PERSISTE NO FIRESTORE — fonte oficial do catálogo.
+        // O edital é criado como draft e só se torna público depois que
+        // cargos, disciplinas e tópicos forem gravados com sucesso.
         try {
           await createCatalogEdital(
             {
@@ -1198,17 +1172,18 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
               publicationDate: catalogEntry.publicationDate,
               sourceFileName: catalogEntry.sourceFileName,
               sourceType: catalogEntry.sourceType,
-              sourceHash: `${catalogEntry.sourceHash}`,
+              sourceHash: catalogEntry.sourceHash,
               normalizedIdentity: catalogEntry.normalizedIdentity,
               logoUrl: catalogEntry.logoUrl || "",
-              status: catalogEntry.status,
+              logoDataUrl: catalogEntry.logoDataUrl,
+              status: "draft",
               description: catalogEntry.description,
             },
             userUid
           );
 
-          for (let cIdx = 0; cIdx < catalogCargos!.length; cIdx++) {
-            const cItem = catalogCargos![cIdx];
+          for (let cIdx = 0; cIdx < catalogCargos.length; cIdx++) {
+            const cItem = catalogCargos[cIdx];
             const addedCargo = await addCargoToCatalogEdital(
               catalogEntry.id,
               {
@@ -1248,8 +1223,32 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
               }
             }
           }
-        } catch (adminCatErr) {
-          console.warn("[CATALOG] Aviso ao espelhar no Firestore (publicação no banco oficial seguiu normal):", adminCatErr);
+
+          await updateCatalogEdital(
+            catalogEntry.id,
+            {
+              ...(publishToCatalog
+                ? {
+                    status: "published" as const,
+                    validatedBy: userUid,
+                  }
+                : {}),
+              cargosCount: catalogCargos.length,
+            },
+            userUid
+          );
+
+          if (publishToCatalog) {
+            publishedCatalogId = catalogEntry.id;
+          }
+        } catch (catalogErr: any) {
+          console.error("[CATALOG] Falha ao persistir/publicar no Firestore:", catalogErr);
+          setCatalogValidationErrors([
+            `Falha ao salvar o edital no catálogo oficial: ${catalogErr?.message || catalogErr}`,
+          ]);
+          setStep("review");
+          setIsSaving(false);
+          return;
         }
 
         refreshCatalogEditais();
