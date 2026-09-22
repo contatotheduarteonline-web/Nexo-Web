@@ -423,7 +423,7 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
   const btnSecondary = `${footerBtnBase} border border-slate-300 text-slate-600 hover:bg-slate-50 dark:border-slate-700 dark:text-white dark:hover:bg-slate-800`;
 
   // =========================================================================
-  // CHOICE SCREEN: Manual vs Ajuda do Estudei
+  // CHOICE SCREEN: Manual vs Ajuda do Nexo
   // =========================================================================
   if (stage === "choice") {
     return (
@@ -447,7 +447,7 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
           <p className="mt-6 text-center text-sm text-slate-600 dark:text-slate-300">
             Como você deseja criar o seu Planejamento? De forma{" "}
             <strong className="text-slate-900 dark:text-white">manual</strong>, ou prefere a
-            ajuda do <strong className="text-[#F3AA2D]">Estudei</strong>?
+            ajuda do <strong className="text-[#F3AA2D]">Nexo</strong>?
           </p>
 
           <div className="mt-6">
@@ -463,7 +463,7 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
               }}
               className="w-full max-w-xs rounded-xl bg-[#F3AA2D] px-6 py-3 text-sm font-bold text-[#11151F] shadow-sm hover:bg-[#e09a1d] active:scale-95 transition cursor-pointer"
             >
-              Quero Ajuda do Estudei
+              Quero Ajuda do Nexo
             </button>
             <button
               type="button"
