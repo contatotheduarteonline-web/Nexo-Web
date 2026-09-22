@@ -725,15 +725,24 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
       cargoName
     );
 
+    // CORREÇÃO: o processamento de páginas é referente apenas ao cargo ativo.
+    // Antes a lista inteira era substituída por um único cargo, descartando
+    // silenciosamente os outros cargos já cadastrados na publicação.
     const updatedParsedData: ParsedEditalData = {
       ...parsedData,
       programmaticSection: section,
       validation,
-      cargos: [cargo],
+      cargos: currentCargo
+        ? [...(parsedData.cargos || []).filter((c) => c.id !== currentCargo.id), cargo]
+        : [...(parsedData.cargos || []), cargo],
     };
 
     setParsedData(updatedParsedData);
-    setCargosList([cargo]);
+    setCargosList((prev) =>
+      currentCargo
+        ? prev.map((c) => (c.id === currentCargo.id ? cargo : c))
+        : [...prev, cargo]
+    );
     setActiveCargoId(cargo.id);
     if (cargo.disciplines.length > 0) {
       setExpandedDiscId(cargo.disciplines[0].id);
