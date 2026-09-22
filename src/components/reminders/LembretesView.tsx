@@ -22,12 +22,12 @@ export const LembretesView: React.FC = () => {
     activeEdital,
   } = useStudy();
 
-  const [filterCategory, setFilterCategory] = useState<"TODOS" | "INSCRICOES" | "PROVAS" | "PAGAMENTOS" | "GERAL">("TODOS");
+  const [filterCategory, setFilterCategory] = useState<"TODOS" | "INSCRICOES" | "PROVAS" | "PAGAMENTOS">("TODOS");
   const [filterStatus, setFilterStatus] = useState<"TODOS" | "PENDENTES" | "CONCLUIDOS">("TODOS");
 
   const [isAdding, setIsAdding] = useState(false);
   const [title, setTitle] = useState("");
-  const [category, setCategory] = useState<"INSCRICOES" | "PROVAS" | "PAGAMENTOS" | "GERAL">("GERAL");
+  const [category, setCategory] = useState<"INSCRICOES" | "PROVAS" | "PAGAMENTOS">("INSCRICOES");
   const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
 
   const filteredReminders = useMemo(() => {
@@ -145,7 +145,6 @@ export const LembretesView: React.FC = () => {
                 <option value="INSCRICOES">Inscrições</option>
                 <option value="PROVAS">Provas</option>
                 <option value="PAGAMENTOS">Pagamentos</option>
-                <option value="GERAL">Geral</option>
               </select>
             </div>
 
@@ -184,7 +183,7 @@ export const LembretesView: React.FC = () => {
       <div className="flex flex-wrap items-center justify-between gap-2 rounded-2xl border border-[#E2E8F0] bg-white p-3 dark:border-[#1E293B] dark:bg-[#252B38]">
         {/* Category Tabs */}
         <div className="flex flex-wrap gap-1">
-          {(["TODOS", "INSCRICOES", "PROVAS", "PAGAMENTOS", "GERAL"] as const).map((cat) => (
+          {(["TODOS", "INSCRICOES", "PROVAS", "PAGAMENTOS"] as const).map((cat) => (
             <button
               key={cat}
               onClick={() => setFilterCategory(cat)}
