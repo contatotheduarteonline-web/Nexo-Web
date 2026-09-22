@@ -5,7 +5,7 @@ import { Reminder } from "../../types";
 interface RemindersSectionProps {
   reminders: Reminder[];
   onToggleReminder: (id: string) => void;
-  onAddReminder: (data: { title: string; date: string }) => void;
+  onAddReminder: (data: { title: string; category: "INSCRICOES" | "PROVAS" | "PAGAMENTOS"; date: string }) => void;
 }
 
 export const RemindersSection: React.FC<RemindersSectionProps> = ({
@@ -15,6 +15,7 @@ export const RemindersSection: React.FC<RemindersSectionProps> = ({
 }) => {
   const [isAddingReminder, setIsAddingReminder] = useState(false);
   const [newReminderTitle, setNewReminderTitle] = useState("");
+  const [newReminderCategory, setNewReminderCategory] = useState<"INSCRICOES" | "PROVAS" | "PAGAMENTOS">("PROVAS");
   const [newReminderDate, setNewReminderDate] = useState(new Date().toISOString().split("T")[0]);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -22,6 +23,7 @@ export const RemindersSection: React.FC<RemindersSectionProps> = ({
     if (!newReminderTitle.trim()) return;
     onAddReminder({
       title: newReminderTitle.trim(),
+      category: newReminderCategory,
       date: newReminderDate,
     });
     setNewReminderTitle("");
@@ -69,12 +71,23 @@ export const RemindersSection: React.FC<RemindersSectionProps> = ({
               className="w-full rounded-lg border border-[#384154] bg-[#171B25] p-2 text-[12px] text-white placeholder:text-white outline-hidden focus:border-[#F3AA2D] transition-colors duration-200 mb-2"
             />
             <div className="flex items-center justify-between gap-2">
-              <input
-                type="date"
-                value={newReminderDate}
-                onChange={(e) => setNewReminderDate(e.target.value)}
-                className="rounded-lg border border-[#384154] bg-[#171B25] p-1.5 text-[11px] text-white focus:border-[#F3AA2D] transition-colors duration-200"
-              />
+              <div className="flex items-center gap-2">
+                <input
+                  type="date"
+                  value={newReminderDate}
+                  onChange={(e) => setNewReminderDate(e.target.value)}
+                  className="rounded-lg border border-[#384154] bg-[#171B25] p-1.5 text-[11px] text-white focus:border-[#F3AA2D] transition-colors duration-200"
+                />
+                <select
+                  value={newReminderCategory}
+                  onChange={(e) => setNewReminderCategory(e.target.value as "INSCRICOES" | "PROVAS" | "PAGAMENTOS")}
+                  className="rounded-lg border border-[#384154] bg-[#171B25] p-1.5 text-[11px] text-white focus:border-[#F3AA2D] transition-colors duration-200 cursor-pointer"
+                >
+                  <option value="INSCRICOES">Inscrições</option>
+                  <option value="PROVAS">Provas</option>
+                  <option value="PAGAMENTOS">Pagamentos</option>
+                </select>
+              </div>
               <div className="flex items-center gap-1.5">
                 <button
                   type="button"

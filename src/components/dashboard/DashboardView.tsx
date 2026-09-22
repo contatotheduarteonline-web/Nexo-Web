@@ -290,10 +290,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy 
   }, [studySessions, activeEdital]);
 
   // Handle Quick Reminder Creation
-  const handleAddReminder = (data: { title: string; date: string }) => {
+  const handleAddReminder = (data: { title: string; category: "INSCRICOES" | "PROVAS" | "PAGAMENTOS"; date: string }) => {
     addReminder({
       title: data.title,
-      category: "GERAL",
+      category: data.category,
       date: data.date,
       completed: false,
       editalId: activeEdital?.id,
