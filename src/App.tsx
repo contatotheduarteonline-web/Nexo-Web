@@ -3,7 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { ActiveTab } from "./types";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import { StudyProvider, useStudy } from "./context/StudyContext";
 import { ToastProvider } from "./context/ToastContext";
@@ -18,7 +19,7 @@ import { Sidebar } from "./components/layout/Sidebar";
 import { Header } from "./components/layout/Header";
 import { DashboardView } from "./components/dashboard/DashboardView";
 import { EditalView } from "./components/edital/EditalView";
-import { CronometroView } from "./components/cronometro/CronometroView";
+import { CronometroModal } from "./components/cronometro/CronometroModal";
 import { RevisoesView } from "./components/revisoes/RevisoesView";
 import { PlanosView } from "./components/planos/PlanosView";
 import { DiagnosticoView } from "./components/diagnostico/DiagnosticoView";
@@ -30,7 +31,6 @@ import { CicloView } from "./components/ciclo/CicloView";
 import { QuadroSemanalView } from "./components/semanal/QuadroSemanalView";
 import { SimuladosView } from "./components/simulados/SimuladosView";
 import { MetasView } from "./components/metas/MetasView";
-import { MedalhasView } from "./components/medalhas/MedalhasView";
 import { LembretesView } from "./components/reminders/LembretesView";
 import { ConfiguracoesView } from "./components/config/ConfiguracoesView";
 import { GlobalWatermark } from "./components/brand/GlobalWatermark";
@@ -45,6 +45,16 @@ const AuthenticatedApp: React.FC = () => {
 
   // Watch for gamification XP and Rank milestones across the entire app
   useGamificationTracker();
+
+  // "Registro de Estudos" is no longer a sidebar destination — it renders as an
+  // overlay popup on top of the last visited view, opened by study actions.
+  const [lastMainTab, setLastMainTab] = useState<ActiveTab>("dashboard");
+  useEffect(() => {
+    if (activeTab && activeTab !== "cronometro") {
+      setLastMainTab(activeTab);
+    }
+  }, [activeTab]);
+  const mainTab: ActiveTab = activeTab === "cronometro" ? lastMainTab : activeTab;
 
   const [isAiModalOpen, setIsAiModalOpen] = useState(false);
   const [isNewEditalOpen, setIsNewEditalOpen] = useState(false);
@@ -78,14 +88,12 @@ const AuthenticatedApp: React.FC = () => {
   };
 
   const renderActiveView = () => {
-    switch (activeTab) {
+    switch (mainTab) {
       case "dashboard":
         return <DashboardView onOpenManualStudy={() => handleOpenManualStudy()} />;
       case "edital":
       case "edital_verticalizado":
         return <EditalView />;
-      case "cronometro":
-        return <CronometroView />;
       case "revisoes":
         return <RevisoesView />;
       case "planos":
@@ -108,8 +116,6 @@ const AuthenticatedApp: React.FC = () => {
         return <SimuladosView />;
       case "metas":
         return <MetasView />;
-      case "medalhas":
-        return <MedalhasView />;
       case "lembretes":
         return <LembretesView />;
       case "configuracoes":
@@ -120,7 +126,7 @@ const AuthenticatedApp: React.FC = () => {
   };
 
   return (
-    <div className="flex h-screen w-full flex-col overflow-hidden bg-[#E9EAEC] font-sans text-[#172033] antialiased dark:bg-[#0C0F17] dark:text-[#F1F5F9] relative">
+    <div className="flex h-screen w-full flex-col overflow-hidden bg-[#E9EAEC] font-sans text-[#172033] antialiased dark:bg-[#0F172A] dark:text-[#F1F5F9] relative">
       {/* Background Institutional Watermark Texture */}
       <GlobalWatermark />
 
@@ -141,19 +147,24 @@ const AuthenticatedApp: React.FC = () => {
       <div className="flex flex-1 overflow-hidden relative">
         {/* Left Sidebar below Topbar */}
         <Sidebar
-          activeTab={activeTab}
+          activeTab={mainTab}
           setActiveTab={setActiveTab}
           isCollapsed={isSidebarCollapsed}
           setIsCollapsed={setIsSidebarCollapsed}
         />
 
         {/* Scrollable View Canvas */}
-        <main className="flex-1 overflow-y-auto bg-[#F4F5F7] p-4 md:p-6 lg:p-7 dark:bg-[#0B0E14]">
+        <main className="flex-1 overflow-y-auto bg-[#F4F5F7] p-4 md:p-6 lg:p-7 dark:bg-[#11151F]">
           <div className="mx-auto max-w-7xl">{renderActiveView()}</div>
         </main>
       </div>
 
       {/* Modals */}
+      <CronometroModal
+        isOpen={activeTab === "cronometro"}
+        onClose={() => setActiveTab(lastMainTab)}
+      />
+
       <AiAssistantModal
         isOpen={isAiModalOpen}
         onClose={() => setIsAiModalOpen(false)}
@@ -188,7 +199,7 @@ const RootRouter: React.FC = () => {
     return (
       <div className="flex h-screen w-full items-center justify-center bg-[#07090E] text-white">
         <div className="flex flex-col items-center gap-4">
-          <div className="h-10 w-10 animate-spin rounded-full border-4 border-orange-500 border-t-transparent"></div>
+          <div className="h-10 w-10 animate-spin rounded-full border-4 border-amber-500 border-t-transparent"></div>
           <p className="text-sm font-medium tracking-wide text-zinc-400">Conectando sessão segura...</p>
         </div>
       </div>
@@ -199,7 +210,7 @@ const RootRouter: React.FC = () => {
     if (authView === "cadastro") {
       return <CadastroView onGoToLogin={() => setAuthView("login")} />;
     }
-    return <LoginView onGoToCadastro={() => setAuthView("cadastro")} />;
+    return <LoginView />;
   }
 
   return (

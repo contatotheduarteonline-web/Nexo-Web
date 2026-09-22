@@ -73,7 +73,7 @@ export const DisciplineColorPickerModal: React.FC<DisciplineColorPickerModalProp
 
   return (
     <div className="fixed inset-0 z-70 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs">
-      <div className="w-full max-w-md rounded-2xl border border-zinc-200 bg-white p-5 shadow-2xl dark:border-zinc-800 dark:bg-zinc-900 transition-all">
+      <div className="w-full max-w-md rounded-2xl border border-zinc-200 bg-white p-5 shadow-2xl dark:border-zinc-800 dark:bg-[#252B38] transition-all">
         {/* Cabeçalho */}
         <div className="flex items-center justify-between pb-3 border-b border-zinc-100 dark:border-zinc-800">
           <div className="flex items-center gap-2.5">
@@ -82,17 +82,17 @@ export const DisciplineColorPickerModal: React.FC<DisciplineColorPickerModalProp
               style={{ backgroundColor: selectedColor }}
             />
             <div className="min-w-0">
-              <h3 className="text-sm font-bold text-zinc-900 dark:text-white truncate">
+              <h3 className="text-sm font-bold text-white dark:text-white truncate">
                 Alterar Cor da Matéria
               </h3>
-              <p className="text-xs text-zinc-500 dark:text-zinc-400 truncate">
+              <p className="text-xs text-white dark:text-white truncate">
                 {disciplineName}
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="rounded-lg p-1.5 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-zinc-800 dark:hover:text-zinc-200 transition cursor-pointer"
+            className="rounded-lg p-1.5 text-white hover:bg-zinc-100 hover:text-white dark:hover:bg-zinc-800 dark:hover:text-white transition cursor-pointer"
           >
             <X className="h-4 w-4" />
           </button>
@@ -108,10 +108,10 @@ export const DisciplineColorPickerModal: React.FC<DisciplineColorPickerModalProp
               <Check className="h-4 w-4 drop-shadow-xs" />
             </div>
             <div>
-              <span className="text-xs font-bold text-zinc-800 dark:text-zinc-200 block">
+              <span className="text-xs font-bold text-white dark:text-white block">
                 {isDuplicate ? "Cor em conflito" : "Cor exclusiva selecionada"}
               </span>
-              <span className="text-[11px] font-mono text-zinc-400">
+              <span className="text-[11px] font-mono text-white">
                 {normalizeHex(selectedColor).toUpperCase()}
               </span>
             </div>
@@ -145,10 +145,10 @@ export const DisciplineColorPickerModal: React.FC<DisciplineColorPickerModalProp
         {/* Grade de Cores da Paleta */}
         <div>
           <div className="flex items-center justify-between mb-2">
-            <label className="text-xs font-bold uppercase tracking-wider text-zinc-600 dark:text-zinc-400">
+            <label className="text-xs font-bold uppercase tracking-wider text-white dark:text-white">
               Paleta de Cores Disponíveis
             </label>
-            <span className="text-[10px] text-zinc-400">
+            <span className="text-[10px] text-white">
               {otherDisciplines.length} matérias cadastradas
             </span>
           </div>
@@ -220,7 +220,7 @@ export const DisciplineColorPickerModal: React.FC<DisciplineColorPickerModalProp
                 }
               }}
               placeholder="#000000"
-              className="w-24 font-mono text-xs uppercase rounded-lg border border-zinc-200 bg-zinc-50 px-2 py-1 text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"
+              className="w-24 font-mono text-xs uppercase rounded-lg border border-zinc-200 bg-zinc-50 px-2 py-1 text-white dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"
             />
           </div>
 
@@ -228,7 +228,7 @@ export const DisciplineColorPickerModal: React.FC<DisciplineColorPickerModalProp
             <button
               type="button"
               onClick={onClose}
-              className="rounded-xl px-3 py-1.5 text-xs font-medium text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800 transition cursor-pointer"
+              className="rounded-xl px-3 py-1.5 text-xs font-medium text-white hover:bg-zinc-100 dark:text-white dark:hover:bg-zinc-800 transition cursor-pointer"
             >
               Cancelar
             </button>

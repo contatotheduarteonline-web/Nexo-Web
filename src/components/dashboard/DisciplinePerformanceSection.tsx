@@ -29,15 +29,15 @@ export const DisciplinePerformanceSection: React.FC<DisciplinePerformanceSection
   return (
     <section
       id="section-desempenho-disciplinas"
-      className="rounded-2xl border border-[#E5E7EB] bg-white p-5 sm:p-6 shadow-[0_1px_3px_rgba(0,0,0,0.03),0_4px_12px_rgba(0,0,0,0.015)] dark:border-[#1E2638] dark:bg-[#121622]"
+      className="nx-card p-5 sm:p-6"
     >
-      <div className="flex items-center justify-between pb-4 border-b border-[#F0F2F5] dark:border-[#1C2333]">
+      <div className="flex items-center justify-between pb-4 border-b border-[#384154]">
         <div className="flex items-center gap-2.5">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-orange-50 text-[#F97316] dark:bg-orange-950/40 dark:text-orange-400">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#384154] bg-[#171B25] text-white">
             <Layers className="h-4 w-4" />
           </div>
-          <h2 className="text-[16px] sm:text-[17px] font-semibold text-[#172033] dark:text-white tracking-tight">
-            Desempenho por disciplina
+          <h2 className="font-condensed text-[19px] font-bold text-white">
+            PAINEL
           </h2>
         </div>
 
@@ -45,7 +45,7 @@ export const DisciplinePerformanceSection: React.FC<DisciplinePerformanceSection
           type="button"
           id="btn-ver-detalhes-disciplinas"
           onClick={onNavigateToDisciplines}
-          className="text-[13px] font-semibold text-[#F97316] hover:text-[#EA580C] hover:underline flex items-center gap-1 cursor-pointer transition-colors"
+          className="text-[13px] font-semibold text-[#F3AA2D] hover:text-[#D98F20] hover:underline flex items-center gap-1 cursor-pointer transition-colors duration-200"
         >
           <span>Ver todas</span>
           <ArrowUpRight className="h-3.5 w-3.5" />
@@ -54,13 +54,13 @@ export const DisciplinePerformanceSection: React.FC<DisciplinePerformanceSection
 
       <div className="mt-3 overflow-x-auto">
         {disciplines.length === 0 ? (
-          <p className="text-[14px] text-[#667085] dark:text-[#94A3B8] py-8 text-center">
+          <p className="text-[14px] text-white py-8 text-center">
             Nenhuma disciplina cadastrada no edital ativo.
           </p>
         ) : (
           <table className="w-full text-left text-[13px]">
             <thead>
-              <tr className="border-b border-[#F0F2F5] text-[11px] font-semibold uppercase tracking-wider text-[#667085] dark:border-[#1C2333] dark:text-[#94A3B8]">
+              <tr className="border-b border-[#384154] text-[11px] font-semibold uppercase tracking-[0.08em] text-white">
                 <th className="pb-3 pr-4 font-semibold">Disciplina</th>
                 <th className="pb-3 px-4 font-semibold text-center">Questões</th>
                 <th className="pb-3 px-4 font-semibold text-center">Precisão</th>
@@ -69,71 +69,70 @@ export const DisciplinePerformanceSection: React.FC<DisciplinePerformanceSection
                 <th className="pb-3 pl-4 font-semibold text-right">Ação</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#F0F2F5] dark:divide-[#1C2333]">
+            <tbody className="divide-y divide-[#384154]">
               {disciplines.map((d) => (
                 <tr
                   key={d.id}
                   id={`discipline-row-${d.id}`}
-                  className="transition-colors hover:bg-[#F8F9FB] dark:hover:bg-[#161D2B]/60"
+                  className="transition-colors duration-200 hover:bg-[#2D3442]/50"
                 >
                   <td className="py-3.5 pr-4">
                     <div className="flex items-center gap-2.5">
                       <span
-                        className="h-2.5 w-2.5 rounded-full shrink-0 shadow-xs"
-                        style={{ backgroundColor: d.color || "#F97316" }}
+                        className="h-2.5 w-2.5 rounded-full shrink-0"
+                        style={{ backgroundColor: d.color || "#F3AA2D" }}
                       />
-                      <span className="font-semibold text-[#172033] dark:text-white">
+                      <span className="font-semibold text-white">
                         {d.name}
                       </span>
                     </div>
                   </td>
 
-                  <td className="py-3.5 px-4 text-center font-mono text-[12px] text-[#667085] dark:text-[#94A3B8]">
+                  <td className="py-3.5 px-4 text-center text-[12px] text-white">
                     {d.qDone > 0 ? (
-                      <span className="inline-flex items-center rounded-md bg-[#F8F9FB] border border-[#E5E7EB] px-2 py-0.5 dark:bg-[#181F2E] dark:border-[#1E2638]">
-                        <strong className="text-[#172033] dark:text-white mr-1">{d.qDone}</strong>
+                      <span className="nx-deep inline-flex items-center rounded-md px-2 py-0.5">
+                        <strong className="num-condensed text-[13px] font-bold text-white mr-1">{d.qDone}</strong>
                       </span>
                     ) : (
                       "—"
                     )}
                   </td>
 
-                  <td className="py-3.5 px-4 text-center font-mono text-[12px]">
+                  <td className="py-3.5 px-4 text-center text-[12px]">
                     {d.accuracy !== null ? (
                       <span
                         className={
                           d.accuracy >= 70
-                            ? "inline-flex items-center rounded-md bg-emerald-50 px-2 py-0.5 font-semibold text-[#16A37A] border border-emerald-200/60 dark:bg-emerald-950/40 dark:border-emerald-800/40"
+                            ? "inline-flex items-center rounded-md border border-emerald-400/25 bg-emerald-400/10 px-2 py-0.5 font-semibold text-[#34D399]"
                             : d.accuracy >= 50
-                            ? "inline-flex items-center rounded-md bg-orange-50 px-2 py-0.5 font-semibold text-[#F97316] border border-orange-200/60 dark:bg-orange-950/40 dark:border-orange-800/40"
-                            : "inline-flex items-center rounded-md bg-red-50 px-2 py-0.5 font-semibold text-[#DC4B4B] border border-red-200/60 dark:bg-red-950/40 dark:border-red-800/40"
+                            ? "inline-flex items-center rounded-md border border-[#F3AA2D]/25 bg-[#F3AA2D]/10 px-2 py-0.5 font-semibold text-[#F3AA2D]"
+                            : "inline-flex items-center rounded-md border border-[#D84A4A]/25 bg-[#D84A4A]/10 px-2 py-0.5 font-semibold text-[#D84A4A]"
                         }
                       >
                         {d.accuracy}%
                       </span>
                     ) : (
-                      <span className="text-[#667085] dark:text-[#94A3B8]">—</span>
+                      <span className="text-white">—</span>
                     )}
                   </td>
 
-                  <td className="py-3.5 px-4 text-center font-mono text-[12px] text-[#172033] dark:text-white font-medium">
+                  <td className="num-condensed py-3.5 px-4 text-center text-[13px] text-white font-bold">
                     {d.timeFormatted}
                   </td>
 
                   <td className="py-3.5 px-4 min-w-[150px]">
                     <div className="space-y-1">
-                      <div className="flex justify-between text-[11px] text-[#667085] dark:text-[#94A3B8] font-medium">
+                      <div className="flex justify-between text-[11px] text-white font-medium">
                         <span>
                           {d.studiedTopicsCount}/{d.topicsCount} tópicos
                         </span>
-                        <span className="font-mono">{d.topicsProgressPercent}%</span>
+                        <span className="num-condensed text-white font-bold">{d.topicsProgressPercent}%</span>
                       </div>
-                      <div className="h-1.5 w-full overflow-hidden rounded-full bg-[#E5E7EB] dark:bg-[#1E2638]">
+                      <div className="h-1.5 w-full overflow-hidden rounded-full border border-[#384154] bg-[#171B25]">
                         <div
-                          className="h-full rounded-full transition-all duration-500"
+                          className="h-full rounded-full bg-[#F3AA2D] transition-all duration-500"
                           style={{
                             width: `${d.topicsProgressPercent}%`,
-                            backgroundColor: d.color || "#F97316",
                           }}
                         />
                       </div>
@@ -145,7 +144,7 @@ export const DisciplinePerformanceSection: React.FC<DisciplinePerformanceSection
                       type="button"
                       id={`btn-estudar-disciplina-${d.id}`}
                       onClick={() => onStartStudy(d.id, 45)}
-                      className="inline-flex items-center gap-1.5 rounded-lg border border-[#E5E7EB] bg-white px-3 py-1.5 text-[12px] font-semibold text-[#172033] shadow-xs transition hover:border-[#F97316] hover:text-[#F97316] dark:border-[#1E2638] dark:bg-[#161D2B] dark:text-white dark:hover:border-[#F97316] cursor-pointer"
+                      className="nx-deep nx-deep-hover inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[12px] font-semibold text-white hover:border-[#F3AA2D]/50 hover:text-[#F3AA2D] cursor-pointer"
                     >
                       <Play className="h-3 w-3 fill-current" />
                       <span>Estudar</span>

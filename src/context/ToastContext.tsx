@@ -24,7 +24,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         particleCount: 80,
         spread: 70,
         origin: { y: 0.15, x: 0.5 },
-        colors: ["#FF6B00", "#FFA726", "#F59E0B", "#8B5CF6", "#10B981"],
+        colors: ["#F59E0B", "#FBBF24", "#F59E0B", "#8B5CF6", "#10B981"],
         disableForReducedMotion: true,
         zIndex: 9999,
       });
@@ -74,7 +74,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         title: "Novo nível alcançado",
         subtitle: `Nível ${rankLevel}: ${rankTitle}`,
         icon: rankIcon || "trendingup",
-        badgeStyle: "from-orange-500 to-amber-500",
+        badgeStyle: "from-amber-500 to-amber-500",
       });
     },
     [showToast]
@@ -87,7 +87,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         title: label || "Progresso nos Estudos",
         subtitle: `+${xpGained.toLocaleString("pt-BR")} XP • Total: ${totalXp.toLocaleString("pt-BR")} XP`,
         icon: "zap",
-        badgeStyle: "from-orange-500 to-amber-500",
+        badgeStyle: "from-amber-500 to-amber-500",
       });
     },
     [showToast]
@@ -100,7 +100,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         title: "Conquista Desbloqueada",
         subtitle: `${badgeTitle}: ${desc}`,
         icon: badgeIcon || "check",
-        badgeStyle: "from-orange-500 to-amber-500",
+        badgeStyle: "from-amber-500 to-amber-500",
       });
     },
     [showToast]

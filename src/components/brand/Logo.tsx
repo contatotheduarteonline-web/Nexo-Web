@@ -7,118 +7,85 @@ interface LogoProps {
   themeMode?: "dark" | "light" | "auto";
 }
 
+/**
+ * NEXO wordmark — white "NEXO" letters with a subtle chromatic
+ * aberration (red/cyan edge shift) and an amber dot.
+ */
 export const Logo: React.FC<LogoProps> = ({
   variant = "horizontal",
   size = "md",
   className = "",
   themeMode = "auto",
 }) => {
-  // Dimension scales
-  const symbolDimensions = {
-    xs: "w-6 h-6",
-    sm: "w-8 h-8",
-    md: "w-10 h-10",
-    lg: "w-14 h-14",
-    xl: "w-20 h-20",
-    hero: "w-28 h-28",
+  const wordmarkSizes: Record<string, string> = {
+    xs: "text-sm",
+    sm: "text-lg",
+    md: "text-2xl",
+    lg: "text-3xl sm:text-4xl",
+    xl: "text-4xl sm:text-5xl",
+    hero: "text-5xl sm:text-6xl",
   };
 
-  const NexoSymbol: React.FC<{ sizeClass: string }> = ({ sizeClass }) => (
-    <svg
-      viewBox="0 0 120 120"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className={`${sizeClass} shrink-0 transition-transform duration-200`}
-    >
-      <defs>
-        <linearGradient id="nexoGrad1" x1="10" y1="10" x2="110" y2="110" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#FF8A00" />
-          <stop offset="1" stopColor="#FF5400" />
-        </linearGradient>
-        <linearGradient id="nexoGrad2" x1="110" y1="10" x2="10" y2="110" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#FFA726" />
-          <stop offset="1" stopColor="#E65100" />
-        </linearGradient>
-      </defs>
+  const textColor =
+    themeMode === "dark"
+      ? "text-white"
+      : themeMode === "light"
+      ? "text-[#172033]"
+      : "text-[#172033] dark:text-white";
 
-      {/* Rounded Outer Framing Rhombus / Nexus Node */}
-      <rect
-        x="60"
-        y="14"
-        width="65"
-        height="65"
-        rx="16"
-        transform="rotate(45 60 14)"
-        fill="#121620"
-        stroke="url(#nexoGrad1)"
-        strokeWidth="5"
-      />
+  const subtitleSlate =
+    themeMode === "dark"
+      ? "text-slate-400"
+      : themeMode === "light"
+      ? "text-slate-500"
+      : "text-slate-500 dark:text-slate-400";
 
-      {/* Inner Intersecting Node / Pathway */}
-      <path
-        d="M38 60 L60 38 L82 60 L60 82 Z"
-        fill="none"
-        stroke="#FFA726"
-        strokeWidth="3.5"
-        strokeLinejoin="round"
-      />
-
-      {/* Modern Center Nexus Point */}
-      <circle cx="60" cy="60" r="5" fill="#FFFFFF" />
-
-      {/* Dynamic Geometric Nodes (North, East, South, West) */}
-      <circle cx="60" cy="38" r="3.5" fill="#FF8A00" />
-      <circle cx="82" cy="60" r="3.5" fill="#FF8A00" />
-      <circle cx="60" cy="82" r="3.5" fill="#FF8A00" />
-      <circle cx="38" cy="60" r="3.5" fill="#FF8A00" />
-    </svg>
+  const Wordmark: React.FC<{ sizeClass: string }> = ({ sizeClass }) => (
+    <span className="relative inline-flex items-baseline">
+      <span
+        className={`font-black uppercase leading-none tracking-[0.14em] ${sizeClass} ${textColor}`}
+        style={{
+          textShadow:
+            "0.03em 0 0 rgba(255, 56, 92, 0.45), -0.03em 0 0 rgba(56, 224, 255, 0.35)",
+        }}
+      >
+        NEXO
+      </span>
+      <span className="font-black leading-none text-[#F59E0B]">.</span>
+    </span>
   );
 
+  const Subtitle: React.FC = () => (
+    <span className="text-[9px] font-bold uppercase tracking-[0.24em] leading-none mt-1">
+      <span className={subtitleSlate}>Plataforma</span>{" "}
+      <span className="text-[#F59E0B]">de Estudos</span>
+    </span>
+  );
+
+  // Wordmark only (compact contexts: headers, toolbars)
   if (variant === "symbol" || variant === "compact") {
     return (
       <div className={`inline-flex items-center justify-center ${className}`}>
-        <NexoSymbol sizeClass={symbolDimensions[size]} />
+        <Wordmark sizeClass={wordmarkSizes[size]} />
       </div>
     );
   }
 
+  // Horizontal: wordmark + subtitle, left-aligned
   if (variant === "horizontal") {
-    const textColor =
-      themeMode === "dark"
-        ? "text-white"
-        : themeMode === "light"
-        ? "text-zinc-900"
-        : "text-zinc-900 dark:text-white";
-
     return (
-      <div className={`inline-flex items-center gap-3 ${className}`}>
-        <NexoSymbol sizeClass={symbolDimensions[size === "hero" ? "md" : size]} />
-        <div className="flex flex-col justify-center leading-none">
-          <div className="flex items-baseline gap-1">
-            <span className={`text-lg font-black tracking-[0.16em] ${textColor}`}>
-              NEXO
-            </span>
-          </div>
-          <span className="text-[9px] font-bold uppercase tracking-[0.24em] text-[#FF6B00] mt-0.5">
-            ESTUDOS
-          </span>
-        </div>
+      <div className={`inline-flex flex-col items-start justify-center ${className}`}>
+        <Wordmark sizeClass={wordmarkSizes[size]} />
+        <Subtitle />
       </div>
     );
   }
 
-  // Full stacked variant
+  // Full stacked variant: centered wordmark + subtitle
   return (
     <div className={`flex flex-col items-center text-center ${className}`}>
-      <NexoSymbol sizeClass={symbolDimensions[size]} />
-      <div className="mt-4 flex flex-col items-center">
-        <h2 className="text-3xl sm:text-4xl font-black tracking-[0.2em] text-white">
-          NEXO
-        </h2>
-        <p className="mt-1.5 text-xs font-semibold uppercase tracking-[0.22em] text-[#FFA726]">
-          Plataforma de Estudos
-        </p>
-      </div>
+      <Wordmark sizeClass={wordmarkSizes[size]} />
+      <Subtitle />
     </div>
   );
 };

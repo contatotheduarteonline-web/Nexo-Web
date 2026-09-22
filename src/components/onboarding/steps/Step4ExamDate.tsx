@@ -26,7 +26,7 @@ export const Step4ExamDate: React.FC<Step4ExamDateProps> = ({
     <div id="step-4-exam-date" className="w-full max-w-2xl mx-auto px-4 py-4 sm:py-8">
       {/* Question Header */}
       <div className="mb-8 text-center sm:text-left">
-        <span className="text-xs font-semibold text-[#FF6B00] tracking-wider uppercase">
+        <span className="text-xs font-semibold text-[#F59E0B] tracking-wider uppercase">
           Etapa 4 de 12
         </span>
         <h2 className="text-2xl sm:text-4xl font-bold tracking-tight text-white mt-1">
@@ -42,7 +42,7 @@ export const Step4ExamDate: React.FC<Step4ExamDateProps> = ({
           onClick={() => onChangeExamDateKnown(true)}
           className={`flex items-center justify-between p-4 sm:p-5 rounded-xl border text-left transition-all duration-150 cursor-pointer ${
             knowsExamDate === true
-              ? "bg-zinc-800/90 border-[#FF6B00] shadow-[0_0_18px_rgba(255,107,0,0.18)]"
+              ? "bg-zinc-800/90 border-[#F59E0B] shadow-[0_0_18px_rgba(255,107,0,0.18)]"
               : "bg-zinc-900/60 border-zinc-800/80 hover:bg-zinc-800/50 hover:border-zinc-700"
           }`}
         >
@@ -52,7 +52,7 @@ export const Step4ExamDate: React.FC<Step4ExamDateProps> = ({
           <div
             className={`w-6 h-6 rounded-full border flex items-center justify-center shrink-0 transition-colors ${
               knowsExamDate === true
-                ? "border-[#FF6B00] bg-[#FF6B00] text-white"
+                ? "border-[#F59E0B] bg-[#F59E0B] text-white"
                 : "border-zinc-700 bg-zinc-800/40 text-transparent"
             }`}
           >
@@ -66,7 +66,7 @@ export const Step4ExamDate: React.FC<Step4ExamDateProps> = ({
           onClick={() => onChangeExamDateKnown(false)}
           className={`flex items-center justify-between p-4 sm:p-5 rounded-xl border text-left transition-all duration-150 cursor-pointer ${
             knowsExamDate === false
-              ? "bg-zinc-800/90 border-[#FF6B00] shadow-[0_0_18px_rgba(255,107,0,0.18)]"
+              ? "bg-zinc-800/90 border-[#F59E0B] shadow-[0_0_18px_rgba(255,107,0,0.18)]"
               : "bg-zinc-900/60 border-zinc-800/80 hover:bg-zinc-800/50 hover:border-zinc-700"
           }`}
         >
@@ -76,7 +76,7 @@ export const Step4ExamDate: React.FC<Step4ExamDateProps> = ({
           <div
             className={`w-6 h-6 rounded-full border flex items-center justify-center shrink-0 transition-colors ${
               knowsExamDate === false
-                ? "border-[#FF6B00] bg-[#FF6B00] text-white"
+                ? "border-[#F59E0B] bg-[#F59E0B] text-white"
                 : "border-zinc-700 bg-zinc-800/40 text-transparent"
             }`}
           >
@@ -98,7 +98,7 @@ export const Step4ExamDate: React.FC<Step4ExamDateProps> = ({
               min={todayStr}
               value={examDate}
               onChange={(e) => onChangeExamDate(e.target.value)}
-              className="w-full px-4 py-3 rounded-xl bg-zinc-800/80 border border-zinc-700/80 text-white focus:outline-none focus:border-[#FF6B00] focus:ring-1 focus:ring-[#FF6B00] transition-colors text-sm"
+              className="w-full px-4 py-3 rounded-xl bg-zinc-800/80 border border-zinc-700/80 text-white focus:outline-none focus:border-[#F59E0B] focus:ring-1 focus:ring-[#F59E0B] transition-colors text-sm"
               autoFocus
             />
             <CalendarIcon className="absolute right-3.5 top-3.5 w-4 h-4 text-zinc-400 pointer-events-none" />
@@ -113,7 +113,7 @@ export const Step4ExamDate: React.FC<Step4ExamDateProps> = ({
           id="btn-exam-date-next"
           onClick={onNext}
           disabled={!canContinue || knowsExamDate === undefined}
-          className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-[#FF6B00] hover:bg-[#FF7A1A] disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold text-sm transition-all duration-200 cursor-pointer shadow-[0_6px_20px_rgba(255,107,0,0.25)]"
+          className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-[#F59E0B] hover:bg-[#FF7A1A] disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold text-sm transition-all duration-200 cursor-pointer shadow-[0_6px_20px_rgba(255,107,0,0.25)]"
         >
           <span>Continuar</span>
           <ArrowRight className="w-4 h-4" />

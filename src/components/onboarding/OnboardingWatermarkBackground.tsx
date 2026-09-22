@@ -24,7 +24,7 @@ export const OnboardingWatermarkBackground: React.FC = () => {
       <div className="absolute -bottom-8 -right-8 text-[140px] font-black tracking-[0.25em] text-white rotate-[-15deg] select-none">
         NEXO
       </div>
-      <div className="absolute top-[8%] -right-10 text-[100px] font-black tracking-[0.25em] text-[#FF6B00] rotate-[15deg] select-none">
+      <div className="absolute top-[8%] -right-10 text-[100px] font-black tracking-[0.25em] text-[#F59E0B] rotate-[15deg] select-none">
         NEXO
       </div>
 
@@ -40,13 +40,13 @@ export const OnboardingWatermarkBackground: React.FC = () => {
       <div className="absolute top-[48%] left-[6%] w-20 h-20 rounded-2xl border-2 border-white/60 flex items-center justify-center rotate-12">
         <span className="font-black text-3xl text-white">N</span>
       </div>
-      <div className="absolute top-[18%] right-[28%] w-16 h-16 rounded-2xl border-2 border-[#FF6B00]/70 flex items-center justify-center -rotate-6">
-        <span className="font-black text-2xl text-[#FF6B00]">N</span>
+      <div className="absolute top-[18%] right-[28%] w-16 h-16 rounded-2xl border-2 border-[#F59E0B]/70 flex items-center justify-center -rotate-6">
+        <span className="font-black text-2xl text-[#F59E0B]">N</span>
       </div>
 
       {/* Subtle geometric circles */}
       <div className="absolute -top-32 left-1/3 w-[450px] h-[450px] rounded-full border border-white/20" />
-      <div className="absolute -bottom-40 right-1/4 w-[500px] h-[500px] rounded-full border border-[#FF6B00]/20" />
+      <div className="absolute -bottom-40 right-1/4 w-[500px] h-[500px] rounded-full border border-[#F59E0B]/20" />
     </div>
   );
 };

@@ -7,6 +7,7 @@ import { FloatingTimerWidget } from "./FloatingTimerWidget";
 import { ScheduledReview } from "../../types";
 
 import { StatCardsRow } from "./StatCardsRow";
+import { EditalProgressCard } from "./EditalProgressCard";
 import { OfensivaCard } from "./OfensivaCard";
 import { TodayScheduleSection, PlannedBlockItem } from "./TodayScheduleSection";
 import { ReviewsSection } from "./ReviewsSection";
@@ -24,7 +25,6 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy 
     activeEdital,
     activePlan,
     userSettings,
-    metrics,
     studySessions,
     scheduledReviews,
     simulados,
@@ -77,13 +77,6 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy 
     return todaySessions.reduce((acc, s) => acc + (s.questionsCorrect || 0), 0);
   }, [todaySessions]);
 
-  const todayAccuracy = useMemo(() => {
-    if (todayQuestionsDone > 0) {
-      return Math.round((todayQuestionsCorrect / todayQuestionsDone) * 100);
-    }
-    return null;
-  }, [todayQuestionsDone, todayQuestionsCorrect]);
-
   // Handle Quick Start Study for a planned block or discipline
   const handleStartStudy = (disciplineId: string, durationMinutes: number = 60) => {
     const disc = activeEdital?.disciplines.find((d) => d.id === disciplineId);
@@ -110,6 +103,16 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy 
     setActiveTab("cronometro");
   };
 
+  // Minutes studied today per discipline (for the progress bars)
+  const studiedMinutesByDiscipline = useMemo(() => {
+    const map = new Map<string, number>();
+    todaySessions.forEach((s) => {
+      const key = s.disciplineId || s.disciplineName;
+      map.set(key, (map.get(key) || 0) + s.durationMinutes);
+    });
+    return map;
+  }, [todaySessions]);
+
   // Planned blocks for today (completely generic, derived from activePlan or activeEdital)
   const todayPlannedBlocks: PlannedBlockItem[] = useMemo(() => {
     let list: PlannedBlockItem[] = [];
@@ -131,6 +134,8 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy 
               disciplineId: b.disciplineId,
               disciplineName: disc?.name || "Disciplina",
               targetMinutes: b.targetMinutes || 60,
+              color: disc?.color,
+              studiedMinutes: studiedMinutesByDiscipline.get(b.disciplineId) || 0,
             };
           });
         }
@@ -149,6 +154,8 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy 
               disciplineId: step.disciplineId,
               disciplineName: disc?.name || "Disciplina",
               targetMinutes: step.targetMinutes || 60,
+              color: disc?.color,
+              studiedMinutes: studiedMinutesByDiscipline.get(step.disciplineId) || 0,
             };
           });
         }
@@ -163,11 +170,13 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy 
         disciplineId: d.id,
         disciplineName: d.name,
         targetMinutes: 60,
+        color: d.color,
+        studiedMinutes: studiedMinutesByDiscipline.get(d.id) || 0,
       }));
     }
 
     return list;
-  }, [activePlan, activeEdital]);
+  }, [activePlan, activeEdital, studiedMinutesByDiscipline]);
 
   // Today's Scheduled Reviews (Clean filtered list)
   const todayReviews = useMemo(() => {
@@ -203,7 +212,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy 
       return {
         id: disc.id,
         name: disc.name,
-        color: disc.color || "#F97316",
+        color: disc.color || "#F59E0B",
         qDone,
         qCorrect,
         accuracy,
@@ -281,10 +290,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy 
   }, [studySessions, activeEdital]);
 
   // Handle Quick Reminder Creation
-  const handleAddReminder = (data: { title: string; date: string }) => {
+  const handleAddReminder = (data: { title: string; category: "INSCRICOES" | "PROVAS" | "PAGAMENTOS"; date: string }) => {
     addReminder({
       title: data.title,
-      category: "GERAL",
+      category: data.category,
       date: data.date,
       completed: false,
       editalId: activeEdital?.id,
@@ -292,57 +301,61 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy 
   };
 
   return (
-    <div className="space-y-6 pb-20 max-w-7xl mx-auto">
+    <div className="nx-home relative space-y-6 pb-20 max-w-7xl mx-auto lg:space-y-7">
       {/* ========================================================================= */}
-      {/* CABEÇALHO LIMPO E ELEGANTE                                                */}
+      {/* CABEÇALHO                                                                 */}
       {/* ========================================================================= */}
-      <div className="pt-1 pb-1">
-        <h1 className="text-[26px] sm:text-[30px] font-bold text-[#172033] dark:text-white tracking-tight">
-          {greeting}, {userName}
+      <div className="relative pt-1 pb-1">
+        <h1 className="font-condensed text-[32px] sm:text-[36px] font-bold leading-tight tracking-[0.01em]">
+          <span className="text-white">{greeting}, </span>
+          <span className="text-white">{userName}</span>
         </h1>
       </div>
 
       {/* ========================================================================= */}
-      {/* 1 A 4. CARDS DE MÉTRICAS: TEMPO, QUESTÕES, PRECISÃO E PROGRESSO           */}
+      {/* 1. INDICADORES DE HOJE: TEMPO, DESEMPENHO E PROGRESSO NO EDITAL          */}
       {/* ========================================================================= */}
       <StatCardsRow
         todayMinutes={todayMinutes}
         todaySessionsCount={todaySessions.length}
         todayQuestionsDone={todayQuestionsDone}
         todayQuestionsCorrect={todayQuestionsCorrect}
-        accuracyRate={todayAccuracy}
-        overallAccuracyRate={metrics.overallAccuracyRate}
-        globalProgressPercentage={gamification.globalProgressPercentage}
-        completedTopicsCount={gamification.completedTopicsCount}
-        totalTopicsCount={gamification.totalTopicsCount}
-        onNavigateToEdital={() => setActiveTab("edital")}
-      />
+      >
+        <EditalProgressCard
+          title={activeEdital?.title}
+          cargo={activeEdital?.cargo}
+          percentage={gamification.globalProgressPercentage}
+          completedTopicsCount={gamification.completedTopicsCount}
+          totalTopicsCount={gamification.totalTopicsCount}
+          onNavigateToEdital={() => setActiveTab("edital")}
+        />
+      </StatCardsRow>
 
       {/* ========================================================================= */}
-      {/* 5. OFENSIVA: QUADRANTE LONGO PREENCHIDO COM OS DIAS DA SEMANA             */}
+      {/* 2. OFENSIVA                                                               */}
       {/* ========================================================================= */}
       <OfensivaCard />
 
       {/* ========================================================================= */}
-      {/* 6. PLANEJAMENTO DE HOJE                                                   */}
+      {/* 3 E 4. GRID: PLANEJAMENTO E REVISÕES                                     */}
       {/* ========================================================================= */}
-      <TodayScheduleSection
-        plannedBlocks={todayPlannedBlocks}
-        onStartStudy={handleStartStudy}
-        onNavigateToPlanning={() => setActiveTab("planejamento")}
-      />
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
+        <TodayScheduleSection
+          plannedBlocks={todayPlannedBlocks}
+          onStartStudy={handleStartStudy}
+          onOpenManualStudy={onOpenManualStudy}
+          onNavigateToPlanning={() => setActiveTab("planejamento")}
+        />
+
+        <ReviewsSection
+          todayReviews={todayReviews}
+          onOpenReview={(rev) => setSelectedReviewForModal(rev)}
+          onNavigateToReviews={() => setActiveTab("revisoes")}
+        />
+      </div>
 
       {/* ========================================================================= */}
-      {/* 7. REVISÕES                                                               */}
-      {/* ========================================================================= */}
-      <ReviewsSection
-        todayReviews={todayReviews}
-        onOpenReview={(rev) => setSelectedReviewForModal(rev)}
-        onNavigateToReviews={() => setActiveTab("revisoes")}
-      />
-
-      {/* ========================================================================= */}
-      {/* 8. DESEMPENHO POR DISCIPLINA                                              */}
+      {/* 6. DESEMPENHO POR DISCIPLINA                                              */}
       {/* ========================================================================= */}
       <DisciplinePerformanceSection
         disciplines={unifiedDisciplineStats}
@@ -351,7 +364,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy 
       />
 
       {/* ========================================================================= */}
-      {/* 9. META DA SEMANA                                                         */}
+      {/* 7. META DA SEMANA                                                         */}
       {/* ========================================================================= */}
       <WeeklyGoalsSection
         weeklyChartData={weeklyChartData}
@@ -363,7 +376,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy 
       />
 
       {/* ========================================================================= */}
-      {/* 10 E 11. GRID: ÚLTIMAS ATIVIDADES E LEMBRETES                             */}
+      {/* 8 E 9. GRID: ÚLTIMAS ATIVIDADES E LEMBRETES                              */}
       {/* ========================================================================= */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* 10. Últimas atividades */}

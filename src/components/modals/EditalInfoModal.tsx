@@ -96,18 +96,18 @@ export const EditalInfoModal: React.FC<EditalInfoModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs">
-      <div className="flex max-h-[90vh] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-[#E2E8F0] bg-white shadow-2xl dark:border-[#1E293B] dark:bg-[#1B2126]">
+      <div className="flex max-h-[90vh] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-[#E2E8F0] bg-white shadow-2xl dark:border-[#1E293B] dark:bg-[#1E293B]">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-[#E2E8F0] bg-[#F8FAFC] px-6 py-4 dark:border-[#1E293B] dark:bg-[#182030]/60">
+        <div className="flex items-center justify-between border-b border-[#E2E8F0] bg-[#F8FAFC] px-6 py-4 dark:border-[#1E293B] dark:bg-[#1E293B]/60">
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#EAF8F4] text-[#249D84] dark:bg-[#16362F] dark:text-[#48C3A7]">
               <FileSpreadsheet className="h-5 w-5" />
             </div>
             <div>
-              <h2 className="text-base font-bold text-[#374151] dark:text-white">
+              <h2 className="text-base font-bold text-white dark:text-white">
                 Informações & Configurações do Edital
               </h2>
-              <p className="text-xs text-[#737D89] dark:text-[#94A3B8]">
+              <p className="text-xs text-white dark:text-white">
                 {targetEdital.title}
               </p>
             </div>
@@ -126,13 +126,13 @@ export const EditalInfoModal: React.FC<EditalInfoModalProps> = ({
           {!isEditing ? (
             <div className="space-y-6">
               {/* Main Info Card */}
-              <div className="rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] p-4 dark:border-[#1E293B] dark:bg-[#182030]/40">
+              <div className="rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] p-4 dark:border-[#1E293B] dark:bg-[#1E293B]/40">
                 <div className="flex items-start justify-between">
                   <div>
                     <span className="inline-block rounded-full bg-[#EAF8F4] px-2.5 py-0.5 text-[11px] font-bold text-[#249D84] dark:bg-[#16362F] dark:text-[#48C3A7]">
                       {targetEdital.banca} • {targetEdital.year}
                     </span>
-                    <h3 className="mt-1.5 text-lg font-extrabold text-[#374151] dark:text-white">
+                    <h3 className="mt-1.5 text-lg font-extrabold text-white dark:text-white">
                       {targetEdital.title}
                     </h3>
                   </div>
@@ -153,7 +153,7 @@ export const EditalInfoModal: React.FC<EditalInfoModalProps> = ({
                       setPdfUrl(targetEdital.pdfUrl || "");
                       setIsEditing(true);
                     }}
-                    className="flex items-center gap-1.5 rounded-lg border border-[#E2E8F0] bg-white px-3 py-1.5 text-xs font-bold text-[#374151] shadow-xs hover:bg-[#F8FAFC] dark:border-[#1E293B] dark:bg-[#1B2126] dark:text-white"
+                    className="flex items-center gap-1.5 rounded-lg border border-[#E2E8F0] bg-white px-3 py-1.5 text-xs font-bold text-[#374151] shadow-xs hover:bg-[#F8FAFC] dark:border-[#1E293B] dark:bg-[#1E293B] dark:text-white"
                   >
                     <Edit3 className="h-3.5 w-3.5" />
                     Editar Dados
@@ -162,37 +162,37 @@ export const EditalInfoModal: React.FC<EditalInfoModalProps> = ({
 
                 <div className="mt-4 grid grid-cols-2 gap-4 text-xs sm:grid-cols-3">
                   <div>
-                    <span className="block text-[10px] font-bold tracking-wider text-[#737D89] uppercase">
+                    <span className="block text-[10px] font-bold tracking-wider text-white uppercase">
                       Órgão / Instituição
                     </span>
-                    <span className="font-semibold text-[#374151] dark:text-[#E5EAEF]">
+                    <span className="font-semibold text-white dark:text-white">
                       {targetEdital.organ || "Não informado"}
                     </span>
                   </div>
 
                   <div>
-                    <span className="block text-[10px] font-bold tracking-wider text-[#737D89] uppercase">
+                    <span className="block text-[10px] font-bold tracking-wider text-white uppercase">
                       Cargo / Especialidade
                     </span>
-                    <span className="font-semibold text-[#374151] dark:text-[#E5EAEF]">
+                    <span className="font-semibold text-white dark:text-white">
                       {targetEdital.cargo || "Todos os cargos"}
                     </span>
                   </div>
 
                   <div>
-                    <span className="block text-[10px] font-bold tracking-wider text-[#737D89] uppercase">
+                    <span className="block text-[10px] font-bold tracking-wider text-white uppercase">
                       Banca Examinadora
                     </span>
-                    <span className="font-semibold text-[#374151] dark:text-[#E5EAEF]">
+                    <span className="font-semibold text-white dark:text-white">
                       {targetEdital.banca}
                     </span>
                   </div>
 
                   <div>
-                    <span className="block text-[10px] font-bold tracking-wider text-[#737D89] uppercase">
+                    <span className="block text-[10px] font-bold tracking-wider text-white uppercase">
                       Data da Publicação
                     </span>
-                    <span className="font-semibold text-[#374151] dark:text-[#E5EAEF]">
+                    <span className="font-semibold text-white dark:text-white">
                       {targetEdital.publicationDate
                         ? new Date(targetEdital.publicationDate).toLocaleDateString("pt-BR")
                         : "Não informada"}
@@ -200,10 +200,10 @@ export const EditalInfoModal: React.FC<EditalInfoModalProps> = ({
                   </div>
 
                   <div>
-                    <span className="block text-[10px] font-bold tracking-wider text-[#737D89] uppercase">
+                    <span className="block text-[10px] font-bold tracking-wider text-white uppercase">
                       Data da Prova
                     </span>
-                    <span className="font-semibold text-[#374151] dark:text-[#E5EAEF]">
+                    <span className="font-semibold text-white dark:text-white">
                       {targetEdital.examDate
                         ? new Date(targetEdital.examDate).toLocaleDateString("pt-BR")
                         : "A definir"}
@@ -211,10 +211,10 @@ export const EditalInfoModal: React.FC<EditalInfoModalProps> = ({
                   </div>
 
                   <div>
-                    <span className="block text-[10px] font-bold tracking-wider text-[#737D89] uppercase">
+                    <span className="block text-[10px] font-bold tracking-wider text-white uppercase">
                       Número de Vagas
                     </span>
-                    <span className="font-semibold text-[#374151] dark:text-[#E5EAEF]">
+                    <span className="font-semibold text-white dark:text-white">
                       {targetEdital.vacanciesCount !== undefined
                         ? `${targetEdital.vacanciesCount} vagas`
                         : "CR"}
@@ -224,10 +224,10 @@ export const EditalInfoModal: React.FC<EditalInfoModalProps> = ({
 
                 {targetEdital.notes && (
                   <div className="mt-3 border-t border-[#E2E8F0] pt-3 text-xs dark:border-[#1E293B]">
-                    <span className="block text-[10px] font-bold tracking-wider text-[#737D89] uppercase">
+                    <span className="block text-[10px] font-bold tracking-wider text-white uppercase">
                       Observações
                     </span>
-                    <p className="mt-1 text-[#55606E] dark:text-[#94A3B8]">
+                    <p className="mt-1 text-white dark:text-white">
                       {targetEdital.notes}
                     </p>
                   </div>
@@ -235,22 +235,22 @@ export const EditalInfoModal: React.FC<EditalInfoModalProps> = ({
               </div>
 
               {/* PDF & Documento Original Section */}
-              <div className="rounded-xl border border-[#E2E8F0] bg-white p-4 shadow-xs dark:border-[#1E293B] dark:bg-[#1B2126]">
-                <h4 className="text-xs font-bold tracking-wider text-[#737D89] uppercase dark:text-[#94A3B8]">
+              <div className="rounded-xl border border-[#E2E8F0] bg-white p-4 shadow-xs dark:border-[#1E293B] dark:bg-[#1E293B]">
+                <h4 className="text-xs font-bold tracking-wider text-white uppercase dark:text-white">
                   Arquivo Original do Edital (PDF ou Link)
                 </h4>
 
                 {targetEdital.pdfUrl || targetEdital.pdfFileName || targetEdital.linkUrl ? (
-                  <div className="mt-3 flex flex-col gap-3 rounded-lg border border-[#E2E8F0] bg-[#F8FAFC] p-3 sm:flex-row sm:items-center sm:justify-between dark:border-[#1E293B] dark:bg-[#182030]">
+                  <div className="mt-3 flex flex-col gap-3 rounded-lg border border-[#E2E8F0] bg-[#F8FAFC] p-3 sm:flex-row sm:items-center sm:justify-between dark:border-[#1E293B] dark:bg-[#1E293B]">
                     <div className="flex items-center gap-2.5">
                       <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-red-100 text-red-600 dark:bg-red-950/40 dark:text-red-400">
                         <FileText className="h-5 w-5" />
                       </div>
                       <div>
-                        <span className="block text-xs font-bold text-[#374151] dark:text-white">
+                        <span className="block text-xs font-bold text-white dark:text-white">
                           {targetEdital.pdfFileName || "Edital Completo em PDF"}
                         </span>
-                        <span className="text-[11px] text-[#737D89] dark:text-[#94A3B8]">
+                        <span className="text-[11px] text-white dark:text-white">
                           {targetEdital.linkUrl || "Arquivo anexado ao plano"}
                         </span>
                       </div>
@@ -279,7 +279,7 @@ export const EditalInfoModal: React.FC<EditalInfoModalProps> = ({
                         </a>
                       ) : null}
 
-                      <label className="flex cursor-pointer items-center gap-1 rounded-lg border border-[#E2E8F0] bg-white px-2.5 py-1.5 text-xs font-semibold text-[#374151] hover:bg-[#F8FAFC] dark:border-[#1E293B] dark:bg-[#1B2126] dark:text-white">
+                      <label className="flex cursor-pointer items-center gap-1 rounded-lg border border-[#E2E8F0] bg-white px-2.5 py-1.5 text-xs font-semibold text-[#374151] hover:bg-[#F8FAFC] dark:border-[#1E293B] dark:bg-[#1E293B] dark:text-white">
                         <Upload className="h-3.5 w-3.5" />
                         Substituir
                         <input
@@ -293,7 +293,7 @@ export const EditalInfoModal: React.FC<EditalInfoModalProps> = ({
                   </div>
                 ) : (
                   <div className="mt-3 rounded-lg border border-dashed border-[#CCD2D8] p-4 text-center dark:border-[#3A454F]">
-                    <p className="text-xs text-[#737D89] dark:text-[#94A3B8]">
+                    <p className="text-xs text-white dark:text-white">
                       Nenhum arquivo PDF anexado ao edital.
                     </p>
                     <label className="mt-2 inline-flex cursor-pointer items-center gap-1.5 rounded-lg bg-[#EAF8F4] px-3 py-1.5 text-xs font-bold text-[#249D84] hover:bg-[#D7F3EC] dark:bg-[#16362F] dark:text-[#48C3A7]">
@@ -312,26 +312,26 @@ export const EditalInfoModal: React.FC<EditalInfoModalProps> = ({
 
               {/* Estatísticas Estruturais do Edital */}
               <div className="grid grid-cols-3 gap-3">
-                <div className="rounded-xl border border-[#E2E8F0] bg-white p-3 text-center dark:border-[#1E293B] dark:bg-[#1B2126]">
-                  <span className="text-[10px] font-bold tracking-wider text-[#737D89] uppercase">
+                <div className="rounded-xl border border-[#E2E8F0] bg-white p-3 text-center dark:border-[#1E293B] dark:bg-[#1E293B]">
+                  <span className="text-[10px] font-bold tracking-wider text-white uppercase">
                     Disciplinas
                   </span>
-                  <span className="mt-1 block text-lg font-black text-[#374151] dark:text-white">
+                  <span className="mt-1 block text-lg font-black text-white dark:text-white">
                     {targetEdital.disciplines.length}
                   </span>
                 </div>
 
-                <div className="rounded-xl border border-[#E2E8F0] bg-white p-3 text-center dark:border-[#1E293B] dark:bg-[#1B2126]">
-                  <span className="text-[10px] font-bold tracking-wider text-[#737D89] uppercase">
+                <div className="rounded-xl border border-[#E2E8F0] bg-white p-3 text-center dark:border-[#1E293B] dark:bg-[#1E293B]">
+                  <span className="text-[10px] font-bold tracking-wider text-white uppercase">
                     Tópicos Totais
                   </span>
-                  <span className="mt-1 block text-lg font-black text-[#374151] dark:text-white">
+                  <span className="mt-1 block text-lg font-black text-white dark:text-white">
                     {targetEdital.topics.length}
                   </span>
                 </div>
 
-                <div className="rounded-xl border border-[#E2E8F0] bg-white p-3 text-center dark:border-[#1E293B] dark:bg-[#1B2126]">
-                  <span className="text-[10px] font-bold tracking-wider text-[#737D89] uppercase">
+                <div className="rounded-xl border border-[#E2E8F0] bg-white p-3 text-center dark:border-[#1E293B] dark:bg-[#1E293B]">
+                  <span className="text-[10px] font-bold tracking-wider text-white uppercase">
                     Concluídos
                   </span>
                   <span className="mt-1 block text-lg font-black text-[#249D84] dark:text-[#48C3A7]">
@@ -344,7 +344,7 @@ export const EditalInfoModal: React.FC<EditalInfoModalProps> = ({
               <div className="border-t border-[#E2E8F0] pt-4 dark:border-[#1E293B]">
                 {!showDeleteConfirm ? (
                   <div className="flex items-center justify-between">
-                    <span className="text-xs text-[#737D89] dark:text-[#94A3B8]">
+                    <span className="text-xs text-white dark:text-white">
                       Ações avançadas de gerenciamento
                     </span>
                     <button
@@ -366,7 +366,7 @@ export const EditalInfoModal: React.FC<EditalInfoModalProps> = ({
                     <div className="mt-3 flex items-center justify-end gap-2">
                       <button
                         onClick={() => setShowDeleteConfirm(false)}
-                        className="rounded-lg border border-[#CCD2D8] bg-white px-3 py-1 text-xs font-semibold text-[#374151] hover:bg-[#F8FAFC] dark:bg-[#1B2126] dark:text-white"
+                        className="rounded-lg border border-[#CCD2D8] bg-white px-3 py-1 text-xs font-semibold text-[#374151] hover:bg-[#F8FAFC] dark:bg-[#1E293B] dark:text-white"
                       >
                         Cancelar
                       </button>
@@ -385,14 +385,14 @@ export const EditalInfoModal: React.FC<EditalInfoModalProps> = ({
             /* Editing Form */
             <form onSubmit={handleSave} className="space-y-4">
               <div>
-                <label className="block text-xs font-bold text-[#374151] dark:text-white">
+                <label className="block text-xs font-bold text-white dark:text-white">
                   Título do Concurso / Edital *
                 </label>
                 <input
                   type="text"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  className="mt-1 w-full rounded-xl border border-[#CCD2D8] bg-white px-3.5 py-2 text-sm text-[#374151] focus:border-[#48C3A7] focus:outline-hidden dark:border-[#3A454F] dark:bg-[#182030] dark:text-white"
+                  className="mt-1 w-full rounded-xl border border-[#CCD2D8] bg-white px-3.5 py-2 text-sm text-[#374151] focus:border-[#48C3A7] focus:outline-hidden dark:border-[#3A454F] dark:bg-[#1E293B] dark:text-white"
                   placeholder="Ex: Guarda Civil Municipal de Manaus"
                   required
                 />
@@ -400,28 +400,28 @@ export const EditalInfoModal: React.FC<EditalInfoModalProps> = ({
 
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div>
-                  <label className="block text-xs font-bold text-[#374151] dark:text-white">
+                  <label className="block text-xs font-bold text-white dark:text-white">
                     Órgão / Instituição *
                   </label>
                   <input
                     type="text"
                     value={organ}
                     onChange={(e) => setOrgan(e.target.value)}
-                    className="mt-1 w-full rounded-xl border border-[#CCD2D8] bg-white px-3.5 py-2 text-sm text-[#374151] focus:border-[#48C3A7] focus:outline-hidden dark:border-[#3A454F] dark:bg-[#182030] dark:text-white"
+                    className="mt-1 w-full rounded-xl border border-[#CCD2D8] bg-white px-3.5 py-2 text-sm text-[#374151] focus:border-[#48C3A7] focus:outline-hidden dark:border-[#3A454F] dark:bg-[#1E293B] dark:text-white"
                     placeholder="Ex: Prefeitura de Manaus"
                     required
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-[#374151] dark:text-white">
+                  <label className="block text-xs font-bold text-white dark:text-white">
                     Cargo / Função
                   </label>
                   <input
                     type="text"
                     value={cargo}
                     onChange={(e) => setCargo(e.target.value)}
-                    className="mt-1 w-full rounded-xl border border-[#CCD2D8] bg-white px-3.5 py-2 text-sm text-[#374151] focus:border-[#48C3A7] focus:outline-hidden dark:border-[#3A454F] dark:bg-[#182030] dark:text-white"
+                    className="mt-1 w-full rounded-xl border border-[#CCD2D8] bg-white px-3.5 py-2 text-sm text-[#374151] focus:border-[#48C3A7] focus:outline-hidden dark:border-[#3A454F] dark:bg-[#1E293B] dark:text-white"
                     placeholder="Ex: Guarda Civil Municipal"
                   />
                 </div>
@@ -429,33 +429,33 @@ export const EditalInfoModal: React.FC<EditalInfoModalProps> = ({
 
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 <div>
-                  <label className="block text-xs font-bold text-[#374151] dark:text-white">
+                  <label className="block text-xs font-bold text-white dark:text-white">
                     Banca *
                   </label>
                   <input
                     type="text"
                     value={banca}
                     onChange={(e) => setBanca(e.target.value)}
-                    className="mt-1 w-full rounded-xl border border-[#CCD2D8] bg-white px-3.5 py-2 text-sm text-[#374151] focus:border-[#48C3A7] focus:outline-hidden dark:border-[#3A454F] dark:bg-[#182030] dark:text-white"
+                    className="mt-1 w-full rounded-xl border border-[#CCD2D8] bg-white px-3.5 py-2 text-sm text-[#374151] focus:border-[#48C3A7] focus:outline-hidden dark:border-[#3A454F] dark:bg-[#1E293B] dark:text-white"
                     placeholder="Ex: IBFC, Cebraspe, FGV"
                     required
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-[#374151] dark:text-white">
+                  <label className="block text-xs font-bold text-white dark:text-white">
                     Ano
                   </label>
                   <input
                     type="number"
                     value={year}
                     onChange={(e) => setYear(Number(e.target.value))}
-                    className="mt-1 w-full rounded-xl border border-[#CCD2D8] bg-white px-3.5 py-2 text-sm text-[#374151] focus:border-[#48C3A7] focus:outline-hidden dark:border-[#3A454F] dark:bg-[#182030] dark:text-white"
+                    className="mt-1 w-full rounded-xl border border-[#CCD2D8] bg-white px-3.5 py-2 text-sm text-[#374151] focus:border-[#48C3A7] focus:outline-hidden dark:border-[#3A454F] dark:bg-[#1E293B] dark:text-white"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-[#374151] dark:text-white">
+                  <label className="block text-xs font-bold text-white dark:text-white">
                     Número de Vagas
                   </label>
                   <input
@@ -464,7 +464,7 @@ export const EditalInfoModal: React.FC<EditalInfoModalProps> = ({
                     onChange={(e) =>
                       setVacanciesCount(e.target.value === "" ? "" : Number(e.target.value))
                     }
-                    className="mt-1 w-full rounded-xl border border-[#CCD2D8] bg-white px-3.5 py-2 text-sm text-[#374151] focus:border-[#48C3A7] focus:outline-hidden dark:border-[#3A454F] dark:bg-[#182030] dark:text-white"
+                    className="mt-1 w-full rounded-xl border border-[#CCD2D8] bg-white px-3.5 py-2 text-sm text-[#374151] focus:border-[#48C3A7] focus:outline-hidden dark:border-[#3A454F] dark:bg-[#1E293B] dark:text-white"
                     placeholder="Ex: 200"
                   />
                 </div>
@@ -472,52 +472,52 @@ export const EditalInfoModal: React.FC<EditalInfoModalProps> = ({
 
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div>
-                  <label className="block text-xs font-bold text-[#374151] dark:text-white">
+                  <label className="block text-xs font-bold text-white dark:text-white">
                     Data da Publicação
                   </label>
                   <input
                     type="date"
                     value={publicationDate}
                     onChange={(e) => setPublicationDate(e.target.value)}
-                    className="mt-1 w-full rounded-xl border border-[#CCD2D8] bg-white px-3.5 py-2 text-sm text-[#374151] focus:border-[#48C3A7] focus:outline-hidden dark:border-[#3A454F] dark:bg-[#182030] dark:text-white"
+                    className="mt-1 w-full rounded-xl border border-[#CCD2D8] bg-white px-3.5 py-2 text-sm text-[#374151] focus:border-[#48C3A7] focus:outline-hidden dark:border-[#3A454F] dark:bg-[#1E293B] dark:text-white"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-[#374151] dark:text-white">
+                  <label className="block text-xs font-bold text-white dark:text-white">
                     Data da Prova
                   </label>
                   <input
                     type="date"
                     value={examDate}
                     onChange={(e) => setExamDate(e.target.value)}
-                    className="mt-1 w-full rounded-xl border border-[#CCD2D8] bg-white px-3.5 py-2 text-sm text-[#374151] focus:border-[#48C3A7] focus:outline-hidden dark:border-[#3A454F] dark:bg-[#182030] dark:text-white"
+                    className="mt-1 w-full rounded-xl border border-[#CCD2D8] bg-white px-3.5 py-2 text-sm text-[#374151] focus:border-[#48C3A7] focus:outline-hidden dark:border-[#3A454F] dark:bg-[#1E293B] dark:text-white"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-[#374151] dark:text-white">
+                <label className="block text-xs font-bold text-white dark:text-white">
                   Link Oficial do Edital
                 </label>
                 <input
                   type="url"
                   value={linkUrl}
                   onChange={(e) => setLinkUrl(e.target.value)}
-                  className="mt-1 w-full rounded-xl border border-[#CCD2D8] bg-white px-3.5 py-2 text-sm text-[#374151] focus:border-[#48C3A7] focus:outline-hidden dark:border-[#3A454F] dark:bg-[#182030] dark:text-white"
+                  className="mt-1 w-full rounded-xl border border-[#CCD2D8] bg-white px-3.5 py-2 text-sm text-[#374151] focus:border-[#48C3A7] focus:outline-hidden dark:border-[#3A454F] dark:bg-[#1E293B] dark:text-white"
                   placeholder="https://exemplo.com.br/edital-oficial.pdf"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-[#374151] dark:text-white">
+                <label className="block text-xs font-bold text-white dark:text-white">
                   Observações Gerais
                 </label>
                 <textarea
                   rows={3}
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
-                  className="mt-1 w-full rounded-xl border border-[#CCD2D8] bg-white px-3.5 py-2 text-sm text-[#374151] focus:border-[#48C3A7] focus:outline-hidden dark:border-[#3A454F] dark:bg-[#182030] dark:text-white"
+                  className="mt-1 w-full rounded-xl border border-[#CCD2D8] bg-white px-3.5 py-2 text-sm text-[#374151] focus:border-[#48C3A7] focus:outline-hidden dark:border-[#3A454F] dark:bg-[#1E293B] dark:text-white"
                   placeholder="Anotações sobre pesos mínimos, critérios de desempate, redação..."
                 />
               </div>
@@ -526,7 +526,7 @@ export const EditalInfoModal: React.FC<EditalInfoModalProps> = ({
                 <button
                   type="button"
                   onClick={() => setIsEditing(false)}
-                  className="rounded-xl border border-[#CCD2D8] bg-white px-4 py-2 text-xs font-semibold text-[#374151] hover:bg-[#F8FAFC] dark:border-[#3A454F] dark:bg-[#182030] dark:text-white"
+                  className="rounded-xl border border-[#CCD2D8] bg-white px-4 py-2 text-xs font-semibold text-[#374151] hover:bg-[#F8FAFC] dark:border-[#3A454F] dark:bg-[#1E293B] dark:text-white"
                 >
                   Cancelar
                 </button>

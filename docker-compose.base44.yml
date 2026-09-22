@@ -1,0 +1,45 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: nexo
+      POSTGRES_PASSWORD: nexodevpass
+      POSTGRES_DB: nexo
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nexo -d nexo"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  app:
+    image: node:22-slim
+    working_dir: /app
+    volumes:
+      - .:/app
+      - app_node_modules:/app/node_modules
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgresql://nexo:nexodevpass@postgres:5432/nexo?sslmode=disable
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
+      - __VITE_ADDITIONAL_SERVER_ALLOWED_HOSTS
+      - BASE44_PUBLIC_HOST_SUFFIX
+    env_file:
+      - /run/base44/app.env
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: >
+      sh -c "npm install &&
+             npx prisma generate &&
+             npx prisma migrate deploy &&
+             npm run dev"
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+  app_node_modules:

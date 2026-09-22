@@ -36,7 +36,7 @@ export const Step3SpecificGoal: React.FC<Step3SpecificGoalProps> = ({
     <div id="step-3-specific-goal" className="w-full max-w-2xl mx-auto px-4 py-4 sm:py-8">
       {/* Question Header */}
       <div className="mb-8 text-center sm:text-left">
-        <span className="text-xs font-semibold text-[#FF6B00] tracking-wider uppercase">
+        <span className="text-xs font-semibold text-[#F59E0B] tracking-wider uppercase">
           Etapa 3 de 12
         </span>
         <h2 className="text-2xl sm:text-4xl font-bold tracking-tight text-white mt-1">
@@ -52,7 +52,7 @@ export const Step3SpecificGoal: React.FC<Step3SpecificGoalProps> = ({
           onClick={() => onChangeGoalKnown(true)}
           className={`flex items-center justify-between p-4 sm:p-5 rounded-xl border text-left transition-all duration-150 cursor-pointer ${
             knowsSpecificGoal === true
-              ? "bg-zinc-800/90 border-[#FF6B00] shadow-[0_0_18px_rgba(255,107,0,0.18)]"
+              ? "bg-zinc-800/90 border-[#F59E0B] shadow-[0_0_18px_rgba(255,107,0,0.18)]"
               : "bg-zinc-900/60 border-zinc-800/80 hover:bg-zinc-800/50 hover:border-zinc-700"
           }`}
         >
@@ -62,7 +62,7 @@ export const Step3SpecificGoal: React.FC<Step3SpecificGoalProps> = ({
           <div
             className={`w-6 h-6 rounded-full border flex items-center justify-center shrink-0 transition-colors ${
               knowsSpecificGoal === true
-                ? "border-[#FF6B00] bg-[#FF6B00] text-white"
+                ? "border-[#F59E0B] bg-[#F59E0B] text-white"
                 : "border-zinc-700 bg-zinc-800/40 text-transparent"
             }`}
           >
@@ -76,7 +76,7 @@ export const Step3SpecificGoal: React.FC<Step3SpecificGoalProps> = ({
           onClick={() => onChangeGoalKnown(false)}
           className={`flex items-center justify-between p-4 sm:p-5 rounded-xl border text-left transition-all duration-150 cursor-pointer ${
             knowsSpecificGoal === false
-              ? "bg-zinc-800/90 border-[#FF6B00] shadow-[0_0_18px_rgba(255,107,0,0.18)]"
+              ? "bg-zinc-800/90 border-[#F59E0B] shadow-[0_0_18px_rgba(255,107,0,0.18)]"
               : "bg-zinc-900/60 border-zinc-800/80 hover:bg-zinc-800/50 hover:border-zinc-700"
           }`}
         >
@@ -86,7 +86,7 @@ export const Step3SpecificGoal: React.FC<Step3SpecificGoalProps> = ({
           <div
             className={`w-6 h-6 rounded-full border flex items-center justify-center shrink-0 transition-colors ${
               knowsSpecificGoal === false
-                ? "border-[#FF6B00] bg-[#FF6B00] text-white"
+                ? "border-[#F59E0B] bg-[#F59E0B] text-white"
                 : "border-zinc-700 bg-zinc-800/40 text-transparent"
             }`}
           >
@@ -101,7 +101,7 @@ export const Step3SpecificGoal: React.FC<Step3SpecificGoalProps> = ({
           {/* Catalog Status Info */}
           {catalogEditais.length === 0 ? (
             <div className="p-3 rounded-xl bg-zinc-800/50 border border-zinc-700/60 text-xs text-zinc-400 flex items-center gap-2.5">
-              <BookOpen className="w-4 h-4 text-[#FF6B00] shrink-0" />
+              <BookOpen className="w-4 h-4 text-[#F59E0B] shrink-0" />
               <span>Nenhum edital oficial cadastrado ainda. Preencha os campos abaixo para configurar seu concurso:</span>
             </div>
           ) : (
@@ -118,10 +118,10 @@ export const Step3SpecificGoal: React.FC<Step3SpecificGoalProps> = ({
                       onChangeOrgan(ed.institution || ed.title);
                       if (ed.board) onChangeBanca(ed.board);
                     }}
-                    className="p-2.5 text-left rounded-xl border border-zinc-700/70 bg-zinc-800/50 hover:border-[#FF6B00] hover:bg-zinc-800 transition"
+                    className="p-2.5 text-left rounded-xl border border-zinc-700/70 bg-zinc-800/50 hover:border-[#F59E0B] hover:bg-zinc-800 transition"
                   >
                     <div className="flex items-center gap-2">
-                      <Shield className="w-3.5 h-3.5 text-[#FF6B00] shrink-0" />
+                      <Shield className="w-3.5 h-3.5 text-[#F59E0B] shrink-0" />
                       <span className="text-xs font-semibold text-white truncate">
                         {ed.institution}
                       </span>
@@ -144,7 +144,7 @@ export const Step3SpecificGoal: React.FC<Step3SpecificGoalProps> = ({
               value={organ}
               onChange={(e) => onChangeOrgan(e.target.value)}
               placeholder="Ex: Órgão ou instituição desejada..."
-              className="w-full px-4 py-3 rounded-xl bg-zinc-800/80 border border-zinc-700/80 text-white placeholder-zinc-500 focus:outline-none focus:border-[#FF6B00] focus:ring-1 focus:ring-[#FF6B00] transition-colors text-sm"
+              className="w-full px-4 py-3 rounded-xl bg-zinc-800/80 border border-zinc-700/80 text-white placeholder-zinc-500 focus:outline-none focus:border-[#F59E0B] focus:ring-1 focus:ring-[#F59E0B] transition-colors text-sm"
               autoFocus
             />
           </div>
@@ -159,7 +159,7 @@ export const Step3SpecificGoal: React.FC<Step3SpecificGoalProps> = ({
               value={cargo}
               onChange={(e) => onChangeCargo(e.target.value)}
               placeholder="Ex: Cargo ou função pretendida..."
-              className="w-full px-4 py-3 rounded-xl bg-zinc-800/80 border border-zinc-700/80 text-white placeholder-zinc-500 focus:outline-none focus:border-[#FF6B00] focus:ring-1 focus:ring-[#FF6B00] transition-colors text-sm"
+              className="w-full px-4 py-3 rounded-xl bg-zinc-800/80 border border-zinc-700/80 text-white placeholder-zinc-500 focus:outline-none focus:border-[#F59E0B] focus:ring-1 focus:ring-[#F59E0B] transition-colors text-sm"
             />
           </div>
 
@@ -176,7 +176,7 @@ export const Step3SpecificGoal: React.FC<Step3SpecificGoalProps> = ({
               value={banca}
               onChange={(e) => onChangeBanca(e.target.value)}
               placeholder="Ex: Cebraspe, FGV, FCC, Vunesp, etc."
-              className="w-full px-4 py-3 rounded-xl bg-zinc-800/80 border border-zinc-700/80 text-white placeholder-zinc-500 focus:outline-none focus:border-[#FF6B00] focus:ring-1 focus:ring-[#FF6B00] transition-colors text-sm"
+              className="w-full px-4 py-3 rounded-xl bg-zinc-800/80 border border-zinc-700/80 text-white placeholder-zinc-500 focus:outline-none focus:border-[#F59E0B] focus:ring-1 focus:ring-[#F59E0B] transition-colors text-sm"
             />
           </div>
         </div>
@@ -189,7 +189,7 @@ export const Step3SpecificGoal: React.FC<Step3SpecificGoalProps> = ({
           id="btn-specific-goal-next"
           onClick={onNext}
           disabled={!canContinue || knowsSpecificGoal === undefined}
-          className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-[#FF6B00] hover:bg-[#FF7A1A] disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold text-sm transition-all duration-200 cursor-pointer shadow-[0_6px_20px_rgba(255,107,0,0.25)]"
+          className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-[#F59E0B] hover:bg-[#FF7A1A] disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold text-sm transition-all duration-200 cursor-pointer shadow-[0_6px_20px_rgba(255,107,0,0.25)]"
         >
           <span>Continuar</span>
           <ArrowRight className="w-4 h-4" />

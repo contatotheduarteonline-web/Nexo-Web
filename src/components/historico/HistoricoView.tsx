@@ -285,7 +285,7 @@ export const HistoricoView: React.FC = () => {
     <div className="mx-auto max-w-6xl space-y-6 pb-12" ref={menuContainerRef}>
       {/* 1. NOVO CABEÇALHO LIMPO (mesmo padrão do Registro de Estudos) */}
       <div className="border-b border-slate-200 pb-3 dark:border-slate-800">
-        <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">
+        <h1 className="text-xl font-bold tracking-tight text-white dark:text-white">
           Histórico de Estudos
         </h1>
       </div>
@@ -293,38 +293,38 @@ export const HistoricoView: React.FC = () => {
       {/* 2. RESUMO SUPERIOR (compacto e elegante) */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         {/* SESSÕES */}
-        <div className="rounded-xl border border-slate-200 bg-white p-3.5 sm:p-4 shadow-xs dark:border-slate-800 dark:bg-[#0E121A]">
-          <div className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-400">
+        <div className="rounded-xl border border-slate-200 bg-white p-3.5 sm:p-4 shadow-xs dark:border-slate-800 dark:bg-[#252B38]">
+          <div className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-white">
             Sessões
           </div>
-          <div className="mt-1 font-mono text-2xl font-bold text-slate-900 dark:text-white">
+          <div className="mt-1 font-mono text-2xl font-bold text-white dark:text-white">
             {sortedSessions.length}
           </div>
         </div>
 
         {/* TEMPO LÍQUIDO */}
-        <div className="rounded-xl border border-slate-200 bg-white p-3.5 sm:p-4 shadow-xs dark:border-slate-800 dark:bg-[#0E121A]">
-          <div className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-400">
+        <div className="rounded-xl border border-slate-200 bg-white p-3.5 sm:p-4 shadow-xs dark:border-slate-800 dark:bg-[#252B38]">
+          <div className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-white">
             Tempo Líquido
           </div>
-          <div className="mt-1 font-mono text-2xl font-bold text-[#FF6B00] dark:text-[#FFA726]">
+          <div className="mt-1 font-mono text-2xl font-bold text-[#F59E0B] dark:text-[#FBBF24]">
             {totalFilteredHoursFormatted}
           </div>
         </div>
 
         {/* QUESTÕES */}
-        <div className="rounded-xl border border-slate-200 bg-white p-3.5 sm:p-4 shadow-xs dark:border-slate-800 dark:bg-[#0E121A]">
-          <div className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-400">
+        <div className="rounded-xl border border-slate-200 bg-white p-3.5 sm:p-4 shadow-xs dark:border-slate-800 dark:bg-[#252B38]">
+          <div className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-white">
             Questões
           </div>
-          <div className="mt-1 font-mono text-2xl font-bold text-slate-900 dark:text-white">
+          <div className="mt-1 font-mono text-2xl font-bold text-white dark:text-white">
             {totalFilteredQuestions}
           </div>
         </div>
 
         {/* APROVEITAMENTO */}
-        <div className="rounded-xl border border-slate-200 bg-white p-3.5 sm:p-4 shadow-xs dark:border-slate-800 dark:bg-[#0E121A]">
-          <div className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-400">
+        <div className="rounded-xl border border-slate-200 bg-white p-3.5 sm:p-4 shadow-xs dark:border-slate-800 dark:bg-[#252B38]">
+          <div className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-white">
             Aproveitamento
           </div>
           <div className="mt-1 font-mono text-2xl font-bold text-emerald-600 dark:text-emerald-400">
@@ -334,25 +334,25 @@ export const HistoricoView: React.FC = () => {
       </div>
 
       {/* 3. ÁREA DE FILTROS COMPACTA E MODERNA */}
-      <div className="rounded-xl border border-slate-200 bg-white p-3.5 sm:p-4 shadow-xs dark:border-slate-800 dark:bg-[#0E121A] space-y-3">
+      <div className="rounded-xl border border-slate-200 bg-white p-3.5 sm:p-4 shadow-xs dark:border-slate-800 dark:bg-[#252B38] space-y-3">
         {/* Linha superior: Busca, Modalidade e Disciplina */}
         <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-12">
           {/* Busca */}
           <div className="relative sm:col-span-6 lg:col-span-6">
-            <Search className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400" />
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-white" />
             <input
               id="history-search-input"
               type="text"
               placeholder="Buscar por disciplina, assunto ou anotação..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full rounded-lg border border-slate-200 bg-slate-50 py-2 pl-8 pr-8 text-xs text-slate-900 placeholder:text-slate-400 focus:border-[#FF6B00] focus:ring-1 focus:ring-[#FF6B00] dark:border-slate-800 dark:bg-[#141924] dark:text-white"
+              className="w-full rounded-lg border border-slate-200 bg-slate-50 py-2 pl-8 pr-8 text-xs text-white placeholder:text-white focus:border-[#F59E0B] focus:ring-1 focus:ring-[#F59E0B] dark:border-slate-800 dark:bg-[#0F172A] dark:text-white"
             />
             {searchQuery && (
               <button
                 type="button"
                 onClick={() => setSearchQuery("")}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-white hover:text-white dark:hover:text-white"
               >
                 <X className="h-3.5 w-3.5" />
               </button>
@@ -365,7 +365,7 @@ export const HistoricoView: React.FC = () => {
               id="history-discipline-filter"
               value={selectedDiscipline}
               onChange={(e) => setSelectedDiscipline(e.target.value)}
-              className="w-full appearance-none rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 pr-8 text-xs font-semibold text-slate-900 transition focus:border-[#FF6B00] focus:ring-1 focus:ring-[#FF6B00] dark:border-slate-800 dark:bg-[#141924] dark:text-white cursor-pointer truncate"
+              className="w-full appearance-none rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 pr-8 text-xs font-semibold text-white transition focus:border-[#F59E0B] focus:ring-1 focus:ring-[#F59E0B] dark:border-slate-800 dark:bg-[#0F172A] dark:text-white cursor-pointer truncate"
             >
               <option value="all">Todas as disciplinas</option>
               {availableDisciplines.map((d) => (
@@ -374,7 +374,7 @@ export const HistoricoView: React.FC = () => {
                 </option>
               ))}
             </select>
-            <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400" />
+            <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-white" />
           </div>
 
           {/* Modalidade */}
@@ -383,7 +383,7 @@ export const HistoricoView: React.FC = () => {
               id="history-modality-filter"
               value={selectedModality}
               onChange={(e) => setSelectedModality(e.target.value)}
-              className="w-full appearance-none rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 pr-8 text-xs font-semibold text-slate-900 transition focus:border-[#FF6B00] focus:ring-1 focus:ring-[#FF6B00] dark:border-slate-800 dark:bg-[#141924] dark:text-white cursor-pointer"
+              className="w-full appearance-none rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 pr-8 text-xs font-semibold text-white transition focus:border-[#F59E0B] focus:ring-1 focus:ring-[#F59E0B] dark:border-slate-800 dark:bg-[#0F172A] dark:text-white cursor-pointer"
             >
               <option value="all">Todas as modalidades</option>
               {modalities.map((m) => (
@@ -392,14 +392,14 @@ export const HistoricoView: React.FC = () => {
                 </option>
               ))}
             </select>
-            <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400" />
+            <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-white" />
           </div>
         </div>
 
         {/* Linha inferior: Filtro de Período (Pills compactas) e Limpar Filtros */}
         <div className="flex flex-wrap items-center justify-between gap-2 border-t border-slate-100 pt-2.5 dark:border-slate-800/80">
           <div className="flex flex-wrap items-center gap-1.5">
-            <span className="mr-1 text-[11px] font-bold uppercase tracking-wider text-slate-400">
+            <span className="mr-1 text-[11px] font-bold uppercase tracking-wider text-white">
               Período:
             </span>
             {(
@@ -419,8 +419,8 @@ export const HistoricoView: React.FC = () => {
                   onClick={() => setPeriodFilter(p.key)}
                   className={`rounded-lg px-2.5 py-1 text-xs font-semibold transition cursor-pointer ${
                     isSelected
-                      ? "bg-[#FF6B00] text-white shadow-xs"
-                      : "bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-[#141924] dark:text-slate-400 dark:hover:bg-slate-800"
+                      ? "bg-[#F59E0B] text-white shadow-xs"
+                      : "bg-slate-100 text-white hover:bg-slate-200 dark:bg-[#0F172A] dark:text-white dark:hover:bg-slate-800"
                   }`}
                 >
                   {p.label}
@@ -433,7 +433,7 @@ export const HistoricoView: React.FC = () => {
             <button
               type="button"
               onClick={clearFilters}
-              className="text-xs font-semibold text-[#FF6B00] hover:underline dark:text-[#FFA726] cursor-pointer"
+              className="text-xs font-semibold text-[#F59E0B] hover:underline dark:text-[#FBBF24] cursor-pointer"
             >
               Limpar filtros
             </button>
@@ -443,19 +443,19 @@ export const HistoricoView: React.FC = () => {
         {/* Período Personalizado (Inputs discretos de data) */}
         {periodFilter === "custom" && (
           <div className="flex flex-wrap items-center gap-2 pt-1">
-            <span className="text-xs text-slate-400">De:</span>
+            <span className="text-xs text-white">De:</span>
             <input
               type="date"
               value={customStartDate}
               onChange={(e) => setCustomStartDate(e.target.value)}
-              className="rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-medium text-slate-900 dark:border-slate-800 dark:bg-[#141924] dark:text-white"
+              className="rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-medium text-white dark:border-slate-800 dark:bg-[#0F172A] dark:text-white"
             />
-            <span className="text-xs text-slate-400">Até:</span>
+            <span className="text-xs text-white">Até:</span>
             <input
               type="date"
               value={customEndDate}
               onChange={(e) => setCustomEndDate(e.target.value)}
-              className="rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-medium text-slate-900 dark:border-slate-800 dark:bg-[#141924] dark:text-white"
+              className="rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-medium text-white dark:border-slate-800 dark:bg-[#0F172A] dark:text-white"
             />
           </div>
         )}
@@ -464,18 +464,18 @@ export const HistoricoView: React.FC = () => {
       {/* 4. LISTA DE REGISTROS MODERNOS (Substitui completamente a tabela tradicional) */}
       {studySessions.length === 0 ? (
         /* ESTADO VAZIO LIMPO (quando não há nenhum estudo registrado) */
-        <div className="rounded-2xl border border-slate-200 bg-white p-12 text-center shadow-xs dark:border-slate-800 dark:bg-[#0E121A]">
-          <h2 className="text-base font-bold text-slate-900 dark:text-white">
+        <div className="rounded-2xl border border-slate-200 bg-white p-12 text-center shadow-xs dark:border-slate-800 dark:bg-[#252B38]">
+          <h2 className="text-base font-bold text-white dark:text-white">
             Nenhum estudo registrado
           </h2>
-          <p className="mt-1 text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto">
+          <p className="mt-1 text-xs text-white dark:text-white max-w-sm mx-auto">
             Seus estudos aparecerão aqui depois que você finalizar uma sessão.
           </p>
           <div className="mt-5">
             <button
               type="button"
               onClick={() => setActiveTab("cronometro")}
-              className="inline-flex items-center gap-2 rounded-xl bg-[#FF6B00] px-5 py-2.5 text-xs font-bold text-white shadow-sm shadow-orange-500/20 transition hover:bg-[#E05D00] active:scale-98 cursor-pointer"
+              className="inline-flex items-center gap-2 rounded-xl bg-[#F59E0B] px-5 py-2.5 text-xs font-bold text-white shadow-sm shadow-amber-500/20 transition hover:bg-[#D97706] active:scale-98 cursor-pointer"
             >
               <Plus className="h-3.5 w-3.5" />
               <span>Registrar estudo</span>
@@ -484,14 +484,14 @@ export const HistoricoView: React.FC = () => {
         </div>
       ) : sortedSessions.length === 0 ? (
         /* VAZIO DEVIDO A FILTROS */
-        <div className="rounded-xl border border-slate-200 bg-white p-8 text-center shadow-xs dark:border-slate-800 dark:bg-[#0E121A]">
-          <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
+        <div className="rounded-xl border border-slate-200 bg-white p-8 text-center shadow-xs dark:border-slate-800 dark:bg-[#252B38]">
+          <p className="text-xs font-medium text-white dark:text-white">
             Nenhum estudo encontrado com os filtros selecionados.
           </p>
           <button
             type="button"
             onClick={clearFilters}
-            className="mt-3 inline-flex items-center gap-1 text-xs font-bold text-[#FF6B00] hover:underline dark:text-[#FFA726] cursor-pointer"
+            className="mt-3 inline-flex items-center gap-1 text-xs font-bold text-[#F59E0B] hover:underline dark:text-[#FBBF24] cursor-pointer"
           >
             Limpar filtros aplicados
           </button>
@@ -525,16 +525,16 @@ export const HistoricoView: React.FC = () => {
             return (
               <div
                 key={session.id}
-                className="group relative rounded-xl border border-slate-200 bg-white p-4 shadow-xs transition hover:border-slate-300 dark:border-slate-800 dark:bg-[#0E121A] dark:hover:border-slate-700"
+                className="group relative rounded-xl border border-slate-200 bg-white p-4 shadow-xs transition hover:border-slate-300 dark:border-slate-800 dark:bg-[#252B38] dark:hover:border-slate-700"
               >
                 {/* Linha Superior: Data do Estudo & Menu 3 Pontos */}
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                    <span className="font-mono text-xs font-bold uppercase tracking-wider text-slate-400">
+                    <span className="font-mono text-xs font-bold uppercase tracking-wider text-white">
                       {formatStudyDateDisplay(session)}
                     </span>
-                    <span className="text-slate-300 dark:text-slate-700">·</span>
-                    <span className="text-xs font-bold uppercase tracking-wider text-[#FF6B00] dark:text-[#FFA726]">
+                    <span className="text-white dark:text-white">·</span>
+                    <span className="text-xs font-bold uppercase tracking-wider text-[#F59E0B] dark:text-[#FBBF24]">
                       {session.disciplineName || "Disciplina"}
                     </span>
                   </div>
@@ -548,7 +548,7 @@ export const HistoricoView: React.FC = () => {
                         e.stopPropagation();
                         setOpenMenuSessionId(isMenuOpen ? null : session.id);
                       }}
-                      className="flex h-7 w-7 items-center justify-center rounded-lg text-slate-400 transition hover:bg-slate-100 hover:text-slate-700 dark:hover:bg-slate-800 dark:hover:text-slate-200 cursor-pointer"
+                      className="flex h-7 w-7 items-center justify-center rounded-lg text-white transition hover:bg-slate-100 hover:text-white dark:hover:bg-slate-800 dark:hover:text-white cursor-pointer"
                       title="Opções do registro"
                     >
                       <MoreVertical className="h-4 w-4" />
@@ -556,7 +556,7 @@ export const HistoricoView: React.FC = () => {
 
                     {/* Dropdown discreto de ações */}
                     {isMenuOpen && (
-                      <div className="absolute right-0 top-8 z-20 w-44 rounded-xl border border-slate-200 bg-white py-1 shadow-lg dark:border-slate-800 dark:bg-[#11151F]">
+                      <div className="absolute right-0 top-8 z-20 w-44 rounded-xl border border-slate-200 bg-white py-1 shadow-lg dark:border-slate-800 dark:bg-[#252B38]">
                         <button
                           type="button"
                           onClick={(e) => {
@@ -575,27 +575,27 @@ export const HistoricoView: React.FC = () => {
                 </div>
 
                 {/* Título do Tópico / Assunto */}
-                <h3 className="mt-1 text-sm font-semibold text-slate-900 dark:text-white leading-snug">
+                <h3 className="mt-1 text-sm font-semibold text-white dark:text-white leading-snug">
                   {session.topicName || "Geral"}
                 </h3>
 
                 {/* Badges / Chips Discretos de Métricas e Indicadores */}
                 <div className="mt-3 flex flex-wrap items-center gap-2 text-xs">
                   {/* Modalidade */}
-                  <span className="inline-flex items-center rounded-md bg-slate-100 px-2 py-0.5 text-xs font-semibold text-slate-700 dark:bg-[#141924] dark:text-slate-300 border border-slate-200/80 dark:border-slate-800">
+                  <span className="inline-flex items-center rounded-md bg-slate-100 px-2 py-0.5 text-xs font-semibold text-white dark:bg-[#0F172A] dark:text-white border border-slate-200/80 dark:border-slate-800">
                     {session.modality}
                   </span>
 
                   {/* Duração líquida */}
-                  <span className="inline-flex items-center gap-1 font-mono text-xs font-medium text-slate-600 dark:text-slate-400">
-                    <Clock className="h-3 w-3 text-slate-400" />
+                  <span className="inline-flex items-center gap-1 font-mono text-xs font-medium text-white dark:text-white">
+                    <Clock className="h-3 w-3 text-white" />
                     {formatDuration(session.durationMinutes)}
                   </span>
 
                   {/* Questões e Aproveitamento */}
                   {session.questionsDone > 0 && (
-                    <span className="inline-flex items-center gap-1 font-mono text-xs font-medium text-slate-600 dark:text-slate-400">
-                      <Target className="h-3 w-3 text-slate-400" />
+                    <span className="inline-flex items-center gap-1 font-mono text-xs font-medium text-white dark:text-white">
+                      <Target className="h-3 w-3 text-white" />
                       <span>
                         {session.questionsCorrect}/{session.questionsDone}
                       </span>
@@ -615,7 +615,7 @@ export const HistoricoView: React.FC = () => {
 
                   {/* Revisões Programadas */}
                   {totalReviews > 0 && (
-                    <span className="inline-flex items-center gap-1 rounded-md bg-orange-50 px-2 py-0.5 text-xs font-semibold text-[#FF6B00] border border-orange-200/70 dark:bg-orange-950/30 dark:text-[#FFA726] dark:border-orange-900/50">
+                    <span className="inline-flex items-center gap-1 rounded-md bg-amber-50 px-2 py-0.5 text-xs font-semibold text-[#F59E0B] border border-amber-200/70 dark:bg-amber-950/30 dark:text-[#FBBF24] dark:border-amber-900/50">
                       <RotateCw className="h-3 w-3" />
                       {completedReviews > 0
                         ? `${completedReviews}/${totalReviews} revisões`
@@ -628,7 +628,7 @@ export const HistoricoView: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => setExpandedSessionId(isExpanded ? null : session.id)}
-                      className="inline-flex items-center gap-1 rounded-md bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700 transition cursor-pointer"
+                      className="inline-flex items-center gap-1 rounded-md bg-slate-100 px-2 py-0.5 text-xs font-medium text-white hover:bg-slate-200 dark:bg-slate-800 dark:text-white dark:hover:bg-slate-700 transition cursor-pointer"
                     >
                       <FileText className="h-3 w-3" />
                       <span>Anotação</span>
@@ -638,19 +638,19 @@ export const HistoricoView: React.FC = () => {
 
                 {/* Detalhe Expandido de Anotações (quando acionado pelo chip) */}
                 {isExpanded && hasNotes && (
-                  <div className="mt-3 rounded-lg border border-slate-200/80 bg-slate-50/70 p-3 text-xs dark:border-slate-800 dark:bg-[#141924]/60">
-                    <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                  <div className="mt-3 rounded-lg border border-slate-200/80 bg-slate-50/70 p-3 text-xs dark:border-slate-800 dark:bg-[#0F172A]/60">
+                    <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-wider text-white">
                       <span className="flex items-center gap-1">
                         <FileText className="h-3 w-3" />
                         Anotações da sessão
                       </span>
                       {session.cargo && (
-                        <span className="text-slate-500 dark:text-slate-400">
+                        <span className="text-white dark:text-white">
                           Cargo: {session.cargo}
                         </span>
                       )}
                     </div>
-                    <p className="mt-1.5 whitespace-pre-wrap text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
+                    <p className="mt-1.5 whitespace-pre-wrap text-xs text-white dark:text-white leading-relaxed">
                       {session.notes}
                     </p>
                   </div>
@@ -664,11 +664,11 @@ export const HistoricoView: React.FC = () => {
       {/* 5. MODAL COMPACTO DE CONFIRMAÇÃO DE EXCLUSÃO */}
       {sessionToDelete && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-xs p-4 animate-in fade-in duration-150">
-          <div className="w-full max-w-sm rounded-2xl border border-slate-200 bg-white p-5 shadow-xl dark:border-slate-800 dark:bg-[#11151F]">
-            <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+          <div className="w-full max-w-sm rounded-2xl border border-slate-200 bg-white p-5 shadow-xl dark:border-slate-800 dark:bg-[#252B38]">
+            <h3 className="text-sm font-bold text-white dark:text-white">
               Excluir este registro de estudo?
             </h3>
-            <p className="mt-2 text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+            <p className="mt-2 text-xs text-white dark:text-white leading-relaxed">
               Essa ação também removerá os dados relacionados a este estudo.
             </p>
 
@@ -677,7 +677,7 @@ export const HistoricoView: React.FC = () => {
                 type="button"
                 disabled={isDeleting}
                 onClick={() => setSessionToDelete(null)}
-                className="rounded-xl border border-slate-200 px-3.5 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-[#161C28] dark:text-slate-300 dark:hover:bg-slate-800 cursor-pointer disabled:opacity-50"
+                className="rounded-xl border border-slate-200 px-3.5 py-2 text-xs font-semibold text-white hover:bg-slate-50 dark:border-slate-700 dark:bg-[#161C28] dark:text-white dark:hover:bg-slate-800 cursor-pointer disabled:opacity-50"
               >
                 Cancelar
               </button>

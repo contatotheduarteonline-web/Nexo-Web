@@ -72,7 +72,7 @@ export const Step7Availability: React.FC<Step7AvailabilityProps> = ({
     <div id="step-7-availability" className="w-full max-w-3xl mx-auto px-4 py-4 sm:py-8">
       {/* Question Header */}
       <div className="mb-6 text-center sm:text-left">
-        <span className="text-xs font-semibold text-[#FF6B00] tracking-wider uppercase">
+        <span className="text-xs font-semibold text-[#F59E0B] tracking-wider uppercase">
           Etapa 7 de 12
         </span>
         <h2 className="text-2xl sm:text-4xl font-bold tracking-tight text-white mt-1">
@@ -83,12 +83,12 @@ export const Step7Availability: React.FC<Step7AvailabilityProps> = ({
       {/* Real-time Summary Card */}
       <div className="mb-6 p-4 rounded-xl bg-zinc-900/90 border border-zinc-800 flex items-center justify-between shadow-md">
         <div className="flex items-center gap-2.5">
-          <Clock className="w-5 h-5 text-[#FF6B00]" />
+          <Clock className="w-5 h-5 text-[#F59E0B]" />
           <span className="text-sm text-zinc-300 font-medium">
             Disponibilidade semanal:
           </span>
         </div>
-        <span className="text-lg sm:text-xl font-bold text-[#FF6B00] font-mono tracking-tight">
+        <span className="text-lg sm:text-xl font-bold text-[#F59E0B] font-mono tracking-tight">
           {formattedWeekly}
         </span>
       </div>
@@ -102,7 +102,7 @@ export const Step7Availability: React.FC<Step7AvailabilityProps> = ({
               key={key}
               className={`p-3.5 sm:p-4 rounded-xl border transition-all duration-150 flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
                 day.enabled
-                  ? "bg-zinc-800/80 border-[#FF6B00]/70 shadow-sm"
+                  ? "bg-zinc-800/80 border-[#F59E0B]/70 shadow-sm"
                   : "bg-zinc-900/40 border-zinc-800/60 opacity-70"
               }`}
             >
@@ -114,7 +114,7 @@ export const Step7Availability: React.FC<Step7AvailabilityProps> = ({
                   onClick={() => handleToggleDay(key)}
                   className={`w-12 h-9 rounded-lg font-bold text-xs flex items-center justify-center transition-colors cursor-pointer ${
                     day.enabled
-                      ? "bg-[#FF6B00] text-white"
+                      ? "bg-[#F59E0B] text-white"
                       : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700"
                   }`}
                 >
@@ -164,7 +164,7 @@ export const Step7Availability: React.FC<Step7AvailabilityProps> = ({
                         onClick={() => handleUpdateDayTime(key, presetH, 0)}
                         className={`px-2 py-1 text-[11px] rounded font-mono transition-colors ${
                           day.hours === presetH && day.minutes === 0
-                            ? "bg-[#FF6B00]/20 text-[#FF6B00] border border-[#FF6B00]/40 font-bold"
+                            ? "bg-[#F59E0B]/20 text-[#F59E0B] border border-[#F59E0B]/40 font-bold"
                             : "bg-zinc-800/60 text-zinc-400 hover:text-zinc-200"
                         }`}
                       >
@@ -188,7 +188,7 @@ export const Step7Availability: React.FC<Step7AvailabilityProps> = ({
           id="btn-availability-next"
           onClick={onNext}
           disabled={!canContinue}
-          className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-[#FF6B00] hover:bg-[#FF7A1A] disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold text-sm transition-all duration-200 cursor-pointer shadow-[0_6px_20px_rgba(255,107,0,0.25)]"
+          className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-[#F59E0B] hover:bg-[#FF7A1A] disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold text-sm transition-all duration-200 cursor-pointer shadow-[0_6px_20px_rgba(255,107,0,0.25)]"
         >
           <span>Continuar</span>
           <ArrowRight className="w-4 h-4" />

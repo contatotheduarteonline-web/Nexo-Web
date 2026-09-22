@@ -62,9 +62,9 @@ export const CadastroView: React.FC<CadastroViewProps> = ({ onGoToLogin }) => {
   };
 
   return (
-    <div className="flex min-h-screen w-full bg-[#0B0E14] text-zinc-100 antialiased selection:bg-orange-500/30 selection:text-orange-300">
+    <div className="flex min-h-screen w-full bg-[#0F172A] text-zinc-100 antialiased selection:bg-amber-500/30 selection:text-amber-300">
       {/* Desktop Split Layout: Institutional side */}
-      <div className="hidden lg:flex lg:w-1/2 flex-col justify-between border-r border-zinc-800/80 bg-gradient-to-b from-[#121620] via-[#0E121A] to-[#0B0E14] p-14 relative overflow-hidden">
+      <div className="hidden lg:flex lg:w-1/2 flex-col justify-between border-r border-zinc-800/80 bg-gradient-to-b from-[#121620] via-[#0F172A] to-[#0F172A] p-14 relative overflow-hidden">
         {/* Central Logo & Message */}
         <div className="my-auto max-w-lg space-y-6">
           <Logo variant="full" size="hero" />
@@ -80,13 +80,13 @@ export const CadastroView: React.FC<CadastroViewProps> = ({ onGoToLogin }) => {
 
           <div className="grid grid-cols-1 gap-3 pt-2">
             <div className="flex items-center gap-3 rounded-xl border border-zinc-800/80 bg-zinc-900/60 px-4 py-3 text-xs font-semibold text-zinc-200 shadow-xs">
-              <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-orange-500/15 text-[#FF6B00] border border-orange-500/30">
+              <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-amber-500/15 text-[#F59E0B] border border-amber-500/30">
                 <CheckCircle2 className="h-3.5 w-3.5" />
               </div>
               <span>Acesso a ciclos de estudos, editais e simulados</span>
             </div>
             <div className="flex items-center gap-3 rounded-xl border border-zinc-800/80 bg-zinc-900/60 px-4 py-3 text-xs font-semibold text-zinc-200 shadow-xs">
-              <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-orange-500/15 text-[#FF6B00] border border-orange-500/30">
+              <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-amber-500/15 text-[#F59E0B] border border-amber-500/30">
                 <CheckCircle2 className="h-3.5 w-3.5" />
               </div>
               <span>Acompanhamento métrico individualizado de desempenho</span>
@@ -97,12 +97,12 @@ export const CadastroView: React.FC<CadastroViewProps> = ({ onGoToLogin }) => {
         {/* Footer */}
         <div className="flex items-center justify-between text-xs text-zinc-500 border-t border-zinc-800/60 pt-6">
           <span>Disciplina • Foco • Alta Performance</span>
-          <span className="text-orange-500/80 font-mono text-[11px] font-bold">NEXO v3.0</span>
+          <span className="text-amber-500/80 font-mono text-[11px] font-bold">NEXO v3.0</span>
         </div>
       </div>
 
       {/* Right side: Registration Form */}
-      <div className="flex w-full lg:w-1/2 flex-col justify-center items-center p-6 sm:p-12 lg:p-16 bg-[#0B0E14]">
+      <div className="flex w-full lg:w-1/2 flex-col justify-center items-center p-6 sm:p-12 lg:p-16 bg-[#0F172A]">
         <div className="w-full max-w-md space-y-7">
           {/* Mobile Logo Header */}
           <div className="lg:hidden flex flex-col items-center text-center mb-2">
@@ -152,7 +152,7 @@ export const CadastroView: React.FC<CadastroViewProps> = ({ onGoToLogin }) => {
                     if (error) setError("");
                   }}
                   placeholder="Ex: Carlos Eduardo Silva"
-                  className="w-full rounded-xl border border-zinc-800 bg-zinc-900/90 py-3 pl-10 pr-4 text-xs text-white placeholder:text-zinc-500 transition focus:border-[#FF6B00] focus:bg-zinc-900 focus:outline-none focus:ring-1 focus:ring-[#FF6B00]"
+                  className="w-full rounded-xl border border-zinc-800 bg-zinc-900/90 py-3 pl-10 pr-4 text-xs text-white placeholder:text-zinc-500 transition focus:border-[#F59E0B] focus:bg-zinc-900 focus:outline-none focus:ring-1 focus:ring-[#F59E0B]"
                 />
                 <User className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
               </div>
@@ -173,7 +173,7 @@ export const CadastroView: React.FC<CadastroViewProps> = ({ onGoToLogin }) => {
                     if (error) setError("");
                   }}
                   placeholder="seu.email@exemplo.com"
-                  className="w-full rounded-xl border border-zinc-800 bg-zinc-900/90 py-3 pl-10 pr-4 text-xs text-white placeholder:text-zinc-500 transition focus:border-[#FF6B00] focus:bg-zinc-900 focus:outline-none focus:ring-1 focus:ring-[#FF6B00]"
+                  className="w-full rounded-xl border border-zinc-800 bg-zinc-900/90 py-3 pl-10 pr-4 text-xs text-white placeholder:text-zinc-500 transition focus:border-[#F59E0B] focus:bg-zinc-900 focus:outline-none focus:ring-1 focus:ring-[#F59E0B]"
                 />
                 <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
               </div>
@@ -195,7 +195,7 @@ export const CadastroView: React.FC<CadastroViewProps> = ({ onGoToLogin }) => {
                       if (error) setError("");
                     }}
                     placeholder="Mínimo 6 caracteres"
-                    className="w-full rounded-xl border border-zinc-800 bg-zinc-900/90 py-3 pl-10 pr-10 text-xs text-white placeholder:text-zinc-500 transition focus:border-[#FF6B00] focus:bg-zinc-900 focus:outline-none focus:ring-1 focus:ring-[#FF6B00]"
+                    className="w-full rounded-xl border border-zinc-800 bg-zinc-900/90 py-3 pl-10 pr-10 text-xs text-white placeholder:text-zinc-500 transition focus:border-[#F59E0B] focus:bg-zinc-900 focus:outline-none focus:ring-1 focus:ring-[#F59E0B]"
                   />
                   <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
                   <button
@@ -223,7 +223,7 @@ export const CadastroView: React.FC<CadastroViewProps> = ({ onGoToLogin }) => {
                       if (error) setError("");
                     }}
                     placeholder="Repita a senha"
-                    className="w-full rounded-xl border border-zinc-800 bg-zinc-900/90 py-3 pl-10 pr-4 text-xs text-white placeholder:text-zinc-500 transition focus:border-[#FF6B00] focus:bg-zinc-900 focus:outline-none focus:ring-1 focus:ring-[#FF6B00]"
+                    className="w-full rounded-xl border border-zinc-800 bg-zinc-900/90 py-3 pl-10 pr-4 text-xs text-white placeholder:text-zinc-500 transition focus:border-[#F59E0B] focus:bg-zinc-900 focus:outline-none focus:ring-1 focus:ring-[#F59E0B]"
                   />
                   <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
                 </div>
@@ -233,7 +233,7 @@ export const CadastroView: React.FC<CadastroViewProps> = ({ onGoToLogin }) => {
             <button
               type="submit"
               disabled={isLoading}
-              className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#FF6B00] to-[#FF8A00] py-3.5 text-xs font-bold text-white transition hover:from-[#E05D00] hover:to-[#FF6B00] active:scale-[0.99] disabled:opacity-50 disabled:pointer-events-none shadow-lg shadow-orange-500/25 mt-5 cursor-pointer"
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#F59E0B] to-[#FBBF24] py-3.5 text-xs font-bold text-white transition hover:from-[#D97706] hover:to-[#F59E0B] active:scale-[0.99] disabled:opacity-50 disabled:pointer-events-none shadow-lg shadow-amber-500/25 mt-5 cursor-pointer"
             >
               <span>{isLoading ? "Criando conta..." : "Criar Minha Conta"}</span>
               {!isLoading && <ArrowRight className="h-4 w-4" />}
@@ -245,7 +245,7 @@ export const CadastroView: React.FC<CadastroViewProps> = ({ onGoToLogin }) => {
             <button
               type="button"
               onClick={onGoToLogin}
-              className="font-semibold text-[#FF6B00] hover:text-[#FFA726] transition underline-offset-4 hover:underline cursor-pointer"
+              className="font-semibold text-[#F59E0B] hover:text-[#FBBF24] transition underline-offset-4 hover:underline cursor-pointer"
             >
               Fazer login
             </button>

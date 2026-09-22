@@ -87,18 +87,18 @@ export const EditalGamificationCard: React.FC = () => {
   }, [filteredBadges, showAllBadges]);
 
   return (
-    <div className="rounded-2xl border border-slate-200/80 bg-white/90 p-5 shadow-2xs backdrop-blur-xs dark:border-[#1A2232] dark:bg-[#0E131F] space-y-4.5 transition-all">
+    <div className="rounded-2xl border border-slate-200/80 bg-white/90 p-5 shadow-2xs backdrop-blur-xs dark:border-[#1E293B] dark:bg-[#0E131F] space-y-4.5 transition-all">
       {/* 1. Header do Card com Título, Patente, Edital Selector e XP */}
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between pb-3 border-b border-slate-100 dark:border-[#1A2232]">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between pb-3 border-b border-slate-100 dark:border-[#1E293B]">
         <div className="space-y-1">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-white dark:text-white">
               Progresso no Edital
             </span>
 
             {/* Nível de Domínio */}
             <div
-              className="inline-flex items-center gap-1.5 rounded-full border border-orange-200/70 bg-orange-50 px-2.5 py-0.5 text-xs font-semibold text-[#FF6B00] dark:border-orange-900/50 dark:bg-orange-950/40 dark:text-[#FFA726]"
+              className="inline-flex items-center gap-1.5 rounded-full border border-amber-200/70 bg-amber-50 px-2.5 py-0.5 text-xs font-semibold text-[#F59E0B] dark:border-amber-900/50 dark:bg-amber-950/40 dark:text-[#FBBF24]"
             >
               <TrendingUp className="h-3.5 w-3.5" />
               <span>{gamification.rankTitle}</span>
@@ -106,14 +106,14 @@ export const EditalGamificationCard: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-400">
+          <div className="flex items-center gap-2 text-xs text-white dark:text-white">
             <span>
-              <strong className="font-semibold text-slate-900 dark:text-white">
+              <strong className="font-semibold text-white dark:text-white">
                 {completedTopicsCount}
               </strong>{" "}
               de {totalTopicsCount} tópicos concluídos
             </span>
-            <span className="text-slate-300 dark:text-slate-700">&bull;</span>
+            <span className="text-white dark:text-white">&bull;</span>
             <span>{pendingTopicsCount} pendentes</span>
           </div>
         </div>
@@ -126,20 +126,20 @@ export const EditalGamificationCard: React.FC = () => {
               <Zap className="h-3 w-3 fill-amber-500" />
               {gamification.totalXp.toLocaleString("pt-BR")} XP
             </span>
-            <span className="text-[10px] text-slate-400 mt-0.5">
+            <span className="text-[10px] text-white mt-0.5">
               {gamification.unlockedBadgesCount}/{gamification.totalBadgesCount} Conquistas
             </span>
           </div>
 
           {/* Porcentagem Grande */}
-          <div className="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+          <div className="text-3xl font-extrabold text-white dark:text-white tracking-tight">
             {globalProgressPercentage}%
           </div>
 
           {/* Botão Ver Edital */}
           <button
             onClick={() => setActiveTab("edital")}
-            className="hidden md:flex items-center justify-center p-2 rounded-xl border border-slate-200/80 hover:border-[#FF6B00] text-slate-400 hover:text-[#FF6B00] bg-slate-50 hover:bg-orange-50/50 dark:bg-[#161D29] dark:border-slate-800 transition"
+            className="hidden md:flex items-center justify-center p-2 rounded-xl border border-slate-200/80 hover:border-[#F59E0B] text-white hover:text-[#F59E0B] bg-slate-50 hover:bg-amber-50/50 dark:bg-[#161D29] dark:border-slate-800 transition"
             title="Ver Edital Completo"
           >
             <ArrowUpRight className="h-4 w-4" />
@@ -153,24 +153,24 @@ export const EditalGamificationCard: React.FC = () => {
           {/* Barra de Fundo */}
           <div className="relative h-2.5 w-full rounded-full bg-slate-100 dark:bg-slate-800/80 overflow-hidden">
             <div
-              className="h-full rounded-full bg-gradient-to-r from-[#FF6B00] to-[#FF8A00] transition-all duration-700 ease-out"
+              className="h-full rounded-full bg-gradient-to-r from-[#F59E0B] to-[#FBBF24] transition-all duration-700 ease-out"
               style={{ width: `${Math.min(100, Math.max(0, globalProgressPercentage))}%` }}
             />
           </div>
 
           {/* Labels abaixo da barra */}
-          <div className="flex justify-between text-[10px] font-medium text-slate-400 mt-2 px-0.5">
+          <div className="flex justify-between text-[10px] font-medium text-white mt-2 px-0.5">
             <span>0% Início</span>
-            <span className={globalProgressPercentage >= 20 ? "text-[#FF6B00] font-semibold" : ""}>
+            <span className={globalProgressPercentage >= 20 ? "text-[#F59E0B] font-semibold" : ""}>
               20%
             </span>
-            <span className={globalProgressPercentage >= 40 ? "text-[#FF6B00] font-semibold" : ""}>
+            <span className={globalProgressPercentage >= 40 ? "text-[#F59E0B] font-semibold" : ""}>
               40%
             </span>
-            <span className={globalProgressPercentage >= 60 ? "text-[#FF6B00] font-semibold" : ""}>
+            <span className={globalProgressPercentage >= 60 ? "text-[#F59E0B] font-semibold" : ""}>
               60%
             </span>
-            <span className={globalProgressPercentage >= 80 ? "text-[#FF6B00] font-semibold" : ""}>
+            <span className={globalProgressPercentage >= 80 ? "text-[#F59E0B] font-semibold" : ""}>
               80%
             </span>
             <span className={globalProgressPercentage >= 100 ? "text-amber-500 font-semibold" : ""}>
@@ -180,23 +180,23 @@ export const EditalGamificationCard: React.FC = () => {
         </div>
 
         {/* Indicador de Próximo Nível & XP restante */}
-        <div className="flex flex-wrap items-center justify-between gap-2 pt-1 border-t border-slate-100 dark:border-[#1A2232] text-xs">
-          <div className="flex items-center gap-1.5 text-slate-600 dark:text-slate-300">
-            <Target className="h-3.5 w-3.5 text-[#FF6B00]" />
+        <div className="flex flex-wrap items-center justify-between gap-2 pt-1 border-t border-slate-100 dark:border-[#1E293B] text-xs">
+          <div className="flex items-center gap-1.5 text-white dark:text-white">
+            <Target className="h-3.5 w-3.5 text-[#F59E0B]" />
             <span>
               Próximo:{" "}
-              <strong className="text-slate-900 dark:text-white font-semibold">
+              <strong className="text-white dark:text-white font-semibold">
                 {gamification.nextRankName}
               </strong>
             </span>
           </div>
 
-          <div className="text-slate-500 dark:text-slate-400 text-[11px]">
+          <div className="text-white dark:text-white text-[11px]">
             {globalProgressPercentage >= 100 ? (
               <span className="font-semibold text-amber-500">🏆 100% Concluído</span>
             ) : (
               <span>
-                Faltam <strong className="text-[#FF6B00] font-semibold">{gamification.topicsRemainingForNext}</strong> tópicos
+                Faltam <strong className="text-[#F59E0B] font-semibold">{gamification.topicsRemainingForNext}</strong> tópicos
               </span>
             )}
           </div>
@@ -207,14 +207,14 @@ export const EditalGamificationCard: React.FC = () => {
       <div className="pt-1">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2.5">
           <div className="flex items-center gap-2">
-            <div className="h-6 w-6 rounded-lg bg-orange-500/15 text-[#FF6B00] flex items-center justify-center">
+            <div className="h-6 w-6 rounded-lg bg-amber-500/15 text-[#F59E0B] flex items-center justify-center">
               <Award className="h-3.5 w-3.5" />
             </div>
             <div>
-              <span className="text-xs font-semibold text-slate-800 dark:text-slate-200">
+              <span className="text-xs font-semibold text-white dark:text-white">
                 Conquistas
               </span>
-              <span className="ml-2 text-[10px] font-semibold text-[#FF6B00] bg-orange-500/15 px-2 py-0.5 rounded-full">
+              <span className="ml-2 text-[10px] font-semibold text-[#F59E0B] bg-amber-500/15 px-2 py-0.5 rounded-full">
                 {gamification.unlockedBadgesCount} de {gamification.totalBadgesCount}
               </span>
             </div>
@@ -223,7 +223,7 @@ export const EditalGamificationCard: React.FC = () => {
           <button
             type="button"
             onClick={() => setShowAllBadges((prev) => !prev)}
-            className="text-[11px] font-semibold text-[#FF6B00] hover:underline self-start sm:self-auto flex items-center gap-1 cursor-pointer"
+            className="text-[11px] font-semibold text-[#F59E0B] hover:underline self-start sm:self-auto flex items-center gap-1 cursor-pointer"
           >
             <Award className="h-3 w-3" />
             {showAllBadges ? "Menos" : `Ver Todas (${gamification.totalBadgesCount})`}
@@ -232,7 +232,7 @@ export const EditalGamificationCard: React.FC = () => {
 
         {/* Categorias & Filtros de Medalhas */}
         {showAllBadges && (
-          <div className="flex flex-wrap items-center gap-1 mb-3 pb-2 border-b border-slate-100 dark:border-[#1A2232]">
+          <div className="flex flex-wrap items-center gap-1 mb-3 pb-2 border-b border-slate-100 dark:border-[#1E293B]">
             {[
               { key: "all", label: `Todas (${gamification.totalBadgesCount})` },
               { key: "unlocked", label: `Desbloqueadas (${gamification.unlockedBadgesCount})` },
@@ -250,8 +250,8 @@ export const EditalGamificationCard: React.FC = () => {
                 onClick={() => setBadgeCategoryFilter(tab.key)}
                 className={`px-2 py-0.5 rounded-lg text-[11px] font-medium transition cursor-pointer ${
                   badgeCategoryFilter === tab.key
-                    ? "bg-[#FF6B00] text-white shadow-2xs"
-                    : "bg-slate-100 dark:bg-[#151D2C] text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800"
+                    ? "bg-[#F59E0B] text-white shadow-2xs"
+                    : "bg-slate-100 dark:bg-[#1E293B] text-white dark:text-white hover:bg-slate-200 dark:hover:bg-slate-800"
                 }`}
               >
                 {tab.label}
@@ -274,13 +274,13 @@ export const EditalGamificationCard: React.FC = () => {
               }}
               className={`relative flex flex-col items-center justify-between p-3 rounded-xl border text-center transition-all cursor-pointer hover:border-slate-300 dark:hover:border-slate-700 ${
                 badge.unlocked
-                  ? "bg-white border-orange-500/30 dark:bg-[#0E131F] dark:border-orange-500/40 shadow-2xs"
-                  : "bg-slate-50/70 border-slate-200/70 dark:bg-[#090D16] dark:border-[#1A2232] opacity-70 hover:opacity-90"
+                  ? "bg-white border-amber-500/30 dark:bg-[#0E131F] dark:border-amber-500/40 shadow-2xs"
+                  : "bg-slate-50/70 border-slate-200/70 dark:bg-[#090D16] dark:border-[#1E293B] opacity-70 hover:opacity-90"
               }`}
             >
               {/* Badge Top Header */}
               <div className="w-full flex items-center justify-between text-[9px] mb-1.5">
-                <span className="text-slate-400 dark:text-slate-500 font-medium uppercase tracking-wider text-[8px]">
+                <span className="text-white dark:text-white font-medium uppercase tracking-wider text-[8px]">
                   {badge.categoryLabel}
                 </span>
                 <span className="font-semibold text-amber-600 dark:text-amber-400 bg-amber-500/10 px-1 py-0.2 rounded text-[9px]">
@@ -301,17 +301,17 @@ export const EditalGamificationCard: React.FC = () => {
               </div>
 
               {/* Título & Descrição */}
-              <h4 className="text-[11px] font-semibold text-slate-900 dark:text-white leading-tight mt-1 truncate w-full">
+              <h4 className="text-[11px] font-semibold text-white dark:text-white leading-tight mt-1 truncate w-full">
                 {badge.title}
               </h4>
-              <span className="text-[9px] text-slate-500 dark:text-slate-400 mt-0.5 line-clamp-1">
+              <span className="text-[9px] text-white dark:text-white mt-0.5 line-clamp-1">
                 {badge.desc}
               </span>
 
               {/* Status Footer */}
               <div className="mt-2 w-full">
                 {badge.unlocked ? (
-                  <span className="inline-flex items-center gap-1 text-[9px] font-semibold text-[#FF6B00] dark:text-[#FFA726] bg-orange-500/10 px-1.5 py-0.5 rounded-md w-full justify-center">
+                  <span className="inline-flex items-center gap-1 text-[9px] font-semibold text-[#F59E0B] dark:text-[#FBBF24] bg-amber-500/10 px-1.5 py-0.5 rounded-md w-full justify-center">
                     <Check className="h-2.5 w-2.5 stroke-[2.5]" />
                     Conquistada
                   </span>
@@ -332,7 +332,7 @@ export const EditalGamificationCard: React.FC = () => {
             <button
               type="button"
               onClick={() => setShowAllBadges(true)}
-              className="text-[11px] font-medium text-slate-500 hover:text-[#FF6B00] transition inline-flex items-center gap-1 cursor-pointer"
+              className="text-[11px] font-medium text-white hover:text-[#F59E0B] transition inline-flex items-center gap-1 cursor-pointer"
             >
               <span>+ {gamification.totalBadgesCount - 6} outras conquistas</span>
               <ChevronRight className="h-3 w-3" />

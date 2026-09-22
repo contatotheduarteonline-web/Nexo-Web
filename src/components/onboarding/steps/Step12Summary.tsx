@@ -45,7 +45,7 @@ export const Step12Summary: React.FC<Step12SummaryProps> = ({
     <div id="step-12-summary" className="w-full max-w-2xl mx-auto px-4 py-4 sm:py-8">
       {/* Title & Subtitle */}
       <div className="mb-8 text-center sm:text-left">
-        <span className="text-xs font-semibold text-[#FF6B00] tracking-wider uppercase">
+        <span className="text-xs font-semibold text-[#F59E0B] tracking-wider uppercase">
           Etapa 12 de 12 • Resumo
         </span>
         <h2 className="text-2xl sm:text-4xl font-bold tracking-tight text-white mt-1">
@@ -109,7 +109,7 @@ export const Step12Summary: React.FC<Step12SummaryProps> = ({
           <span className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">
             Carga Semanal
           </span>
-          <span className="text-sm font-bold text-[#FF6B00] font-mono">
+          <span className="text-sm font-bold text-[#F59E0B] font-mono">
             {weeklyHoursFormatted}
           </span>
         </div>
@@ -152,7 +152,7 @@ export const Step12Summary: React.FC<Step12SummaryProps> = ({
           id="btn-create-my-plan"
           onClick={onCreatePlan}
           disabled={isCreating}
-          className="w-full sm:w-auto min-w-[260px] inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl bg-[#FF6B00] hover:bg-[#FF7A1A] active:bg-[#E05300] disabled:opacity-50 text-white font-semibold text-base transition-all duration-200 cursor-pointer shadow-[0_8px_24px_rgba(255,107,0,0.35)]"
+          className="w-full sm:w-auto min-w-[260px] inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl bg-[#F59E0B] hover:bg-[#FF7A1A] active:bg-[#E05300] disabled:opacity-50 text-white font-semibold text-base transition-all duration-200 cursor-pointer shadow-[0_8px_24px_rgba(255,107,0,0.35)]"
         >
           <span>Criar meu plano</span>
           <ArrowRight className="w-5 h-5" />
