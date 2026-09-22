@@ -1099,6 +1099,18 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
         }
         setCatalogValidationErrors([]);
 
+        // Processa a imagem selecionada para que ela acompanhe o edital publicado
+        // no catálogo oficial (visível para TODOS os usuários, não só o publicador).
+        let catalogLogoDataUrl: string | undefined;
+        if (selectedImageFile) {
+          try {
+            const processedLogo = await processAndCompressPlanImage(selectedImageFile);
+            catalogLogoDataUrl = processedLogo.dataUrl;
+          } catch (logoErr: any) {
+            console.warn("[CATALOG] Falha ao processar imagem do edital:", logoErr);
+          }
+        }
+
         // Snapshot completa do edital + cargos + disciplinas + tópicos (Step 5)
         const catalogEntry: CatalogEdital = {
           id: `catalog-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`,
@@ -1118,6 +1130,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
           sourceHash: parsedData?.sourceHash || `manual-${Date.now()}`,
           normalizedIdentity: parsedData?.normalizedIdentity,
           logoUrl: selectedImageFile ? `plan-image:${planId}` : "",
+          logoDataUrl: catalogLogoDataUrl,
           cargoPretendido: cargoPretendido.trim(),
           imagemTipo: "logo_oficial",
           dadosVerificados: true,
@@ -1599,6 +1612,12 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                           .join("")
                           .slice(0, 2)
                           .toUpperCase();
+                        // Imagem do edital: dataUrl publicada no catálogo oficial
+                        // ou URL direta. Sem imagem, mantém as iniciais.
+                        const logoSrc: string | null =
+                          ed.logoDataUrl ||
+                          (ed.logoUrl && /^https?:\/\//i.test(ed.logoUrl) ? ed.logoUrl : null) ||
+                          null;
 
                         return (
                           <div
@@ -1615,15 +1634,25 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                               disabled={isLoadingCargos}
                               className="flex w-full items-center gap-3 text-left transition cursor-pointer"
                             >
-                              <div
-                                className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full border font-condensed text-xs font-bold transition ${
-                                  isSelected
-                                    ? "border-[#F3AA2D] bg-[#F3AA2D] text-[#11151F]"
-                                    : "border-[#384154] bg-[#252B38] text-[#F3AA2D]"
-                                }`}
-                              >
-                                {initials}
-                              </div>
+                              {logoSrc ? (
+                                <img
+                                  src={logoSrc}
+                                  alt={ed.institution}
+                                  className={`h-10 w-10 shrink-0 rounded-full border object-cover transition ${
+                                    isSelected ? "border-[#F3AA2D]" : "border-[#384154]"
+                                  }`}
+                                />
+                              ) : (
+                                <div
+                                  className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full border font-condensed text-xs font-bold transition ${
+                                    isSelected
+                                      ? "border-[#F3AA2D] bg-[#F3AA2D] text-[#11151F]"
+                                      : "border-[#384154] bg-[#252B38] text-[#F3AA2D]"
+                                  }`}
+                                >
+                                  {initials}
+                                </div>
+                              )}
                               <div className="min-w-0 flex-1">
                                 <span className="font-bold text-xs text-white dark:text-white block truncate">
                                   {ed.institution}
