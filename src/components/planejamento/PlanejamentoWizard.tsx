@@ -12,7 +12,6 @@ import {
   RotateCw,
   CalendarDays,
   CheckCircle2,
-  Clock,
   ArrowRight,
   ArrowLeft,
   Layers,
@@ -408,17 +407,10 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
       <div className="rounded-2xl border border-slate-200/80 bg-white/90 p-4.5 shadow-2xs backdrop-blur-xs dark:border-[#1E293B] dark:bg-[#252B38]">
         <div className="flex items-center justify-between gap-3">
           <div>
-            <h2 className="text-base font-bold tracking-tight text-white dark:text-white flex items-center gap-2">
+            <h2 className="text-base font-bold tracking-tight text-white dark:text-white flex items-center gap-2 uppercase">
               <Sparkles className="h-4 w-4 text-[#F59E0B]" />
-              Assistente de Planejamento
+              Planejamento
             </h2>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 rounded-lg bg-amber-50 px-2.5 py-1 text-xs font-semibold text-[#F59E0B] dark:bg-amber-950/40 dark:text-amber-300">
-              <Clock className="h-3.5 w-3.5" />
-              <span>{totalWeeklyHours}h semanais</span>
-            </span>
           </div>
         </div>
 
@@ -508,7 +500,7 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
                     )}
                   </h4>
                   <p className="mt-1 text-xs text-white dark:text-white leading-relaxed">
-                    Fila contínua e sequencial. Sem acúmulo de matéria caso surjam imprevistos.
+                    Fila contínua e sequencial de matérias.
                   </p>
                 </div>
 
@@ -552,7 +544,7 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
                     )}
                   </h4>
                   <p className="mt-1 text-xs text-white dark:text-white leading-relaxed">
-                    Disciplinas fixadas por dias da semana, de Segunda a Domingo.
+                    Disciplinas fixas por dia da semana.
                   </p>
                 </div>
 
