@@ -31,7 +31,7 @@ export const StepProcessing: React.FC<StepProcessingProps> = ({ onFinished }) =>
     >
       {/* Brand Mark with subtle pulse */}
       <div className="mb-8 relative">
-        <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#F59E0B] to-[#E05300] flex items-center justify-center shadow-[0_12px_36px_rgba(255,107,0,0.35)] border border-[#FF8533]/40 animate-pulse">
+        <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#FF6B00] to-[#E05300] flex items-center justify-center shadow-[0_12px_36px_rgba(255,107,0,0.35)] border border-[#FF8533]/40 animate-pulse">
           <span className="font-black text-4xl text-white select-none">
             N
           </span>
@@ -50,14 +50,14 @@ export const StepProcessing: React.FC<StepProcessingProps> = ({ onFinished }) =>
       <div className="w-full max-w-xs space-y-2.5">
         <div className="w-full h-1.5 bg-zinc-800 rounded-full overflow-hidden">
           <div
-            className="h-full bg-gradient-to-r from-[#F59E0B] to-[#FFA043] transition-all duration-300 ease-out"
+            className="h-full bg-gradient-to-r from-[#FF6B00] to-[#FFA043] transition-all duration-300 ease-out"
             style={{ width: stage === 0 ? "35%" : stage === 1 ? "75%" : "100%" }}
           />
         </div>
 
         {/* Step details */}
         <div className="flex items-center justify-center gap-2 text-xs text-zinc-400 font-mono">
-          <Check className="w-3.5 h-3.5 text-[#F59E0B]" />
+          <Check className="w-3.5 h-3.5 text-[#FF6B00]" />
           <span>
             {stage === 0
               ? "Salvando seu plano..."

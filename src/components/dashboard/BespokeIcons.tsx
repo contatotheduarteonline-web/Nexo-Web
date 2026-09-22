@@ -25,21 +25,21 @@ export const IconClock3D: React.FC<{ className?: string; size?: number }> = ({
       {/* Anel exterior chanfrado de metal */}
       <linearGradient id="clockBezel" x1="12" y1="8" x2="52" y2="56" gradientUnits="userSpaceOnUse">
         <stop offset="0%" stopColor="#FED7AA" />
-        <stop offset="25%" stopColor="#FBBF24" />
-        <stop offset="50%" stopColor="#D97706" />
+        <stop offset="25%" stopColor="#FB923C" />
+        <stop offset="50%" stopColor="#EA580C" />
         <stop offset="75%" stopColor="#C2410C" />
         <stop offset="100%" stopColor="#7C2D12" />
       </linearGradient>
       {/* Borda interna com brilho de aço */}
       <linearGradient id="clockRim" x1="16" y1="16" x2="48" y2="48" gradientUnits="userSpaceOnUse">
         <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.9" />
-        <stop offset="40%" stopColor="#FCD34D" stopOpacity="0.4" />
+        <stop offset="40%" stopColor="#FDBA74" stopOpacity="0.4" />
         <stop offset="100%" stopColor="#9A3412" stopOpacity="0.8" />
       </linearGradient>
       {/* Mostrador principal profundo */}
       <radialGradient id="clockDial" cx="30%" cy="30%" r="70%">
         <stop offset="0%" stopColor="#FFFFFF" />
-        <stop offset="55%" stopColor="#FEF3C7" />
+        <stop offset="55%" stopColor="#FFF7ED" />
         <stop offset="100%" stopColor="#FED7AA" />
       </radialGradient>
       {/* Reflexo de vidro cristalino */}
@@ -60,7 +60,7 @@ export const IconClock3D: React.FC<{ className?: string; size?: number }> = ({
 
     {/* Coroa do relógio (botão superior) */}
     <rect x="29" y="4" width="6" height="5" rx="1.5" fill="#C2410C" />
-    <rect x="30" y="5" width="4" height="3" rx="1" fill="#FCD34D" />
+    <rect x="30" y="5" width="4" height="3" rx="1" fill="#FDBA74" />
 
     {/* Caixa e Bezel de Metal */}
     <circle cx="32" cy="32" r="24" fill="url(#clockBezel)" />
@@ -74,24 +74,24 @@ export const IconClock3D: React.FC<{ className?: string; size?: number }> = ({
     <rect x="16" y="31" width="4" height="2" rx="1" fill="#C2410C" />
 
     {/* Pontos intermediários */}
-    <circle cx="41.2" cy="22.8" r="1" fill="#D97706" opacity="0.6" />
-    <circle cx="41.2" cy="41.2" r="1" fill="#D97706" opacity="0.6" />
-    <circle cx="22.8" cy="41.2" r="1" fill="#D97706" opacity="0.6" />
-    <circle cx="22.8" cy="22.8" r="1" fill="#D97706" opacity="0.6" />
+    <circle cx="41.2" cy="22.8" r="1" fill="#EA580C" opacity="0.6" />
+    <circle cx="41.2" cy="41.2" r="1" fill="#EA580C" opacity="0.6" />
+    <circle cx="22.8" cy="41.2" r="1" fill="#EA580C" opacity="0.6" />
+    <circle cx="22.8" cy="22.8" r="1" fill="#EA580C" opacity="0.6" />
 
     {/* Mini visor digital secundário (LCD) */}
     <rect x="24" y="37" width="16" height="6.5" rx="2" fill="url(#clockLcd)" stroke="#C2410C" strokeWidth="0.5" />
-    <text x="32" y="42" textAnchor="middle" fill="#F59E0B" fontSize="4.5" fontFamily="monospace" fontWeight="bold">00:00</text>
+    <text x="32" y="42" textAnchor="middle" fill="#F97316" fontSize="4.5" fontFamily="monospace" fontWeight="bold">00:00</text>
 
     {/* Ponteiro de Horas */}
     <path d="M32 32 L38 27" stroke="#7C2D12" strokeWidth="2.5" strokeLinecap="round" />
     {/* Ponteiro de Minutos */}
     <path d="M32 32 L32 20" stroke="#C2410C" strokeWidth="2" strokeLinecap="round" />
     {/* Ponteiro de Segundos (Laranja Queimado Vibrante) */}
-    <path d="M32 34 L32 17" stroke="#D97706" strokeWidth="0.9" strokeLinecap="round" />
+    <path d="M32 34 L32 17" stroke="#EA580C" strokeWidth="0.9" strokeLinecap="round" />
 
     {/* Ponto pivô central metálico */}
-    <circle cx="32" cy="32" r="2.8" fill="#FCD34D" stroke="#7C2D12" strokeWidth="1" />
+    <circle cx="32" cy="32" r="2.8" fill="#FDBA74" stroke="#7C2D12" strokeWidth="1" />
     <circle cx="32" cy="32" r="1" fill="#FFFFFF" />
 
     {/* Brilho de vidro curvo (Glare 3D) */}
@@ -136,8 +136,8 @@ export const IconClipboard3D: React.FC<{ className?: string; size?: number }> = 
         <stop offset="100%" stopColor="#334155" />
       </linearGradient>
       <linearGradient id="penBody" x1="42" y1="26" x2="56" y2="40" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stopColor="#F59E0B" />
-        <stop offset="50%" stopColor="#D97706" />
+        <stop offset="0%" stopColor="#F97316" />
+        <stop offset="50%" stopColor="#EA580C" />
         <stop offset="100%" stopColor="#9A3412" />
       </linearGradient>
       <linearGradient id="penTip" x1="39" y1="44" x2="44" y2="49" gradientUnits="userSpaceOnUse">
@@ -230,8 +230,8 @@ export const IconTarget3D: React.FC<{ className?: string; size?: number }> = ({
       </radialGradient>
       {/* Gradiente da haste do dardo */}
       <linearGradient id="dartShaft" x1="32" y1="10" x2="46" y2="24" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stopColor="#FCD34D" />
-        <stop offset="50%" stopColor="#D97706" />
+        <stop offset="0%" stopColor="#FDBA74" />
+        <stop offset="50%" stopColor="#EA580C" />
         <stop offset="100%" stopColor="#9A3412" />
       </linearGradient>
       {/* Aletas do dardo */}
@@ -301,26 +301,26 @@ export const IconTimeline3D: React.FC<{ className?: string; size?: number }> = (
   >
     <defs>
       <linearGradient id="bar1" x1="14" y1="46" x2="22" y2="34" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stopColor="#FCD34D" />
-        <stop offset="100%" stopColor="#FBBF24" />
+        <stop offset="0%" stopColor="#FDBA74" />
+        <stop offset="100%" stopColor="#FB923C" />
       </linearGradient>
       <linearGradient id="bar2" x1="26" y1="46" x2="34" y2="24" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stopColor="#FBBF24" />
-        <stop offset="100%" stopColor="#D97706" />
+        <stop offset="0%" stopColor="#FB923C" />
+        <stop offset="100%" stopColor="#EA580C" />
       </linearGradient>
       <linearGradient id="bar3" x1="38" y1="46" x2="46" y2="14" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stopColor="#D97706" />
+        <stop offset="0%" stopColor="#EA580C" />
         <stop offset="100%" stopColor="#C2410C" />
       </linearGradient>
       <linearGradient id="trendCurve" x1="16" y1="36" x2="48" y2="12" gradientUnits="userSpaceOnUse">
         <stop offset="0%" stopColor="#FDE047" />
-        <stop offset="60%" stopColor="#F59E0B" />
+        <stop offset="60%" stopColor="#F97316" />
         <stop offset="100%" stopColor="#DC2626" />
       </linearGradient>
       <radialGradient id="sphereGlow" cx="35%" cy="35%" r="65%">
         <stop offset="0%" stopColor="#FFFFFF" />
         <stop offset="50%" stopColor="#FDE047" />
-        <stop offset="100%" stopColor="#D97706" />
+        <stop offset="100%" stopColor="#EA580C" />
       </radialGradient>
     </defs>
 
@@ -333,11 +333,11 @@ export const IconTimeline3D: React.FC<{ className?: string; size?: number }> = (
 
     {/* Pilar 2 (Intermediário) */}
     <rect x="27" y="26" width="8" height="24" rx="2.5" fill="url(#bar2)" />
-    <path d="M27 28 L31 25 L35 28 L31 30 Z" fill="#FCD34D" />
+    <path d="M27 28 L31 25 L35 28 L31 30 Z" fill="#FDBA74" />
 
     {/* Pilar 3 (Conquista / Topo) */}
     <rect x="39" y="16" width="8" height="34" rx="2.5" fill="url(#bar3)" />
-    <path d="M39 18 L43 15 L47 18 L43 20 Z" fill="#FBBF24" />
+    <path d="M39 18 L43 15 L47 18 L43 20 Z" fill="#FB923C" />
 
     {/* Linha da trajetória ascendente neon com halo */}
     <path
@@ -506,7 +506,7 @@ export const IconGlobeGeography3D: React.FC<{ className?: string; size?: number 
       opacity="0.95"
     />
     {/* Ponto focal Roraima (Norte do Brasil) */}
-    <circle cx="31" cy="23" r="1.8" fill="#F59E0B" stroke="#FFFFFF" strokeWidth="0.6" />
+    <circle cx="31" cy="23" r="1.8" fill="#F97316" stroke="#FFFFFF" strokeWidth="0.6" />
 
     {/* Meridianos e Paralelos sutis */}
     <ellipse cx="32" cy="28" rx="8" ry="15.5" fill="none" stroke="#93C5FD" strokeWidth="0.7" opacity="0.4" />

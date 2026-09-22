@@ -59,7 +59,7 @@ export const AchievementUnlockToast: React.FC = () => {
             />
 
             {/* Ambient Background Warm Accent Glow */}
-            <div className="absolute -top-12 -left-12 w-32 h-32 rounded-full bg-[#F59E0B]/15 blur-2xl pointer-events-none" />
+            <div className="absolute -top-12 -left-12 w-32 h-32 rounded-full bg-[#FF6B00]/15 blur-2xl pointer-events-none" />
 
             {/* Close Button */}
             <button
@@ -98,7 +98,7 @@ export const AchievementUnlockToast: React.FC = () => {
                   transition={{ delay: 0.12 }}
                   className="flex items-center gap-1.5"
                 >
-                  <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-[#FBBF24] dark:text-[#FBBF24]">
+                  <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-[#FF8A00] dark:text-[#FFA726]">
                     <Check className="h-2.5 w-2.5" strokeWidth={3} />
                     Conquista Desbloqueada
                   </span>
@@ -138,7 +138,7 @@ export const AchievementUnlockToast: React.FC = () => {
                   transition={{ delay: 0.3 }}
                   className="mt-1.5"
                 >
-                  <span className="inline-block font-mono text-xs font-bold text-[#FBBF24] bg-amber-950/60 border border-amber-800/60 px-2 py-0.5 rounded-md shadow-2xs">
+                  <span className="inline-block font-mono text-xs font-bold text-[#FFA726] bg-orange-950/60 border border-orange-800/60 px-2 py-0.5 rounded-md shadow-2xs">
                     +{animatedXp} XP
                   </span>
                 </motion.div>
@@ -150,7 +150,7 @@ export const AchievementUnlockToast: React.FC = () => {
               initial={{ width: "100%" }}
               animate={{ width: "0%" }}
               transition={{ duration: 4.2, ease: "linear" }}
-              className="absolute bottom-0 left-0 h-[2px] bg-gradient-to-r from-[#F59E0B] to-[#FBBF24] opacity-80"
+              className="absolute bottom-0 left-0 h-[2px] bg-gradient-to-r from-[#FF6B00] to-[#FFA726] opacity-80"
             />
           </motion.div>
         )}

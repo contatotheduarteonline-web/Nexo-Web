@@ -69,10 +69,6 @@ import {
   getFullCargoStructure,
   checkForPlanEditalUpdate,
 } from "../lib/catalogEditalService";
-import {
-  fetchPublishedEditaisFromServer,
-  PublishedEditalSnapshot,
-} from "../lib/serverCatalogService";
 import { auth } from "../lib/firebase";
 import {
   fetchPlanImageFromFirestore,
@@ -84,7 +80,7 @@ import {
 
 // Helper function to normalize both database EditalTemplateModel and PlanTemplate formats
 function mapEditalModelToPlanTemplate(t: any): PlanTemplate {
-  const colors = ["#F59E0B", "#3B82F6", "#F59E0B", "#EF4444", "#8B5CF6", "#10B981", "#06B6D4", "#EC4899", "#6366F1", "#14B8A6", "#84CC16", "#F59E0B"];
+  const colors = ["#FF6B00", "#3B82F6", "#F59E0B", "#EF4444", "#8B5CF6", "#10B981", "#06B6D4", "#EC4899", "#6366F1", "#14B8A6", "#84CC16", "#F97316"];
   
   if (t.organ && Array.isArray(t.topics) && t.topics.length > 0 && t.topics[0].disciplineId) {
     return t as PlanTemplate;
@@ -172,6 +168,9 @@ interface StudyContextType {
   toggleSidebar: () => void;
 
   // Theme
+  theme: "light" | "dark" | "system";
+  setTheme: (theme: "light" | "dark" | "system") => void;
+  toggleTheme: () => void;
 
   // User Settings
   userSettings: UserSettings;
@@ -342,6 +341,7 @@ const getStorageKeys = (userId?: string) => {
     REMINDERS: `${prefix}reminders_v7`,
     USER_SETTINGS: `${prefix}user_settings_v7`,
     DAILY_BACKUPS_META: `${prefix}daily_backups_meta_v1`,
+    THEME: "farda_theme_v7",
     SIDEBAR_COLLAPSED: "farda_sidebar_collapsed_v8",
   };
 };
@@ -371,6 +371,42 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       return next;
     });
   };
+
+  // Theme state
+  const [theme, setThemeState] = useState<"light" | "dark" | "system">(() => {
+    try {
+      const saved = localStorage.getItem(storageKeys.THEME) as "light" | "dark" | "system";
+      return saved || "dark";
+    } catch {
+      return "dark";
+    }
+  });
+
+  const setTheme = (newTheme: "light" | "dark" | "system") => {
+    setThemeState(newTheme);
+    localStorage.setItem(storageKeys.THEME, newTheme);
+  };
+
+  const toggleTheme = () => {
+    const next = theme === "dark" ? "light" : "dark";
+    setTheme(next);
+  };
+
+  useEffect(() => {
+    const root = document.documentElement;
+    if (theme === "dark") {
+      root.classList.add("dark");
+    } else if (theme === "light") {
+      root.classList.remove("dark");
+    } else {
+      const systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      if (systemDark) {
+        root.classList.add("dark");
+      } else {
+        root.classList.remove("dark");
+      }
+    }
+  }, [theme]);
 
   // User Settings
   const [userSettings, setUserSettings] = useState<UserSettings>(() => {
@@ -546,76 +582,31 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   const [globalTemplates, setGlobalTemplates] = useState<PlanTemplate[]>([]);
   const [isLoadingTemplates, setIsLoadingTemplates] = useState<boolean>(false);
 
-  // Catálogo Oficial Permanente de Editais
-  // Fonte da verdade: banco de dados do servidor (PostgreSQL) via
-  // /api/catalog/published-editais. O Firestore é mantido como espelho
-  // opcional (legado) — as duas listas são mescladas e deduplicadas.
-  const [serverCatalogEditais, setServerCatalogEditais] = useState<PublishedEditalSnapshot[]>([]);
-  const [firestoreCatalogEditais, setFirestoreCatalogEditais] = useState<CatalogEdital[]>([]);
+  // Catálogo Oficial Permanente de Editais (Firestore)
+  const [catalogEditais, setCatalogEditais] = useState<CatalogEdital[]>([]);
   const [isLoadingCatalog, setIsLoadingCatalog] = useState<boolean>(true);
 
-  const refreshCatalogEditais = async (): Promise<CatalogEdital[]> => {
-    setIsLoadingCatalog(true);
-    try {
-      const [serverList, firestoreList] = await Promise.all([
-        fetchPublishedEditaisFromServer(),
-        getPublishedEditais(),
-      ]);
-      setServerCatalogEditais(serverList);
-      setFirestoreCatalogEditais(firestoreList);
-      return [...serverList, ...firestoreList];
-    } finally {
-      setIsLoadingCatalog(false);
-    }
-  };
-
-  // Carga inicial do catálogo do servidor + assinatura em tempo real do espelho Firestore
+  // Assinatura em tempo real de editais publicados
   useEffect(() => {
-    let isMounted = true;
-    fetchPublishedEditaisFromServer().then((list) => {
-      if (isMounted) {
-        setServerCatalogEditais(list);
-        setIsLoadingCatalog(false);
-      }
-    });
-
     const unsubCatalog = subscribePublishedEditais((list) => {
-      if (isMounted) {
-        setFirestoreCatalogEditais(list);
-        setIsLoadingCatalog(false);
-      }
+      setCatalogEditais(list);
+      setIsLoadingCatalog(false);
     });
     return () => {
-      isMounted = false;
       unsubCatalog();
     };
   }, []);
 
-  // Lista mesclada e deduplicada (servidor tem prioridade)
-  const catalogEditais = useMemo<CatalogEdital[]>(() => {
-    const seen = new Set<string>();
-    const merged: CatalogEdital[] = [];
-    const tryPush = (ed: CatalogEdital) => {
-      const identity = [
-        (ed.institution || "").toLowerCase().trim(),
-        ed.year || "",
-        (ed.editalNumber || "").toLowerCase().trim(),
-        (ed.title || "").toLowerCase().trim(),
-      ].join("|");
-      if (seen.has(ed.id) || seen.has(identity)) return;
-      seen.add(ed.id);
-      seen.add(identity);
-      merged.push(ed);
-    };
-    serverCatalogEditais.forEach(tryPush);
-    firestoreCatalogEditais.forEach(tryPush);
-    merged.sort(
-      (a, b) =>
-        new Date(b.publicationDate || b.createdAt).getTime() -
-        new Date(a.publicationDate || a.createdAt).getTime()
-    );
-    return merged;
-  }, [serverCatalogEditais, firestoreCatalogEditais]);
+  const refreshCatalogEditais = async (): Promise<CatalogEdital[]> => {
+    setIsLoadingCatalog(true);
+    try {
+      const list = await getPublishedEditais();
+      setCatalogEditais(list);
+      return list;
+    } finally {
+      setIsLoadingCatalog(false);
+    }
+  };
 
   const fetchGlobalTemplates = async () => {
     // Permanent architecture uses catalogEditais. Mocks/seeds are never used.
@@ -1645,7 +1636,7 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
   const importVerticalizedData = (editalTitle: string, organ: string, banca: string, disciplinesData: any[]) => {
     const editalId = `edital-${Date.now()}`;
-    const colors = ["#F59E0B", "#3B82F6", "#10B981", "#F59E0B", "#EF4444", "#8B5CF6", "#06B6D4", "#EC4899"];
+    const colors = ["#FF6B00", "#3B82F6", "#10B981", "#F59E0B", "#EF4444", "#8B5CF6", "#06B6D4", "#EC4899"];
     const icons = ["BookOpen", "Scale", "Building2", "ShieldAlert", "FileText", "Laptop", "Calculator", "Sparkles"];
 
     const builtDisciplines: Discipline[] = [];
@@ -1957,7 +1948,7 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         id: newDiscId,
         editalId,
         name: td.name,
-        color: td.color || "#F59E0B",
+        color: td.color || "#FF6B00",
         iconName: td.iconName || "BookOpen",
         priority: td.priority || "alta",
         difficulty: td.difficulty || "medio",
@@ -2161,7 +2152,7 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       const discIdMap = new Map<string, string>();
       const PRESET_COLORS = [
         "#249D84", "#3B82F6", "#10B981", "#8B5CF6", "#F59E0B",
-        "#EC4899", "#06B6D4", "#6366F1", "#14B8A6", "#F59E0B"
+        "#EC4899", "#06B6D4", "#6366F1", "#14B8A6", "#F97316"
       ];
 
       const newDisciplines: Discipline[] = (cargoSnapshot.disciplines || []).map((cd, idx) => {
@@ -3096,6 +3087,9 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         isSidebarCollapsed,
         setIsSidebarCollapsed,
         toggleSidebar,
+        theme,
+        setTheme,
+        toggleTheme,
         userSettings,
         updateUserSettings,
         editais,

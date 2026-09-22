@@ -309,7 +309,7 @@ export const FirstAccessOnboarding: React.FC = () => {
       const editalId = `edital-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`;
 
       // 3. Map user entered disciplines into real Discipline models
-      const colors = ["#3B82F6", "#10B981", "#F59E0B", "#8B5CF6", "#EC4899", "#06B6D4", "#F59E0B"];
+      const colors = ["#3B82F6", "#10B981", "#F59E0B", "#8B5CF6", "#EC4899", "#06B6D4", "#F97316"];
       const newDisciplines: Discipline[] = (draft.disciplines || []).map((disc, idx) => ({
         id: `disc-${editalId}-${idx + 1}-${Math.random().toString(36).substr(2, 6)}`,
         editalId: editalId,
@@ -400,7 +400,7 @@ export const FirstAccessOnboarding: React.FC = () => {
   return (
     <div
       id="first-access-onboarding-screen"
-      className="relative w-full min-h-screen bg-[#0F172A] text-white flex flex-col font-sans overflow-x-hidden"
+      className="relative w-full min-h-screen bg-[#0B0E14] text-white flex flex-col font-sans overflow-x-hidden"
     >
       {/* 1. Discreet top progress bar */}
       <OnboardingProgress currentStep={currentStep} totalSteps={12} />
@@ -428,11 +428,11 @@ export const FirstAccessOnboarding: React.FC = () => {
           )}
 
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#F59E0B] to-[#E05300] flex items-center justify-center shadow-[0_0_12px_rgba(255,107,0,0.3)]">
+            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#FF6B00] to-[#E05300] flex items-center justify-center shadow-[0_0_12px_rgba(255,107,0,0.3)]">
               <span className="font-black text-xs text-white">N</span>
             </div>
             <span className="text-base font-bold tracking-tight text-white">
-              NEXO<span className="text-[#F59E0B]">.</span>
+              NEXO<span className="text-[#FF6B00]">.</span>
             </span>
           </div>
         </div>

@@ -50,9 +50,9 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4 backdrop-blur-sm">
-      <div className="w-full max-w-2xl rounded-3xl border border-[#292929] bg-[#0F172A] p-6 sm:p-8 text-white shadow-2xl">
+      <div className="w-full max-w-2xl rounded-3xl border border-[#292929] bg-[#111622] p-6 sm:p-8 text-white shadow-2xl">
         <div className="flex flex-col items-center text-center">
-          <Logo variant="compact" size="md" />
+          <Logo variant="symbol" size="md" />
 
           <span className="mt-3 text-[10px] font-bold uppercase tracking-[0.3em] text-[#249D84]">
             NEXO &bull; BOAS-VINDAS
@@ -74,7 +74,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
             return (
               <div
                 key={s.num}
-                className="flex items-center gap-3.5 rounded-2xl border border-[#292929] bg-[#1E293B]/70 p-3.5 transition hover:border-[#249D84]/40"
+                className="flex items-center gap-3.5 rounded-2xl border border-[#292929] bg-[#182030]/70 p-3.5 transition hover:border-[#249D84]/40"
               >
                 <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-[#0B0F17] text-xs font-black text-[#249D84] border border-[#292929]">
                   {s.num}

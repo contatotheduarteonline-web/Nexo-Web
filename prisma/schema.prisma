@@ -74,32 +74,6 @@ model Template {
   updatedAt   DateTime @updatedAt
 }
 
-// Catálogo oficial de editais publicados pelo administrador.
-// Fonte da verdade do catálogo: qualquer edital publicado aqui aparece
-// imediatamente como opção de plano para TODOS os usuários.
-// dataJson guarda o snapshot completo (edital + cargos + disciplinas + tópicos).
-model PublishedEdital {
-  id              String   @id
-  status          String   @default("published") // "published" | "draft" | "archived"
-  title           String
-  institution     String
-  uf              String?
-  careerId        String?
-  year            Int?
-  editalNumber    String?
-  board           String?
-  cargoPretendido String?
-  logoUrl         String?  @db.Text
-  sourceHash      String?
-  dataJson        String   @db.Text
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-
-  @@index([status])
-  @@index([careerId])
-  @@index([uf])
-}
-
 model EditalTemplate {
   id                String             @id @default(cuid())
   slug              String             @unique

@@ -170,7 +170,7 @@ export const AiAssistantModal: React.FC<AiAssistantModalProps> = ({ isOpen, onCl
         {/* Modal Header */}
         <div className="flex items-center justify-between border-b border-slate-100 p-5 dark:border-slate-800">
           <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#F59E0B] text-white shadow-sm">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#FF6B00] text-white shadow-sm">
               <Sparkles className="h-5 w-5" />
             </div>
             <div>
@@ -197,7 +197,7 @@ export const AiAssistantModal: React.FC<AiAssistantModalProps> = ({ isOpen, onCl
             onClick={() => setActiveTab("verticalize")}
             className={`border-b-2 px-4 py-3 transition ${
               activeTab === "verticalize"
-                ? "border-[#F59E0B] text-[#F59E0B] dark:text-[#FBBF24]"
+                ? "border-[#FF6B00] text-[#FF6B00] dark:text-[#FFA726]"
                 : "border-transparent text-slate-500 hover:text-slate-900 dark:text-slate-400"
             }`}
           >
@@ -207,7 +207,7 @@ export const AiAssistantModal: React.FC<AiAssistantModalProps> = ({ isOpen, onCl
             onClick={() => setActiveTab("questions")}
             className={`border-b-2 px-4 py-3 transition ${
               activeTab === "questions"
-                ? "border-[#F59E0B] text-[#F59E0B] dark:text-[#FBBF24]"
+                ? "border-[#FF6B00] text-[#FF6B00] dark:text-[#FFA726]"
                 : "border-transparent text-slate-500 hover:text-slate-900 dark:text-slate-400"
             }`}
           >
@@ -264,7 +264,7 @@ export const AiAssistantModal: React.FC<AiAssistantModalProps> = ({ isOpen, onCl
                       setRawEditalText(`LÍNGUA PORTUGUESA: 1 Compreensão e interpretação de textos. 2 Tipologia textual. 3 Ortografia oficial. 4 Acentuação gráfica. 5 Emprego das classes de palavras. 6 Emprego do sinal indicativo de crase. 7 Sintaxe da oração e do período. 8 Pontuação. 9 Concordância nominal e verbal. 10 Regência nominal e verbal.
 DIREITO CONSTITUCIONAL: 1 Direitos e deveres fundamentais: direitos e deveres individuais e coletivos, direito à vida, à liberdade, à igualdade, à segurança e à propriedade. 2 Da Segurança Pública: artigo 144 da Constituição Federal. 3 Organização dos Poderes.`);
                     }}
-                    className="text-[11px] font-semibold text-[#F59E0B] hover:underline dark:text-[#FBBF24]"
+                    className="text-[11px] font-semibold text-[#FF6B00] hover:underline dark:text-[#FFA726]"
                   >
                     Inserir Exemplo Pronto
                   </button>
@@ -274,7 +274,7 @@ DIREITO CONSTITUCIONAL: 1 Direitos e deveres fundamentais: direitos e deveres in
                   value={rawEditalText}
                   onChange={(e) => setRawEditalText(e.target.value)}
                   placeholder="Ex: NOÇÕES DE DIREITO ADMINISTRATIVO: 1 Estado, governo e administração pública. 2 Princípios fundamentais. 3 Poderes da administração pública: poder hierárquico, poder disciplinar, poder regulamentar, poder de polícia..."
-                  className="mt-1.5 w-full rounded-xl border border-slate-200 p-3 text-xs text-slate-900 focus:border-[#F59E0B] dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                  className="mt-1.5 w-full rounded-xl border border-slate-200 p-3 text-xs text-slate-900 focus:border-[#FF6B00] dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                 />
               </div>
 
@@ -282,7 +282,7 @@ DIREITO CONSTITUCIONAL: 1 Direitos e deveres fundamentais: direitos e deveres in
                 <button
                   onClick={handleVerticalize}
                   disabled={isLoading}
-                  className="flex items-center gap-2 rounded-xl bg-[#F59E0B] hover:bg-[#D97706] px-5 py-2.5 text-xs font-bold text-white shadow-xs transition disabled:opacity-50"
+                  className="flex items-center gap-2 rounded-xl bg-[#FF6B00] hover:bg-[#E05D00] px-5 py-2.5 text-xs font-bold text-white shadow-xs transition disabled:opacity-50"
                 >
                   <Sparkles className="h-4 w-4" />
                   {isLoading ? "Verticalizando com IA..." : "Estruturar e Verticalizar com IA"}
@@ -291,14 +291,14 @@ DIREITO CONSTITUCIONAL: 1 Direitos e deveres fundamentais: direitos e deveres in
 
               {/* Result Preview */}
               {verticalizedResult && (
-                <div className="mt-4 rounded-xl border border-amber-500/40 bg-amber-50/60 p-4 dark:border-amber-500/40 dark:bg-amber-500/10">
+                <div className="mt-4 rounded-xl border border-orange-500/40 bg-orange-50/60 p-4 dark:border-orange-500/40 dark:bg-orange-500/10">
                   <div className="flex items-center justify-between">
-                    <h4 className="text-xs font-bold text-[#F59E0B] dark:text-[#FBBF24]">
+                    <h4 className="text-xs font-bold text-[#FF6B00] dark:text-[#FFA726]">
                       ✅ Edital Estruturado ({verticalizedResult.disciplines?.length || 0} Disciplinas extraídas)
                     </h4>
                     <button
                       onClick={handleApplyVerticalizedEdital}
-                      className="rounded-lg bg-[#F59E0B] hover:bg-[#D97706] px-4 py-2 text-xs font-bold text-white shadow-xs"
+                      className="rounded-lg bg-[#FF6B00] hover:bg-[#E05D00] px-4 py-2 text-xs font-bold text-white shadow-xs"
                     >
                       Importar para meu Painel
                     </button>
@@ -311,7 +311,7 @@ DIREITO CONSTITUCIONAL: 1 Direitos e deveres fundamentais: direitos e deveres in
                         <ul className="mt-1 space-y-1 text-slate-600 dark:text-slate-300">
                           {disc.topics?.map((top: any, tIdx: number) => (
                             <li key={tIdx} className="flex items-center gap-2 text-[11px]">
-                              <span className="h-1.5 w-1.5 rounded-full bg-[#F59E0B]" />
+                              <span className="h-1.5 w-1.5 rounded-full bg-[#FF6B00]" />
                               <span>{top.name}</span>
                             </li>
                           ))}
@@ -352,7 +352,7 @@ DIREITO CONSTITUCIONAL: 1 Direitos e deveres fundamentais: direitos e deveres in
                 <button
                   onClick={handleGenerateQuestions}
                   disabled={isLoading}
-                  className="flex items-center gap-2 rounded-xl bg-[#F59E0B] hover:bg-[#D97706] px-5 py-2.5 text-xs font-bold text-white shadow-xs disabled:opacity-50"
+                  className="flex items-center gap-2 rounded-xl bg-[#FF6B00] hover:bg-[#E05D00] px-5 py-2.5 text-xs font-bold text-white shadow-xs disabled:opacity-50"
                 >
                   <Sparkles className="h-4 w-4" />
                   {isLoading ? "Gerando Questões..." : "Gerar Questões com IA"}
@@ -365,7 +365,7 @@ DIREITO CONSTITUCIONAL: 1 Direitos e deveres fundamentais: direitos e deveres in
                   {generatedQuestions.map((q, idx) => (
                     <div key={idx} className="rounded-xl border border-slate-200 bg-slate-50 p-4 text-xs dark:border-slate-700 dark:bg-slate-800">
                       <p className="font-semibold text-slate-900 dark:text-white">
-                        <span className="font-bold text-[#F59E0B] dark:text-[#FBBF24]">Questão {idx + 1}:</span> {q.statement}
+                        <span className="font-bold text-[#FF6B00] dark:text-[#FFA726]">Questão {idx + 1}:</span> {q.statement}
                       </p>
 
                       <div className="mt-3 space-y-1.5">
@@ -374,7 +374,7 @@ DIREITO CONSTITUCIONAL: 1 Direitos e deveres fundamentais: direitos e deveres in
                             key={oIdx}
                             className={`rounded-lg border p-2 text-[11px] ${
                               q.correctIndex === oIdx
-                                ? "border-amber-500 bg-amber-50 text-[#F59E0B] font-bold dark:bg-amber-500/20 dark:text-[#FBBF24]"
+                                ? "border-orange-500 bg-orange-50 text-[#FF6B00] font-bold dark:bg-orange-500/20 dark:text-[#FFA726]"
                                 : "border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900"
                             }`}
                           >
@@ -383,8 +383,8 @@ DIREITO CONSTITUCIONAL: 1 Direitos e deveres fundamentais: direitos e deveres in
                         ))}
                       </div>
 
-                      <div className="mt-2 rounded-md bg-amber-50 border border-amber-200 p-2 text-[11px] text-slate-800 dark:bg-amber-500/20 dark:border-amber-500/30 dark:text-[#FBBF24]">
-                        <strong className="text-[#F59E0B] dark:text-[#FBBF24]">Gabarito Comentado:</strong> {q.explanation}
+                      <div className="mt-2 rounded-md bg-orange-50 border border-orange-200 p-2 text-[11px] text-slate-800 dark:bg-orange-500/20 dark:border-orange-500/30 dark:text-[#FFA726]">
+                        <strong className="text-[#FF6B00] dark:text-[#FFA726]">Gabarito Comentado:</strong> {q.explanation}
                       </div>
                     </div>
                   ))}

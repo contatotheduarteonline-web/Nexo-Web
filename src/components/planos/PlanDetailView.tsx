@@ -126,7 +126,7 @@ export const PlanDetailView: React.FC<PlanDetailViewProps> = ({
       <div className="flex items-center justify-between">
         <button
           onClick={onBack}
-          className="group flex items-center gap-2 rounded-xl border border-zinc-200 bg-white px-3.5 py-2 text-xs font-bold text-zinc-700 hover:border-zinc-300 hover:bg-zinc-50 dark:border-zinc-800 dark:bg-[#252B38] dark:text-zinc-300 dark:hover:bg-zinc-850 transition"
+          className="group flex items-center gap-2 rounded-xl border border-zinc-200 bg-white px-3.5 py-2 text-xs font-bold text-zinc-700 hover:border-zinc-300 hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-850 transition"
         >
           <ArrowLeft className="h-4 w-4 transition group-hover:-translate-x-0.5" />
           <span>Voltar para todos os planos</span>
@@ -140,7 +140,7 @@ export const PlanDetailView: React.FC<PlanDetailViewProps> = ({
       </div>
 
       {/* Hero Card with Plan info */}
-      <div className="relative overflow-hidden rounded-2xl border border-zinc-200 bg-white p-6 shadow-xs dark:border-zinc-800 dark:bg-[#252B38]">
+      <div className="relative overflow-hidden rounded-2xl border border-zinc-200 bg-white p-6 shadow-xs dark:border-zinc-800 dark:bg-zinc-900">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5 min-w-0">
             {/* Plan Logo / Cover */}
@@ -158,7 +158,7 @@ export const PlanDetailView: React.FC<PlanDetailViewProps> = ({
                   }}
                 />
               ) : (
-                <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#F59E0B]/20 to-[#F59E0B]/5 text-[#F59E0B]">
+                <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#FF6B00]/20 to-[#FF6B00]/5 text-[#FF6B00]">
                   <Shield className="h-10 w-10" />
                 </div>
               )}
@@ -166,12 +166,12 @@ export const PlanDetailView: React.FC<PlanDetailViewProps> = ({
 
             {/* Plan Metadata */}
             <div className="space-y-1.5 min-w-0">
-              <h1 className="text-xl sm:text-2xl font-bold text-white dark:text-white truncate">
+              <h1 className="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-white truncate">
                 {plan.name}
               </h1>
 
-              <div className="flex flex-wrap items-center gap-2 text-xs text-white dark:text-white">
-                <span className="font-semibold text-white dark:text-white">
+              <div className="flex flex-wrap items-center gap-2 text-xs text-zinc-600 dark:text-zinc-400">
+                <span className="font-semibold text-zinc-800 dark:text-zinc-200">
                   Concurso: {plan.organ || edital?.organ || "Geral"}
                 </span>
                 {(plan.cargo || edital?.cargo) && (
@@ -187,7 +187,7 @@ export const PlanDetailView: React.FC<PlanDetailViewProps> = ({
               </div>
 
               {plan.notes && (
-                <p className="text-xs text-white dark:text-white max-w-2xl line-clamp-2">
+                <p className="text-xs text-zinc-500 dark:text-zinc-400 max-w-2xl line-clamp-2">
                   {plan.notes}
                 </p>
               )}
@@ -200,7 +200,7 @@ export const PlanDetailView: React.FC<PlanDetailViewProps> = ({
               onClick={() => onEditPlan(plan)}
               className="flex items-center gap-1.5 rounded-xl border border-zinc-200 bg-white px-4 py-2.5 text-xs font-bold text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-750 transition"
             >
-              <Edit2 className="h-3.5 w-3.5 text-white" />
+              <Edit2 className="h-3.5 w-3.5 text-zinc-500" />
               <span>Editar Plano</span>
             </button>
 
@@ -220,13 +220,13 @@ export const PlanDetailView: React.FC<PlanDetailViewProps> = ({
                     className="fixed inset-0 z-20"
                     onClick={() => setIsMenuOpen(false)}
                   />
-                  <div className="absolute right-0 z-30 mt-1 w-44 rounded-xl border border-zinc-200 bg-white py-1.5 shadow-xl dark:border-zinc-800 dark:bg-[#252B38]">
+                  <div className="absolute right-0 z-30 mt-1 w-44 rounded-xl border border-zinc-200 bg-white py-1.5 shadow-xl dark:border-zinc-800 dark:bg-zinc-900">
                     <button
                       onClick={() => {
                         setIsMenuOpen(false);
                         onArchivePlan(plan.id);
                       }}
-                      className="flex w-full items-center gap-2 px-3 py-2 text-xs font-semibold text-white hover:bg-zinc-100 dark:text-white dark:hover:bg-zinc-800"
+                      className="flex w-full items-center gap-2 px-3 py-2 text-xs font-semibold text-zinc-700 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800"
                     >
                       {isArchived ? (
                         <>
@@ -262,72 +262,72 @@ export const PlanDetailView: React.FC<PlanDetailViewProps> = ({
       {/* Indicadores do Plano (Real Data) */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Horas Estudadas */}
-        <div className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-xs dark:border-zinc-800 dark:bg-[#252B38]">
-          <div className="flex items-center justify-between text-white dark:text-white">
+        <div className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-xs dark:border-zinc-800 dark:bg-zinc-900">
+          <div className="flex items-center justify-between text-zinc-500 dark:text-zinc-400">
             <span className="text-xs font-bold uppercase tracking-wider">Horas Estudadas</span>
-            <div className="rounded-xl bg-amber-500/10 p-2 text-[#F59E0B]">
+            <div className="rounded-xl bg-orange-500/10 p-2 text-[#FF6B00]">
               <Clock className="h-4 w-4" />
             </div>
           </div>
           <div className="mt-3">
-            <span className="text-2xl font-black text-white dark:text-white">
+            <span className="text-2xl font-black text-zinc-900 dark:text-white">
               {formattedHours}
             </span>
-            <p className="text-[11px] text-white mt-0.5">
+            <p className="text-[11px] text-zinc-400 mt-0.5">
               {planSessions.length} sessões registradas
             </p>
           </div>
         </div>
 
         {/* Questões Resolvidas */}
-        <div className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-xs dark:border-zinc-800 dark:bg-[#252B38]">
-          <div className="flex items-center justify-between text-white dark:text-white">
+        <div className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-xs dark:border-zinc-800 dark:bg-zinc-900">
+          <div className="flex items-center justify-between text-zinc-500 dark:text-zinc-400">
             <span className="text-xs font-bold uppercase tracking-wider">Questões Resolvidas</span>
             <div className="rounded-xl bg-blue-500/10 p-2 text-blue-500">
               <HelpCircle className="h-4 w-4" />
             </div>
           </div>
           <div className="mt-3">
-            <span className="text-2xl font-black text-white dark:text-white">
+            <span className="text-2xl font-black text-zinc-900 dark:text-white">
               {totalQuestionsDone.toLocaleString()}
             </span>
-            <p className="text-[11px] text-white mt-0.5">
+            <p className="text-[11px] text-zinc-400 mt-0.5">
               {totalQuestionsCorrect.toLocaleString()} acertos registrados
             </p>
           </div>
         </div>
 
         {/* Desempenho */}
-        <div className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-xs dark:border-zinc-800 dark:bg-[#252B38]">
-          <div className="flex items-center justify-between text-white dark:text-white">
+        <div className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-xs dark:border-zinc-800 dark:bg-zinc-900">
+          <div className="flex items-center justify-between text-zinc-500 dark:text-zinc-400">
             <span className="text-xs font-bold uppercase tracking-wider">Desempenho Médio</span>
             <div className="rounded-xl bg-emerald-500/10 p-2 text-emerald-500">
               <TrendingUp className="h-4 w-4" />
             </div>
           </div>
           <div className="mt-3">
-            <span className="text-2xl font-black text-white dark:text-white">
+            <span className="text-2xl font-black text-zinc-900 dark:text-white">
               {accuracyPct}%
             </span>
-            <p className="text-[11px] text-white mt-0.5">
+            <p className="text-[11px] text-zinc-400 mt-0.5">
               Taxa de acertos em exercícios
             </p>
           </div>
         </div>
 
         {/* Progresso Geral */}
-        <div className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-xs dark:border-zinc-800 dark:bg-[#252B38]">
-          <div className="flex items-center justify-between text-white dark:text-white">
+        <div className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-xs dark:border-zinc-800 dark:bg-zinc-900">
+          <div className="flex items-center justify-between text-zinc-500 dark:text-zinc-400">
             <span className="text-xs font-bold uppercase tracking-wider">Progresso Geral</span>
-            <div className="rounded-xl bg-amber-500/10 p-2 text-[#F59E0B]">
+            <div className="rounded-xl bg-orange-500/10 p-2 text-[#FF6B00]">
               <CheckCircle2 className="h-4 w-4" />
             </div>
           </div>
           <div className="mt-3">
-            <span className="text-2xl font-black text-white dark:text-white">
+            <span className="text-2xl font-black text-zinc-900 dark:text-white">
               {progressPct}%
             </span>
-            <p className="text-[11px] text-white mt-0.5">
+            <p className="text-[11px] text-zinc-400 mt-0.5">
               {studiedTopicsCount} de {totalTopicsCount} tópicos concluídos
             </p>
           </div>
@@ -338,14 +338,14 @@ export const PlanDetailView: React.FC<PlanDetailViewProps> = ({
       <div className="space-y-4 pt-2">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-200 pb-3 dark:border-zinc-800">
           <div>
-            <h2 className="text-base font-bold text-white dark:text-white flex items-center gap-2">
-              <BookOpen className="h-4 w-4 text-[#F59E0B]" />
+            <h2 className="text-base font-bold text-zinc-900 dark:text-white flex items-center gap-2">
+              <BookOpen className="h-4 w-4 text-[#FF6B00]" />
               <span>Disciplinas do Plano</span>
-              <span className="text-xs font-medium text-white dark:text-white">
+              <span className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
                 ({disciplines.length})
               </span>
             </h2>
-            <p className="text-xs text-white dark:text-white">
+            <p className="text-xs text-zinc-500 dark:text-zinc-400">
               Clique em qualquer matéria para editar tópicos, ordem e prioridades rapidamente.
             </p>
           </div>
@@ -353,7 +353,7 @@ export const PlanDetailView: React.FC<PlanDetailViewProps> = ({
           <div className="flex items-center gap-2">
             <button
               onClick={() => setIsAddDisciplineOpen(true)}
-              className="flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#F59E0B] to-[#FBBF24] hover:from-[#D97706] hover:to-[#F59E0B] px-4 py-2 text-xs font-bold text-white shadow-md shadow-amber-500/20 active:scale-98 transition cursor-pointer"
+              className="flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#FF6B00] to-[#FF8A00] hover:from-[#E05D00] hover:to-[#FF6B00] px-4 py-2 text-xs font-bold text-white shadow-md shadow-orange-500/20 active:scale-98 transition cursor-pointer"
             >
               <Plus className="h-3.5 w-3.5" />
               <span>Nova Disciplina</span>
@@ -363,19 +363,19 @@ export const PlanDetailView: React.FC<PlanDetailViewProps> = ({
 
         {/* Empty state or Grid */}
         {disciplines.length === 0 ? (
-          <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-zinc-200 bg-white p-12 text-center dark:border-zinc-800 dark:bg-[#252B38]">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-500/10 text-[#F59E0B]">
+          <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-zinc-200 bg-white p-12 text-center dark:border-zinc-800 dark:bg-zinc-900">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-orange-500/10 text-[#FF6B00]">
               <BookOpen className="h-6 w-6" />
             </div>
-            <h3 className="mt-3 text-sm font-bold text-white dark:text-white">
+            <h3 className="mt-3 text-sm font-bold text-zinc-900 dark:text-white">
               Nenhuma disciplina cadastrada neste plano
             </h3>
-            <p className="mt-1 max-w-sm text-xs text-white dark:text-white">
+            <p className="mt-1 max-w-sm text-xs text-zinc-500 dark:text-zinc-400">
               Adicione as matérias exigidas para começar a organizar sua rotina de estudos e tópicos.
             </p>
             <button
               onClick={() => setIsAddDisciplineOpen(true)}
-              className="mt-4 flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#F59E0B] to-[#FBBF24] hover:from-[#D97706] hover:to-[#F59E0B] px-4 py-2 text-xs font-bold text-white shadow-md shadow-amber-500/20 transition cursor-pointer"
+              className="mt-4 flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#FF6B00] to-[#FF8A00] hover:from-[#E05D00] hover:to-[#FF6B00] px-4 py-2 text-xs font-bold text-white shadow-md shadow-orange-500/20 transition cursor-pointer"
             >
               <Plus className="h-3.5 w-3.5" />
               <span>Adicionar Primeira Disciplina</span>
@@ -420,7 +420,7 @@ export const PlanDetailView: React.FC<PlanDetailViewProps> = ({
                 <div
                   key={disc.id}
                   onClick={() => setSelectedDisciplineForEdit(disc)}
-                  className="group relative flex flex-col justify-between rounded-2xl border border-zinc-200 bg-white p-5 shadow-xs transition hover:border-[#F59E0B] hover:shadow-md cursor-pointer dark:border-zinc-800 dark:bg-[#252B38]"
+                  className="group relative flex flex-col justify-between rounded-2xl border border-zinc-200 bg-white p-5 shadow-xs transition hover:border-[#FF6B00] hover:shadow-md cursor-pointer dark:border-zinc-800 dark:bg-zinc-900"
                 >
                   <div>
                     {/* Header: Color Indicator + Title + Tag */}
@@ -428,13 +428,13 @@ export const PlanDetailView: React.FC<PlanDetailViewProps> = ({
                       <div className="flex items-center gap-2.5 min-w-0">
                         <span
                           className="h-3 w-3 rounded-full shrink-0 shadow-xs"
-                          style={{ backgroundColor: disc.color || "#F59E0B" }}
+                          style={{ backgroundColor: disc.color || "#FF6B00" }}
                         />
-                        <h3 className="font-bold text-white group-hover:text-[#F59E0B] dark:text-white dark:group-hover:text-[#FBBF24] truncate text-sm transition">
+                        <h3 className="font-bold text-zinc-900 group-hover:text-[#FF6B00] dark:text-white dark:group-hover:text-[#FFA726] truncate text-sm transition">
                           {disc.name}
                         </h3>
                       </div>
-                      <span className="shrink-0 rounded-md bg-zinc-100 px-2 py-0.5 text-[10px] font-semibold text-white dark:bg-zinc-800 dark:text-white">
+                      <span className="shrink-0 rounded-md bg-zinc-100 px-2 py-0.5 text-[10px] font-semibold text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400">
                         {plan.name}
                       </span>
                     </div>
@@ -442,20 +442,20 @@ export const PlanDetailView: React.FC<PlanDetailViewProps> = ({
                     {/* Stats Grid */}
                     <div className="mt-4 grid grid-cols-3 gap-2 rounded-xl bg-zinc-50 p-2.5 dark:bg-zinc-800/50 text-center">
                       <div>
-                        <span className="text-[10px] text-white block">Tópicos</span>
-                        <span className="text-xs font-bold text-white dark:text-white">
+                        <span className="text-[10px] text-zinc-400 block">Tópicos</span>
+                        <span className="text-xs font-bold text-zinc-800 dark:text-zinc-100">
                           {discStudiedCount}/{discTopics.length}
                         </span>
                       </div>
                       <div className="border-x border-zinc-200 dark:border-zinc-700/60">
-                        <span className="text-[10px] text-white block">Questões</span>
-                        <span className="text-xs font-bold text-white dark:text-white">
+                        <span className="text-[10px] text-zinc-400 block">Questões</span>
+                        <span className="text-xs font-bold text-zinc-800 dark:text-zinc-100">
                           {discQuestions}
                         </span>
                       </div>
                       <div>
-                        <span className="text-[10px] text-white block">Desempenho</span>
-                        <span className="text-xs font-bold text-[#F59E0B] dark:text-[#FBBF24]">
+                        <span className="text-[10px] text-zinc-400 block">Desempenho</span>
+                        <span className="text-xs font-bold text-[#FF6B00] dark:text-[#FFA726]">
                           {discAccuracy}%
                         </span>
                       </div>
@@ -464,10 +464,10 @@ export const PlanDetailView: React.FC<PlanDetailViewProps> = ({
                     {/* Progress Bar */}
                     <div className="mt-4">
                       <div className="flex items-center justify-between text-xs mb-1">
-                        <span className="text-white dark:text-white text-[11px]">
+                        <span className="text-zinc-500 dark:text-zinc-400 text-[11px]">
                           {discStudiedCount} de {discTopics.length} tópicos ({discProgress}%)
                         </span>
-                        <span className="text-white dark:text-white text-[11px] font-medium">
+                        <span className="text-zinc-500 dark:text-zinc-400 text-[11px] font-medium">
                           {formattedDiscTime}
                         </span>
                       </div>
@@ -476,7 +476,7 @@ export const PlanDetailView: React.FC<PlanDetailViewProps> = ({
                           className="h-full rounded-full transition-all duration-500"
                           style={{
                             width: `${discProgress}%`,
-                            backgroundColor: disc.color || "#F59E0B",
+                            backgroundColor: disc.color || "#FF6B00",
                           }}
                         />
                       </div>
@@ -484,9 +484,9 @@ export const PlanDetailView: React.FC<PlanDetailViewProps> = ({
                   </div>
 
                   {/* Card Footer: Quick edit cue */}
-                  <div className="mt-4 pt-3 border-t border-zinc-100 dark:border-zinc-800 flex items-center justify-between text-[11px] text-white group-hover:text-white dark:group-hover:text-white transition">
+                  <div className="mt-4 pt-3 border-t border-zinc-100 dark:border-zinc-800 flex items-center justify-between text-[11px] text-zinc-400 group-hover:text-zinc-600 dark:group-hover:text-zinc-300 transition">
                     <span>Clique para editar tópicos</span>
-                    <Edit2 className="h-3.5 w-3.5 text-white group-hover:text-[#F59E0B] transition" />
+                    <Edit2 className="h-3.5 w-3.5 text-zinc-400 group-hover:text-[#FF6B00] transition" />
                   </div>
                 </div>
               );

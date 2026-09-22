@@ -67,7 +67,7 @@ export const PlanCard: React.FC<PlanCardProps> = ({
   const displayImage = customImageUrl || plan.imageUrl || edital?.imageUrl;
 
   return (
-    <div className="group relative flex flex-col justify-between rounded-2xl border border-zinc-200 bg-white p-5 shadow-xs transition hover:border-[#F59E0B]/50 hover:shadow-md dark:border-zinc-800 dark:bg-[#252B38]">
+    <div className="group relative flex flex-col justify-between rounded-2xl border border-zinc-200 bg-white p-5 shadow-xs transition hover:border-[#FF6B00]/50 hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900">
       <div>
         {/* Top bar: Image + Info + Menu */}
         <div className="flex items-start justify-between gap-3">
@@ -87,7 +87,7 @@ export const PlanCard: React.FC<PlanCardProps> = ({
                   }}
                 />
               ) : (
-                <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#F59E0B]/20 to-[#F59E0B]/5 text-[#F59E0B]">
+                <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#FF6B00]/20 to-[#FF6B00]/5 text-[#FF6B00]">
                   <Shield className="h-7 w-7" />
                 </div>
               )}
@@ -98,7 +98,7 @@ export const PlanCard: React.FC<PlanCardProps> = ({
               <div className="flex items-center gap-2">
                 <h3
                   onClick={() => onOpenPlan(plan.id)}
-                  className="cursor-pointer font-bold text-white hover:text-[#F59E0B] dark:text-white dark:hover:text-[#FBBF24] truncate transition"
+                  className="cursor-pointer font-bold text-zinc-900 hover:text-[#FF6B00] dark:text-white dark:hover:text-[#FFA726] truncate transition"
                   title={plan.name}
                 >
                   {plan.name}
@@ -109,7 +109,7 @@ export const PlanCard: React.FC<PlanCardProps> = ({
                   </span>
                 )}
               </div>
-              <p className="text-xs text-white dark:text-white truncate mt-0.5">
+              <p className="text-xs text-zinc-500 dark:text-zinc-400 truncate mt-0.5">
                 {plan.organ || edital?.organ || "Concurso Geral"}
                 {plan.cargo || edital?.cargo ? ` • ${plan.cargo || edital?.cargo}` : ""}
               </p>
@@ -120,7 +120,7 @@ export const PlanCard: React.FC<PlanCardProps> = ({
           <div className="relative">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="rounded-lg p-1.5 text-white hover:bg-zinc-100 hover:text-white dark:text-white dark:hover:bg-zinc-800 dark:hover:text-white transition cursor-pointer"
+              className="rounded-lg p-1.5 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-700 dark:text-zinc-500 dark:hover:bg-zinc-800 dark:hover:text-zinc-200 transition cursor-pointer"
               title="Opções"
             >
               <MoreVertical className="h-4 w-4" />
@@ -132,15 +132,15 @@ export const PlanCard: React.FC<PlanCardProps> = ({
                   className="fixed inset-0 z-20"
                   onClick={() => setIsMenuOpen(false)}
                 />
-                <div className="absolute right-0 z-30 mt-1 w-44 rounded-xl border border-zinc-200 bg-white py-1.5 shadow-xl dark:border-zinc-800 dark:bg-[#252B38]">
+                <div className="absolute right-0 z-30 mt-1 w-44 rounded-xl border border-zinc-200 bg-white py-1.5 shadow-xl dark:border-zinc-800 dark:bg-zinc-900">
                   <button
                     onClick={() => {
                       setIsMenuOpen(false);
                       onOpenPlan(plan.id);
                     }}
-                    className="flex w-full items-center gap-2 px-3 py-2 text-xs font-semibold text-white hover:bg-amber-50 hover:text-[#F59E0B] dark:text-white dark:hover:bg-zinc-800 dark:hover:text-[#FBBF24] transition"
+                    className="flex w-full items-center gap-2 px-3 py-2 text-xs font-semibold text-zinc-700 hover:bg-orange-50 hover:text-[#FF6B00] dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-[#FFA726] transition"
                   >
-                    <ExternalLink className="h-3.5 w-3.5 text-[#F59E0B]" />
+                    <ExternalLink className="h-3.5 w-3.5 text-[#FF6B00]" />
                     <span>Abrir Plano</span>
                   </button>
                   <button
@@ -148,9 +148,9 @@ export const PlanCard: React.FC<PlanCardProps> = ({
                       setIsMenuOpen(false);
                       onEditPlan(plan);
                     }}
-                    className="flex w-full items-center gap-2 px-3 py-2 text-xs font-semibold text-white hover:bg-zinc-100 dark:text-white dark:hover:bg-zinc-800"
+                    className="flex w-full items-center gap-2 px-3 py-2 text-xs font-semibold text-zinc-700 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800"
                   >
-                    <Edit2 className="h-3.5 w-3.5 text-white" />
+                    <Edit2 className="h-3.5 w-3.5 text-zinc-500" />
                     <span>Editar Informações</span>
                   </button>
                   <button
@@ -158,7 +158,7 @@ export const PlanCard: React.FC<PlanCardProps> = ({
                       setIsMenuOpen(false);
                       onArchivePlan(plan.id);
                     }}
-                    className="flex w-full items-center gap-2 px-3 py-2 text-xs font-semibold text-white hover:bg-zinc-100 dark:text-white dark:hover:bg-zinc-800"
+                    className="flex w-full items-center gap-2 px-3 py-2 text-xs font-semibold text-zinc-700 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800"
                   >
                     {isArchived ? (
                       <>
@@ -192,26 +192,26 @@ export const PlanCard: React.FC<PlanCardProps> = ({
         {/* Badges / Metrics Stats Row */}
         <div className="mt-4 grid grid-cols-3 gap-2 rounded-xl bg-zinc-50 p-2.5 dark:bg-zinc-800/60">
           <div className="flex flex-col items-center justify-center text-center">
-            <span className="text-[10px] font-medium text-white dark:text-white">
+            <span className="text-[10px] font-medium text-zinc-500 dark:text-zinc-400">
               Disciplinas
             </span>
-            <span className="text-xs font-bold text-white dark:text-white">
+            <span className="text-xs font-bold text-zinc-800 dark:text-zinc-100">
               {totalDisciplines}
             </span>
           </div>
           <div className="flex flex-col items-center justify-center text-center border-x border-zinc-200 dark:border-zinc-700/60">
-            <span className="text-[10px] font-medium text-white dark:text-white">
+            <span className="text-[10px] font-medium text-zinc-500 dark:text-zinc-400">
               Tópicos
             </span>
-            <span className="text-xs font-bold text-white dark:text-white">
+            <span className="text-xs font-bold text-zinc-800 dark:text-zinc-100">
               {totalTopics}
             </span>
           </div>
           <div className="flex flex-col items-center justify-center text-center">
-            <span className="text-[10px] font-medium text-white dark:text-white">
+            <span className="text-[10px] font-medium text-zinc-500 dark:text-zinc-400">
               Estudado
             </span>
-            <span className="text-xs font-bold text-[#F59E0B] dark:text-[#FBBF24]">
+            <span className="text-xs font-bold text-[#FF6B00] dark:text-[#FFA726]">
               {formattedTime}
             </span>
           </div>
@@ -220,16 +220,16 @@ export const PlanCard: React.FC<PlanCardProps> = ({
         {/* Progress bar */}
         <div className="mt-4">
           <div className="flex items-center justify-between text-xs mb-1.5">
-            <span className="text-white dark:text-white font-medium">
+            <span className="text-zinc-500 dark:text-zinc-400 font-medium">
               Progresso do Conteúdo
             </span>
-            <span className="font-bold text-white dark:text-white">
+            <span className="font-bold text-zinc-900 dark:text-white">
               {progressPct}%
             </span>
           </div>
           <div className="h-2 w-full overflow-hidden rounded-full bg-zinc-100 dark:bg-zinc-800">
             <div
-              className="h-full rounded-full bg-gradient-to-r from-[#F59E0B] to-[#FBBF24] transition-all duration-500"
+              className="h-full rounded-full bg-gradient-to-r from-[#FF6B00] to-[#FF8A00] transition-all duration-500"
               style={{ width: `${progressPct}%` }}
             />
           </div>
@@ -238,13 +238,13 @@ export const PlanCard: React.FC<PlanCardProps> = ({
 
       {/* Footer Action */}
       <div className="mt-5 pt-3.5 border-t border-zinc-100 dark:border-zinc-800 flex items-center justify-between">
-        <span className="text-[11px] text-white">
+        <span className="text-[11px] text-zinc-400">
           {totalTopics > 0 ? `${studiedTopicsCount} de ${totalTopics} tópicos concluídos` : "Sem tópicos cadastrados"}
         </span>
 
         <button
           onClick={() => onOpenPlan(plan.id)}
-          className="flex items-center gap-1.5 text-xs font-bold text-[#F59E0B] hover:text-[#D97706] dark:text-[#FBBF24] dark:hover:text-white transition cursor-pointer"
+          className="flex items-center gap-1.5 text-xs font-bold text-[#FF6B00] hover:text-[#E05D00] dark:text-[#FFA726] dark:hover:text-white transition cursor-pointer"
         >
           <span>Abrir plano</span>
           <ExternalLink className="h-3.5 w-3.5" />

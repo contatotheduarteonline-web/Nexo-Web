@@ -80,21 +80,21 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-white">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
                   {discipline?.name || "Disciplina"}
                 </span>
-                <span className="rounded-full bg-slate-200 px-2 py-0.2 text-[10px] font-semibold text-white dark:bg-slate-700 dark:text-white">
+                <span className="rounded-full bg-slate-200 px-2 py-0.2 text-[10px] font-semibold text-slate-700 dark:bg-slate-700 dark:text-slate-300">
                   Peso {discipline?.weight || 1}
                 </span>
               </div>
-              <h2 className="text-lg font-bold text-white dark:text-white">
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white">
                 {topic.name}
               </h2>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="rounded-lg p-1.5 text-white hover:bg-slate-100 hover:text-white dark:hover:bg-slate-800 dark:hover:text-white"
+            className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700 dark:hover:bg-slate-800 dark:hover:text-slate-200"
           >
             <X className="h-5 w-5" />
           </button>
@@ -105,21 +105,21 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
           {/* Quick Metrics Bar */}
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
             <div className="rounded-xl border border-slate-100 bg-slate-50 p-3 text-center dark:border-slate-800 dark:bg-slate-800/50">
-              <span className="block text-[11px] font-semibold text-white uppercase">Tempo Estudado</span>
-              <span className="text-base font-bold text-white dark:text-white">{hoursFormatted}</span>
+              <span className="block text-[11px] font-semibold text-slate-400 uppercase">Tempo Estudado</span>
+              <span className="text-base font-bold text-slate-900 dark:text-white">{hoursFormatted}</span>
             </div>
             <div className="rounded-xl border border-slate-100 bg-slate-50 p-3 text-center dark:border-slate-800 dark:bg-slate-800/50">
-              <span className="block text-[11px] font-semibold text-white uppercase">Questões / Acerto</span>
-              <span className="text-base font-bold text-white dark:text-white">
+              <span className="block text-[11px] font-semibold text-slate-400 uppercase">Questões / Acerto</span>
+              <span className="text-base font-bold text-slate-900 dark:text-white">
                 {topic.questionsCorrect}/{topic.questionsDone} ({topic.accuracyRate}%)
               </span>
             </div>
             <div className="rounded-xl border border-slate-100 bg-slate-50 p-3 text-center dark:border-slate-800 dark:bg-slate-800/50">
-              <span className="block text-[11px] font-semibold text-white uppercase">Revisões Feitas</span>
+              <span className="block text-[11px] font-semibold text-slate-400 uppercase">Revisões Feitas</span>
               <span className="text-base font-bold text-blue-600 dark:text-blue-400">{topic.reviewCount}x</span>
             </div>
             <div className="rounded-xl border border-slate-100 bg-slate-50 p-3 text-center dark:border-slate-800 dark:bg-slate-800/50">
-              <span className="block text-[11px] font-semibold text-white uppercase">Índice de Domínio</span>
+              <span className="block text-[11px] font-semibold text-slate-400 uppercase">Índice de Domínio</span>
               <span
                 className={`text-base font-bold ${
                   topic.masteryRate >= 75
@@ -172,7 +172,7 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
 
             <button
               onClick={() => createScheduledReview(topic.id, "24h")}
-              className="flex items-center gap-1.5 rounded-xl border border-amber-200 bg-amber-50 px-3.5 py-2 text-xs font-semibold text-[#F59E0B] hover:bg-amber-100 dark:border-amber-900 dark:bg-amber-950/60 dark:text-[#FBBF24] cursor-pointer"
+              className="flex items-center gap-1.5 rounded-xl border border-orange-200 bg-orange-50 px-3.5 py-2 text-xs font-semibold text-[#FF6B00] hover:bg-orange-100 dark:border-orange-900 dark:bg-orange-950/60 dark:text-[#FFA726] cursor-pointer"
             >
               <RotateCw className="h-3.5 w-3.5" />
               Agendar Revisão (24h)
@@ -182,14 +182,14 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
           {/* Subtopics Checklist Section */}
           <div className="rounded-xl border border-slate-200 bg-slate-50/50 p-4 dark:border-slate-800 dark:bg-slate-800/30">
             <div className="flex items-center justify-between">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-white dark:text-white">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300">
                 Subtópicos & Artigos de Lei ({topic.subtopics.length})
               </h3>
             </div>
 
             <div className="mt-3 space-y-2">
               {topic.subtopics.length === 0 ? (
-                <p className="text-xs text-white italic">
+                <p className="text-xs text-slate-400 italic">
                   Nenhum subtópico cadastrado ainda para este assunto.
                 </p>
               ) : (
@@ -199,12 +199,12 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
                     className="flex items-center justify-between rounded-lg border border-slate-200/80 bg-white p-2.5 text-xs text-slate-800 shadow-2xs dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
                   >
                     <div className="flex items-center gap-2">
-                      <span className="h-1.5 w-1.5 rounded-full bg-[#F59E0B]" />
+                      <span className="h-1.5 w-1.5 rounded-full bg-[#FF6B00]" />
                       <span>{sub}</span>
                     </div>
                     <button
                       onClick={() => handleRemoveSubtopic(idx)}
-                      className="text-white hover:text-red-500 cursor-pointer"
+                      className="text-slate-400 hover:text-red-500 cursor-pointer"
                     >
                       <Trash2 className="h-3.5 w-3.5" />
                     </button>
@@ -220,12 +220,12 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
                   value={newSubtopicText}
                   onChange={(e) => setNewSubtopicText(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleAddSubtopic()}
-                  className="flex-1 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs text-slate-900 focus:border-[#F59E0B] focus:ring-1 focus:ring-[#F59E0B] focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                  className="flex-1 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs text-slate-900 focus:border-[#FF6B00] focus:ring-1 focus:ring-[#FF6B00] focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                 />
                 <button
                   type="button"
                   onClick={handleAddSubtopic}
-                  className="flex items-center gap-1 rounded-lg bg-[#F59E0B] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#D97706] cursor-pointer"
+                  className="flex items-center gap-1 rounded-lg bg-[#FF6B00] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#E05D00] cursor-pointer"
                 >
                   <Plus className="h-3.5 w-3.5" /> Adicionar
                 </button>
@@ -236,20 +236,20 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
           {/* Anotações / Pegadinhas */}
           <div className="rounded-xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-800/60">
             <div className="flex items-center justify-between">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-white dark:text-white">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300">
                 Anotações, Mnemônicos & Pegadinhas
               </h3>
               {!isEditingNotes ? (
                 <button
                   onClick={() => setIsEditingNotes(true)}
-                  className="flex items-center gap-1 text-xs font-semibold text-[#F59E0B] hover:underline dark:text-[#FBBF24] cursor-pointer"
+                  className="flex items-center gap-1 text-xs font-semibold text-[#FF6B00] hover:underline dark:text-[#FFA726] cursor-pointer"
                 >
                   <Edit3 className="h-3 w-3" /> Editar
                 </button>
               ) : (
                 <button
                   onClick={handleSaveNotes}
-                  className="flex items-center gap-1 rounded-md bg-[#F59E0B] px-2.5 py-1 text-xs font-bold text-white hover:bg-[#D97706] cursor-pointer"
+                  className="flex items-center gap-1 rounded-md bg-[#FF6B00] px-2.5 py-1 text-xs font-bold text-white hover:bg-[#E05D00] cursor-pointer"
                 >
                   Salvar
                 </button>
@@ -263,14 +263,14 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
                   placeholder="Ex: Cuidado com a pegadinha da banca sobre prazo prescricional..."
-                  className="w-full rounded-lg border border-slate-200 p-2.5 text-xs text-white focus:border-[#F59E0B] focus:ring-1 focus:ring-[#F59E0B] focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                  className="w-full rounded-lg border border-slate-200 p-2.5 text-xs text-slate-900 focus:border-[#FF6B00] focus:ring-1 focus:ring-[#FF6B00] focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                 />
               ) : (
-                <div className="rounded-lg bg-slate-50 p-3 text-xs text-white dark:bg-slate-800/40 dark:text-white">
+                <div className="rounded-lg bg-slate-50 p-3 text-xs text-slate-700 dark:bg-slate-800/40 dark:text-slate-300">
                   {topic.notes ? (
                     <p className="whitespace-pre-wrap">{topic.notes}</p>
                   ) : (
-                    <p className="text-white italic">
+                    <p className="text-slate-400 italic">
                       Nenhuma anotação registrada ainda. Clique em "Editar" para adicionar mnemônicos ou súmulas.
                     </p>
                   )}
@@ -281,12 +281,12 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
 
           {/* Session History on this Topic */}
           <div>
-            <h3 className="text-xs font-bold uppercase tracking-wider text-white dark:text-white">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300">
               Histórico de Sessões neste Tópico ({topicSessions.length})
             </h3>
             <div className="mt-3 space-y-2">
               {topicSessions.length === 0 ? (
-                <p className="text-xs text-white italic">
+                <p className="text-xs text-slate-400 italic">
                   Nenhuma sessão de estudo registrada ainda para este tópico.
                 </p>
               ) : (
@@ -296,26 +296,26 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
                     className="flex items-center justify-between rounded-xl border border-slate-100 bg-slate-50/70 p-3 text-xs dark:border-slate-800 dark:bg-slate-800/30"
                   >
                     <div className="flex items-center gap-3">
-                      <span className="rounded-md bg-amber-100 px-2 py-0.5 text-[10px] font-bold text-amber-800 dark:bg-amber-950 dark:text-amber-300">
+                      <span className="rounded-md bg-orange-100 px-2 py-0.5 text-[10px] font-bold text-orange-800 dark:bg-orange-950 dark:text-orange-300">
                         {sess.modality}
                       </span>
                       <div>
-                        <span className="font-semibold text-white dark:text-white">
+                        <span className="font-semibold text-slate-900 dark:text-white">
                           {sess.durationMinutes} minutos
                         </span>
                         {sess.notes && (
-                          <p className="text-[11px] text-white">{sess.notes}</p>
+                          <p className="text-[11px] text-slate-500">{sess.notes}</p>
                         )}
                       </div>
                     </div>
 
                     <div className="text-right">
                       {sess.questionsDone > 0 && (
-                        <span className="block font-semibold text-white dark:text-white">
+                        <span className="block font-semibold text-slate-700 dark:text-slate-300">
                           {sess.questionsCorrect}/{sess.questionsDone} acertos
                         </span>
                       )}
-                      <span className="text-[10px] text-white">
+                      <span className="text-[10px] text-slate-400">
                         {new Date(sess.date).toLocaleDateString("pt-BR")}
                       </span>
                     </div>

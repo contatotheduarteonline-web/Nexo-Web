@@ -19,7 +19,7 @@ export const OnboardingProgress: React.FC<OnboardingProgressProps> = ({
     >
       <div
         id="onboarding-progress-bar-fill"
-        className="h-full bg-gradient-to-r from-[#F59E0B] to-[#FFA043] transition-all duration-500 ease-out shadow-[0_0_8px_rgba(255,107,0,0.5)]"
+        className="h-full bg-gradient-to-r from-[#FF6B00] to-[#FFA043] transition-all duration-500 ease-out shadow-[0_0_8px_rgba(255,107,0,0.5)]"
         style={{ width: `${percentage}%` }}
       />
     </div>

@@ -12,7 +12,7 @@ export const DISTINCT_DISCIPLINE_COLORS = [
   "#F59E0B", // Âmbar / Dourado
   "#10B981", // Verde Menta
   "#06B6D4", // Ciano / Turquesa
-  "#F59E0B", // Laranja Quente
+  "#F97316", // Laranja Quente
   "#6366F1", // Índigo
   "#D946EF", // Fúcsia / Magenta
   "#14B8A6", // Verde Petróleo Claro
@@ -23,7 +23,7 @@ export const DISTINCT_DISCIPLINE_COLORS = [
   "#E11D48", // Rosa Rubi
   "#0D9488", // Teal Profundo
   "#7C3AED", // Violeta Escuro
-  "#D97706", // Laranja Queimado
+  "#EA580C", // Laranja Queimado
   "#4F46E5", // Índigo Escuro
   "#059669", // Verde Floresta
   "#DB2777", // Rosa Escuro

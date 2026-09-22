@@ -141,37 +141,56 @@ export const OfensivaCard: React.FC<OfensivaCardProps> = ({ className = "" }) =>
     });
   }, [studiedDatesSet]);
 
+  const todayStr = useMemo(() => getLocalDateString(new Date()), []);
+  const studiedToday = studiedDatesSet.has(todayStr);
+
   return (
     <section
       id="section-ofensiva-semana"
-      className={`nx-card nx-card-hover w-full p-5 sm:p-6 ${className}`}
+      className={`w-full rounded-2xl border border-[#E5E7EB] bg-white p-5 sm:p-6 shadow-[0_1px_3px_rgba(0,0,0,0.03),0_4px_12px_rgba(0,0,0,0.015)] dark:border-[#1E2638] dark:bg-[#121622] transition-all duration-200 hover:border-[#D1D5DB] dark:hover:border-[#2A3447] ${className}`}
     >
       {/* Topo Limpo da Ofensiva */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-4 border-b border-[#384154] gap-3">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-4 border-b border-[#F0F2F5] dark:border-[#1C2333] gap-3">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#F3AA2D]/20 bg-[#F3AA2D]/10 text-[#F3AA2D]">
-            <Flame className="h-5 w-5 fill-[#F3AA2D] text-[#F3AA2D]" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-orange-50 text-[#F97316] dark:bg-orange-950/40 dark:text-orange-400">
+            <Flame className="h-5 w-5 fill-[#F97316] text-[#F97316]" />
           </div>
           <div className="flex items-baseline gap-2.5">
-            <h2 className="font-condensed text-[19px] font-bold text-white">
+            <h2 className="text-[16px] sm:text-[17px] font-semibold text-[#172033] dark:text-white tracking-tight">
               Ofensiva
             </h2>
-            <span className="num-condensed text-[26px] font-bold leading-none text-[#F3AA2D]">
+            <span className="text-[22px] sm:text-[24px] font-extrabold text-[#F97316] font-mono tracking-tight">
               {currentStreak} {currentStreak === 1 ? "dia" : "dias"}
+            </span>
+            <span className="text-[12px] font-medium text-[#667085] dark:text-[#94A3B8]">
+              sequência atual
             </span>
           </div>
         </div>
 
         {/* Lado Direito: Recorde e Status resumido sem poluição de texto */}
         <div className="flex items-center gap-2.5 text-[12px]">
-          <div className="nx-deep flex items-center gap-1.5 px-3 py-1.5">
-            <span className="text-white">Recorde:</span>
-            <span className="num-condensed font-bold text-white">
+          <div className="flex items-center gap-1.5 rounded-lg bg-[#F8F9FB] px-3 py-1.5 border border-[#E5E7EB] dark:bg-[#181F2E] dark:border-[#1E2638]">
+            <span className="text-[#667085] dark:text-[#94A3B8]">Recorde:</span>
+            <span className="font-semibold text-[#172033] dark:text-white font-mono">
               {recordStreak} {recordStreak === 1 ? "dia" : "dias"}
             </span>
           </div>
 
-
+          <div
+            className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 font-medium transition-colors ${
+              studiedToday
+                ? "bg-emerald-50 text-[#16A37A] border border-emerald-200/60 dark:bg-emerald-950/40 dark:border-emerald-800/40"
+                : "bg-orange-50 text-[#F97316] border border-orange-200/60 dark:bg-orange-950/40 dark:border-orange-800/40"
+            }`}
+          >
+            <span
+              className={`h-2 w-2 rounded-full shrink-0 ${
+                studiedToday ? "bg-[#10B981]" : "bg-[#F97316] animate-pulse"
+              }`}
+            />
+            <span>{studiedToday ? "Hoje concluído" : "Pendente hoje"}</span>
+          </div>
         </div>
       </div>
 
@@ -183,24 +202,24 @@ export const OfensivaCard: React.FC<OfensivaCardProps> = ({ className = "" }) =>
               <div
                 key={day.dateKey}
                 id={`ofensiva-dia-${day.label.toLowerCase()}`}
-                className={`relative flex flex-col items-center justify-between rounded-xl py-3.5 px-2 sm:px-3 text-center transition-colors duration-200 ${
+                className={`relative flex flex-col items-center justify-between rounded-xl py-3.5 px-2 sm:px-3 text-center transition-all duration-200 ${
                   day.isStudied
-                    ? "border border-[#F3AA2D]/30 bg-[#F3AA2D]/[0.07]"
+                    ? "bg-orange-50/70 border border-orange-200/80 shadow-xs dark:bg-orange-950/30 dark:border-orange-900/50"
                     : day.isToday
-                    ? "border-2 border-[#F3AA2D] bg-[#171B25]"
+                    ? "border-2 border-[#F97316] bg-white shadow-xs dark:bg-[#161D2B]"
                     : day.isFuture
-                    ? "border border-dashed border-[#384154] bg-[#171B25]/60 opacity-60"
-                    : "border border-[#384154] bg-[#171B25]"
+                    ? "border border-dashed border-[#E5E7EB] bg-[#F8F9FB]/60 dark:border-[#1E2638] dark:bg-[#181F2E]/20 opacity-50"
+                    : "border border-[#E5E7EB] bg-[#F8F9FB] dark:border-[#1E2638] dark:bg-[#181F2E]/50"
                 }`}
               >
                 {/* Rótulo do dia (SEG, TER, QUA...) */}
                 <span
                   className={`text-[11px] font-bold tracking-wider ${
                     day.isToday
-                      ? "text-[#F3AA2D]"
+                      ? "text-[#F97316] dark:text-orange-400 font-extrabold"
                       : day.isStudied
-                      ? "text-[#F3AA2D]"
-                      : "text-white"
+                      ? "text-[#EA580C] dark:text-orange-300"
+                      : "text-[#667085] dark:text-[#94A3B8]"
                   }`}
                 >
                   {day.label}
@@ -208,14 +227,14 @@ export const OfensivaCard: React.FC<OfensivaCardProps> = ({ className = "" }) =>
 
                 {/* Número do dia */}
                 <span
-                  className={`num-condensed my-1.5 text-[20px] sm:text-[22px] font-bold ${
+                  className={`my-1.5 text-[18px] sm:text-[21px] font-bold font-mono tracking-tight ${
                     day.isStudied
-                      ? "text-[#F3AA2D]"
+                      ? "text-[#EA580C] dark:text-orange-400"
                       : day.isToday
-                      ? "text-white"
+                      ? "text-[#172033] dark:text-white"
                       : day.isFuture
-                      ? "text-white"
-                      : "text-white"
+                      ? "text-[#94A3B8] dark:text-[#475467]"
+                      : "text-[#667085] dark:text-[#94A3B8]"
                   }`}
                 >
                   {day.dayNumber}
@@ -226,20 +245,20 @@ export const OfensivaCard: React.FC<OfensivaCardProps> = ({ className = "" }) =>
                   {day.isStudied ? (
                     <div
                       title="Estudado"
-                      className="flex h-5 w-5 items-center justify-center rounded-full bg-[#F3AA2D] text-[#11151F]"
+                      className="flex h-5 w-5 items-center justify-center rounded-full bg-[#F97316] text-white shadow-xs"
                     >
                       <Check className="h-3 w-3 stroke-[3]" />
                     </div>
                   ) : day.isToday ? (
-                    <span className="inline-flex items-center rounded-full border border-[#F3AA2D]/25 bg-[#F3AA2D]/10 px-2 py-0.5 text-[10px] font-bold text-[#F3AA2D]">
+                    <span className="inline-flex items-center rounded-full bg-orange-100 px-2 py-0.5 text-[10px] font-bold text-[#F97316] dark:bg-orange-950/60">
                       Hoje
                     </span>
                   ) : day.isFuture ? (
-                    <span className="h-1.5 w-1.5 rounded-full bg-[#384154]" />
+                    <span className="h-1.5 w-1.5 rounded-full bg-[#D1D5DB]/50 dark:bg-[#334155]/40" />
                   ) : (
                     <span
                       title="Sem estudo"
-                      className="h-1.5 w-1.5 rounded-full bg-[#4A556E]"
+                      className="h-1.5 w-1.5 rounded-full bg-[#CBD5E1] dark:bg-[#334155]"
                     />
                   )}
                 </div>

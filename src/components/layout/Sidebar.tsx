@@ -5,12 +5,15 @@ import {
   BookOpen,
   FileCheck,
   CalendarRange,
+  Timer,
   RotateCcw,
   History,
   TrendingUp,
   Award,
+  Medal,
   Target,
   Bell,
+  Settings,
 } from "lucide-react";
 import { ActiveTab } from "../../types";
 import { useStudy } from "../../context/StudyContext";
@@ -51,6 +54,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       title: "ROTINA",
       items: [
         { id: "planejamento", label: "Planejamento", icon: CalendarRange },
+        { id: "cronometro", label: "Registro de Estudos", icon: Timer },
         {
           id: "revisoes",
           label: "Revisões",
@@ -63,6 +67,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     {
       title: "DESEMPENHO",
       items: [
+        { id: "medalhas", label: "Medalhas e Conquistas", icon: Medal },
         { id: "estatisticas", label: "Estatísticas", icon: TrendingUp },
         { id: "simulados", label: "Simulados", icon: Award },
         { id: "metas", label: "Metas", icon: Target },
@@ -92,7 +97,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       )}
 
       <aside
-        className={`fixed top-16 bottom-0 left-0 z-40 flex w-[230px] flex-col justify-between border-r border-[#E4E7EC] bg-white shadow-xl transition-transform duration-200 ease-in-out dark:border-[#334155] dark:bg-[#1E293B] select-none ${
+        className={`fixed top-16 bottom-0 left-0 z-40 flex w-[230px] flex-col justify-between border-r border-[#E4E7EC] bg-white shadow-xl transition-transform duration-200 ease-in-out dark:border-[#1E2536] dark:bg-[#131824] select-none ${
           isCollapsed ? "-translate-x-full pointer-events-none" : "translate-x-0"
         }`}
       >
@@ -124,7 +129,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       onClick={() => handleSelectTab(item.id)}
                       className={`relative flex h-9 w-full items-center justify-between rounded-lg px-2.5 transition-colors cursor-pointer ${
                         isSelected
-                          ? "bg-[#FEF3C7] text-[#F59E0B] font-medium dark:bg-[#F59E0B]/10 dark:text-[#F59E0B]"
+                          ? "bg-[#FFF7ED] text-[#F97316] font-medium dark:bg-[#F97316]/10 dark:text-[#F97316]"
                           : "text-[#667085] hover:bg-[#F7F8FA] hover:text-[#172033] dark:text-[#94A3B8] dark:hover:bg-[#161B28] dark:hover:text-white font-normal"
                       }`}
                     >
@@ -133,7 +138,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                           <Icon
                             className={`h-4 w-4 ${
                               isSelected
-                                ? "text-[#F59E0B]"
+                                ? "text-[#F97316]"
                                 : "text-[#667085] dark:text-[#94A3B8]"
                             }`}
                           />
@@ -144,7 +149,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
                       {/* Badge de Notificação / Revisões */}
                       {item.badge !== undefined && (
-                        <span className="flex h-4 min-w-4 items-center justify-center rounded-full bg-amber-100 px-1 text-[9px] font-semibold text-[#F59E0B] dark:bg-[#F59E0B]/20 dark:text-[#FBBF24]">
+                        <span className="flex h-4 min-w-4 items-center justify-center rounded-full bg-orange-100 px-1 text-[9px] font-semibold text-[#F97316] dark:bg-[#F97316]/20 dark:text-[#FB923C]">
                           {item.badge}
                         </span>
                       )}
@@ -156,6 +161,31 @@ export const Sidebar: React.FC<SidebarProps> = ({
           ))}
         </div>
 
+        {/* Footer Configurações */}
+        <div className="border-t border-[#E7EAF0] p-2 dark:border-[#1F2636]">
+          <button
+            type="button"
+            onClick={() => handleSelectTab("configuracoes")}
+            className={`relative flex h-9 w-full items-center justify-between rounded-lg px-2.5 transition-colors cursor-pointer ${
+              activeTab === "configuracoes"
+                ? "bg-[#FFF7ED] text-[#F97316] font-medium dark:bg-[#F97316]/10 dark:text-[#F97316]"
+                : "text-[#667085] hover:bg-[#F7F8FA] hover:text-[#172033] dark:text-[#94A3B8] dark:hover:bg-[#161B28] dark:hover:text-white font-normal"
+            }`}
+          >
+            <div className="flex items-center gap-2.5 min-w-0">
+              <div className="flex h-5 w-5 shrink-0 items-center justify-center">
+                <Settings
+                  className={`h-4 w-4 ${
+                    activeTab === "configuracoes"
+                      ? "text-[#F97316]"
+                      : "text-[#667085] dark:text-[#94A3B8]"
+                  }`}
+                />
+              </div>
+              <span className="truncate text-xs">Configurações</span>
+            </div>
+          </button>
+        </div>
       </aside>
     </>
   );

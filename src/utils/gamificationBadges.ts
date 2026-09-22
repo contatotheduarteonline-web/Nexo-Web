@@ -136,7 +136,7 @@ export function computeGamificationData(
     rankLevel = 6;
     rankIcon = "check";
     rankTier = "diamond";
-    rankBadgeStyle = "bg-amber-50 text-[#F59E0B] border-amber-200 dark:bg-amber-950/40 dark:text-[#FBBF24] dark:border-amber-800";
+    rankBadgeStyle = "bg-orange-50 text-[#FF6B00] border-orange-200 dark:bg-orange-950/40 dark:text-[#FFA726] dark:border-orange-800";
     nextRankName = "100% Concluído";
     targetPctForNext = 100;
   } else if (globalProgressPercentage >= 80) {

@@ -175,14 +175,14 @@ export const EditPlanModal: React.FC<EditPlanModalProps> = ({ plan, onClose }) =
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 p-4 backdrop-blur-xs">
-      <div className="relative flex max-h-[90vh] w-full max-w-xl flex-col overflow-hidden rounded-2xl border border-[#E2E8F0] bg-white shadow-2xl dark:border-[#1E293B] dark:bg-[#0F172A]">
+      <div className="relative flex max-h-[90vh] w-full max-w-xl flex-col overflow-hidden rounded-2xl border border-[#E2E8F0] bg-white shadow-2xl dark:border-[#1E293B] dark:bg-[#111622]">
         {/* Header */}
         <div className="flex items-center justify-between border-b border-[#E2E8F0] px-6 py-4 dark:border-[#1E293B]">
           <div>
-            <h2 className="text-base font-bold text-white dark:text-white">
+            <h2 className="text-base font-bold text-[#374151] dark:text-white">
               {isConfirmingDelete ? "Excluir Plano de Estudos" : "Editar Dados do Plano"}
             </h2>
-            <p className="text-xs text-white dark:text-white">
+            <p className="text-xs text-[#737D89] dark:text-[#94A3B8]">
               {isConfirmingDelete
                 ? "Confirmação de exclusão permanente"
                 : "Atualize as informações do concurso, imagem e metas"}
@@ -190,7 +190,7 @@ export const EditPlanModal: React.FC<EditPlanModalProps> = ({ plan, onClose }) =
           </div>
           <button
             onClick={onClose}
-            className="rounded-lg p-1.5 text-[#737D89] hover:bg-[#F8FAFC] dark:hover:bg-[#1E293B]"
+            className="rounded-lg p-1.5 text-[#737D89] hover:bg-[#F8FAFC] dark:hover:bg-[#182030]"
           >
             <X className="h-5 w-5" />
           </button>
@@ -211,12 +211,12 @@ export const EditPlanModal: React.FC<EditPlanModalProps> = ({ plan, onClose }) =
               <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-red-50 text-red-600 dark:bg-red-950/40 dark:text-red-400">
                 <AlertTriangle className="h-7 w-7" />
               </div>
-              <h3 className="mt-4 text-base font-extrabold text-white dark:text-white">
+              <h3 className="mt-4 text-base font-extrabold text-[#374151] dark:text-white">
                 Deseja realmente excluir este plano?
               </h3>
-              <p className="mt-2 max-w-md text-xs text-white dark:text-white">
+              <p className="mt-2 max-w-md text-xs text-[#737D89] dark:text-[#94A3B8]">
                 Você está prestes a excluir o plano{" "}
-                <strong className="text-white dark:text-white">"{plan.name}"</strong>.
+                <strong className="text-[#374151] dark:text-white">"{plan.name}"</strong>.
                 Esta ação é irreversível e removerá as configurações e planejamento deste plano.
               </p>
             </div>
@@ -230,7 +230,7 @@ export const EditPlanModal: React.FC<EditPlanModalProps> = ({ plan, onClose }) =
                 type="button"
                 onClick={() => setIsConfirmingDelete(false)}
                 disabled={isDeleting}
-                className="rounded-xl border border-[#E2E8F0] px-4 py-2 text-xs font-semibold text-[#737D89] hover:bg-[#F8FAFC] disabled:opacity-50 dark:border-[#1E293B] dark:text-[#94A3B8] dark:hover:bg-[#1E293B]"
+                className="rounded-xl border border-[#E2E8F0] px-4 py-2 text-xs font-semibold text-[#737D89] hover:bg-[#F8FAFC] disabled:opacity-50 dark:border-[#1E293B] dark:text-[#94A3B8] dark:hover:bg-[#182030]"
               >
                 Cancelar
               </button>
@@ -271,7 +271,7 @@ export const EditPlanModal: React.FC<EditPlanModalProps> = ({ plan, onClose }) =
             />
 
             <div>
-              <label className="text-xs font-bold text-white dark:text-white">
+              <label className="text-xs font-bold text-[#374151] dark:text-white">
                 Nome do Plano
               </label>
               <input
@@ -279,13 +279,13 @@ export const EditPlanModal: React.FC<EditPlanModalProps> = ({ plan, onClose }) =
                 required
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] p-2.5 text-xs text-[#374151] focus:border-[#48C3A7] focus:bg-white focus:outline-hidden dark:border-[#1E293B] dark:bg-[#1E293B] dark:text-white"
+                className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] p-2.5 text-xs text-[#374151] focus:border-[#48C3A7] focus:bg-white focus:outline-hidden dark:border-[#1E293B] dark:bg-[#182030] dark:text-white"
               />
             </div>
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div>
-                <label className="text-xs font-bold text-white dark:text-white">
+                <label className="text-xs font-bold text-[#374151] dark:text-white">
                   Órgão / Instituição
                 </label>
                 <input
@@ -293,12 +293,12 @@ export const EditPlanModal: React.FC<EditPlanModalProps> = ({ plan, onClose }) =
                   value={organ}
                   onChange={(e) => setOrgan(e.target.value)}
                   placeholder="Ex: Órgão ou instituição..."
-                  className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] p-2.5 text-xs text-[#374151] focus:border-[#48C3A7] focus:bg-white focus:outline-hidden dark:border-[#1E293B] dark:bg-[#1E293B] dark:text-white"
+                  className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] p-2.5 text-xs text-[#374151] focus:border-[#48C3A7] focus:bg-white focus:outline-hidden dark:border-[#1E293B] dark:bg-[#182030] dark:text-white"
                 />
               </div>
 
               <div>
-                <label className="text-xs font-bold text-white dark:text-white">
+                <label className="text-xs font-bold text-[#374151] dark:text-white">
                   Cargo
                 </label>
                 <input
@@ -306,12 +306,12 @@ export const EditPlanModal: React.FC<EditPlanModalProps> = ({ plan, onClose }) =
                   value={cargo}
                   onChange={(e) => setCargo(e.target.value)}
                   placeholder="Ex: Cargo ou função pretendida..."
-                  className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] p-2.5 text-xs text-[#374151] focus:border-[#48C3A7] focus:bg-white focus:outline-hidden dark:border-[#1E293B] dark:bg-[#1E293B] dark:text-white"
+                  className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] p-2.5 text-xs text-[#374151] focus:border-[#48C3A7] focus:bg-white focus:outline-hidden dark:border-[#1E293B] dark:bg-[#182030] dark:text-white"
                 />
               </div>
 
               <div>
-                <label className="text-xs font-bold text-white dark:text-white">
+                <label className="text-xs font-bold text-[#374151] dark:text-white">
                   Banca
                 </label>
                 <input
@@ -319,12 +319,12 @@ export const EditPlanModal: React.FC<EditPlanModalProps> = ({ plan, onClose }) =
                   value={banca}
                   onChange={(e) => setBanca(e.target.value)}
                   placeholder="Ex: FGV, Cebraspe"
-                  className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] p-2.5 text-xs text-[#374151] focus:border-[#48C3A7] focus:bg-white focus:outline-hidden dark:border-[#1E293B] dark:bg-[#1E293B] dark:text-white"
+                  className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] p-2.5 text-xs text-[#374151] focus:border-[#48C3A7] focus:bg-white focus:outline-hidden dark:border-[#1E293B] dark:bg-[#182030] dark:text-white"
                 />
               </div>
 
               <div>
-                <label className="text-xs font-bold text-white dark:text-white">
+                <label className="text-xs font-bold text-[#374151] dark:text-white">
                   Meta Semanal (Horas)
                 </label>
                 <input
@@ -333,7 +333,7 @@ export const EditPlanModal: React.FC<EditPlanModalProps> = ({ plan, onClose }) =
                   placeholder="Ex: 20 ou 7.5"
                   value={weeklyGoalHours}
                   onChange={(e) => setWeeklyGoalHours(e.target.value)}
-                  className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] p-2.5 text-xs text-[#374151] focus:border-[#48C3A7] focus:bg-white focus:outline-hidden dark:border-[#1E293B] dark:bg-[#1E293B] dark:text-white font-mono"
+                  className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] p-2.5 text-xs text-[#374151] focus:border-[#48C3A7] focus:bg-white focus:outline-hidden dark:border-[#1E293B] dark:bg-[#182030] dark:text-white font-mono"
                 />
               </div>
             </div>
@@ -344,7 +344,7 @@ export const EditPlanModal: React.FC<EditPlanModalProps> = ({ plan, onClose }) =
                   type="button"
                   onClick={handleArchive}
                   disabled={isUploading}
-                  className="flex items-center gap-1 rounded-lg px-3 py-1.5 text-xs font-semibold text-[#737D89] hover:bg-[#F8FAFC] disabled:opacity-50 dark:text-[#94A3B8] dark:hover:bg-[#1E293B]"
+                  className="flex items-center gap-1 rounded-lg px-3 py-1.5 text-xs font-semibold text-[#737D89] hover:bg-[#F8FAFC] disabled:opacity-50 dark:text-[#94A3B8] dark:hover:bg-[#182030]"
                 >
                   <Archive className="h-3.5 w-3.5" />
                   {plan.isArchived ? "Desarquivar" : "Arquivar"}

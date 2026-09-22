@@ -2,43 +2,63 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-@theme {
-  --font-sans: "Manrope", Arial, sans-serif;
-  --font-display: "Manrope", Arial, sans-serif;
-}
-
 @layer base {
   :root {
-    /* TEMA ÚNICO NEXO — ARDÓSIA + ÂMBAR */
-    --background: #0F172A;          /* ardósia: base principal (fundo, sidebar, navegação) */
-    --surface: #1E293B;              /* ardósia: superfície secundária (cards estruturais) */
-    --surface-secondary: #253349;    /* ardósia: superfícies elevadas */
+    --background: #E9EAEC;
+    --surface: #FFFFFF;
+    --surface-secondary: #F4F5F7;
 
-    --primary: #F59E0B;             /* âmbar: destaque principal (botões, links, ativos) */
-    --primary-hover: #D97706;        /* âmbar escuro (hover) */
-    --primary-foreground: #0F172A; /* texto sobre âmbar (contraste) */
+    --primary: #F97316;
+    --primary-hover: #EA580C;
+    --primary-foreground: #FFFFFF;
 
-    --secondary: #1C2A40;
+    --secondary: #FFF7ED;
 
-    --text-primary: #F1F5F9;        /* leitura confortável sobre ardósia */
-    --text-secondary: #94A3B8;
+    --text-primary: #172033;
+    --text-secondary: #667085;
 
-    --border: #334155;              /* ardósia: elementos secundários */
+    --border: #E4E7EC;
 
     --success: #16A37A;
     --danger: #DC4B4B;
-    --warning: #FBBF24;             /* âmbar: destaque secundário */
+    --warning: #F59E0B;
     --accent-blue: #315B8C;
 
-    --brand-amber: #F59E0B;
-    --brand-amber-light: #FEF3C7;
-    --brand-amber-dark: #D97706;
+    --brand-orange: #F97316;
+    --brand-orange-light: #FFF7ED;
+    --brand-orange-dark: #EA580C;
+  }
+
+  .dark {
+    --background: #0C0F17;
+    --surface: #131824;
+    --surface-secondary: #181F2E;
+
+    --primary: #F97316;
+    --primary-hover: #EA580C;
+    --primary-foreground: #FFFFFF;
+
+    --secondary: #1A2232;
+
+    --text-primary: #F1F5F9;
+    --text-secondary: #94A3B8;
+
+    --border: #1E2536;
+
+    --success: #16A37A;
+    --danger: #DC4B4B;
+    --warning: #FBBF24;
+    --accent-blue: #315B8C;
+
+    --brand-orange: #F97316;
+    --brand-orange-light: #2A170A;
+    --brand-orange-dark: #EA580C;
   }
 
   body {
     background-color: var(--background);
     color: var(--text-primary);
-    font-family: "Manrope", Arial, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     font-size: 14px;
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
@@ -47,96 +67,41 @@
     letter-spacing: -0.011em;
   }
 
-  /* ===== HIERARQUIA TIPOGRÁFICA — MANROPE ===== */
-
   h1 {
-    font-family: "Manrope", Arial, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     font-size: 1.625rem; /* 26px */
-    font-weight: 800;
-    line-height: 1.2;
-    letter-spacing: -0.025em;
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -0.02em;
     color: var(--text-primary);
   }
 
   h2 {
-    font-family: "Manrope", Arial, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     font-size: 1.1875rem; /* 19px */
-    font-weight: 700;
+    font-weight: 650;
     line-height: 1.35;
-    letter-spacing: -0.018em;
+    letter-spacing: -0.015em;
     color: var(--text-primary);
   }
 
   h3 {
-    font-family: "Manrope", Arial, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     font-size: 0.9375rem; /* 15px */
     font-weight: 600;
     line-height: 1.4;
-    letter-spacing: -0.012em;
+    letter-spacing: -0.01em;
     color: var(--text-primary);
   }
 
   h4, h5, h6 {
-    font-family: "Manrope", Arial, sans-serif;
-    font-weight: 600;
-    letter-spacing: -0.012em;
-    color: var(--text-primary);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    letter-spacing: -0.01em;
   }
 
   button, input, select, textarea {
     font-family: inherit;
     letter-spacing: inherit;
-  }
-
-  button {
-    font-weight: 600;
-    cursor: pointer;
-  }
-}
-
-/* ===== MICROINTERAÇÕES E REFINAMENTO GLOBAL ===== */
-
-@layer base {
-  button, a, [role="button"], summary {
-    transition-property: color, background-color, border-color, box-shadow, transform, filter, opacity;
-    transition-duration: 180ms;
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  button:not(:disabled):active {
-    transform: scale(0.98);
-  }
-
-  /* Foco âmbar elegante em campos de formulário */
-  input:focus-visible,
-  select:focus-visible,
-  textarea:focus-visible {
-    outline: 2px solid rgba(245, 158, 11, 0.5);
-    outline-offset: 1px;
-  }
-
-  /* Checkboxes e radios nativos seguem o âmbar */
-  input[type="checkbox"],
-  input[type="radio"] {
-    accent-color: #F59E0B;
-  }
-
-  ::selection {
-    background: rgba(245, 158, 11, 0.35);
-    color: #F1F5F9;
-  }
-}
-
-/* ===== PROFUNDIDADE VISUAL DOS CARDS (superfície ardósia) ===== */
-
-@layer base {
-  [class*="bg-[#1E293B]"] {
-    box-shadow: 0 1px 2px rgba(2, 6, 23, 0.4), 0 8px 24px -16px rgba(2, 6, 23, 0.5);
-  }
-
-  /* Botões âmbar recebem sombra muito sutil */
-  button[class*="bg-[#F59E0B]"] {
-    box-shadow: 0 1px 2px rgba(245, 158, 11, 0.35);
   }
 }
 
@@ -149,11 +114,14 @@
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #334155;
+  background: #D1D5DB;
   border-radius: 9999px;
 }
+.dark ::-webkit-scrollbar-thumb {
+  background: #2E2E2E;
+}
 ::-webkit-scrollbar-thumb:hover {
-  background: #475569;
+  background: #9CA3AF;
 }
 
 @layer base {
@@ -163,97 +131,5 @@
   ::backdrop,
   ::file-selector-button {
     border-color: var(--border, currentColor);
-  }
-}
-
-/* ===== HOME / DASHBOARD — REFINAMENTO VISUAL (ARDÓSIA + ÂMBAR) ===== */
-
-@layer base {
-  /* Tipografia de impacto: Barlow Condensed (títulos e números de destaque) */
-  .font-condensed {
-    font-family: "Barlow Condensed", "Manrope", sans-serif;
-    letter-spacing: 0.01em;
-  }
-  .num-condensed {
-    font-family: "Barlow Condensed", "Manrope", sans-serif;
-    font-variant-numeric: tabular-nums;
-    letter-spacing: 0.02em;
-  }
-
-  /* Tipografia de texto da Home: Inter (títulos de impacto seguem Barlow Condensed) */
-  .nx-home,
-  .nx-home h1,
-  .nx-home h2,
-  .nx-home h3,
-  .nx-home h4,
-  .nx-home h5,
-  .nx-home h6 {
-    font-family: "Inter", "Manrope", Arial, sans-serif;
-  }
-  .nx-home .font-condensed,
-  .nx-home .num-condensed {
-    font-family: "Barlow Condensed", "Manrope", sans-serif;
-  }
-
-  /* Superfície de card da Home — perceptivelmente mais clara que o fundo #11151F */
-  .nx-card {
-    background-color: #252b38;
-    border: 1px solid #384154;
-    border-radius: 1rem;
-    box-shadow:
-      0 1px 2px rgba(8, 10, 16, 0.22),
-      0 10px 28px -16px rgba(8, 10, 16, 0.4);
-  }
-  .nx-card-hover {
-    transition:
-      border-color 200ms ease,
-      background-color 200ms ease,
-      box-shadow 200ms ease,
-      transform 200ms ease;
-  }
-  .nx-card-hover:hover {
-    background-color: #2d3442;
-    border-color: #4a556e;
-    transform: translateY(-1px);
-    box-shadow:
-      0 2px 4px rgba(8, 10, 16, 0.28),
-      0 14px 32px -16px rgba(8, 10, 16, 0.45);
-  }
-
-  /* Área profunda: itens internos, inputs, tracks */
-  .nx-deep {
-    background-color: #171b25;
-    border: 1px solid #384154;
-    border-radius: 0.75rem;
-  }
-  .nx-deep-hover {
-    transition:
-      border-color 200ms ease,
-      background-color 200ms ease;
-  }
-  .nx-deep-hover:hover {
-    border-color: #4a556e;
-    background-color: #1b2130;
-  }
-
-  /* Botão principal âmbar da Home */
-  .nx-btn-primary {
-    background-color: #f3aa2d;
-    color: #11151f;
-    border-radius: 0.75rem;
-    font-weight: 700;
-    transition:
-      background-color 200ms ease,
-      transform 150ms ease;
-  }
-  .nx-btn-primary:hover {
-    background-color: #d98f20;
-  }
-  .nx-btn-primary:active {
-    transform: scale(0.98);
-  }
-  .nx-btn-primary:focus-visible {
-    outline: 2px solid #f3aa2d;
-    outline-offset: 2px;
   }
 }

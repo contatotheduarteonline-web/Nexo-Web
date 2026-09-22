@@ -57,7 +57,7 @@ export const GamificationToastContainer: React.FC = () => {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -20, scale: 0.92, transition: { duration: 0.2 } }}
               transition={{ type: "spring", stiffness: 450, damping: 30 }}
-              className={`pointer-events-auto relative w-full overflow-hidden rounded-2xl border ${borderColor} bg-white/95 dark:bg-[#0F172A]/95 backdrop-blur-xl p-3.5 sm:p-4 text-slate-900 dark:text-white ${shadowGlow} transition-all`}
+              className={`pointer-events-auto relative w-full overflow-hidden rounded-2xl border ${borderColor} bg-white/95 dark:bg-[#111622]/95 backdrop-blur-xl p-3.5 sm:p-4 text-slate-900 dark:text-white ${shadowGlow} transition-all`}
             >
               {/* Top Accent Gradient Line */}
               <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#249D84] via-amber-400 to-[#2EC4B6]" />

@@ -36,12 +36,12 @@ export const DisciplinesTableView: React.FC<DisciplinesTableViewProps> = ({
 
   if (!activeEdital) {
     return (
-      <div className="rounded-xl border border-[#E2E8F0] bg-white p-8 text-center dark:border-[#1E293B] dark:bg-[#252B38]">
-        <BookOpen className="mx-auto h-8 w-8 text-white" />
-        <h3 className="mt-3 text-sm font-bold text-white dark:text-white">
+      <div className="rounded-xl border border-[#E2E8F0] bg-white p-8 text-center dark:border-[#1E293B] dark:bg-[#1B2126]">
+        <BookOpen className="mx-auto h-8 w-8 text-[#737D89]" />
+        <h3 className="mt-3 text-sm font-bold text-[#374151] dark:text-white">
           Nenhum Edital Ativo
         </h3>
-        <p className="mt-1 text-xs text-white dark:text-white">
+        <p className="mt-1 text-xs text-[#737D89] dark:text-[#94A3B8]">
           Selecione ou crie um edital para gerenciar disciplinas e assuntos.
         </p>
       </div>
@@ -86,16 +86,16 @@ export const DisciplinesTableView: React.FC<DisciplinesTableViewProps> = ({
   return (
     <div className="space-y-4">
       {/* Disciplines Data Table */}
-      <div className="overflow-hidden rounded-xl border border-[#E2E8F0] bg-white shadow-[0_1px_3px_rgba(0,0,0,0.02)] dark:border-[#1E293B] dark:bg-[#252B38]">
-        <div className="border-b border-[#E2E8F0] bg-[#F8FAFC]/60 px-4 py-3 dark:border-[#1E293B] dark:bg-[#0F172A]/40">
-          <h3 className="text-xs font-bold uppercase tracking-wider text-white dark:text-white">
+      <div className="overflow-hidden rounded-xl border border-[#E2E8F0] bg-white shadow-[0_1px_3px_rgba(0,0,0,0.02)] dark:border-[#1E293B] dark:bg-[#1B2126]">
+        <div className="border-b border-[#E2E8F0] bg-[#F8FAFC]/60 px-4 py-3 dark:border-[#1E293B] dark:bg-[#111622]/40">
+          <h3 className="text-xs font-bold uppercase tracking-wider text-[#374151] dark:text-white">
             Quadro Comparativo de Desempenho
           </h3>
         </div>
 
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="border-b border-[#E2E8F0] bg-[#F8FAFC]/30 text-[10px] font-bold uppercase tracking-wider text-[#737D89] dark:border-[#1E293B] dark:bg-[#0F172A]/20 dark:text-[#94A3B8]">
+            <thead className="border-b border-[#E2E8F0] bg-[#F8FAFC]/30 text-[10px] font-bold uppercase tracking-wider text-[#737D89] dark:border-[#1E293B] dark:bg-[#111622]/20 dark:text-[#94A3B8]">
               <tr>
                 <th className="px-4 py-2.5">Disciplina</th>
                 <th className="px-3 py-2.5 text-center">Peso</th>
@@ -115,8 +115,8 @@ export const DisciplinesTableView: React.FC<DisciplinesTableViewProps> = ({
                   <tr
                     key={row.discipline.id}
                     onClick={() => setSelectedDisciplineId(isSelected ? null : row.discipline.id)}
-                    className={`cursor-pointer transition hover:bg-amber-50/50 dark:hover:bg-[#1E293B] ${
-                      isSelected ? "bg-amber-50/80 dark:bg-amber-500/15" : ""
+                    className={`cursor-pointer transition hover:bg-orange-50/50 dark:hover:bg-[#182030] ${
+                      isSelected ? "bg-orange-50/80 dark:bg-orange-500/15" : ""
                     }`}
                   >
                     <td className="px-4 py-3">
@@ -126,10 +126,10 @@ export const DisciplinesTableView: React.FC<DisciplinesTableViewProps> = ({
                           style={{ backgroundColor: row.discipline.color }}
                         />
                         <div>
-                          <span className="font-semibold text-white dark:text-white">
+                          <span className="font-semibold text-slate-900 dark:text-white">
                             {row.discipline.name}
                           </span>
-                          <span className="block text-[10px] text-white">
+                          <span className="block text-[10px] text-slate-400">
                             {row.topicsCount} tópicos
                           </span>
                         </div>
@@ -137,12 +137,12 @@ export const DisciplinesTableView: React.FC<DisciplinesTableViewProps> = ({
                     </td>
 
                     <td className="px-3 py-3 text-center">
-                      <span className="rounded bg-slate-100 px-1.5 py-0.5 text-[10px] font-bold text-white dark:bg-[#1E293B] dark:text-white">
+                      <span className="rounded bg-slate-100 px-1.5 py-0.5 text-[10px] font-bold text-slate-600 dark:bg-[#182030] dark:text-slate-300">
                         {row.discipline.weight}x
                       </span>
                     </td>
 
-                    <td className="px-3 py-3 font-mono font-medium text-white dark:text-white">
+                    <td className="px-3 py-3 font-mono font-medium text-slate-900 dark:text-white">
                       {row.hoursFormatted}
                     </td>
 
@@ -154,7 +154,7 @@ export const DisciplinesTableView: React.FC<DisciplinesTableViewProps> = ({
                       {row.questionsWrong}
                     </td>
 
-                    <td className="px-3 py-3 text-center font-medium text-white dark:text-white">
+                    <td className="px-3 py-3 text-center font-medium text-slate-900 dark:text-[#E5EAEF]">
                       {row.questionsDone}
                     </td>
 
@@ -174,9 +174,9 @@ export const DisciplinesTableView: React.FC<DisciplinesTableViewProps> = ({
 
                     <td className="px-4 py-3">
                       <div className="w-28 space-y-1">
-                        <div className="flex justify-between text-[10px] text-white">
+                        <div className="flex justify-between text-[10px] text-slate-400">
                           <span>{row.studiedTopics}/{row.topicsCount}</span>
-                          <span className="font-semibold text-white dark:text-white">{row.coveragePct}%</span>
+                          <span className="font-semibold text-slate-900 dark:text-white">{row.coveragePct}%</span>
                         </div>
                         <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-[#1E293B]">
                           <div
@@ -195,14 +195,14 @@ export const DisciplinesTableView: React.FC<DisciplinesTableViewProps> = ({
                         <button
                           onClick={() => launchStudySessionForTopic(row.discipline.id, undefined, "Teoria")}
                           title="Estudar agora"
-                          className="flex items-center gap-1 rounded-md bg-[#F59E0B] hover:bg-[#D97706] p-1.5 text-white shadow-xs"
+                          className="flex items-center gap-1 rounded-md bg-[#FF6B00] hover:bg-[#E05D00] p-1.5 text-white shadow-xs"
                         >
                           <Play className="h-3 w-3 fill-white" />
                         </button>
                         <button
                           onClick={() => setEditingDiscipline(row.discipline)}
                           title="Editar disciplina"
-                          className="rounded-md border border-slate-200 bg-white p-1.5 text-slate-500 hover:bg-slate-50 hover:text-black dark:border-slate-800 dark:bg-[#252B38] dark:text-slate-400 dark:hover:text-white"
+                          className="rounded-md border border-slate-200 bg-white p-1.5 text-slate-500 hover:bg-slate-50 hover:text-black dark:border-slate-800 dark:bg-[#111622] dark:text-slate-400 dark:hover:text-white"
                         >
                           <Settings2 className="h-3 w-3" />
                         </button>
@@ -218,14 +218,14 @@ export const DisciplinesTableView: React.FC<DisciplinesTableViewProps> = ({
 
       {/* Detail Accordion / Panel of the Selected Discipline */}
       {selectedStats && (
-        <div className="rounded-xl border border-amber-500/40 bg-white p-4 shadow-xs dark:border-amber-500/40 dark:bg-[#252B38]">
+        <div className="rounded-xl border border-orange-500/40 bg-white p-4 shadow-xs dark:border-orange-500/40 dark:bg-[#1B2126]">
           <div className="flex flex-col justify-between gap-2 border-b border-slate-100 pb-3 sm:flex-row sm:items-center dark:border-[#1E293B]">
             <div className="flex items-center gap-2.5">
               <span
                 className="h-3.5 w-3.5 rounded-full"
                 style={{ backgroundColor: selectedStats.discipline.color }}
               />
-              <h3 className="text-sm font-bold text-white dark:text-white">
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white">
                 {selectedStats.discipline.name} — Tópicos e Assuntos
               </h3>
             </div>
@@ -233,7 +233,7 @@ export const DisciplinesTableView: React.FC<DisciplinesTableViewProps> = ({
             <div className="flex items-center gap-2">
               <button
                 onClick={() => onOpenNewTopicModal(selectedStats.discipline.id)}
-                className="flex items-center gap-1 rounded-lg bg-[#F59E0B] px-3 py-1 text-xs font-bold text-white shadow-xs hover:bg-[#D97706]"
+                className="flex items-center gap-1 rounded-lg bg-[#FF6B00] px-3 py-1 text-xs font-bold text-white shadow-xs hover:bg-[#E05D00]"
               >
                 <Plus className="h-3 w-3" /> Novo Assunto
               </button>
@@ -245,24 +245,24 @@ export const DisciplinesTableView: React.FC<DisciplinesTableViewProps> = ({
             {selectedStats.topics.map((t, idx) => (
               <div
                 key={t.id}
-                className="flex items-center justify-between rounded-lg bg-slate-50 p-2 text-xs transition dark:bg-[#0F172A]"
+                className="flex items-center justify-between rounded-lg bg-slate-50 p-2 text-xs transition dark:bg-[#111622]"
               >
                 <div className="flex items-center gap-2.5 truncate max-w-[280px] sm:max-w-[400px]">
-                  <span className="font-bold text-white">{idx + 1}.</span>
-                  <span className="font-medium text-white dark:text-white truncate">
+                  <span className="font-bold text-slate-400">{idx + 1}.</span>
+                  <span className="font-medium text-slate-900 dark:text-white truncate">
                     {t.name}
                   </span>
                 </div>
 
                 <div className="flex items-center gap-3">
-                  <span className="text-[10px] text-white">
+                  <span className="text-[10px] text-slate-400">
                     {t.questionsCorrect}/{t.questionsDone} q ({t.accuracyRate}%)
                   </span>
                   <span
                     className={`rounded-full px-2 py-0.5 text-[9px] font-bold ${
                       t.isStudied
-                        ? "bg-amber-50 text-[#F59E0B] border border-amber-500/30 dark:bg-amber-500/15 dark:text-[#FBBF24]"
-                        : "bg-slate-200 text-white dark:bg-slate-800 dark:text-white"
+                        ? "bg-orange-50 text-[#FF6B00] border border-orange-500/30 dark:bg-orange-500/15 dark:text-[#FFA726]"
+                        : "bg-slate-200 text-slate-500 dark:bg-slate-800 dark:text-slate-400"
                     }`}
                   >
                     {t.isStudied ? "✓ Estudado" : "○ Pendente"}

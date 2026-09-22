@@ -181,10 +181,10 @@ export const DisciplinasView: React.FC<DisciplinasViewProps> = ({
       {/* Header */}
       <div className="flex flex-col justify-between gap-4 border-b border-zinc-200 pb-4 sm:flex-row sm:items-center dark:border-zinc-800">
         <div>
-          <h1 className="text-xl font-bold text-white dark:text-white">
+          <h1 className="text-xl font-bold text-zinc-900 dark:text-white">
             Disciplinas
           </h1>
-          <p className="text-xs text-white dark:text-white mt-0.5">
+          <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
             Acompanhe todas as matérias dos seus planos em um único lugar.
           </p>
         </div>
@@ -197,7 +197,7 @@ export const DisciplinasView: React.FC<DisciplinasViewProps> = ({
               className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-bold transition ${
                 viewMode === "cards"
                   ? "bg-white text-zinc-900 shadow-xs dark:bg-zinc-900 dark:text-white"
-                  : "text-white hover:text-white dark:text-white dark:hover:text-white"
+                  : "text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"
               }`}
               title="Visualização em Cards"
             >
@@ -209,7 +209,7 @@ export const DisciplinasView: React.FC<DisciplinasViewProps> = ({
               className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-bold transition ${
                 viewMode === "table"
                   ? "bg-white text-zinc-900 shadow-xs dark:bg-zinc-900 dark:text-white"
-                  : "text-white hover:text-white dark:text-white dark:hover:text-white"
+                  : "text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"
               }`}
               title="Visualização em Tabela"
             >
@@ -220,7 +220,7 @@ export const DisciplinasView: React.FC<DisciplinasViewProps> = ({
 
           <button
             onClick={() => setIsAddDisciplineOpen(true)}
-            className="flex items-center gap-1.5 rounded-xl bg-[#F59E0B] hover:bg-[#D97706] px-4 py-2 text-xs font-bold text-white shadow-xs active:scale-98 transition shrink-0"
+            className="flex items-center gap-1.5 rounded-xl bg-[#FF6B00] hover:bg-[#E05D00] px-4 py-2 text-xs font-bold text-white shadow-xs active:scale-98 transition shrink-0"
           >
             <Plus className="h-4 w-4" />
             <span>Nova Disciplina</span>
@@ -232,13 +232,13 @@ export const DisciplinasView: React.FC<DisciplinasViewProps> = ({
       <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
         {/* Search */}
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-white" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-zinc-400" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Buscar por nome da disciplina ou plano..."
-            className="w-full rounded-xl border border-zinc-200 bg-white py-2 pl-9 pr-3.5 text-xs text-zinc-900 placeholder:text-zinc-400 focus:border-[#F59E0B] focus:outline-none dark:border-zinc-800 dark:bg-zinc-900 dark:text-white"
+            className="w-full rounded-xl border border-zinc-200 bg-white py-2 pl-9 pr-3.5 text-xs text-zinc-900 placeholder:text-zinc-400 focus:border-[#FF6B00] focus:outline-none dark:border-zinc-800 dark:bg-zinc-900 dark:text-white"
           />
         </div>
 
@@ -248,7 +248,7 @@ export const DisciplinasView: React.FC<DisciplinasViewProps> = ({
           <select
             value={selectedPlanId}
             onChange={(e) => setSelectedPlanId(e.target.value)}
-            className="rounded-xl border border-zinc-200 bg-white px-3 py-2 text-xs font-semibold text-zinc-700 focus:border-[#F59E0B] focus:outline-none dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200"
+            className="rounded-xl border border-zinc-200 bg-white px-3 py-2 text-xs font-semibold text-zinc-700 focus:border-[#FF6B00] focus:outline-none dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200"
           >
             <option value="all">Todos os Planos ({studyPlans.length})</option>
             {studyPlans.map((p) => (
@@ -262,7 +262,7 @@ export const DisciplinasView: React.FC<DisciplinasViewProps> = ({
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value as any)}
-            className="rounded-xl border border-zinc-200 bg-white px-3 py-2 text-xs font-semibold text-zinc-700 focus:border-[#F59E0B] focus:outline-none dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200"
+            className="rounded-xl border border-zinc-200 bg-white px-3 py-2 text-xs font-semibold text-zinc-700 focus:border-[#FF6B00] focus:outline-none dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200"
           >
             <option value="all">Todos os Status</option>
             <option value="in_progress">Em Andamento</option>
@@ -274,7 +274,7 @@ export const DisciplinasView: React.FC<DisciplinasViewProps> = ({
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as any)}
-            className="rounded-xl border border-zinc-200 bg-white px-3 py-2 text-xs font-semibold text-zinc-700 focus:border-[#F59E0B] focus:outline-none dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200"
+            className="rounded-xl border border-zinc-200 bg-white px-3 py-2 text-xs font-semibold text-zinc-700 focus:border-[#FF6B00] focus:outline-none dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200"
           >
             <option value="name">Ordem Alfabética</option>
             <option value="progress">Maior Progresso</option>
@@ -286,14 +286,14 @@ export const DisciplinasView: React.FC<DisciplinasViewProps> = ({
 
       {/* Main Content: Cards or Table */}
       {filteredDisciplines.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-zinc-200 bg-white p-12 text-center dark:border-zinc-800 dark:bg-[#252B38]">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-500/10 text-[#F59E0B]">
+        <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-zinc-200 bg-white p-12 text-center dark:border-zinc-800 dark:bg-zinc-900">
+          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-orange-500/10 text-[#FF6B00]">
             <BookOpen className="h-6 w-6" />
           </div>
-          <h3 className="mt-3 text-sm font-bold text-white dark:text-white">
+          <h3 className="mt-3 text-sm font-bold text-zinc-900 dark:text-white">
             Nenhuma disciplina encontrada
           </h3>
-          <p className="mt-1 max-w-sm text-xs text-white dark:text-white">
+          <p className="mt-1 max-w-sm text-xs text-zinc-500 dark:text-zinc-400">
             {allDisciplinesWithPlans.length === 0
               ? "As disciplinas aparecerão aqui quando forem adicionadas aos seus planos de estudo."
               : "Nenhuma matéria corresponde aos filtros selecionados."}
@@ -301,7 +301,7 @@ export const DisciplinasView: React.FC<DisciplinasViewProps> = ({
           {allDisciplinesWithPlans.length === 0 && (
             <button
               onClick={() => setActiveTab("planos")}
-              className="mt-4 flex items-center gap-1.5 rounded-xl bg-[#F59E0B] hover:bg-[#D97706] px-4 py-2.5 text-xs font-bold text-white shadow-xs transition"
+              className="mt-4 flex items-center gap-1.5 rounded-xl bg-[#FF6B00] hover:bg-[#E05D00] px-4 py-2.5 text-xs font-bold text-white shadow-xs transition"
             >
               <Layers className="h-4 w-4" />
               <span>Ir para Planos</span>
@@ -309,7 +309,7 @@ export const DisciplinasView: React.FC<DisciplinasViewProps> = ({
           )}
         </div>
       ) : viewMode === "table" ? (
-        <div className="rounded-2xl border border-zinc-200 bg-white p-4 shadow-xs dark:border-zinc-800 dark:bg-[#252B38]">
+        <div className="rounded-2xl border border-zinc-200 bg-white p-4 shadow-xs dark:border-zinc-800 dark:bg-zinc-900">
           <DisciplinesTableView
             onOpenNewTopicModal={(discId) => onOpenNewTopicModal?.(discId)}
           />

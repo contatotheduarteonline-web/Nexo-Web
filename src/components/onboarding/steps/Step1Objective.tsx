@@ -30,7 +30,7 @@ export const Step1Objective: React.FC<Step1ObjectiveProps> = ({
     <div id="step-1-objective" className="w-full max-w-2xl mx-auto px-4 py-4 sm:py-8">
       {/* Question Header */}
       <div className="mb-8 text-center sm:text-left">
-        <span className="text-xs font-semibold text-[#F59E0B] tracking-wider uppercase">
+        <span className="text-xs font-semibold text-[#FF6B00] tracking-wider uppercase">
           Etapa 1 de 12
         </span>
         <h2 className="text-2xl sm:text-4xl font-bold tracking-tight text-white mt-1">
@@ -50,7 +50,7 @@ export const Step1Objective: React.FC<Step1ObjectiveProps> = ({
               onClick={() => handleSelect(opt.id)}
               className={`flex items-center justify-between p-4 sm:p-5 rounded-xl border text-left transition-all duration-200 cursor-pointer ${
                 isSelected
-                  ? "bg-zinc-800/90 border-[#F59E0B] shadow-[0_0_18px_rgba(255,107,0,0.18)]"
+                  ? "bg-zinc-800/90 border-[#FF6B00] shadow-[0_0_18px_rgba(255,107,0,0.18)]"
                   : "bg-zinc-900/60 border-zinc-800/80 hover:bg-zinc-800/50 hover:border-zinc-700"
               }`}
             >
@@ -60,7 +60,7 @@ export const Step1Objective: React.FC<Step1ObjectiveProps> = ({
               <div
                 className={`w-6 h-6 rounded-full border flex items-center justify-center shrink-0 transition-colors ${
                   isSelected
-                    ? "border-[#F59E0B] bg-[#F59E0B] text-white"
+                    ? "border-[#FF6B00] bg-[#FF6B00] text-white"
                     : "border-zinc-700 bg-zinc-800/40 text-transparent"
                 }`}
               >
@@ -78,7 +78,7 @@ export const Step1Objective: React.FC<Step1ObjectiveProps> = ({
           id="btn-objective-next"
           onClick={onNext}
           disabled={!value}
-          className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-[#F59E0B] hover:bg-[#FF7A1A] disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold text-sm transition-all duration-200 cursor-pointer shadow-[0_6px_20px_rgba(255,107,0,0.25)]"
+          className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-[#FF6B00] hover:bg-[#FF7A1A] disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold text-sm transition-all duration-200 cursor-pointer shadow-[0_6px_20px_rgba(255,107,0,0.25)]"
         >
           <span>Continuar</span>
           <ArrowRight className="w-4 h-4" />

@@ -97,15 +97,15 @@ export const PlanosView: React.FC<PlanosViewProps> = ({ onOpenNewTopicModal }) =
       {/* Delete Confirmation Modal */}
       {planToDelete && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-xs">
-          <div className="relative w-full max-w-md overflow-hidden rounded-2xl border border-zinc-200 bg-white p-6 shadow-2xl dark:border-zinc-800 dark:bg-[#252B38] space-y-4">
+          <div className="relative w-full max-w-md overflow-hidden rounded-2xl border border-zinc-200 bg-white p-6 shadow-2xl dark:border-zinc-800 dark:bg-zinc-900 space-y-4">
             <div className="flex flex-col items-center text-center">
               <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-red-50 text-red-600 dark:bg-red-950/40 dark:text-red-400">
                 <AlertTriangle className="h-6 w-6" />
               </div>
-              <h3 className="mt-3 text-sm font-bold text-white dark:text-white">
+              <h3 className="mt-3 text-sm font-bold text-zinc-900 dark:text-white">
                 Excluir plano "{planToDelete.name}"?
               </h3>
-              <p className="mt-1 text-xs text-white dark:text-white">
+              <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
                 Esta ação excluirá o plano de estudo permanentemente.
               </p>
             </div>
@@ -115,7 +115,7 @@ export const PlanosView: React.FC<PlanosViewProps> = ({ onOpenNewTopicModal }) =
                 type="button"
                 onClick={() => setPlanToDelete(null)}
                 disabled={isDeleting}
-                className="rounded-xl border border-zinc-200 px-4 py-2 text-xs font-bold text-white hover:bg-zinc-100 dark:border-zinc-700 dark:text-white dark:hover:bg-zinc-800 transition"
+                className="rounded-xl border border-zinc-200 px-4 py-2 text-xs font-bold text-zinc-600 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800 transition"
               >
                 Cancelar
               </button>

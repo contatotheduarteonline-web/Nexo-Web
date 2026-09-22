@@ -19,13 +19,7 @@ import {
   checkCatalogDuplicity,
   submitUserEdital,
   getPublishedEditaisByCareer,
-  validateCatalogEditalData,
-  VALID_CATALOG_UFS,
 } from "../../lib/catalogEditalService";
-import {
-  publishEditalToServer,
-  PublishedEditalSnapshot,
-} from "../../lib/serverCatalogService";
 import {
   parseEditalPdf,
   parseManualPagesSelection,
@@ -69,8 +63,8 @@ import {
   AlertCircle,
 } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
-import { CAREER_OPTIONS } from "../../constants/careers";
 import { auth } from "../../lib/firebase";
+import { PlanImageUploader } from "../planos/PlanImageUploader";
 import {
   processAndCompressPlanImage,
   savePlanImageToFirestore,
@@ -84,7 +78,6 @@ import {
   normalizeHex,
 } from "../../utils/disciplineColors";
 import { DisciplineColorPickerModal } from "../disciplinas/DisciplineColorPickerModal";
-import { WizardSidePanel, WizardSelectionPanel } from "./wizard/WizardSidePanel";
 
 interface CreatePlanWizardModalProps {
   isOpen: boolean;
@@ -146,7 +139,20 @@ const OBJECTIVE_OPTIONS: Array<{
   },
 ];
 
-
+export const CAREER_OPTIONS = [
+  { id: "policial", title: "Policial", description: "Segurança pública, PF, PRF, PC, PM e Penal", icon: Shield },
+  { id: "fiscal", title: "Fiscal", description: "Receita Federal, SEFAZ e ISS", icon: Award },
+  { id: "tribunais_mpu", title: "Tribunais & MPU", description: "STF, STJ, TST, TSE, TRFs, TRTs e MPU", icon: Scale },
+  { id: "juridica", title: "Carreiras Jurídicas", description: "Magistratura, Ministério Público e Defensoria", icon: Scale },
+  { id: "controle_gestao", title: "Controle & Gestão", description: "TCU, CGU, TCEs e TCMs", icon: Layers },
+  { id: "legislativa", title: "Legislativa", description: "Senado, Câmara dos Deputados e Assembleias", icon: BookOpen },
+  { id: "administrativa", title: "Administrativa", description: "Prefeituras, Autarquias e Ministérios", icon: Layers },
+  { id: "bancaria", title: "Bancária", description: "Banco do Brasil, Caixa e Banco Central", icon: Award },
+  { id: "educacao", title: "Educação", description: "Professores, Pedagogia e Técnicos", icon: GraduationCap },
+  { id: "saude", title: "Saúde", description: "Enfermagem, Medicina, SUS e EBSERH", icon: Stethoscope },
+  { id: "diplomacia", title: "Diplomacia", description: "Instituto Rio Branco (CACD)", icon: Sparkles },
+  { id: "outra", title: "Outra Área", description: "Áreas técnicas específicas ou gerais", icon: Sparkles },
+];
 
 const PRESET_COLORS = DISTINCT_DISCIPLINE_COLORS;
 
@@ -178,7 +184,6 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
 
   // Step 3: Edital
   const [concursoSearchQuery, setConcursoSearchQuery] = useState("");
-  const [ufFilter, setUfFilter] = useState<string>("all");
   const [selectedCatalogEdital, setSelectedCatalogEdital] = useState<CatalogEdital | null>(null);
   const [selectedCatalogCargo, setSelectedCatalogCargo] = useState<CatalogCargo | null>(null);
   const [availableCatalogCargos, setAvailableCatalogCargos] = useState<CatalogCargo[]>([]);
@@ -193,8 +198,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
   const [organAcronym, setOrganAcronym] = useState("");
   const [editalUf, setEditalUf] = useState("");
   const [editalBoard, setEditalBoard] = useState("");
-  // Ano do Certame: sem valor padrão automático — deve corresponder ao certame real.
-  const [editalYear, setEditalYear] = useState<number | "">("");
+  const [editalYear, setEditalYear] = useState<number>(new Date().getFullYear());
   const [editalNotes, setEditalNotes] = useState("");
   const [weeklyGoalHours, setWeeklyGoalHours] = useState<number>(20);
 
@@ -216,14 +220,10 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
   } | null>(null);
   const [ignoreDuplicityWarning, setIgnoreDuplicityWarning] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const imageInputRef = useRef<HTMLInputElement | null>(null);
 
   // Image Upload State
   const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null);
   const [previewImageUrl, setPreviewImageUrl] = useState<string | null>(null);
-
-  // Validação obrigatória do catálogo oficial (8 campos)
-  const [catalogValidationErrors, setCatalogValidationErrors] = useState<string[]>([]);
 
   // Manual Page Selection Fallback State
   const [isManualPageSelectionOpen, setIsManualPageSelectionOpen] = useState(false);
@@ -265,7 +265,6 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
       setSelectedObjective("Concurso Público");
       setSelectedCareerId("policial");
       setConcursoSearchQuery("");
-      setUfFilter("all");
       setSelectedCatalogEdital(null);
       setSelectedCatalogCargo(null);
       setAvailableCatalogCargos([]);
@@ -300,7 +299,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
       setEditingCargoId(null);
       setEditingCargoName("");
       setNewDiscName("");
-      setNewDiscColor("#F3AA2D");
+      setNewDiscColor("#249D84");
       setNewTopicName("");
       setBatchTopicDiscId(null);
       setIsFullContentExpanded(false);
@@ -322,10 +321,6 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
       if (ed.careerId) {
         if (ed.careerId.toLowerCase() !== selectedCareerId.toLowerCase()) return false;
       }
-      if (ufFilter !== "all") {
-        const edUf = (ed.uf || ed.state || "").trim().toUpperCase();
-        if (edUf !== ufFilter) return false;
-      }
       const q = concursoSearchQuery.toLowerCase().trim();
       if (!q) return true;
       return (
@@ -337,28 +332,14 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
         (ed.state || "").toLowerCase().includes(q)
       );
     });
-  }, [catalogEditais, selectedCareerId, concursoSearchQuery, ufFilter]);
-
-  // UFs disponíveis nos editais da carreira selecionada (para o filtro da etapa de edital)
-  const availableUfs = useMemo(() => {
-    const ufSet = new Set<string>();
-    catalogEditais.forEach((ed) => {
-      if (ed.careerId && ed.careerId.toLowerCase() !== selectedCareerId.toLowerCase()) return;
-      const uf = (ed.uf || ed.state || "").trim().toUpperCase();
-      if (uf) ufSet.add(uf);
-    });
-    return Array.from(ufSet).sort();
-  }, [catalogEditais, selectedCareerId]);
+  }, [catalogEditais, selectedCareerId, concursoSearchQuery]);
 
   // Efeito para carregar a contagem de cargos dos editais da carreira selecionada
   useEffect(() => {
     if (isOpen && step === "edital" && editaisForCareer.length > 0) {
       editaisForCareer.forEach(async (ed) => {
-        const embedded = (ed as PublishedEditalSnapshot).cargos;
         if (ed.cargosCount !== undefined) {
           setEditalCargosCountMap((prev) => ({ ...prev, [ed.id]: ed.cargosCount! }));
-        } else if (embedded) {
-          setEditalCargosCountMap((prev) => ({ ...prev, [ed.id]: embedded.length }));
         } else if (editalCargosCountMap[ed.id] === undefined) {
           try {
             const c = await getEditalCargos(ed.id);
@@ -386,18 +367,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
     setIsCustomConcurso(false);
 
     try {
-      // Editais do catálogo oficial (banco do servidor) trazem o snapshot
-      // completo de cargos embutido — sem depender do Firestore.
-      const embedded = (ed as PublishedEditalSnapshot).cargos;
-      const cargos: CatalogCargo[] = embedded?.length
-        ? embedded.map((c) => ({
-            id: c.id,
-            name: c.name,
-            level: c.level,
-            vacancies: c.vacancies,
-            order: c.order,
-          }))
-        : await getEditalCargos(ed.id);
+      const cargos = await getEditalCargos(ed.id);
       if (cargos.length === 0) {
         // Sem cargos cadastrados no catálogo, disponibiliza 1 cargo padrão
         const fallbackCargo: CatalogCargo = {
@@ -436,11 +406,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
     setEditalYear(ed.year || new Date().getFullYear());
 
     try {
-      // Prioriza o snapshot embutido do catálogo oficial (banco do servidor)
-      const embeddedStructure = (ed as PublishedEditalSnapshot).cargos?.find(
-        (c) => c.id === cargoItem.id
-      );
-      const structure = embeddedStructure ?? (await getFullCargoStructure(ed.id, cargoItem.id));
+      const structure = await getFullCargoStructure(ed.id, cargoItem.id);
       const rawDisciplines: ExtractedDiscipline[] = (structure?.disciplines || []).map(
         (d, dIdx) => ({
           id: d.id || `disc-${dIdx + 1}`,
@@ -537,7 +503,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
           id: "disc-1",
           name: "Língua Portuguesa",
           order: 1,
-          color: "#F3AA2D",
+          color: "#249D84",
           weight: 3,
           topics: [
             { id: "top-1-1", title: "Compreensão e Interpretação de Texto", order: 1 },
@@ -713,24 +679,15 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
       cargoName
     );
 
-    // CORREÇÃO: o processamento de páginas é referente apenas ao cargo ativo.
-    // Antes a lista inteira era substituída por um único cargo, descartando
-    // silenciosamente os outros cargos já cadastrados na publicação.
     const updatedParsedData: ParsedEditalData = {
       ...parsedData,
       programmaticSection: section,
       validation,
-      cargos: currentCargo
-        ? [...(parsedData.cargos || []).filter((c) => c.id !== currentCargo.id), cargo]
-        : [...(parsedData.cargos || []), cargo],
+      cargos: [cargo],
     };
 
     setParsedData(updatedParsedData);
-    setCargosList((prev) =>
-      currentCargo
-        ? prev.map((c) => (c.id === currentCargo.id ? cargo : c))
-        : [...prev, cargo]
-    );
+    setCargosList([cargo]);
     setActiveCargoId(cargo.id);
     if (cargo.disciplines.length > 0) {
       setExpandedDiscId(cargo.disciplines[0].id);
@@ -768,7 +725,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
   const handleAddDiscipline = () => {
     if (!newDiscName.trim() || !activeCargo) return;
 
-    const currentUsed = activeCargo.disciplines.map((d) => d.color || "#F3AA2D");
+    const currentUsed = activeCargo.disciplines.map((d) => d.color || "#249D84");
 
     // Regra estrita: se a cor atual já estiver em uso, calcula a próxima cor exclusiva disponível
     let assignedColor = newDiscColor;
@@ -815,7 +772,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
     );
     // Se a cor selecionada para o cadastro de nova matéria coincidir com essa cor, avança automaticamente
     const updatedUsed = (activeCargo?.disciplines || []).map((d) =>
-      d.id === discId ? newColor : d.color || "#F3AA2D"
+      d.id === discId ? newColor : d.color || "#249D84"
     );
     if (updatedUsed.some((c) => areColorsEqual(c, newDiscColor))) {
       setNewDiscColor(getNextAvailableDisciplineColor(updatedUsed));
@@ -1074,148 +1031,41 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
       // 4. Se for admin e solicitou publicar ou salvar no catálogo
       let publishedCatalogId: string | undefined = selectedCatalogEdital?.id;
       if (isAdmin && (publishToCatalog || isDraft) && !selectedCatalogEdital) {
-        // REGRA OFICIAL DO CATÁLOGO: os 8 campos obrigatórios devem estar
-        // verificados antes de salvar. Sem fallbacks genéricos — dados
-        // ausentes ou inválidos impedem o salvamento do registro oficial.
-        const catalogValidation = validateCatalogEditalData({
-          title: planTitle.trim(),
-          cargoPretendido: cargoPretendido.trim(),
-          institution: organ.trim(),
-          acronym: organAcronym.trim(),
-          uf: editalUf.trim(),
-          board: editalBoard.trim(),
-          year: Number(editalYear),
-          logoUrl: selectedImageFile ? selectedImageFile.name : "",
-        });
-
-        if (!catalogValidation.valid) {
-          setCatalogValidationErrors(catalogValidation.errors);
-          setStep("review");
-          setIsSaving(false);
-          return;
-        }
-        setCatalogValidationErrors([]);
-
-        // Processa a imagem selecionada para que ela acompanhe o edital publicado
-        // no catálogo oficial (visível para TODOS os usuários, não só o publicador).
-        let catalogLogoDataUrl: string | undefined;
-        if (selectedImageFile) {
-          try {
-            const processedLogo = await processAndCompressPlanImage(selectedImageFile);
-            catalogLogoDataUrl = processedLogo.dataUrl;
-          } catch (logoErr: any) {
-            console.warn("[CATALOG] Falha ao processar imagem do edital:", logoErr);
-          }
-        }
-
-        // Snapshot completa do edital + cargos + disciplinas + tópicos (Step 5)
-        const catalogEntry: CatalogEdital = {
-          id: `catalog-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`,
-          title: planTitle.trim(),
-          institution: organ.trim(),
-          acronym: organAcronym.trim().toUpperCase(),
-          state: editalUf.trim().toUpperCase(),
-          uf: editalUf.trim().toUpperCase(),
-          year: Number(editalYear),
-          careerId: selectedCareerId,
-          objectiveType: selectedObjective,
-          editalNumber: parsedData?.editalNumber || "01",
-          board: editalBoard.trim(),
-          publicationDate: parsedData?.publicationDate || new Date().toISOString(),
-          sourceFileName: editalFile?.name || "importacao_direta.pdf",
-          sourceType: "pdf",
-          sourceHash: parsedData?.sourceHash || `manual-${Date.now()}`,
-          normalizedIdentity: parsedData?.normalizedIdentity,
-          logoUrl: selectedImageFile ? `plan-image:${planId}` : "",
-          logoDataUrl: catalogLogoDataUrl,
-          cargoPretendido: cargoPretendido.trim(),
-          imagemTipo: "logo_oficial",
-          dadosVerificados: true,
-          status: publishToCatalog ? "published" : "draft",
-          version: 1,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-          createdBy: userUid,
-          validatedBy: publishToCatalog ? userUid : undefined,
-          description: editalNotes || undefined,
-        };
-
-        const catalogCargos: PublishedEditalSnapshot["cargos"] = cargosList.map(
-          (c, cIdx) => ({
-            id: `cargo-${catalogEntry.id}-${cIdx + 1}`,
-            name: c.name.trim(),
-            level: c.level || "superior",
-            vacancies: c.vacancies ?? "A definir",
-            order: cIdx + 1,
-            disciplines: c.disciplines.map((d, dIdx) => ({
-              id: `disc-${catalogEntry.id}-${cIdx + 1}-${dIdx + 1}`,
-              name: d.name.trim(),
-              order: d.order || dIdx + 1,
-              weight: d.weight || 2,
-              topics: (d.topics || []).map((t, tIdx) => ({
-                id: `topic-${catalogEntry.id}-${cIdx + 1}-${dIdx + 1}-${tIdx + 1}`,
-                title: t.title.trim(),
-                order: t.order || tIdx + 1,
-                sourceReference: (t as any).sourceReference,
-              })),
-            })),
-          })
-        );
-
-        // 4a. PUBLICA NO BANCO DE DADOS DO SERVIDOR (PostgreSQL) — fonte oficial
-        // do catálogo. Regra: publicou o edital, ele já aparece para todos os
-        // usuários como opção de plano disponível. Falhas são exibidas.
         try {
-          await publishEditalToServer(catalogEntry, catalogCargos);
-          publishedCatalogId = catalogEntry.id;
-        } catch (pubErr: any) {
-          console.error("[CATALOG] Falha ao publicar no banco de dados:", pubErr);
-          setCatalogValidationErrors([
-            `Falha ao publicar o edital no catálogo oficial: ${pubErr?.message || pubErr}`,
-          ]);
-          setStep("review");
-          setIsSaving(false);
-          return;
-        }
-
-        // 4b. Espelhamento best-effort no Firestore (compatibilidade com
-        // clientes legados). Falhas aqui não bloqueiam a publicação oficial.
-        try {
-          await createCatalogEdital(
+          const newCatalogEdital = await createCatalogEdital(
             {
-              id: catalogEntry.id,
-              title: catalogEntry.title,
-              cargoPretendido: catalogEntry.cargoPretendido || "",
-              institution: catalogEntry.institution,
-              acronym: catalogEntry.acronym,
-              state: catalogEntry.state,
-              uf: catalogEntry.uf,
-              year: catalogEntry.year,
-              careerId: catalogEntry.careerId,
-              objectiveType: catalogEntry.objectiveType,
-              editalNumber: catalogEntry.editalNumber,
-              board: catalogEntry.board,
-              publicationDate: catalogEntry.publicationDate,
-              sourceFileName: catalogEntry.sourceFileName,
-              sourceType: catalogEntry.sourceType,
-              sourceHash: `${catalogEntry.sourceHash}`,
-              normalizedIdentity: catalogEntry.normalizedIdentity,
-              logoUrl: catalogEntry.logoUrl || "",
-              status: catalogEntry.status,
-              description: catalogEntry.description,
+              title: finalTitle,
+              institution: organ.trim() || finalTitle,
+              acronym: organAcronym.trim() || organ.slice(0, 6).toUpperCase(),
+              state: editalUf.trim() || "BR",
+              uf: editalUf.trim() || "BR",
+              year: Number(editalYear),
+              careerId: selectedCareerId,
+              objectiveType: selectedObjective,
+              editalNumber: parsedData?.editalNumber || "01",
+              board: editalBoard.trim() || "A definir",
+              publicationDate: parsedData?.publicationDate || new Date().toISOString(),
+              sourceFileName: editalFile?.name || "importacao_direta.pdf",
+              sourceType: "pdf",
+              sourceHash: parsedData?.sourceHash || `manual-${Date.now()}`,
+              normalizedIdentity: parsedData?.normalizedIdentity,
+              status: publishToCatalog ? "published" : "draft",
+              description: editalNotes || undefined,
             },
             userUid
           );
+          publishedCatalogId = newCatalogEdital.id;
 
-          for (let cIdx = 0; cIdx < catalogCargos!.length; cIdx++) {
-            const cItem = catalogCargos![cIdx];
+          // Salva os cargos e estrutura no catálogo oficial
+          for (let cIdx = 0; cIdx < cargosList.length; cIdx++) {
+            const cItem = cargosList[cIdx];
             const addedCargo = await addCargoToCatalogEdital(
-              catalogEntry.id,
+              newCatalogEdital.id,
               {
                 name: cItem.name,
                 level: cItem.level,
                 vacancies: cItem.vacancies,
-                order: cItem.order,
+                order: cIdx + 1,
               },
               userUid
             );
@@ -1223,7 +1073,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
             for (let dIdx = 0; dIdx < cItem.disciplines.length; dIdx++) {
               const dItem = cItem.disciplines[dIdx];
               const addedDisc = await addDisciplineToCargo(
-                catalogEntry.id,
+                newCatalogEdital.id,
                 addedCargo.id,
                 {
                   name: dItem.name,
@@ -1235,24 +1085,19 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
 
               for (const tItem of dItem.topics) {
                 await addTopicToDiscipline(
-                  catalogEntry.id,
+                  newCatalogEdital.id,
                   addedCargo.id,
                   addedDisc.id,
-                  {
-                    title: tItem.title,
-                    order: tItem.order,
-                    sourceReference: tItem.sourceReference,
-                  },
+                  { title: tItem.title, order: tItem.order, sourceReference: tItem.sourceReference },
                   userUid
                 );
               }
             }
           }
+          refreshCatalogEditais();
         } catch (adminCatErr) {
-          console.warn("[CATALOG] Aviso ao espelhar no Firestore (publicação no banco oficial seguiu normal):", adminCatErr);
+          console.warn("[CATALOG] Aviso ao cadastrar no catálogo administrativo:", adminCatErr);
         }
-
-        refreshCatalogEditais();
       } else if (!isAdmin && editalFile && parsedData) {
         // Usuário regular enviando edital: registra submissão para revisão administrativa
         try {
@@ -1337,15 +1182,15 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-3 sm:p-4 backdrop-blur-xs">
-      <div className="relative flex flex-col w-full max-w-5xl max-h-[92vh] overflow-hidden rounded-2xl border border-[#384154] bg-[#252B38] shadow-2xl dark:border-[#384154] dark:bg-[#252B38]">
+      <div className="relative flex flex-col w-full max-w-3xl max-h-[92vh] overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-2xl dark:border-zinc-800 dark:bg-zinc-900">
         {/* Modal Header */}
-        <div className="flex items-center justify-between border-b border-[#384154] bg-[#171B25] px-5 sm:px-6 py-3.5 dark:border-[#384154] dark:bg-[#11151F]">
+        <div className="flex items-center justify-between border-b border-zinc-200 bg-zinc-50 px-5 sm:px-6 py-3.5 dark:border-zinc-800 dark:bg-zinc-950">
           <div>
-            <h2 className="font-condensed text-lg sm:text-xl font-bold uppercase tracking-wide text-white dark:text-white flex items-baseline gap-1">
-              <span>Seu Plano</span>
-              <span className="text-[#F3AA2D]">.</span>
+            <h2 className="text-sm sm:text-base font-bold text-zinc-900 dark:text-white flex items-center gap-2">
+              <Shield className="h-4 w-4 text-[#249D84]" />
+              <span>Criar Novo Plano de Estudos</span>
             </h2>
-            <p className="text-[11px] sm:text-xs text-white dark:text-white">
+            <p className="text-[11px] sm:text-xs text-zinc-500 dark:text-zinc-400">
               {step === "objective" && "Etapa 1 de 6: Objetivo principal"}
               {step === "career" && "Etapa 2 de 6: Carreira pretendida"}
               {step === "edital" && "Etapa 3 de 6: Seleção ou importação do edital"}
@@ -1359,7 +1204,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
           {step !== "processing" && (
             <button
               onClick={onClose}
-              className="rounded-lg p-1.5 text-white hover:bg-[#2D3442] hover:text-white dark:text-white dark:hover:bg-[#2D3442] dark:hover:text-white transition"
+              className="rounded-lg p-1.5 text-zinc-500 hover:bg-zinc-200 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-white transition"
             >
               <X className="h-5 w-5" />
             </button>
@@ -1368,9 +1213,9 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
 
         {/* Linear Step Progress Bar */}
         {step !== "processing" && (
-          <div className="w-full bg-[#171B25] dark:bg-[#171B25] h-1">
+          <div className="w-full bg-zinc-100 dark:bg-zinc-800 h-1">
             <div
-              className="h-full bg-[#F3AA2D] transition-all duration-300"
+              className="h-full bg-[#249D84] transition-all duration-300"
               style={{
                 width:
                   step === "objective"
@@ -1395,78 +1240,78 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
           {/* ETAPA 1: OBJETIVO PRINCIPAL (LISTA VERTICAL ROLÁVEL) */}
           {/* ========================================================================= */}
           {step === "objective" && (
-            <div className="grid gap-5 lg:grid-cols-[1fr_290px]">
-              <div className="min-w-0">
-                <h3 className="text-sm font-bold text-white dark:text-white">
-                  Qual o seu objetivo com o NEXO?
+            <div className="space-y-3">
+              <div>
+                <h3 className="text-sm font-bold text-zinc-900 dark:text-white">
+                  Qual é o seu objetivo?
                 </h3>
-                <p className="text-xs text-white dark:text-white mt-0.5">
-                  Escolha o tipo de preparação que você vai iniciar:
+                <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
+                  Selecione o tipo de preparação que você irá iniciar:
                 </p>
+              </div>
 
-                {/* Botões de objetivo com faixa lateral */}
-                <div className="mt-4 max-h-[380px] space-y-2 overflow-y-auto pr-0.5">
-                  {OBJECTIVE_OPTIONS.map((opt) => {
-                    const Icon = opt.icon;
-                    const isSelected = selectedObjective === opt.id;
-                    return (
-                      <button
-                        key={opt.id}
-                        type="button"
-                        onClick={() => setSelectedObjective(opt.id)}
-                        className={`flex w-full items-center gap-3 rounded-2xl border p-3 text-left transition cursor-pointer ${
-                          isSelected
-                            ? "border-[#F3AA2D]/60 bg-[#F3AA2D]/10"
-                            : "border-[#384154] bg-[#171B25] hover:border-[#4A5470] hover:bg-[#1B2129]"
-                        }`}
-                      >
-                        <span
-                          className={`h-9 w-1.5 shrink-0 rounded-full transition ${
-                            isSelected ? "bg-[#F3AA2D]" : "bg-[#384154]"
-                          }`}
-                        />
+              {/* Lista Vertical Rolável Padronizada */}
+              <div className="max-h-[380px] overflow-y-auto divide-y divide-zinc-100 dark:divide-zinc-800 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 pr-0.5">
+                {OBJECTIVE_OPTIONS.map((opt) => {
+                  const Icon = opt.icon;
+                  const isSelected = selectedObjective === opt.id;
+                  return (
+                    <button
+                      key={opt.id}
+                      type="button"
+                      onClick={() => setSelectedObjective(opt.id)}
+                      className={`w-full flex items-center justify-between p-3 text-left transition cursor-pointer ${
+                        isSelected
+                          ? "bg-[#249D84]/10 dark:bg-[#249D84]/15 border-l-4 border-l-[#249D84]"
+                          : "hover:bg-zinc-50 dark:hover:bg-zinc-850"
+                      }`}
+                    >
+                      <div className="flex items-center gap-3 min-w-0">
                         <div
-                          className={`p-1.5 rounded-lg shrink-0 transition ${
-                            isSelected ? "bg-[#F3AA2D] text-[#11151F]" : "bg-[#252B38] text-white"
+                          className={`p-2 rounded-lg shrink-0 transition ${
+                            isSelected
+                              ? "bg-[#249D84] text-white"
+                              : "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300"
                           }`}
                         >
                           <Icon className="h-4 w-4" />
                         </div>
-                        <div className="min-w-0 flex-1">
+                        <div className="min-w-0">
                           <div className="flex items-center gap-2">
                             <span
                               className={`text-xs block font-bold truncate ${
-                                isSelected ? "text-[#F3AA2D]" : "text-white dark:text-white"
+                                isSelected
+                                  ? "text-[#249D84] dark:text-[#2dc5a6]"
+                                  : "text-zinc-900 dark:text-white"
                               }`}
                             >
                               {opt.title}
                             </span>
                             {opt.badge && (
-                              <span className="rounded-full bg-[#F3AA2D]/15 px-1.5 py-0.5 text-[9px] font-bold text-[#F3AA2D] shrink-0">
+                              <span className="rounded-full bg-[#249D84]/15 px-1.5 py-0.5 text-[9px] font-bold text-[#249D84] shrink-0">
                                 {opt.badge}
                               </span>
                             )}
                           </div>
-                          <span className="text-[11px] text-white/70 dark:text-white line-clamp-1 mt-0.5">
+                          <span className="text-[11px] text-zinc-500 dark:text-zinc-400 line-clamp-1 mt-0.5">
                             {opt.description}
                           </span>
                         </div>
+                      </div>
 
+                      <div className="shrink-0 pl-2">
                         {isSelected ? (
-                          <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#F3AA2D] text-[#11151F]">
+                          <div className="flex h-5 w-5 items-center justify-center rounded-full bg-[#249D84] text-white">
                             <Check className="h-3 w-3" />
                           </div>
                         ) : (
-                          <div className="h-4 w-4 shrink-0 rounded-full border border-[#384154]" />
+                          <div className="h-4 w-4 rounded-full border border-zinc-300 dark:border-zinc-700" />
                         )}
-                      </button>
-                    );
-                  })}
-                </div>
+                      </div>
+                    </button>
+                  );
+                })}
               </div>
-
-              {/* Painel lateral com os diferenciais do NEXO */}
-              <WizardSidePanel title="Sua jornada de estudos começa aqui!" />
             </div>
           )}
 
@@ -1474,47 +1319,76 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
           {/* ETAPA 2: CARREIRA (LISTA VERTICAL ROLÁVEL) */}
           {/* ========================================================================= */}
           {step === "career" && (
-            <div className="grid gap-5 lg:grid-cols-[1fr_290px]">
-              <div className="min-w-0">
-                <span className="text-[10px] font-bold text-white/60 uppercase tracking-wider block">
-                  Áreas de interesse
-                </span>
-                <h3 className="text-sm font-bold text-white dark:text-white mt-1">
-                  Qual área combina com o seu objetivo?
+            <div className="space-y-3">
+              <div>
+                <h3 className="text-sm font-bold text-zinc-900 dark:text-white">
+                  Qual é a sua carreira de foco?
                 </h3>
-                <p className="text-xs text-white dark:text-white mt-0.5">
-                  Usamos a área para organizar o catálogo de editais do NEXO:
+                <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
+                  Filtraremos os editais cadastrados e estruturaremos seu catálogo por carreira:
                 </p>
-
-                {/* Grade de áreas em formato de pílulas */}
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {CAREER_OPTIONS.map((area) => {
-                    const isSelected = selectedCareerId === area.id;
-                    return (
-                      <button
-                        key={area.id}
-                        type="button"
-                        onClick={() => {
-                          setSelectedCareerId(area.id);
-                          setSelectedCatalogEdital(null);
-                          setSelectedCatalogCargo(null);
-                          setAvailableCatalogCargos([]);
-                          setUfFilter("all");
-                        }}
-                        className={`rounded-full border px-3.5 py-2 text-xs font-semibold transition cursor-pointer ${
-                          isSelected
-                            ? "border-[#F3AA2D] bg-[#F3AA2D] text-[#11151F]"
-                            : "border-[#384154] bg-[#171B25] text-white hover:border-[#4A5470] hover:bg-[#1B2129]"
-                        }`}
-                      >
-                        {area.title}
-                      </button>
-                    );
-                  })}
-                </div>
               </div>
 
-              <WizardSidePanel title="Editais organizados pela sua área" />
+              {/* Lista Vertical Rolável Profissional */}
+              <div className="max-h-[380px] overflow-y-auto divide-y divide-zinc-100 dark:divide-zinc-800 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 pr-0.5">
+                {CAREER_OPTIONS.map((area) => {
+                  const Icon = area.icon;
+                  const isSelected = selectedCareerId === area.id;
+                  return (
+                    <button
+                      key={area.id}
+                      type="button"
+                      onClick={() => {
+                        setSelectedCareerId(area.id);
+                        setSelectedCatalogEdital(null);
+                        setSelectedCatalogCargo(null);
+                        setAvailableCatalogCargos([]);
+                      }}
+                      className={`w-full flex items-center justify-between p-3 text-left transition cursor-pointer ${
+                        isSelected
+                          ? "bg-[#249D84]/10 dark:bg-[#249D84]/15 border-l-4 border-l-[#249D84]"
+                          : "hover:bg-zinc-50 dark:hover:bg-zinc-850"
+                      }`}
+                    >
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div
+                          className={`p-2 rounded-lg shrink-0 transition ${
+                            isSelected
+                              ? "bg-[#249D84] text-white"
+                              : "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300"
+                          }`}
+                        >
+                          <Icon className="h-4 w-4" />
+                        </div>
+                        <div className="min-w-0">
+                          <span
+                            className={`text-xs block font-bold truncate ${
+                              isSelected
+                                ? "text-[#249D84] dark:text-[#2dc5a6]"
+                                : "text-zinc-900 dark:text-white"
+                            }`}
+                          >
+                            {area.title}
+                          </span>
+                          <span className="text-[11px] text-zinc-500 dark:text-zinc-400 line-clamp-1 mt-0.5">
+                            {area.description}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="shrink-0 pl-2">
+                        {isSelected ? (
+                          <div className="flex h-5 w-5 items-center justify-center rounded-full bg-[#249D84] text-white">
+                            <Check className="h-3 w-3" />
+                          </div>
+                        ) : (
+                          <div className="h-4 w-4 rounded-full border border-zinc-300 dark:border-zinc-700" />
+                        )}
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           )}
 
@@ -1522,210 +1396,199 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
           {/* ETAPA 3: EDITAL E CARGO (BUSCA, LISTA VERTICAL E SELEÇÃO DE CARGO) */}
           {/* ========================================================================= */}
           {step === "edital" && (
-            <div className="grid gap-5 lg:grid-cols-[1fr_250px]">
-              <div className="min-w-0 space-y-4">
-                <div>
-                  <h3 className="text-sm font-bold text-white dark:text-white">
-                    Escolha seu edital
-                  </h3>
-                  <p className="text-xs text-white dark:text-white mt-0.5">
-                    Área: <strong className="text-white dark:text-white">{currentCareer.title}</strong> • Selecione o certame e, em seguida, o cargo pretendido:
-                  </p>
+            <div className="space-y-4">
+              <div>
+                <h3 className="text-sm font-bold text-zinc-900 dark:text-white">
+                  Escolha seu edital
+                </h3>
+                <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
+                  Carreira: <strong className="text-zinc-800 dark:text-zinc-200">{currentCareer.title}</strong> • Selecione o certame desejado e indique o cargo que você pretende disputar:
+                </p>
+              </div>
+
+              {/* Barra de Busca Funcional e Ações Rápidas */}
+              <div className="space-y-2">
+                <div className="relative w-full">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-zinc-400" />
+                  <input
+                    type="text"
+                    value={concursoSearchQuery}
+                    onChange={(e) => setConcursoSearchQuery(e.target.value)}
+                    placeholder={`Buscar edital de ${currentCareer.title}...`}
+                    className="w-full rounded-xl border border-zinc-200 bg-white py-2 pl-9 pr-3.5 text-xs text-zinc-900 placeholder:text-zinc-400 focus:border-[#249D84] focus:outline-hidden dark:border-zinc-800 dark:bg-zinc-900 dark:text-white"
+                  />
                 </div>
 
-                {/* Filtros e Ações Rápidas */}
-                <div className="flex flex-col gap-2">
-                  <div className="relative w-full">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-white" />
-                    <input
-                      type="text"
-                      value={concursoSearchQuery}
-                      onChange={(e) => setConcursoSearchQuery(e.target.value)}
-                      placeholder={`Buscar edital de ${currentCareer.title}...`}
-                      className="w-full rounded-xl border border-[#384154] bg-[#171B25] py-2 pl-9 pr-3.5 text-xs text-white placeholder:text-white/50 focus:border-[#F3AA2D] focus:outline-hidden dark:border-[#384154] dark:bg-[#171B25] dark:text-white"
-                    />
-                  </div>
-
-                  <div className="flex flex-wrap items-center gap-2">
-                    <div className="relative">
-                      <select
-                        value={ufFilter}
-                        onChange={(e) => setUfFilter(e.target.value)}
-                        className="appearance-none rounded-full border border-[#384154] bg-[#171B25] py-1.5 pl-3.5 pr-8 text-xs font-semibold text-white focus:border-[#F3AA2D] focus:outline-hidden cursor-pointer dark:border-[#384154] dark:bg-[#171B25] dark:text-white"
-                      >
-                        <option value="all">Todas as UFs</option>
-                        {availableUfs.map((uf) => (
-                          <option key={uf} value={uf}>
-                            {uf}
-                          </option>
-                        ))}
-                      </select>
-                      <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-white" />
-                    </div>
-
-                    <button
-                      type="button"
-                      onClick={handleStartImportEdital}
-                      className="flex-1 min-w-[140px] inline-flex items-center justify-center gap-1.5 rounded-full border border-[#384154] bg-[#171B25] hover:bg-[#2D3442] dark:border-[#384154] dark:bg-[#171B25] dark:hover:bg-[#2D3442] px-3 py-1.5 text-xs font-semibold text-white dark:text-white transition cursor-pointer"
-                    >
-                      <Upload className="h-3.5 w-3.5 text-[#F3AA2D]" />
-                      <span>Importar edital (PDF)</span>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={handleSelectCustomPlan}
-                      className="flex-1 min-w-[140px] inline-flex items-center justify-center gap-1.5 rounded-full border border-[#384154] bg-[#171B25] hover:bg-[#2D3442] dark:border-[#384154] dark:bg-[#171B25] dark:hover:bg-[#2D3442] px-3 py-1.5 text-xs font-semibold text-white dark:text-white transition cursor-pointer"
-                    >
-                      <Plus className="h-3.5 w-3.5 text-[#F3AA2D]" />
-                      <span>Criar plano personalizado</span>
-                    </button>
-                  </div>
-                </div>
-
-                {/* Cards de instituições com cargos em pílulas */}
-                <div>
-                  <span className="text-[10px] font-bold text-white uppercase tracking-wider block">
-                    Editais disponíveis ({editaisForCareer.length})
-                  </span>
-
-                  {editaisForCareer.length === 0 ? (
-                    <div className="mt-2 flex flex-col items-center justify-center py-8 px-4 rounded-xl border border-dashed border-[#384154] dark:border-[#384154] bg-[#171B25]/50 dark:bg-[#252B38]/40 text-center">
-                      <BookOpen className="w-5 h-5 text-white mb-2" />
-                      <h4 className="text-xs font-bold text-white dark:text-white">
-                        Nenhum edital encontrado para esta área.
-                      </h4>
-                      <p className="text-[11px] text-white dark:text-white mt-0.5 max-w-sm">
-                        Utilize os botões acima para importar o PDF oficial ou montar um plano livre.
-                      </p>
-                    </div>
-                  ) : (
-                    <div className="mt-2 max-h-[340px] space-y-2.5 overflow-y-auto pr-0.5">
-                      {editaisForCareer.map((ed) => {
-                        const isSelected = selectedCatalogEdital?.id === ed.id;
-                        const cargosCount = editalCargosCountMap[ed.id] ?? ed.cargosCount ?? 1;
-                        const initials = (ed.acronym || ed.institution || "ED")
-                          .split(/\s+/)
-                          .map((w) => w[0])
-                          .join("")
-                          .slice(0, 2)
-                          .toUpperCase();
-                        // Imagem do edital: dataUrl publicada no catálogo oficial
-                        // ou URL direta. Sem imagem, mantém as iniciais.
-                        const logoSrc: string | null =
-                          ed.logoDataUrl ||
-                          (ed.logoUrl && /^https?:\/\//i.test(ed.logoUrl) ? ed.logoUrl : null) ||
-                          null;
-
-                        return (
-                          <div
-                            key={ed.id}
-                            className={`rounded-2xl border p-3.5 transition ${
-                              isSelected
-                                ? "border-[#F3AA2D]/60 bg-[#F3AA2D]/[0.07]"
-                                : "border-[#384154] bg-[#171B25] hover:border-[#4A5470]"
-                            }`}
-                          >
-                            <button
-                              type="button"
-                              onClick={() => handleSelectCatalogEdital(ed)}
-                              disabled={isLoadingCargos}
-                              className="flex w-full items-center gap-3 text-left transition cursor-pointer"
-                            >
-                              {logoSrc ? (
-                                <img
-                                  src={logoSrc}
-                                  alt={ed.institution}
-                                  className={`h-10 w-10 shrink-0 rounded-full border object-cover transition ${
-                                    isSelected ? "border-[#F3AA2D]" : "border-[#384154]"
-                                  }`}
-                                />
-                              ) : (
-                                <div
-                                  className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full border font-condensed text-xs font-bold transition ${
-                                    isSelected
-                                      ? "border-[#F3AA2D] bg-[#F3AA2D] text-[#11151F]"
-                                      : "border-[#384154] bg-[#252B38] text-[#F3AA2D]"
-                                  }`}
-                                >
-                                  {initials}
-                                </div>
-                              )}
-                              <div className="min-w-0 flex-1">
-                                <span className="font-bold text-xs text-white dark:text-white block truncate">
-                                  {ed.institution}
-                                </span>
-                                <span className="text-[10px] text-white/70 dark:text-white block truncate mt-0.5">
-                                  Banca: {ed.board || "A definir"} • {ed.year || "—"} • {ed.state || ed.uf || "BR"} • {cargosCount} {cargosCount === 1 ? "cargo" : "cargos"}
-                                </span>
-                              </div>
-
-                              {isSelected ? (
-                                <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#F3AA2D] text-[#11151F]">
-                                  <Check className="h-3 w-3" />
-                                </div>
-                              ) : (
-                                <ChevronRight className="h-4 w-4 shrink-0 text-white/50" />
-                              )}
-                            </button>
-
-                            {/* Cargos do edital selecionado em formato de pílulas */}
-                            {isSelected && (
-                              <div className="mt-3 border-t border-[#384154] pt-3">
-                                {isLoadingCargos ? (
-                                  <span className="text-[11px] text-white inline-flex items-center gap-1.5">
-                                    <Loader2 className="h-3 w-3 animate-spin text-[#F3AA2D]" />
-                                    Carregando cargos...
-                                  </span>
-                                ) : availableCatalogCargos.length === 0 ? (
-                                  <p className="text-[11px] text-white/70">
-                                    Nenhum cargo específico cadastrado. Conteúdo geral selecionado.
-                                  </p>
-                                ) : (
-                                  <div className="flex flex-wrap gap-2">
-                                    {availableCatalogCargos.map((cargoItem) => {
-                                      const isCargoSelected = selectedCatalogCargo?.id === cargoItem.id;
-                                      return (
-                                        <button
-                                          key={cargoItem.id}
-                                          type="button"
-                                          onClick={() =>
-                                            handleSelectCatalogCargo(selectedCatalogEdital, cargoItem)
-                                          }
-                                          className={`rounded-full px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-wide transition cursor-pointer ${
-                                            isCargoSelected
-                                              ? "bg-[#F3AA2D] text-[#11151F]"
-                                              : "bg-[#252B38] text-white hover:bg-[#2D3442]"
-                                          }`}
-                                        >
-                                          {cargoItem.name}
-                                        </button>
-                                      );
-                                    })}
-                                  </div>
-                                )}
-                              </div>
-                            )}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  )}
+                <div className="flex flex-wrap items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={handleStartImportEdital}
+                    className="flex-1 min-w-[140px] inline-flex items-center justify-center gap-1.5 rounded-xl border border-zinc-200 bg-zinc-50 hover:bg-zinc-100 dark:border-zinc-800 dark:bg-zinc-850 dark:hover:bg-zinc-800 px-3 py-1.5 text-xs font-semibold text-zinc-700 dark:text-zinc-200 transition cursor-pointer"
+                  >
+                    <Upload className="h-3.5 w-3.5 text-[#249D84]" />
+                    <span>Importar edital (PDF)</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleSelectCustomPlan}
+                    className="flex-1 min-w-[140px] inline-flex items-center justify-center gap-1.5 rounded-xl border border-zinc-200 bg-zinc-50 hover:bg-zinc-100 dark:border-zinc-800 dark:bg-zinc-850 dark:hover:bg-zinc-800 px-3 py-1.5 text-xs font-semibold text-zinc-700 dark:text-zinc-200 transition cursor-pointer"
+                  >
+                    <Plus className="h-3.5 w-3.5 text-[#249D84]" />
+                    <span>Criar plano personalizado</span>
+                  </button>
                 </div>
               </div>
 
-              {/* Resumo da seleção atual */}
-              <WizardSelectionPanel
-                edital={selectedCatalogEdital}
-                cargo={selectedCatalogCargo}
-                disciplinesCount={totalDisciplinesAcrossAllCargos}
-                topicsCount={totalTopicsAcrossAllCargos}
-                isLoading={isLoadingCargos}
-                onClear={() => {
-                  setSelectedCatalogEdital(null);
-                  setSelectedCatalogCargo(null);
-                  setAvailableCatalogCargos([]);
-                }}
-              />
+              {/* Lista Vertical Rolável de Editais */}
+              <div className="space-y-1.5">
+                <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider block">
+                  Editais disponíveis ({editaisForCareer.length})
+                </span>
+
+                {editaisForCareer.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center py-8 px-4 rounded-xl border border-dashed border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/40 text-center">
+                    <BookOpen className="w-5 h-5 text-zinc-400 mb-2" />
+                    <h4 className="text-xs font-bold text-zinc-800 dark:text-zinc-200">
+                      Nenhum edital encontrado para esta carreira.
+                    </h4>
+                    <p className="text-[11px] text-zinc-500 dark:text-zinc-400 mt-0.5 max-w-sm">
+                      Utilize os botões acima para importar o PDF oficial ou montar um plano livre.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="max-h-52 overflow-y-auto divide-y divide-zinc-100 dark:divide-zinc-800 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 pr-0.5">
+                    {editaisForCareer.map((ed) => {
+                      const isSelected = selectedCatalogEdital?.id === ed.id;
+                      const cargosCount = editalCargosCountMap[ed.id] ?? ed.cargosCount ?? 1;
+
+                      return (
+                        <button
+                          key={ed.id}
+                          type="button"
+                          onClick={() => handleSelectCatalogEdital(ed)}
+                          disabled={isLoadingCargos}
+                          className={`w-full flex items-center justify-between p-3 text-left transition cursor-pointer ${
+                            isSelected
+                              ? "bg-[#249D84]/10 dark:bg-[#249D84]/15 border-l-4 border-l-[#249D84]"
+                              : "hover:bg-zinc-50 dark:hover:bg-zinc-850"
+                          }`}
+                        >
+                          <div className="flex items-center gap-3 min-w-0">
+                            <div
+                              className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg transition ${
+                                isSelected
+                                  ? "bg-[#249D84] text-white"
+                                  : "bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300"
+                              }`}
+                            >
+                              <Shield className="h-4 w-4" />
+                            </div>
+                            <div className="min-w-0">
+                              <span className="font-bold text-xs text-zinc-900 dark:text-white block truncate">
+                                {ed.title || ed.institution}
+                              </span>
+                              <span className="text-[11px] text-zinc-500 dark:text-zinc-400 block truncate mt-0.5">
+                                {ed.institution}
+                              </span>
+                              <span className="text-[10px] text-zinc-400 dark:text-zinc-500 block truncate mt-0.5">
+                                Banca: {ed.board || "A definir"} • {ed.year || "2024"} • {ed.state || ed.uf || "BR"} • {cargosCount} {cargosCount === 1 ? "cargo" : "cargos"}
+                              </span>
+                            </div>
+                          </div>
+
+                          <div className="shrink-0 pl-2">
+                            {isSelected ? (
+                              <div className="flex h-5 w-5 items-center justify-center rounded-full bg-[#249D84] text-white">
+                                <Check className="h-3 w-3" />
+                              </div>
+                            ) : (
+                              <ChevronRight className="h-4 w-4 text-zinc-300 dark:text-zinc-600" />
+                            )}
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+
+              {/* SELEÇÃO DE CARGO NESTA MESMA ETAPA (quando edital selecionado) */}
+              {selectedCatalogEdital && (
+                <div className="space-y-2 pt-1">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <span className="text-[10px] font-bold text-[#249D84] uppercase tracking-wider block">
+                        Escolha o cargo deste edital
+                      </span>
+                      <span className="text-xs text-zinc-600 dark:text-zinc-400">
+                        {selectedCatalogEdital.institution}
+                      </span>
+                    </div>
+                    {isLoadingCargos && (
+                      <span className="text-xs text-zinc-400 inline-flex items-center gap-1">
+                        <Loader2 className="h-3 w-3 animate-spin text-[#249D84]" />
+                        Carregando cargos...
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="max-h-48 overflow-y-auto divide-y divide-zinc-100 dark:divide-zinc-800 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 pr-0.5">
+                    {availableCatalogCargos.length === 0 && !isLoadingCargos ? (
+                      <div className="p-3 text-xs text-zinc-500 text-center">
+                        Nenhum cargo específico cadastrado. Conteúdo geral selecionado.
+                      </div>
+                    ) : (
+                      availableCatalogCargos.map((cargoItem) => {
+                        const isCargoSelected = selectedCatalogCargo?.id === cargoItem.id;
+                        return (
+                          <button
+                            key={cargoItem.id}
+                            type="button"
+                            onClick={() => handleSelectCatalogCargo(selectedCatalogEdital, cargoItem)}
+                            className={`w-full flex items-center justify-between p-3 text-left transition cursor-pointer ${
+                              isCargoSelected
+                                ? "bg-[#249D84]/10 dark:bg-[#249D84]/15 border-l-4 border-l-[#249D84]"
+                                : "hover:bg-zinc-50 dark:hover:bg-zinc-850"
+                            }`}
+                          >
+                            <div className="flex items-start gap-2.5 min-w-0">
+                              <div className="pt-0.5 shrink-0">
+                                {isCargoSelected ? (
+                                  <div className="h-4 w-4 rounded-full bg-[#249D84] flex items-center justify-center text-white">
+                                    <div className="h-1.5 w-1.5 rounded-full bg-white" />
+                                  </div>
+                                ) : (
+                                  <div className="h-4 w-4 rounded-full border border-zinc-300 dark:border-zinc-600" />
+                                )}
+                              </div>
+                              <div className="min-w-0">
+                                <span
+                                  className={`text-xs block font-bold truncate ${
+                                    isCargoSelected
+                                      ? "text-[#249D84] dark:text-[#2dc5a6]"
+                                      : "text-zinc-900 dark:text-white"
+                                  }`}
+                                >
+                                  {cargoItem.name}
+                                </span>
+                                <span className="text-[11px] text-zinc-500 dark:text-zinc-400 block truncate mt-0.5">
+                                  Nível: {cargoItem.level === "superior" ? "Superior" : cargoItem.level === "medio" ? "Médio" : "Geral"} • Vagas: {cargoItem.vacancies || "Conforme edital"}
+                                </span>
+                              </div>
+                            </div>
+
+                            {isCargoSelected && (
+                              <span className="text-[10px] font-bold text-[#249D84] shrink-0 pl-2">
+                                Selecionado
+                              </span>
+                            )}
+                          </button>
+                        );
+                      })
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
@@ -1735,31 +1598,31 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
           {step === "data" && (
             <div className="space-y-4">
               <div>
-                <h3 className="text-sm font-bold text-white dark:text-white">
+                <h3 className="text-sm font-bold text-zinc-900 dark:text-white">
                   Dados e Arquivos do Edital
                 </h3>
-                <p className="text-xs text-white dark:text-white mt-0.5">
+                <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
                   Revise as informações cadastrais e os arquivos vinculados:
                 </p>
               </div>
 
               {/* Visualização Discreta de Carreira e Cargo Selecionados */}
-              <div className="flex items-center justify-between p-3 rounded-xl border border-[#384154] dark:border-[#384154] bg-[#171B25]/70 dark:bg-[#2D3442]/50">
+              <div className="flex items-center justify-between p-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/70 dark:bg-zinc-850/50">
                 <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-xs">
                   <div>
-                    <span className="text-[10px] font-bold text-white uppercase tracking-wider block">
+                    <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider block">
                       Carreira
                     </span>
-                    <span className="font-bold text-white dark:text-white">
+                    <span className="font-bold text-zinc-800 dark:text-zinc-200">
                       {currentCareer.title}
                     </span>
                   </div>
-                  <div className="h-6 w-px bg-[#384154] dark:bg-[#384154] hidden sm:block" />
+                  <div className="h-6 w-px bg-zinc-200 dark:bg-zinc-700 hidden sm:block" />
                   <div>
-                    <span className="text-[10px] font-bold text-white uppercase tracking-wider block">
+                    <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider block">
                       Cargo
                     </span>
-                    <span className="font-bold text-white dark:text-white">
+                    <span className="font-bold text-zinc-800 dark:text-zinc-200">
                       {selectedCatalogCargo?.name ||
                         (activeCargo && activeCargo.name !== "Cargo não identificado"
                           ? activeCargo.name
@@ -1774,7 +1637,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                 <button
                   type="button"
                   onClick={() => setStep("edital")}
-                  className="text-xs font-bold text-[#F3AA2D] hover:underline cursor-pointer"
+                  className="text-xs font-bold text-[#249D84] hover:underline cursor-pointer"
                 >
                   Alterar
                 </button>
@@ -1782,22 +1645,22 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
 
               {/* Upload & Estado do Arquivo PDF */}
               <div className="space-y-2">
-                <label className="text-xs font-bold uppercase tracking-wider text-white dark:text-white">
+                <label className="text-xs font-bold uppercase tracking-wider text-zinc-600 dark:text-zinc-400">
                   Documento Oficial do Edital (PDF)
                 </label>
 
                 {editalFile ? (
-                  <div className="flex items-center justify-between p-3.5 rounded-xl border border-[#384154] bg-[#252B38] dark:border-[#384154] dark:bg-[#252B38] shadow-xs">
+                  <div className="flex items-center justify-between p-3.5 rounded-xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900 shadow-xs">
                     <div className="flex items-center gap-3 min-w-0">
                       <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-red-50 text-red-600 dark:bg-red-950/40 dark:text-red-400">
                         <FileText className="h-5 w-5" />
                       </div>
                       <div className="min-w-0">
-                        <span className="font-bold text-xs text-white dark:text-white truncate block">
+                        <span className="font-bold text-xs text-zinc-900 dark:text-white truncate block">
                           {editalFile.name}
                         </span>
                         <div className="flex items-center gap-2 mt-0.5">
-                          <span className="text-[10px] text-white dark:text-white">
+                          <span className="text-[10px] text-zinc-500 dark:text-zinc-400">
                             {(editalFile.size / (1024 * 1024)).toFixed(1)} MB
                           </span>
                           <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.2 text-[9px] font-bold text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400">
@@ -1812,14 +1675,14 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                       <button
                         type="button"
                         onClick={() => fileInputRef.current?.click()}
-                        className="rounded-lg px-2.5 py-1.5 text-xs font-semibold text-white hover:bg-[#2D3442] dark:text-white dark:hover:bg-[#2D3442] transition"
+                        className="rounded-lg px-2.5 py-1.5 text-xs font-semibold text-zinc-600 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800 transition"
                       >
                         Trocar documento
                       </button>
                       <button
                         type="button"
                         onClick={handleRemovePdf}
-                        className="rounded-lg p-1.5 text-white hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 transition"
+                        className="rounded-lg p-1.5 text-zinc-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 transition"
                         title="Remover documento"
                       >
                         <Trash2 className="h-4 w-4" />
@@ -1840,13 +1703,13 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                     />
                     <div
                       onClick={() => fileInputRef.current?.click()}
-                      className="flex flex-col items-center justify-center p-6 rounded-2xl border-2 border-dashed border-[#384154] hover:border-[#F3AA2D] bg-[#171B25]/50 hover:bg-[#F3AA2D]/5 dark:border-[#384154] dark:bg-[#252B38]/40 cursor-pointer transition text-center"
+                      className="flex flex-col items-center justify-center p-6 rounded-2xl border-2 border-dashed border-zinc-200 hover:border-[#249D84] bg-zinc-50/50 hover:bg-[#249D84]/5 dark:border-zinc-800 dark:bg-zinc-900/40 cursor-pointer transition text-center"
                     >
-                      <Upload className="h-7 w-7 text-white mb-2" />
-                      <span className="text-xs font-bold text-white dark:text-white">
+                      <Upload className="h-7 w-7 text-zinc-400 mb-2" />
+                      <span className="text-xs font-bold text-zinc-800 dark:text-zinc-200">
                         Clique para selecionar o edital em PDF
                       </span>
-                      <span className="text-[11px] text-white mt-0.5">
+                      <span className="text-[11px] text-zinc-400 mt-0.5">
                         Processamento direto e seguro no seu navegador (sem limites externos)
                       </span>
                     </div>
@@ -1855,21 +1718,21 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
 
                 {/* Feedback de Progresso de Leitura */}
                 {isParsingPdf && importProgress && (
-                  <div className="p-3.5 rounded-xl border border-[#F3AA2D]/30 bg-[#F3AA2D]/5 space-y-2">
+                  <div className="p-3.5 rounded-xl border border-[#249D84]/30 bg-[#249D84]/5 space-y-2">
                     <div className="flex items-center justify-between text-xs">
-                      <span className="font-bold text-[#F3AA2D] flex items-center gap-2">
+                      <span className="font-bold text-[#249D84] flex items-center gap-2">
                         <Loader2 className="h-3.5 w-3.5 animate-spin" />
                         {importProgress.message}
                       </span>
                       {importProgress.totalPages && (
-                        <span className="text-[10px] text-white font-mono">
+                        <span className="text-[10px] text-zinc-500 font-mono">
                           Página {importProgress.currentPage || 1} de {importProgress.totalPages}
                         </span>
                       )}
                     </div>
-                    <div className="w-full bg-[#384154] dark:bg-[#171B25] h-1 rounded-full overflow-hidden">
+                    <div className="w-full bg-zinc-200 dark:bg-zinc-800 h-1 rounded-full overflow-hidden">
                       <div
-                        className="bg-[#F3AA2D] h-full transition-all duration-200"
+                        className="bg-[#249D84] h-full transition-all duration-200"
                         style={{
                           width:
                             importProgress.phase === "reading"
@@ -1926,7 +1789,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
               {/* Formulário Principal Limpo */}
               <div className="space-y-3 pt-1">
                 <div>
-                  <label className="text-xs font-bold uppercase tracking-wider text-white dark:text-white">
+                  <label className="text-xs font-bold uppercase tracking-wider text-zinc-600 dark:text-zinc-400">
                     Título do Edital *
                   </label>
                   <input
@@ -1934,13 +1797,13 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                     value={planTitle}
                     onChange={(e) => setPlanTitle(e.target.value)}
                     required
-                    placeholder="Ex: Concurso Público da Polícia Federal – 2021"
-                    className="mt-1 w-full rounded-xl border border-[#384154] bg-[#171B25] px-3.5 py-2 text-xs font-bold text-white focus:border-[#F3AA2D] focus:bg-[#252B38] focus:outline-hidden dark:border-[#384154] dark:bg-[#171B25] dark:text-white"
+                    placeholder="Ex: Polícia Federal"
+                    className="mt-1 w-full rounded-xl border border-zinc-200 bg-zinc-50 px-3.5 py-2 text-xs font-bold text-zinc-900 focus:border-[#249D84] focus:bg-white focus:outline-hidden dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"
                   />
                 </div>
 
                 <div>
-                  <label className="text-xs font-bold uppercase tracking-wider text-white dark:text-white">
+                  <label className="text-xs font-bold uppercase tracking-wider text-zinc-600 dark:text-zinc-400">
                     Cargo Pretendido *
                   </label>
                   <input
@@ -1969,27 +1832,27 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                     }}
                     required
                     placeholder="Ex: Agente de Polícia Federal"
-                    className="mt-1 w-full rounded-xl border border-[#384154] bg-[#171B25] px-3.5 py-2 text-xs font-bold text-white focus:border-[#F3AA2D] focus:bg-[#252B38] focus:outline-hidden dark:border-[#384154] dark:bg-[#171B25] dark:text-white"
+                    className="mt-1 w-full rounded-xl border border-zinc-200 bg-zinc-50 px-3.5 py-2 text-xs font-bold text-zinc-900 focus:border-[#249D84] focus:bg-white focus:outline-hidden dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"
                   />
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <div className="sm:col-span-2">
-                    <label className="text-xs font-bold uppercase tracking-wider text-white dark:text-white">
-                      Órgão / Instituição *
+                    <label className="text-xs font-bold uppercase tracking-wider text-zinc-600 dark:text-zinc-400">
+                      Órgão / Instituição
                     </label>
                     <input
                       type="text"
                       value={organ}
                       onChange={(e) => setOrgan(e.target.value)}
                       placeholder="Ex: Polícia Federal"
-                      className="mt-1 w-full rounded-xl border border-[#384154] bg-[#171B25] px-3.5 py-2 text-xs text-white focus:border-[#F3AA2D] focus:bg-[#252B38] focus:outline-hidden dark:border-[#384154] dark:bg-[#171B25] dark:text-white"
+                      className="mt-1 w-full rounded-xl border border-zinc-200 bg-zinc-50 px-3.5 py-2 text-xs text-zinc-900 focus:border-[#249D84] focus:bg-white focus:outline-hidden dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"
                     />
                   </div>
 
                   <div>
-                    <label className="text-xs font-bold uppercase tracking-wider text-white dark:text-white">
-                      Sigla *
+                    <label className="text-xs font-bold uppercase tracking-wider text-zinc-600 dark:text-zinc-400">
+                      Sigla
                     </label>
                     <input
                       type="text"
@@ -1997,117 +1860,97 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                       onChange={(e) => setOrganAcronym(e.target.value.toUpperCase())}
                       placeholder="Ex: PF"
                       maxLength={10}
-                      className="mt-1 w-full rounded-xl border border-[#384154] bg-[#171B25] px-3.5 py-2 text-xs font-bold text-white focus:border-[#F3AA2D] focus:bg-[#252B38] focus:outline-hidden dark:border-[#384154] dark:bg-[#171B25] dark:text-white uppercase"
+                      className="mt-1 w-full rounded-xl border border-zinc-200 bg-zinc-50 px-3.5 py-2 text-xs font-bold text-zinc-900 focus:border-[#249D84] focus:bg-white focus:outline-hidden dark:border-zinc-700 dark:bg-zinc-800 dark:text-white uppercase"
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <div>
-                    <label className="text-xs font-bold uppercase tracking-wider text-white dark:text-white">
-                      UF (Estado) *
+                    <label className="text-xs font-bold uppercase tracking-wider text-zinc-600 dark:text-zinc-400">
+                      UF (Estado)
                     </label>
-                    <select
+                    <input
+                      type="text"
                       value={editalUf}
-                      onChange={(e) => setEditalUf(e.target.value)}
-                      className="mt-1 w-full rounded-xl border border-[#384154] bg-[#171B25] px-3.5 py-2 text-xs font-bold text-white focus:border-[#F3AA2D] focus:bg-[#252B38] focus:outline-hidden dark:border-[#384154] dark:bg-[#171B25] dark:text-white"
-                    >
-                      <option value="">Selecione a UF</option>
-                      {VALID_CATALOG_UFS.map((uf) => (
-                        <option key={uf} value={uf}>
-                          {uf}
-                        </option>
-                      ))}
-                    </select>
+                      onChange={(e) => setEditalUf(e.target.value.toUpperCase())}
+                      placeholder="Ex: DF ou Nacional"
+                      maxLength={15}
+                      className="mt-1 w-full rounded-xl border border-zinc-200 bg-zinc-50 px-3.5 py-2 text-xs font-bold text-zinc-900 focus:border-[#249D84] focus:bg-white focus:outline-hidden dark:border-zinc-700 dark:bg-zinc-800 dark:text-white uppercase"
+                    />
                   </div>
 
                   <div>
-                    <label className="text-xs font-bold uppercase tracking-wider text-white dark:text-white">
-                      Banca Examinadora *
+                    <label className="text-xs font-bold uppercase tracking-wider text-zinc-600 dark:text-zinc-400">
+                      Banca Examinadora
                     </label>
                     <input
                       type="text"
                       value={editalBoard}
                       onChange={(e) => setEditalBoard(e.target.value)}
                       placeholder="Ex: Cebraspe, FGV, Vunesp"
-                      className="mt-1 w-full rounded-xl border border-[#384154] bg-[#171B25] px-3.5 py-2 text-xs text-white focus:border-[#F3AA2D] focus:bg-[#252B38] focus:outline-hidden dark:border-[#384154] dark:bg-[#171B25] dark:text-white"
+                      className="mt-1 w-full rounded-xl border border-zinc-200 bg-zinc-50 px-3.5 py-2 text-xs text-zinc-900 focus:border-[#249D84] focus:bg-white focus:outline-hidden dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"
                     />
                   </div>
 
                   <div>
-                    <label className="text-xs font-bold uppercase tracking-wider text-white dark:text-white">
-                      Ano do Certame *
+                    <label className="text-xs font-bold uppercase tracking-wider text-zinc-600 dark:text-zinc-400">
+                      Ano do Certame
                     </label>
                     <input
                       type="number"
                       min="2000"
                       max="2035"
-                      placeholder="Ex: 2021"
                       value={editalYear}
-                      onChange={(e) =>
-                        setEditalYear(e.target.value === "" ? "" : Number(e.target.value))
-                      }
-                      className="mt-1 w-full rounded-xl border border-[#384154] bg-[#171B25] px-3.5 py-2 text-xs font-bold text-white focus:border-[#F3AA2D] focus:bg-[#252B38] focus:outline-hidden dark:border-[#384154] dark:bg-[#171B25] dark:text-white"
+                      onChange={(e) => setEditalYear(Number(e.target.value))}
+                      className="mt-1 w-full rounded-xl border border-zinc-200 bg-zinc-50 px-3.5 py-2 text-xs font-bold text-zinc-900 focus:border-[#249D84] focus:bg-white focus:outline-hidden dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"
                     />
                   </div>
                 </div>
 
-                {/* Imagem do Plano */}
+                {/* Meta Semanal de Horas */}
                 <div>
-                  <label className="text-xs font-bold uppercase tracking-wider text-white dark:text-white">
-                    Imagem do Plano *
+                  <label className="text-xs font-bold uppercase tracking-wider text-zinc-600 dark:text-zinc-400">
+                    Meta Semanal de Estudo
                   </label>
-                  <input
-                    ref={imageInputRef}
-                    type="file"
-                    accept="image/jpeg,image/png,image/webp"
-                    className="hidden"
-                    onChange={(e) => {
-                      const file = e.target.files?.[0];
-                      if (!file) return;
-                      setSelectedImageFile(file);
-                      setPreviewImageUrl(URL.createObjectURL(file));
-                    }}
-                  />
-                  {previewImageUrl ? (
-                    <div className="mt-1 flex items-center gap-3 rounded-xl border border-[#384154] bg-[#252B38] p-2.5 dark:border-[#384154] dark:bg-[#252B38]">
-                      <img
-                        src={previewImageUrl}
-                        alt="Imagem do plano"
-                        className="h-12 w-12 shrink-0 rounded-lg object-cover border border-[#384154] dark:border-[#384154]"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => imageInputRef.current?.click()}
-                        className="text-xs font-semibold text-white hover:text-white dark:text-white dark:hover:text-white truncate flex-1 cursor-pointer"
-                      >
-                        {selectedImageFile?.name}
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setSelectedImageFile(null);
-                          setPreviewImageUrl(null);
-                          if (imageInputRef.current) imageInputRef.current.value = "";
-                        }}
-                        className="rounded-lg p-1.5 text-white hover:text-red-500 hover:bg-red-950/30 transition"
-                        title="Remover imagem"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </button>
-                    </div>
-                  ) : (
-                    <button
-                      type="button"
-                      onClick={() => imageInputRef.current?.click()}
-                      className="mt-1 flex w-full items-center justify-center gap-2 rounded-xl border-2 border-dashed border-[#384154] hover:border-[#F3AA2D] bg-[#171B25]/50 hover:bg-[#F3AA2D]/5 dark:border-[#384154] dark:bg-[#252B38]/40 px-3 py-3 text-xs font-bold text-white dark:text-white transition cursor-pointer"
-                    >
-                      <Upload className="h-4 w-4 text-[#F3AA2D]" />
-                      Selecionar imagem
-                    </button>
-                  )}
+                  <div className="mt-1 flex items-center gap-3">
+                    <input
+                      type="number"
+                      min="1"
+                      max="100"
+                      value={weeklyGoalHours}
+                      onChange={(e) => setWeeklyGoalHours(Number(e.target.value))}
+                      className="w-24 rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2 text-xs font-bold text-zinc-900 focus:border-[#249D84] focus:bg-white focus:outline-hidden dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"
+                    />
+                    <span className="text-xs text-zinc-500 dark:text-zinc-400">
+                      horas por semana (~{(weeklyGoalHours / 7).toFixed(1)}h por dia)
+                    </span>
+                  </div>
                 </div>
 
+                {/* Imagem / Logo do Órgão */}
+                <div>
+                  <label className="text-xs font-bold uppercase tracking-wider text-zinc-600 dark:text-zinc-400">
+                    Logo / Imagem do Certame (JPG, PNG, WebP)
+                  </label>
+                  <div className="mt-1">
+                    <PlanImageUploader
+                      currentImagePath={null}
+                      currentImageUrl={null}
+                      previewUrl={previewImageUrl}
+                      isRemoved={false}
+                      isUploading={false}
+                      onFileSelect={(file, preview) => {
+                        setSelectedImageFile(file);
+                        setPreviewImageUrl(preview);
+                      }}
+                      onRemove={() => {
+                        setSelectedImageFile(null);
+                        setPreviewImageUrl(null);
+                      }}
+                    />
+                  </div>
+                </div>
               </div>
             </div>
           )}
@@ -2121,14 +1964,14 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
               {editalFile && parsedData && (
                 <>
                   {parsedData.validation?.valid ? (
-                    <div className="flex flex-wrap items-center justify-between gap-2 p-3 rounded-xl border border-[#F3AA2D]/30 bg-[#F3AA2D]/5">
-                      <div className="flex flex-wrap items-center gap-2 text-xs font-bold text-[#F3AA2D]">
+                    <div className="flex flex-wrap items-center justify-between gap-2 p-3 rounded-xl border border-[#249D84]/30 bg-[#249D84]/5">
+                      <div className="flex flex-wrap items-center gap-2 text-xs font-bold text-[#249D84]">
                         <CheckCircle2 className="h-4 w-4 shrink-0" />
                         <span>
                           Conteúdo identificado no documento ({activeCargoDisciplines.length} disciplinas • {activeCargoTopicsCount} tópicos)
                         </span>
                         {parsedData.programmaticSection && (
-                          <span className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-[#F3AA2D]/15 text-[#F3AA2D]">
+                          <span className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-[#249D84]/15 text-[#249D84]">
                             Páginas {parsedData.programmaticSection.startPage} a {parsedData.programmaticSection.endPage}
                           </span>
                         )}
@@ -2142,7 +1985,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                           }
                           setIsManualPageSelectionOpen(!isManualPageSelectionOpen);
                         }}
-                        className="text-[11px] font-bold text-white hover:text-white dark:text-white dark:hover:text-white underline cursor-pointer"
+                        className="text-[11px] font-bold text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white underline cursor-pointer"
                       >
                         Ajustar páginas
                       </button>
@@ -2185,53 +2028,53 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
 
                   {/* Formulário de Seleção Manual de Páginas */}
                   {isManualPageSelectionOpen && (
-                    <div className="p-3.5 rounded-xl border border-[#384154] bg-[#252B38] dark:border-[#384154] dark:bg-[#2D3442] space-y-2.5 shadow-xs">
+                    <div className="p-3.5 rounded-xl border border-zinc-300 bg-white dark:border-zinc-700 dark:bg-zinc-850 space-y-2.5 shadow-xs">
                       <div className="flex items-center justify-between">
-                        <h4 className="text-xs font-bold text-white dark:text-white flex items-center gap-1.5">
-                          <Layers className="h-3.5 w-3.5 text-[#F3AA2D]" />
+                        <h4 className="text-xs font-bold text-zinc-900 dark:text-white flex items-center gap-1.5">
+                          <Layers className="h-3.5 w-3.5 text-[#249D84]" />
                           Selecionar páginas do conteúdo programático
                         </h4>
-                        <span className="text-[11px] text-white dark:text-white">
+                        <span className="text-[11px] text-zinc-500 dark:text-zinc-400">
                           Total do documento: {parsedData?.pagesCount || 0} páginas
                         </span>
                       </div>
-                      <p className="text-[11px] text-white dark:text-white">
+                      <p className="text-[11px] text-zinc-600 dark:text-zinc-400">
                         Indique o intervalo onde está o anexo ou a seção de disciplinas e matérias para recortar com precisão:
                       </p>
                       <div className="flex flex-wrap items-center gap-2.5 pt-1">
                         <div className="flex items-center gap-1.5">
-                          <label className="text-xs text-white dark:text-white font-medium">Página inicial:</label>
+                          <label className="text-xs text-zinc-700 dark:text-zinc-300 font-medium">Página inicial:</label>
                           <input
                             type="number"
                             min={1}
                             max={parsedData?.pagesCount || 1000}
                             value={manualStartPage}
                             onChange={(e) => setManualStartPage(Number(e.target.value))}
-                            className="w-16 rounded-lg border border-[#384154] bg-[#171B25] px-2 py-1 text-xs font-bold text-white text-center dark:border-[#384154] dark:bg-[#252B38] dark:text-white"
+                            className="w-16 rounded-lg border border-zinc-300 bg-zinc-50 px-2 py-1 text-xs font-bold text-zinc-900 text-center dark:border-zinc-700 dark:bg-zinc-900 dark:text-white"
                           />
                         </div>
                         <div className="flex items-center gap-1.5">
-                          <label className="text-xs text-white dark:text-white font-medium">Página final:</label>
+                          <label className="text-xs text-zinc-700 dark:text-zinc-300 font-medium">Página final:</label>
                           <input
                             type="number"
                             min={1}
                             max={parsedData?.pagesCount || 1000}
                             value={manualEndPage}
                             onChange={(e) => setManualEndPage(Number(e.target.value))}
-                            className="w-16 rounded-lg border border-[#384154] bg-[#171B25] px-2 py-1 text-xs font-bold text-white text-center dark:border-[#384154] dark:bg-[#252B38] dark:text-white"
+                            className="w-16 rounded-lg border border-zinc-300 bg-zinc-50 px-2 py-1 text-xs font-bold text-zinc-900 text-center dark:border-zinc-700 dark:bg-zinc-900 dark:text-white"
                           />
                         </div>
                         <button
                           type="button"
                           onClick={handleProcessManualPages}
-                          className="px-3 py-1 text-xs font-bold text-white bg-[#F3AA2D] hover:bg-[#1f8771] rounded-lg transition cursor-pointer"
+                          className="px-3 py-1 text-xs font-bold text-white bg-[#249D84] hover:bg-[#1f8771] rounded-lg transition cursor-pointer"
                         >
                           Processar essas páginas
                         </button>
                         <button
                           type="button"
                           onClick={() => setIsManualPageSelectionOpen(false)}
-                          className="text-xs text-white hover:text-white dark:hover:text-white px-1 cursor-pointer"
+                          className="text-xs text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 px-1 cursor-pointer"
                         >
                           Fechar
                         </button>
@@ -2242,16 +2085,16 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
               )}
 
               {/* Seção Cargos Identificados */}
-              <div className="rounded-xl border border-[#384154] dark:border-[#384154] bg-[#252B38] dark:bg-[#252B38] overflow-hidden">
-                <div className="flex items-center justify-between px-3.5 py-2.5 bg-[#171B25] dark:bg-[#2D3442] border-b border-[#384154] dark:border-[#384154]">
-                  <span className="text-xs font-bold text-white dark:text-white uppercase tracking-wider">
+              <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 overflow-hidden">
+                <div className="flex items-center justify-between px-3.5 py-2.5 bg-zinc-50 dark:bg-zinc-850 border-b border-zinc-200 dark:border-zinc-800">
+                  <span className="text-xs font-bold text-zinc-800 dark:text-zinc-200 uppercase tracking-wider">
                     Cargos identificados ({cargosList.length})
                   </span>
                   {!isAddingNewCargo && (
                     <button
                       type="button"
                       onClick={() => setIsAddingNewCargo(true)}
-                      className="inline-flex items-center gap-1 text-xs font-bold text-[#F3AA2D] hover:underline cursor-pointer"
+                      className="inline-flex items-center gap-1 text-xs font-bold text-[#249D84] hover:underline cursor-pointer"
                     >
                       <Plus className="h-3.5 w-3.5" />
                       <span>Adicionar cargo</span>
@@ -2261,20 +2104,20 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
 
                 {/* Formulário inline para adicionar cargo */}
                 {isAddingNewCargo && (
-                  <div className="p-3 bg-[#171B25]/50 dark:bg-[#2D3442]/50 border-b border-[#384154] dark:border-[#384154] flex items-center gap-2">
+                  <div className="p-3 bg-zinc-50/50 dark:bg-zinc-850/50 border-b border-zinc-200 dark:border-zinc-800 flex items-center gap-2">
                     <input
                       type="text"
                       value={newCargoName}
                       onChange={(e) => setNewCargoName(e.target.value)}
                       onKeyDown={(e) => e.key === "Enter" && handleAddNewCargo()}
                       placeholder="Nome do novo cargo..."
-                      className="flex-1 rounded-lg border border-[#384154] bg-[#252B38] px-2.5 py-1.5 text-xs text-white focus:border-[#F3AA2D] focus:outline-hidden dark:border-[#384154] dark:bg-[#171B25] dark:text-white"
+                      className="flex-1 rounded-lg border border-zinc-300 bg-white px-2.5 py-1.5 text-xs text-zinc-900 focus:border-[#249D84] focus:outline-hidden dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"
                       autoFocus
                     />
                     <button
                       type="button"
                       onClick={handleAddNewCargo}
-                      className="rounded-lg bg-[#F3AA2D] px-3 py-1.5 text-xs font-bold text-white hover:bg-[#1f8771]"
+                      className="rounded-lg bg-[#249D84] px-3 py-1.5 text-xs font-bold text-white hover:bg-[#1f8771]"
                     >
                       Salvar
                     </button>
@@ -2284,7 +2127,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                         setIsAddingNewCargo(false);
                         setNewCargoName("");
                       }}
-                      className="text-xs text-white hover:text-white dark:hover:text-white px-1.5"
+                      className="text-xs text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 px-1.5"
                     >
                       Cancelar
                     </button>
@@ -2292,9 +2135,9 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                 )}
 
                 {/* Lista de Cargos com checkmarks, renomear, remover e aviso de cargo inválido */}
-                <div className="divide-y divide-[#384154] dark:divide-[#384154] max-h-48 overflow-y-auto">
+                <div className="divide-y divide-zinc-100 dark:divide-zinc-800 max-h-48 overflow-y-auto">
                   {cargosList.length === 0 ? (
-                    <div className="p-3 text-xs text-white text-center">
+                    <div className="p-3 text-xs text-zinc-400 text-center">
                       Nenhum cargo adicionado ainda.
                     </div>
                   ) : (
@@ -2310,8 +2153,8 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                           onClick={() => setActiveCargoId(cargo.id)}
                           className={`p-3 flex items-center justify-between gap-3 cursor-pointer transition ${
                             isActive
-                              ? "bg-[#F3AA2D]/5 dark:bg-[#F3AA2D]/10 ring-1 ring-inset ring-[#F3AA2D]/30"
-                              : "hover:bg-[#2D3442] dark:hover:bg-[#2D3442]"
+                              ? "bg-[#249D84]/5 dark:bg-[#249D84]/10 ring-1 ring-inset ring-[#249D84]/30"
+                              : "hover:bg-zinc-50 dark:hover:bg-zinc-850"
                           }`}
                         >
                           <div className="min-w-0 flex-1">
@@ -2321,7 +2164,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                                   <AlertTriangle className="h-4 w-4 shrink-0" />
                                   <span>⚠️ Cargo não identificado</span>
                                 </div>
-                                <p className="text-[11px] text-white dark:text-white">
+                                <p className="text-[11px] text-zinc-500 dark:text-zinc-400">
                                   O edital não especificou este cargo claramente. Clique ao lado para definir o nome.
                                 </p>
                               </div>
@@ -2335,38 +2178,38 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                                     if (e.key === "Enter") handleRenameCargo(cargo.id, editingCargoName);
                                     if (e.key === "Escape") setEditingCargoId(null);
                                   }}
-                                  className="flex-1 rounded-lg border border-[#F3AA2D] bg-[#252B38] px-2 py-1 text-xs text-white dark:bg-[#171B25] dark:text-white"
+                                  className="flex-1 rounded-lg border border-[#249D84] bg-white px-2 py-1 text-xs text-zinc-900 dark:bg-zinc-800 dark:text-white"
                                   autoFocus
                                 />
                                 <button
                                   type="button"
                                   onClick={() => handleRenameCargo(cargo.id, editingCargoName)}
-                                  className="rounded-md bg-[#F3AA2D] px-2 py-1 text-[11px] font-bold text-white"
+                                  className="rounded-md bg-[#249D84] px-2 py-1 text-[11px] font-bold text-white"
                                 >
                                   OK
                                 </button>
                                 <button
                                   type="button"
                                   onClick={() => setEditingCargoId(null)}
-                                  className="text-[11px] text-white hover:text-white px-1"
+                                  className="text-[11px] text-zinc-400 hover:text-zinc-600 px-1"
                                 >
                                   ✕
                                 </button>
                               </div>
                             ) : (
                               <div className="flex items-center gap-2">
-                                <span className="text-[#F3AA2D] font-bold text-xs shrink-0">✓</span>
+                                <span className="text-[#249D84] font-bold text-xs shrink-0">✓</span>
                                 <div className="min-w-0">
                                   <span
                                     className={`font-bold text-xs block truncate ${
                                       isActive
-                                        ? "text-[#F3AA2D] dark:text-[#F3AA2D]"
-                                        : "text-white dark:text-white"
+                                        ? "text-[#249D84] dark:text-[#2dc5a6]"
+                                        : "text-zinc-900 dark:text-white"
                                     }`}
                                   >
                                     {cargo.name}
                                   </span>
-                                  <span className="text-[11px] text-white dark:text-white block truncate mt-0.5">
+                                  <span className="text-[11px] text-zinc-500 dark:text-zinc-400 block truncate mt-0.5">
                                     {cargo.disciplines.length} {cargo.disciplines.length === 1 ? "disciplina" : "disciplinas"} • {totalTopics} {totalTopics === 1 ? "tópico" : "tópicos"}
                                   </span>
                                 </div>
@@ -2397,7 +2240,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                                       setEditingCargoName(cargo.name);
                                     }}
                                     title="Renomear cargo"
-                                    className="p-1 rounded-md text-white hover:text-white dark:hover:text-white transition cursor-pointer"
+                                    className="p-1 rounded-md text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 transition cursor-pointer"
                                   >
                                     <Edit2 className="h-3.5 w-3.5" />
                                   </button>
@@ -2407,7 +2250,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                                     type="button"
                                     onClick={() => handleRemoveCargo(cargo.id)}
                                     title="Remover cargo"
-                                    className="p-1 rounded-md text-white hover:text-red-600 transition cursor-pointer"
+                                    className="p-1 rounded-md text-zinc-400 hover:text-red-600 transition cursor-pointer"
                                   >
                                     <Trash2 className="h-3.5 w-3.5" />
                                   </button>
@@ -2423,7 +2266,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
               </div>
 
               {/* Seletor de Nova Disciplina com Métrica de Cor Automática e Opção Manual */}
-              <div className="rounded-xl border border-[#384154] bg-[#171B25] p-2.5 dark:border-[#384154] dark:bg-[#2D3442] space-y-2">
+              <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-2.5 dark:border-zinc-800 dark:bg-zinc-850 space-y-2">
                 <div className="flex items-center gap-2">
                   <input
                     type="text"
@@ -2438,7 +2281,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                       }
                     }}
                     placeholder="Adicionar disciplina ao cargo (ex: Direito Processual Penal)..."
-                    className="flex-1 rounded-lg border border-[#384154] bg-[#252B38] px-3 py-1.5 text-xs text-white focus:outline-hidden dark:border-[#384154] dark:bg-[#171B25] dark:text-white"
+                    className="flex-1 rounded-lg border border-zinc-200 bg-white px-3 py-1.5 text-xs text-zinc-900 focus:outline-hidden dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"
                   />
 
                   {/* Seletor de Cor da Nova Matéria (Automático + Opção Manual) */}
@@ -2446,36 +2289,36 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                     <button
                       type="button"
                       onClick={() => setShowNewDiscColorPalette(!showNewDiscColorPalette)}
-                      className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-[#384154] dark:border-[#384154] bg-[#252B38] dark:bg-[#171B25] hover:bg-[#2D3442] dark:hover:bg-[#2D3442] transition cursor-pointer shadow-2xs"
+                      className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-750 transition cursor-pointer shadow-2xs"
                       title="Cor da matéria (troca automaticamente a cada cadastro, ou clique para escolher manual)"
                     >
                       <span
-                        className="h-4 w-4 rounded-full ring-1 ring-[#384154] dark:ring-[#384154] shrink-0"
+                        className="h-4 w-4 rounded-full ring-1 ring-zinc-300 dark:ring-zinc-600 shrink-0"
                         style={{ backgroundColor: newDiscColor }}
                       />
-                      <span className="font-mono text-[10px] font-bold text-white dark:text-white">
+                      <span className="font-mono text-[10px] font-bold text-zinc-600 dark:text-zinc-300">
                         {normalizeHex(newDiscColor).toUpperCase()}
                       </span>
-                      <Palette className="h-3 w-3 text-white" />
+                      <Palette className="h-3 w-3 text-zinc-400" />
                     </button>
 
                     {/* Popover de Escolha Manual de Cor */}
                     {showNewDiscColorPalette && (
-                      <div className="absolute right-0 bottom-full mb-2 z-50 w-72 rounded-2xl border border-[#384154] bg-[#252B38] p-3 shadow-xl dark:border-[#384154] dark:bg-[#252B38] animate-in fade-in zoom-in-95">
-                        <div className="flex items-center justify-between pb-2 mb-2 border-b border-[#384154] dark:border-[#384154]">
-                          <span className="text-[11px] font-bold text-white dark:text-white flex items-center gap-1.5">
-                            <Palette className="h-3.5 w-3.5 text-[#F3AA2D]" />
+                      <div className="absolute right-0 bottom-full mb-2 z-50 w-72 rounded-2xl border border-zinc-200 bg-white p-3 shadow-xl dark:border-zinc-700 dark:bg-zinc-900 animate-in fade-in zoom-in-95">
+                        <div className="flex items-center justify-between pb-2 mb-2 border-b border-zinc-100 dark:border-zinc-800">
+                          <span className="text-[11px] font-bold text-zinc-800 dark:text-zinc-200 flex items-center gap-1.5">
+                            <Palette className="h-3.5 w-3.5 text-[#249D84]" />
                             Escolher Cor Manualmente
                           </span>
                           <button
                             type="button"
                             onClick={() => setShowNewDiscColorPalette(false)}
-                            className="text-white hover:text-white dark:hover:text-white cursor-pointer"
+                            className="text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 cursor-pointer"
                           >
                             <X className="h-3.5 w-3.5" />
                           </button>
                         </div>
-                        <p className="text-[10px] text-white dark:text-white mb-2">
+                        <p className="text-[10px] text-zinc-500 dark:text-zinc-400 mb-2">
                           Cores com cadeado já pertencem a outras matérias deste cargo e não podem ser repetidas.
                         </p>
                         <div className="grid grid-cols-6 gap-1.5 mb-2.5">
@@ -2509,7 +2352,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                                   isTaken
                                     ? "opacity-20 cursor-not-allowed"
                                     : isSelected
-                                    ? "ring-2 ring-offset-1 ring-[#F3AA2D] scale-110 shadow-sm"
+                                    ? "ring-2 ring-offset-1 ring-[#249D84] scale-110 shadow-sm"
                                     : "hover:scale-110 opacity-90 cursor-pointer"
                                 }`}
                               >
@@ -2521,8 +2364,8 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                             );
                           })}
                         </div>
-                        <div className="pt-2 border-t border-[#384154] dark:border-[#384154] flex items-center justify-between text-[11px]">
-                          <span className="text-white font-mono text-[10px]">Livre:</span>
+                        <div className="pt-2 border-t border-zinc-100 dark:border-zinc-800 flex items-center justify-between text-[11px]">
+                          <span className="text-zinc-500 font-mono text-[10px]">Livre:</span>
                           <div className="flex items-center gap-1.5">
                             <input
                               type="color"
@@ -2534,11 +2377,11 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                             <button
                               type="button"
                               onClick={() => {
-                                const used = activeCargoDisciplines.map((d) => d.color || "#F3AA2D");
+                                const used = activeCargoDisciplines.map((d) => d.color || "#249D84");
                                 setNewDiscColor(getNextAvailableDisciplineColor(used));
                                 setShowNewDiscColorPalette(false);
                               }}
-                              className="text-[10px] font-bold text-[#F3AA2D] hover:underline cursor-pointer"
+                              className="text-[10px] font-bold text-[#249D84] hover:underline cursor-pointer"
                             >
                               Sugerir próxima
                             </button>
@@ -2557,7 +2400,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                       )
                     )}
                     onClick={handleAddDiscipline}
-                    className="rounded-lg bg-[#F3AA2D] px-3.5 py-1.5 text-xs font-bold text-white hover:bg-[#1f8771] disabled:opacity-40 disabled:cursor-not-allowed transition cursor-pointer"
+                    className="rounded-lg bg-[#249D84] px-3.5 py-1.5 text-xs font-bold text-white hover:bg-[#1f8771] disabled:opacity-40 disabled:cursor-not-allowed transition cursor-pointer"
                   >
                     Adicionar
                   </button>
@@ -2580,10 +2423,10 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                       <button
                         type="button"
                         onClick={() => {
-                          const used = activeCargoDisciplines.map((d) => d.color || "#F3AA2D");
+                          const used = activeCargoDisciplines.map((d) => d.color || "#249D84");
                           setNewDiscColor(getNextAvailableDisciplineColor(used));
                         }}
-                        className="text-[10px] font-bold text-[#F3AA2D] dark:text-[#38c9ab] hover:underline shrink-0 ml-2 cursor-pointer"
+                        className="text-[10px] font-bold text-[#249D84] dark:text-[#38c9ab] hover:underline shrink-0 ml-2 cursor-pointer"
                       >
                         Trocar automática
                       </button>
@@ -2595,7 +2438,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
               {/* Acordeão de Disciplinas e Tópicos */}
               <div className="space-y-2 max-h-72 overflow-y-auto pr-1">
                 {activeCargoDisciplines.length === 0 ? (
-                  <div className="p-8 text-center text-xs text-white dark:text-white rounded-xl border border-dashed border-[#384154] dark:border-[#384154]">
+                  <div className="p-8 text-center text-xs text-zinc-500 dark:text-zinc-400 rounded-xl border border-dashed border-zinc-200 dark:border-zinc-800">
                     Nenhuma disciplina cadastrada para este cargo ainda. Adicione disciplinas ou tópicos acima.
                   </div>
                 ) : (
@@ -2604,10 +2447,10 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                     return (
                       <div
                         key={disc.id}
-                        className="rounded-xl border border-[#384154] bg-[#252B38] overflow-hidden dark:border-[#384154] dark:bg-[#252B38] shadow-2xs"
+                        className="rounded-xl border border-zinc-200 bg-white overflow-hidden dark:border-zinc-800 dark:bg-zinc-900 shadow-2xs"
                       >
                         {/* Cabeçalho do Acordeão */}
-                        <div className="flex items-center justify-between p-3 bg-[#171B25]/70 dark:bg-[#2D3442]/50">
+                        <div className="flex items-center justify-between p-3 bg-zinc-50/70 dark:bg-zinc-850/50">
                           <div
                             onClick={() => setExpandedDiscId(isExpanded ? null : disc.id)}
                             className="flex items-center gap-2.5 min-w-0 cursor-pointer flex-1"
@@ -2620,31 +2463,31 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                                 setColorPickerDisc({
                                   id: disc.id,
                                   name: disc.name,
-                                  color: disc.color || "#F3AA2D",
+                                  color: disc.color || "#249D84",
                                 });
                               }}
-                              className="group relative flex items-center justify-center shrink-0 cursor-pointer p-0.5 rounded-full hover:bg-[#2D3442] dark:hover:bg-[#2D3442] transition"
+                              className="group relative flex items-center justify-center shrink-0 cursor-pointer p-0.5 rounded-full hover:bg-zinc-200 dark:hover:bg-zinc-700 transition"
                               title="Clique para alterar a cor desta matéria (cores únicas)"
                             >
                               <span
-                                className="h-3.5 w-3.5 rounded-full ring-2 ring-white dark:ring-[#252B38] group-hover:scale-125 transition-transform shadow-xs"
-                                style={{ backgroundColor: disc.color || "#F3AA2D" }}
+                                className="h-3.5 w-3.5 rounded-full ring-2 ring-white dark:ring-zinc-900 group-hover:scale-125 transition-transform shadow-xs"
+                                style={{ backgroundColor: disc.color || "#249D84" }}
                               />
                             </button>
-                            <span className="font-bold text-xs text-white dark:text-white truncate">
+                            <span className="font-bold text-xs text-zinc-900 dark:text-white truncate">
                               {disc.name}
                             </span>
                             {disc.group && (
-                              <span className="rounded-md bg-[#384154]/70 dark:bg-[#171B25] border border-[#384154]/60 dark:border-[#384154]/60 px-1.5 py-0.2 text-[10px] font-semibold text-white dark:text-white shrink-0">
+                              <span className="rounded-md bg-zinc-200/70 dark:bg-zinc-800 border border-zinc-300/60 dark:border-zinc-700/60 px-1.5 py-0.2 text-[10px] font-semibold text-zinc-600 dark:text-zinc-300 shrink-0">
                                 {disc.group}
                               </span>
                             )}
                             {disc.sourceReference && (
-                              <span className="text-[10px] text-white dark:text-white shrink-0">
+                              <span className="text-[10px] text-zinc-400 dark:text-zinc-500 shrink-0">
                                 {disc.sourceReference}
                               </span>
                             )}
-                            <span className="rounded-full bg-[#384154]/60 dark:bg-[#171B25] px-2 py-0.2 text-[10px] font-bold text-white dark:text-white shrink-0">
+                            <span className="rounded-full bg-zinc-200/60 dark:bg-zinc-800 px-2 py-0.2 text-[10px] font-bold text-zinc-600 dark:text-zinc-300 shrink-0">
                               {disc.topics.length} {disc.topics.length === 1 ? "tópico" : "tópicos"}
                             </span>
                           </div>
@@ -2654,7 +2497,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                               type="button"
                               onClick={() => handleMoveDiscipline(dIdx, "up")}
                               disabled={dIdx === 0}
-                              className="p-1 text-white hover:text-white dark:hover:text-white disabled:opacity-30"
+                              className="p-1 text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 disabled:opacity-30"
                               title="Subir disciplina"
                             >
                               <ChevronUp className="h-3.5 w-3.5" />
@@ -2663,7 +2506,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                               type="button"
                               onClick={() => handleMoveDiscipline(dIdx, "down")}
                               disabled={dIdx === activeCargoDisciplines.length - 1}
-                              className="p-1 text-white hover:text-white dark:hover:text-white disabled:opacity-30"
+                              className="p-1 text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 disabled:opacity-30"
                               title="Descer disciplina"
                             >
                               <ChevronDown className="h-3.5 w-3.5" />
@@ -2679,7 +2522,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                             <button
                               type="button"
                               onClick={() => setExpandedDiscId(isExpanded ? null : disc.id)}
-                              className="p-1 text-white hover:text-white"
+                              className="p-1 text-zinc-400 hover:text-zinc-600"
                             >
                               <ChevronDown
                                 className={`h-4 w-4 transition-transform ${
@@ -2692,21 +2535,21 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
 
                         {/* Conteúdo Expandido do Acordeão: Lista Ordenada de Tópicos */}
                         {isExpanded && (
-                          <div className="p-3 border-t border-[#384154] dark:border-[#384154] space-y-2 bg-[#252B38] dark:bg-[#252B38]">
+                          <div className="p-3 border-t border-zinc-100 dark:border-zinc-800 space-y-2 bg-white dark:bg-zinc-900">
                             {/* Lista dos Tópicos */}
                             <div className="space-y-1 max-h-48 overflow-y-auto pr-1">
                               {disc.topics.length === 0 ? (
-                                <p className="text-[11px] text-white py-1 italic">
+                                <p className="text-[11px] text-zinc-400 py-1 italic">
                                   Nenhum tópico adicionado a esta disciplina.
                                 </p>
                               ) : (
                                 disc.topics.map((top, tIdx) => (
                                   <div
                                     key={top.id}
-                                    className="flex items-center justify-between gap-2 px-2.5 py-1.5 rounded-lg bg-[#171B25] dark:bg-[#2D3442] hover:bg-[#2D3442] dark:hover:bg-[#2D3442] text-xs"
+                                    className="flex items-center justify-between gap-2 px-2.5 py-1.5 rounded-lg bg-zinc-50 dark:bg-zinc-850 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-xs"
                                   >
                                     <div className="flex items-center gap-2 min-w-0 flex-1">
-                                      <span className="font-mono text-[10px] font-bold text-white shrink-0">
+                                      <span className="font-mono text-[10px] font-bold text-zinc-400 shrink-0">
                                         {String(tIdx + 1).padStart(2, "0")}
                                       </span>
                                       <input
@@ -2736,10 +2579,10 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                                             )
                                           );
                                         }}
-                                        className="w-full bg-transparent font-medium text-white dark:text-white focus:outline-hidden"
+                                        className="w-full bg-transparent font-medium text-zinc-800 dark:text-zinc-200 focus:outline-hidden"
                                       />
                                       {top.sourceReference && (
-                                        <span className="text-[9px] text-white shrink-0">
+                                        <span className="text-[9px] text-zinc-400 shrink-0">
                                           {top.sourceReference}
                                         </span>
                                       )}
@@ -2750,7 +2593,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                                         type="button"
                                         onClick={() => handleMoveTopic(disc.id, tIdx, "up")}
                                         disabled={tIdx === 0}
-                                        className="p-0.5 text-white hover:text-white disabled:opacity-30"
+                                        className="p-0.5 text-zinc-400 hover:text-zinc-600 disabled:opacity-30"
                                       >
                                         <ChevronUp className="h-3 w-3" />
                                       </button>
@@ -2758,14 +2601,14 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                                         type="button"
                                         onClick={() => handleMoveTopic(disc.id, tIdx, "down")}
                                         disabled={tIdx === disc.topics.length - 1}
-                                        className="p-0.5 text-white hover:text-white disabled:opacity-30"
+                                        className="p-0.5 text-zinc-400 hover:text-zinc-600 disabled:opacity-30"
                                       >
                                         <ChevronDown className="h-3 w-3" />
                                       </button>
                                       <button
                                         type="button"
                                         onClick={() => handleRemoveTopic(disc.id, top.id)}
-                                        className="p-0.5 text-white hover:text-red-500"
+                                        className="p-0.5 text-zinc-400 hover:text-red-500"
                                       >
                                         <Trash2 className="h-3 w-3" />
                                       </button>
@@ -2776,7 +2619,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                             </div>
 
                             {/* Adicionador Unitário e em Lote */}
-                            <div className="pt-2 border-t border-[#384154] dark:border-[#384154] flex flex-wrap items-center justify-between gap-2">
+                            <div className="pt-2 border-t border-zinc-100 dark:border-zinc-800 flex flex-wrap items-center justify-between gap-2">
                               <div className="flex items-center gap-1.5 flex-1 min-w-[200px]">
                                 <input
                                   type="text"
@@ -2791,14 +2634,14 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                                       }
                                     }
                                   }}
-                                  className="w-full rounded-lg border border-[#384154] bg-[#171B25] px-2.5 py-1 text-xs text-white focus:bg-[#252B38] focus:outline-hidden dark:border-[#384154] dark:bg-[#171B25] dark:text-white"
+                                  className="w-full rounded-lg border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-xs text-zinc-900 focus:bg-white focus:outline-hidden dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"
                                 />
                               </div>
 
                               <button
                                 type="button"
                                 onClick={() => setBatchTopicDiscId(disc.id)}
-                                className="inline-flex items-center gap-1 text-[11px] font-bold text-[#F3AA2D] hover:underline"
+                                className="inline-flex items-center gap-1 text-[11px] font-bold text-[#249D84] hover:underline"
                               >
                                 <Layers className="h-3 w-3" />
                                 + Adicionar em lote
@@ -2820,59 +2663,45 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
           {step === "review" && (
             <div className="space-y-4">
               <div>
-                <h3 className="text-sm font-bold text-white dark:text-white">
+                <h3 className="text-sm font-bold text-zinc-900 dark:text-white">
                   Revisão Executiva
                 </h3>
-                <p className="text-xs text-white dark:text-white mt-0.5">
+                <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
                   Verifique o resumo consolidado antes de iniciar sua preparação:
                 </p>
               </div>
 
-              {/* Bloqueio de publicação no catálogo oficial: campos obrigatórios ausentes/inválidos */}
-              {catalogValidationErrors.length > 0 && (
-                <div className="rounded-xl border border-red-500/40 bg-red-500/10 p-3.5 space-y-1.5">
-                  <p className="text-xs font-bold text-red-400">
-                    Publicação no catálogo bloqueada — dados obrigatórios ausentes ou inválidos:
-                  </p>
-                  <ul className="space-y-0.5 text-[11px] text-red-300 list-disc list-inside">
-                    {catalogValidationErrors.map((validationError, vIdx) => (
-                      <li key={vIdx}>{validationError}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-
               {/* Card Executivo de Resumo */}
-              <div className="rounded-2xl border border-[#384154] bg-[#171B25] p-4 sm:p-5 space-y-3 dark:border-[#384154] dark:bg-[#2D3442]">
-                <div className="flex items-start justify-between border-b border-[#384154] pb-3 dark:border-[#384154]">
+              <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-4 sm:p-5 space-y-3 dark:border-zinc-800 dark:bg-zinc-850">
+                <div className="flex items-start justify-between border-b border-zinc-200 pb-3 dark:border-zinc-750">
                   <div className="flex items-center gap-3">
                     {previewImageUrl ? (
                       <img
                         src={previewImageUrl}
                         alt="Logo"
-                        className="w-11 h-11 rounded-xl object-cover border border-[#384154] dark:border-[#384154] shrink-0"
+                        className="w-11 h-11 rounded-xl object-cover border border-zinc-200 dark:border-zinc-700 shrink-0"
                       />
                     ) : (
-                      <div className="w-11 h-11 rounded-xl bg-[#F3AA2D]/15 flex items-center justify-center text-[#F3AA2D] shrink-0 font-bold">
+                      <div className="w-11 h-11 rounded-xl bg-[#249D84]/15 flex items-center justify-center text-[#249D84] shrink-0 font-bold">
                         <Building2 className="h-5 w-5" />
                       </div>
                     )}
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#F3AA2D]">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#249D84]">
                           {organAcronym || organ || "Certame"}
                         </span>
-                        <span className="rounded-full bg-[#F3AA2D]/15 px-2 py-0.2 text-[9px] font-bold text-[#F3AA2D]">
+                        <span className="rounded-full bg-[#249D84]/15 px-2 py-0.2 text-[9px] font-bold text-[#249D84]">
                           {currentCareer.title}
                         </span>
                       </div>
-                      <h4 className="text-sm font-bold text-white dark:text-white">
+                      <h4 className="text-sm font-bold text-zinc-900 dark:text-white">
                         {planTitle || "Plano de Estudos"}
                       </h4>
                     </div>
                   </div>
 
-                  <span className="rounded-full bg-[#384154]/70 px-2.5 py-0.5 text-xs font-bold text-white dark:bg-[#384154] dark:text-white shrink-0">
+                  <span className="rounded-full bg-zinc-200/70 px-2.5 py-0.5 text-xs font-bold text-zinc-700 dark:bg-zinc-700 dark:text-zinc-200 shrink-0">
                     {selectedObjective}
                   </span>
                 </div>
@@ -2880,43 +2709,43 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                 {/* Métricas e Detalhes */}
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs pt-1">
                   <div>
-                    <span className="text-white block text-[10px] uppercase font-bold">Órgão</span>
-                    <span className="font-semibold text-white dark:text-white truncate block">
+                    <span className="text-zinc-400 block text-[10px] uppercase font-bold">Órgão</span>
+                    <span className="font-semibold text-zinc-800 dark:text-zinc-200 truncate block">
                       {organ || "Geral"}
                     </span>
                   </div>
                   <div>
-                    <span className="text-white block text-[10px] uppercase font-bold">Cargo</span>
-                    <span className="font-semibold text-white dark:text-white truncate block">
+                    <span className="text-zinc-400 block text-[10px] uppercase font-bold">Cargo</span>
+                    <span className="font-semibold text-zinc-800 dark:text-zinc-200 truncate block">
                       {activeCargo?.name || "Geral"}
                     </span>
                   </div>
                   <div>
-                    <span className="text-white block text-[10px] uppercase font-bold">Banca • Ano</span>
-                    <span className="font-semibold text-white dark:text-white">
-                      {editalBoard || "A definir"} • {editalYear || "—"}
+                    <span className="text-zinc-400 block text-[10px] uppercase font-bold">Banca • Ano</span>
+                    <span className="font-semibold text-zinc-800 dark:text-zinc-200">
+                      {editalBoard || "A definir"} • {editalYear}
                     </span>
                   </div>
                   <div>
-                    <span className="text-white block text-[10px] uppercase font-bold">Meta Semanal</span>
-                    <span className="font-semibold text-white dark:text-white">
+                    <span className="text-zinc-400 block text-[10px] uppercase font-bold">Meta Semanal</span>
+                    <span className="font-semibold text-zinc-800 dark:text-zinc-200">
                       {weeklyGoalHours}h / semana
                     </span>
                   </div>
                 </div>
 
                 {/* Resumo Quantitativo de Conteúdo */}
-                <div className="flex flex-wrap items-center justify-between gap-2 pt-2.5 border-t border-[#384154] dark:border-[#384154] text-xs">
+                <div className="flex flex-wrap items-center justify-between gap-2 pt-2.5 border-t border-zinc-200 dark:border-zinc-750 text-xs">
                   <div className="flex items-center gap-2">
-                    <span className="font-bold text-white dark:text-white">
+                    <span className="font-bold text-zinc-800 dark:text-zinc-200">
                       {cargosList.length} cargo(s)
                     </span>
-                    <span className="text-white">•</span>
-                    <span className="font-bold text-white dark:text-white">
+                    <span className="text-zinc-400">•</span>
+                    <span className="font-bold text-zinc-800 dark:text-zinc-200">
                       {activeCargoDisciplines.length} disciplinas
                     </span>
-                    <span className="text-white">•</span>
-                    <span className="font-bold text-white dark:text-white">
+                    <span className="text-zinc-400">•</span>
+                    <span className="font-bold text-zinc-800 dark:text-zinc-200">
                       {activeCargoTopicsCount} tópicos
                     </span>
                   </div>
@@ -2934,7 +2763,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                   <button
                     type="button"
                     onClick={() => setIsFullContentExpanded(!isFullContentExpanded)}
-                    className="text-xs font-bold text-[#F3AA2D] hover:underline flex items-center gap-1"
+                    className="text-xs font-bold text-[#249D84] hover:underline flex items-center gap-1"
                   >
                     <span>{isFullContentExpanded ? "Ocultar detalhes" : "Ver conteúdo completo do plano"}</span>
                     <ChevronDown
@@ -2945,20 +2774,20 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                   </button>
 
                   {isFullContentExpanded && (
-                    <div className="mt-3 p-3 rounded-xl bg-[#252B38] dark:bg-[#252B38] border border-[#384154] dark:border-[#384154] max-h-48 overflow-y-auto space-y-2">
+                    <div className="mt-3 p-3 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 max-h-48 overflow-y-auto space-y-2">
                       {activeCargoDisciplines.map((d) => (
                         <div key={d.id} className="text-xs">
-                          <div className="flex items-center gap-1.5 font-bold text-white dark:text-white">
+                          <div className="flex items-center gap-1.5 font-bold text-zinc-800 dark:text-zinc-200">
                             <span
                               className="h-2 w-2 rounded-full"
                               style={{ backgroundColor: d.color }}
                             />
                             <span>{d.name}</span>
-                            <span className="text-[10px] font-normal text-white">
+                            <span className="text-[10px] font-normal text-zinc-400">
                               ({d.topics.length} tópicos)
                             </span>
                           </div>
-                          <ul className="pl-4 mt-1 space-y-0.5 text-[11px] text-white dark:text-white list-disc">
+                          <ul className="pl-4 mt-1 space-y-0.5 text-[11px] text-zinc-600 dark:text-zinc-400 list-disc">
                             {d.topics.map((t) => (
                               <li key={t.id}>{t.title}</li>
                             ))}
@@ -2977,13 +2806,13 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
           {/* ========================================================================= */}
           {step === "processing" && (
             <div className="flex flex-col items-center justify-center p-12 text-center space-y-3">
-              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#F3AA2D]/15 text-[#F3AA2D]">
+              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#249D84]/15 text-[#249D84]">
                 <Loader2 className="h-7 w-7 animate-spin" />
               </div>
-              <h3 className="text-sm font-bold text-white dark:text-white">
+              <h3 className="text-sm font-bold text-zinc-900 dark:text-white">
                 Construindo seu plano de estudos...
               </h3>
-              <p className="text-xs text-white dark:text-white max-w-sm">
+              <p className="text-xs text-zinc-500 dark:text-zinc-400 max-w-sm">
                 Organizando o ciclo, metas e estrutura programática. Você será redirecionado em instantes.
               </p>
             </div>
@@ -2992,12 +2821,12 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
 
         {/* Modal Navigation Footer */}
         {step !== "processing" && (
-          <div className="flex items-center justify-between border-t border-[#384154] bg-[#171B25] px-5 sm:px-6 py-3.5 dark:border-[#384154] dark:bg-[#11151F]">
+          <div className="flex items-center justify-between border-t border-zinc-200 bg-zinc-50 px-5 sm:px-6 py-3.5 dark:border-zinc-800 dark:bg-zinc-950">
             {step === "objective" ? (
               <button
                 type="button"
                 onClick={onClose}
-                className="rounded-xl border border-[#384154] px-4 py-2 text-xs font-bold text-white hover:bg-[#2D3442] dark:border-[#384154] dark:text-white dark:hover:bg-[#2D3442] transition"
+                className="rounded-xl border border-zinc-200 px-4 py-2 text-xs font-bold text-zinc-600 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800 transition"
               >
                 Cancelar
               </button>
@@ -3011,7 +2840,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                   else if (step === "content") setStep("data");
                   else if (step === "review") setStep("content");
                 }}
-                className="flex items-center gap-1.5 rounded-xl border border-[#384154] px-4 py-2 text-xs font-bold text-white hover:bg-[#2D3442] dark:border-[#384154] dark:text-white dark:hover:bg-[#2D3442] transition"
+                className="flex items-center gap-1.5 rounded-xl border border-zinc-200 px-4 py-2 text-xs font-bold text-zinc-600 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800 transition"
               >
                 <ChevronLeft className="h-4 w-4" />
                 <span>Voltar</span>
@@ -3027,7 +2856,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                       type="button"
                       disabled={isSaving}
                       onClick={() => handleFinalSubmitCreatePlan(false, true)}
-                      className="hidden sm:inline-flex items-center gap-1.5 rounded-xl border border-[#384154] bg-[#252B38] px-3 py-2 text-xs font-bold text-white hover:bg-[#2D3442] dark:border-[#384154] dark:bg-[#171B25] dark:text-white transition"
+                      className="hidden sm:inline-flex items-center gap-1.5 rounded-xl border border-zinc-300 bg-white px-3 py-2 text-xs font-bold text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 transition"
                       title="Salva no catálogo oficial como rascunho"
                     >
                       Salvar Rascunho
@@ -3049,7 +2878,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                   type="button"
                   disabled={isSaving || activeCargoDisciplines.length === 0}
                   onClick={() => handleFinalSubmitCreatePlan(false, false)}
-                  className="flex items-center gap-1.5 rounded-xl bg-[#F3AA2D] px-5 py-2 text-xs font-bold text-[#11151F] shadow-sm hover:bg-[#e09a1d] transition disabled:opacity-50"
+                  className="flex items-center gap-1.5 rounded-xl bg-[#249D84] px-5 py-2 text-xs font-bold text-white shadow-sm hover:bg-[#1f8771] transition disabled:opacity-50"
                 >
                   <Check className="h-4 w-4" />
                   <span>Criar Plano de Estudos</span>
@@ -3121,9 +2950,9 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                     setStep("review");
                   }
                 }}
-                className="flex items-center gap-1.5 rounded-xl bg-[#F3AA2D] px-5 py-2 text-xs font-bold text-[#11151F] shadow-sm hover:bg-[#e09a1d] transition disabled:opacity-40 disabled:cursor-not-allowed"
+                className="flex items-center gap-1.5 rounded-xl bg-[#249D84] px-5 py-2 text-xs font-bold text-white shadow-sm hover:bg-[#1f8771] transition disabled:opacity-40 disabled:cursor-not-allowed"
               >
-                <span>Avançar</span>
+                <span>Continuar</span>
                 <ChevronRight className="h-4 w-4" />
               </button>
             )}
@@ -3153,7 +2982,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
           otherDisciplines={activeCargo.disciplines.map((d) => ({
             id: d.id,
             name: d.name,
-            color: d.color || "#F3AA2D",
+            color: d.color || "#249D84",
           }))}
           onSelectColor={(newColor) =>
             handleUpdateDisciplineColor(colorPickerDisc.id, newColor)

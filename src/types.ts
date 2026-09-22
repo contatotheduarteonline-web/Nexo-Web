@@ -146,11 +146,6 @@ export interface CatalogEdital {
   sourceHash: string;
   normalizedIdentity?: string;
   logoUrl?: string;
-  /** Imagem (dataUrl comprimida) publicada junto com o edital no catálogo oficial. */
-  logoDataUrl?: string;
-  cargoPretendido?: string;
-  imagemTipo?: "logo_oficial";
-  dadosVerificados?: boolean;
   status: CatalogEditalStatus;
   version: number;
   createdAt: string;

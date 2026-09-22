@@ -81,18 +81,18 @@ export const AddDisciplineModal: React.FC<AddDisciplineModalProps> = ({
         {/* Header */}
         <div className="flex items-center justify-between border-b border-zinc-200 bg-zinc-50 px-6 py-4 dark:border-zinc-800 dark:bg-zinc-950">
           <div>
-            <h2 className="text-base font-bold text-white dark:text-white">
+            <h2 className="text-base font-bold text-zinc-900 dark:text-white">
               Adicionar Nova Disciplina
             </h2>
             {targetPlanName && (
-              <p className="text-xs text-white dark:text-white">
-                Vinculando ao plano: <span className="font-semibold text-white dark:text-white">{targetPlanName}</span>
+              <p className="text-xs text-zinc-500 dark:text-zinc-400">
+                Vinculando ao plano: <span className="font-semibold text-zinc-700 dark:text-zinc-200">{targetPlanName}</span>
               </p>
             )}
           </div>
           <button
             onClick={onClose}
-            className="rounded-lg p-1.5 text-white hover:bg-zinc-200 hover:text-white dark:text-white dark:hover:bg-zinc-800 dark:hover:text-white transition"
+            className="rounded-lg p-1.5 text-zinc-500 hover:bg-zinc-200 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-white transition"
           >
             <X className="h-5 w-5" />
           </button>
@@ -101,7 +101,7 @@ export const AddDisciplineModal: React.FC<AddDisciplineModalProps> = ({
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
             {/* Nome */}
             <div>
-              <label className="text-xs font-bold uppercase tracking-wider text-white dark:text-white">
+              <label className="text-xs font-bold uppercase tracking-wider text-zinc-600 dark:text-zinc-400">
                 Nome da Disciplina *
               </label>
               <input
@@ -110,13 +110,13 @@ export const AddDisciplineModal: React.FC<AddDisciplineModalProps> = ({
                 onChange={(e) => setName(e.target.value)}
                 required
                 placeholder="Ex: Criminologia, Direito Penal Militar..."
-                className="mt-1.5 w-full rounded-xl border border-zinc-200 bg-zinc-50 px-3.5 py-2.5 text-xs font-bold text-white focus:border-[#249D84] focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"
+                className="mt-1.5 w-full rounded-xl border border-zinc-200 bg-zinc-50 px-3.5 py-2.5 text-xs font-bold text-zinc-900 focus:border-[#249D84] focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"
               />
             </div>
 
             {/* Cor */}
             <div>
-              <label className="text-xs font-bold uppercase tracking-wider text-white dark:text-white">
+              <label className="text-xs font-bold uppercase tracking-wider text-zinc-600 dark:text-zinc-400">
                 Cor de Identificação
               </label>
               <div className="mt-2 flex flex-wrap items-center gap-2">
@@ -141,7 +141,7 @@ export const AddDisciplineModal: React.FC<AddDisciplineModalProps> = ({
                     className="h-7 w-7 cursor-pointer rounded-lg border-0 bg-transparent p-0"
                     title="Cor personalizada"
                   />
-                  <span className="font-mono text-[10px] text-white dark:text-white">
+                  <span className="font-mono text-[10px] text-zinc-500 dark:text-zinc-400">
                     {color}
                   </span>
                 </div>
@@ -151,7 +151,7 @@ export const AddDisciplineModal: React.FC<AddDisciplineModalProps> = ({
             {/* Peso e Prioridade */}
             <div className="grid grid-cols-2 gap-3 pt-1">
               <div>
-                <label className="text-xs font-bold uppercase tracking-wider text-white dark:text-white">
+                <label className="text-xs font-bold uppercase tracking-wider text-zinc-600 dark:text-zinc-400">
                   Peso no Ciclo
                 </label>
                 <div className="mt-1.5 flex items-center gap-1 bg-zinc-100 dark:bg-zinc-800 p-1 rounded-xl border border-zinc-200 dark:border-zinc-700">
@@ -163,7 +163,7 @@ export const AddDisciplineModal: React.FC<AddDisciplineModalProps> = ({
                       className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition ${
                         weight === w
                           ? "bg-white text-zinc-900 shadow-xs dark:bg-zinc-900 dark:text-white"
-                          : "text-white hover:text-white dark:text-white dark:hover:text-white"
+                          : "text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"
                       }`}
                     >
                       Peso {w}
@@ -173,13 +173,13 @@ export const AddDisciplineModal: React.FC<AddDisciplineModalProps> = ({
               </div>
 
               <div>
-                <label className="text-xs font-bold uppercase tracking-wider text-white dark:text-white">
+                <label className="text-xs font-bold uppercase tracking-wider text-zinc-600 dark:text-zinc-400">
                   Prioridade
                 </label>
                 <select
                   value={priority}
                   onChange={(e) => setPriority(e.target.value as any)}
-                  className="mt-1.5 w-full rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2.5 text-xs font-bold text-white focus:border-[#249D84] focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"
+                  className="mt-1.5 w-full rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2.5 text-xs font-bold text-zinc-900 focus:border-[#249D84] focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"
                 >
                   <option value="alta">Alta</option>
                   <option value="media">Média</option>
@@ -191,17 +191,17 @@ export const AddDisciplineModal: React.FC<AddDisciplineModalProps> = ({
             {/* Tópicos Iniciais */}
             <div>
               <div className="flex items-center justify-between">
-                <label className="text-xs font-bold uppercase tracking-wider text-white dark:text-white">
+                <label className="text-xs font-bold uppercase tracking-wider text-zinc-600 dark:text-zinc-400">
                   Tópicos Iniciais (Opcional)
                 </label>
-                <span className="text-[10px] text-white">Um por linha</span>
+                <span className="text-[10px] text-zinc-400">Um por linha</span>
               </div>
               <textarea
                 value={initialTopicsText}
                 onChange={(e) => setInitialTopicsText(e.target.value)}
                 rows={3}
                 placeholder="Ex:&#10;Teoria Geral do Crime&#10;Tipicidade e Ilicitude&#10;Culpabilidade"
-                className="mt-1.5 w-full rounded-xl border border-zinc-200 bg-zinc-50 p-3 text-xs text-white focus:border-[#249D84] focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-white resize-none"
+                className="mt-1.5 w-full rounded-xl border border-zinc-200 bg-zinc-50 p-3 text-xs text-zinc-900 focus:border-[#249D84] focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-white resize-none"
               />
             </div>
 
@@ -210,7 +210,7 @@ export const AddDisciplineModal: React.FC<AddDisciplineModalProps> = ({
               <button
                 type="button"
                 onClick={onClose}
-                className="rounded-xl border border-zinc-200 px-4 py-2.5 text-xs font-bold text-white hover:bg-zinc-100 dark:border-zinc-700 dark:text-white dark:hover:bg-zinc-800 transition"
+                className="rounded-xl border border-zinc-200 px-4 py-2.5 text-xs font-bold text-zinc-600 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800 transition"
               >
                 Cancelar
               </button>

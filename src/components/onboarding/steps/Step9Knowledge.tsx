@@ -25,7 +25,7 @@ export const Step9Knowledge: React.FC<Step9KnowledgeProps> = ({
     <div id="step-9-knowledge" className="w-full max-w-3xl mx-auto px-4 py-4 sm:py-8">
       {/* Question Header */}
       <div className="mb-8 text-center sm:text-left">
-        <span className="text-xs font-semibold text-[#F59E0B] tracking-wider uppercase">
+        <span className="text-xs font-semibold text-[#FF6B00] tracking-wider uppercase">
           Etapa 9 de 12
         </span>
         <h2 className="text-2xl sm:text-4xl font-bold tracking-tight text-white mt-1">
@@ -57,7 +57,7 @@ export const Step9Knowledge: React.FC<Step9KnowledgeProps> = ({
                       onClick={() => onChangeLevel(disc.id, lvl.id)}
                       className={`px-3 py-2 rounded-lg text-xs font-medium border text-center transition-all duration-150 cursor-pointer ${
                         isSelected
-                          ? "bg-[#F59E0B] border-[#F59E0B] text-white shadow-sm font-semibold"
+                          ? "bg-[#FF6B00] border-[#FF6B00] text-white shadow-sm font-semibold"
                           : "bg-zinc-800/60 border-zinc-700/60 text-zinc-300 hover:bg-zinc-800 hover:text-white"
                       }`}
                     >
@@ -77,7 +77,7 @@ export const Step9Knowledge: React.FC<Step9KnowledgeProps> = ({
           type="button"
           id="btn-knowledge-next"
           onClick={onNext}
-          className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-[#F59E0B] hover:bg-[#FF7A1A] text-white font-semibold text-sm transition-all duration-200 cursor-pointer shadow-[0_6px_20px_rgba(255,107,0,0.25)]"
+          className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-[#FF6B00] hover:bg-[#FF7A1A] text-white font-semibold text-sm transition-all duration-200 cursor-pointer shadow-[0_6px_20px_rgba(255,107,0,0.25)]"
         >
           <span>Continuar</span>
           <ArrowRight className="w-4 h-4" />
