@@ -19,40 +19,6 @@ interface ProfilePictureModalProps {
   onClose: () => void;
 }
 
-// Curated Tactical / Operational Presets with SVG data URLs
-const PRESET_AVATARS = [
-  {
-    id: "tactical-1",
-    name: "Operador Tático",
-    url: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80",
-  },
-  {
-    id: "tactical-2",
-    name: "Agente Federal",
-    url: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80",
-  },
-  {
-    id: "tactical-3",
-    name: "Investigadora",
-    url: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&auto=format&fit=crop&q=80",
-  },
-  {
-    id: "tactical-4",
-    name: "Delegado",
-    url: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&auto=format&fit=crop&q=80",
-  },
-  {
-    id: "tactical-5",
-    name: "Perita Criminal",
-    url: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&auto=format&fit=crop&q=80",
-  },
-  {
-    id: "tactical-6",
-    name: "Comandante",
-    url: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&auto=format&fit=crop&q=80",
-  },
-];
-
 export const ProfilePictureModal: React.FC<ProfilePictureModalProps> = ({
   isOpen,
   onClose,
@@ -252,44 +218,6 @@ export const ProfilePictureModal: React.FC<ProfilePictureModalProps> = ({
           <p className="text-[10px] text-slate-400 mt-0.5">
             PNG, JPG, GIF ou WEBP (Máx. 5MB)
           </p>
-        </div>
-
-        {/* Preset Tactical Avatars */}
-        <div className="space-y-2">
-          <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
-            Ou escolha um Avatar de Perfil:
-          </label>
-          <div className="grid grid-cols-3 sm:grid-cols-6 gap-2.5">
-            {PRESET_AVATARS.map((avatar) => {
-              const isSelected = previewUrl === avatar.url;
-              return (
-                <button
-                  key={avatar.id}
-                  type="button"
-                  onClick={() => setPreviewUrl(avatar.url)}
-                  className={`group relative flex flex-col items-center p-1.5 rounded-2xl border transition-all ${
-                    isSelected
-                      ? "border-[#249D84] bg-[#249D84]/10 ring-2 ring-[#249D84]/30"
-                      : "border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 bg-white dark:bg-[#151D2A]"
-                  }`}
-                >
-                  <img
-                    src={avatar.url}
-                    alt={avatar.name}
-                    className="h-11 w-11 rounded-full object-cover shadow-2xs group-hover:scale-105 transition"
-                  />
-                  <span className="text-[9px] font-semibold text-slate-600 dark:text-slate-300 mt-1 truncate max-w-full">
-                    {avatar.name.split(" ")[0]}
-                  </span>
-                  {isSelected && (
-                    <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#249D84] text-white text-[8px]">
-                      <Check className="h-2.5 w-2.5 stroke-[3]" />
-                    </span>
-                  )}
-                </button>
-              );
-            })}
-          </div>
         </div>
 
         {/* Direct URL Input */}

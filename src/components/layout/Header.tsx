@@ -4,18 +4,14 @@ import { useAuth } from "../../context/AuthContext";
 import {
   Menu,
   Bell,
-  User,
   Settings,
   LogOut,
-  ShieldCheck,
   Calendar,
   Clock,
   CheckCircle2,
   ChevronRight,
-  Camera,
 } from "lucide-react";
 import { Logo } from "../brand/Logo";
-import { ProfilePictureModal } from "../modals/ProfilePictureModal";
 
 interface HeaderProps {
   onOpenAiModal?: () => void;
@@ -32,11 +28,10 @@ export const Header: React.FC<HeaderProps> = () => {
     reminders,
   } = useStudy();
 
-  const { user, logout, isAdmin } = useAuth();
+  const { user, logout } = useAuth();
 
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
-  const [isProfilePictureModalOpen, setIsProfilePictureModalOpen] = useState(false);
 
   const profileMenuRef = useRef<HTMLDivElement>(null);
   const notificationsRef = useRef<HTMLDivElement>(null);
@@ -229,14 +224,7 @@ export const Header: React.FC<HeaderProps> = () => {
               {/* User Header */}
               <div className="border-b border-[#E7EAF0] px-2.5 pb-2.5 pt-2 dark:border-[#1F2636]">
                 <div className="flex items-center gap-2.5">
-                  <div
-                    className="relative group cursor-pointer shrink-0"
-                    onClick={() => {
-                      setIsProfileMenuOpen(false);
-                      setIsProfilePictureModalOpen(true);
-                    }}
-                    title="Alterar foto de perfil"
-                  >
+                  <div className="shrink-0">
                     <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#F59E0B] text-xs font-bold text-white overflow-hidden">
                       {user?.avatarUrl ? (
                         <img
@@ -248,9 +236,6 @@ export const Header: React.FC<HeaderProps> = () => {
                         <span>{user?.name ? user.name.charAt(0).toUpperCase() : "U"}</span>
                       )}
                     </div>
-                    <div className="absolute inset-0 flex items-center justify-center rounded-full bg-black/50 text-white opacity-0 group-hover:opacity-100 transition duration-150">
-                      <Camera className="h-3 w-3" />
-                    </div>
                   </div>
 
                   <div className="flex-1 min-w-0">
@@ -260,21 +245,6 @@ export const Header: React.FC<HeaderProps> = () => {
                     <p className="truncate text-[10px] text-[#667085] dark:text-[#94A3B8]">
                       {user?.email || "aluno@nexo.com"}
                     </p>
-                    <div className="mt-0.5">
-                      <span className="inline-flex items-center gap-1 rounded bg-slate-100 px-1.5 py-0.2 text-[9px] font-medium text-slate-700 dark:bg-[#1A2234] dark:text-slate-300">
-                        {isAdmin ? (
-                          <>
-                            <ShieldCheck className="h-2.5 w-2.5 text-[#F59E0B]" />
-                            Administrador
-                          </>
-                        ) : (
-                          <>
-                            <User className="h-2.5 w-2.5 text-slate-400" />
-                            Estudante
-                          </>
-                        )}
-                      </span>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -291,18 +261,6 @@ export const Header: React.FC<HeaderProps> = () => {
                 >
                   <Settings className="h-3.5 w-3.5 text-slate-400" />
                   <span>Configurações</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    setIsProfileMenuOpen(false);
-                    setIsProfilePictureModalOpen(true);
-                  }}
-                  className="flex w-full items-center gap-2 rounded-lg px-2.5 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-[#1E293B] dark:hover:text-white transition-colors cursor-pointer"
-                >
-                  <Camera className="h-3.5 w-3.5 text-slate-400" />
-                  <span>Foto de Perfil</span>
                 </button>
               </div>
 
@@ -325,11 +283,6 @@ export const Header: React.FC<HeaderProps> = () => {
         </div>
       </div>
 
-      {/* Profile Picture Change Modal */}
-      <ProfilePictureModal
-        isOpen={isProfilePictureModalOpen}
-        onClose={() => setIsProfilePictureModalOpen(false)}
-      />
     </header>
   );
 };
