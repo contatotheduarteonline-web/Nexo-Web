@@ -22,7 +22,6 @@ export const LembretesView: React.FC = () => {
     activeEdital,
   } = useStudy();
 
-  const [filterCategory, setFilterCategory] = useState<"TODOS" | "INSCRICOES" | "PROVAS" | "PAGAMENTOS">("TODOS");
   const [filterStatus, setFilterStatus] = useState<"TODOS" | "PENDENTES" | "CONCLUIDOS">("TODOS");
 
   const [isAdding, setIsAdding] = useState(false);
@@ -32,12 +31,11 @@ export const LembretesView: React.FC = () => {
 
   const filteredReminders = useMemo(() => {
     return reminders.filter((rem) => {
-      if (filterCategory !== "TODOS" && rem.category !== filterCategory) return false;
       if (filterStatus === "PENDENTES" && rem.completed) return false;
       if (filterStatus === "CONCLUIDOS" && !rem.completed) return false;
       return true;
     });
-  }, [reminders, filterCategory, filterStatus]);
+  }, [reminders, filterStatus]);
 
   const stats = useMemo(() => {
     const total = reminders.length;
@@ -180,24 +178,7 @@ export const LembretesView: React.FC = () => {
       )}
 
       {/* Filters Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-2 rounded-2xl border border-[#E2E8F0] bg-white p-3 dark:border-[#1E293B] dark:bg-[#252B38]">
-        {/* Category Tabs */}
-        <div className="flex flex-wrap gap-1">
-          {(["TODOS", "INSCRICOES", "PROVAS", "PAGAMENTOS"] as const).map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setFilterCategory(cat)}
-              className={`rounded-xl px-2.5 py-1 text-xs font-semibold transition ${
-                filterCategory === cat
-                  ? "bg-amber-500/10 text-[#F59E0B] border border-amber-500/30 dark:bg-amber-500/20 dark:text-[#FBBF24]"
-                  : "text-[#737D89] hover:bg-[#F8FAFC] dark:text-[#94A3B8] dark:hover:bg-[#1E293B]"
-              }`}
-            >
-              {cat === "TODOS" ? "Todas Categorias" : cat}
-            </button>
-          ))}
-        </div>
-
+      <div className="flex flex-wrap items-center justify-end gap-2 rounded-2xl border border-[#E2E8F0] bg-white p-3 dark:border-[#1E293B] dark:bg-[#252B38]">
         {/* Status Filter */}
         <div className="flex items-center gap-1 rounded-xl bg-[#F8FAFC] p-0.5 text-xs font-bold dark:bg-[#0F172A]">
           {(["TODOS", "PENDENTES", "CONCLUIDOS"] as const).map((st) => (
