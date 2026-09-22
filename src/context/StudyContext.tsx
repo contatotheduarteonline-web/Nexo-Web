@@ -69,10 +69,6 @@ import {
   getFullCargoStructure,
   checkForPlanEditalUpdate,
 } from "../lib/catalogEditalService";
-import {
-  fetchPublishedEditaisFromServer,
-  PublishedEditalSnapshot,
-} from "../lib/serverCatalogService";
 import { auth } from "../lib/firebase";
 import {
   fetchPlanImageFromFirestore,
@@ -201,384 +197,25 @@ interface StudyContextType {
   importVerticalizedEdital?: (editalTitle: string, organ: string, banca: string, disciplinesData: any[]) => void;
 
   // Catálogo Oficial Permanente de Editais
-  catalogEditais: CatalogEdital[];
-  isLoadingCatalog: boolean;
-  refreshCatalogEditais: () => Promise<CatalogEdital[]>;
-  createStudyPlanFromCatalog: (params: {
-    catalogEditalId: string;
-    cargoId: string;
-    planName?: string;
-    weeklyGoalHours?: number;
-    organizationType?: PlanOrganization;
-    planningMode?: PlanningMode;
-  }) => Promise<StudyPlan | null>;
-  checkPlanForUpdates: (planId: string) => Promise<boolean>;
-
-  // Plans & Cycle
-  studyPlans: StudyPlan[];
-  activePlan: StudyPlan | undefined;
-  globalTemplates: PlanTemplate[];
-  isLoadingTemplates: boolean;
-  fetchGlobalTemplates: () => Promise<void>;
-  saveTemplateToCatalog: (templateData: Omit<PlanTemplate, "id" | "createdAt" | "clonesCount">) => Promise<PlanTemplate | null>;
-  cloneTemplateToPlan: (template: PlanTemplate, customName?: string, organizationType?: PlanOrganization) => Promise<StudyPlan>;
-  setActivePlanId: (id: string) => void;
-  createStudyPlan: (plan: Omit<StudyPlan, "id" | "createdAt"> & { id?: string }) => Promise<StudyPlan>;
-  updateStudyPlan: (id: string, updates: Partial<StudyPlan>) => void;
-  deleteStudyPlan: (id: string) => void;
-  archiveStudyPlan: (id: string) => void;
-  resetCycleProgress: (planId: string) => void;
-  advanceCycleStep: () => void;
-  updateWeeklySchedule: (planId: string, schedule: WeeklyScheduleBlock[]) => void;
-  cloneCatalogEditalAsPlan: (editalId: string, planName?: string, organizationType?: PlanOrganization) => Promise<StudyPlan>;
-  applyOnboardingPlan: (plan: any, edital: any) => void;
-
-  // Plan Images (Firestore Subcollection + Zero-latency cache)
-  planImages: Record<string, string>;
-  getPlanImageUrl: (planId: string) => string | undefined;
-  isPlanImageLoading: (planId: string) => boolean;
-  setPlanImageCache: (planId: string, dataUrl: string | null) => void;
-  refreshPlanImage: (planId: string) => Promise<string | null>;
-
-  // Study Sessions & History Deletion
-  studySessions: StudySession[];
-  logStudySession: (session: Omit<StudySession, "id">) => void;
-  deleteStudySession: (id: string) => Promise<void>;
-  deleteSelectedStudySessions: (ids: string[]) => Promise<void> | void;
-  clearAllStudySessions: () => Promise<void> | void;
-
-  // Reviews
-  scheduledReviews: ScheduledReview[];
-  completeScheduledReview: (reviewId: string, options?: CompleteReviewOptions) => void;
-  createScheduledReview: (topicId: string, stage: ReviewInterval, customDueDate?: string) => void;
-  rescheduleReview: (reviewId: string, newDueDate: string, stage?: ReviewInterval) => void;
-  deleteScheduledReview: (reviewId: string) => void;
-  updateScheduledReview: (reviewId: string, updates: Partial<ScheduledReview>) => void;
-  batchRescheduleOverdueReviews: (newDueDate?: string) => void;
-  clearAllScheduledReviews: () => void;
-  pendingReviewsToday: ScheduledReview[];
-  overdueReviews: ScheduledReview[];
-  pendingReviewsCount: number;
-
-  // Reminders
-  reminders: Reminder[];
-  addReminder: (reminder: Omit<Reminder, "id">) => void;
-  updateReminder: (id: string, updates: Partial<Reminder>) => void;
-  deleteReminder: (id: string) => void;
-  toggleReminder: (id: string) => void;
-  clearAllReminders: () => void;
-
-  // Simulados
-  simulados: Simulado[];
-  addSimulado: (simulado: Omit<Simulado, "id">) => void;
-  deleteSimulado: (id: string) => void;
-  clearAllSimulados: () => void;
-
-  // Global Active Timer
-  timer: ActiveTimerState;
-  startTimer: () => void;
-  pauseTimer: () => void;
-  resetTimer: () => void;
-  setTimerConfig: (config: Partial<ActiveTimerState>) => void;
-  finishCurrentSession: (
-    options?: FinishSessionOptions
-  ) => Promise<{ session: StudySession; reviews: ScheduledReview[] }>;
-  launchStudySessionForTopic: (disciplineId: string, topicId?: string, modality?: StudyModality) => void;
-
-  // Derived Metrics & Analytics
-  metrics: {
-    hoursToday: number;
-    hoursThisWeek: number;
-    totalHoursStudied?: number;
-    totalStudiedMinutes: number;
-    totalStudiedHoursFormatted: string;
-    weeklyGoalHours: number;
-    weeklyGoalPercentage: number;
-    disciplinesStudiedTodayCount: number;
-    totalQuestionsDone: number;
-    totalQuestionsCorrect: number;
-    totalQuestionsWrong: number;
-    overallAccuracyRate: number;
-    editalStudiedPercentage: number;
-    editalReviewedPercentage: number;
-    totalTopicsCount: number;
-    studiedTopicsCount: number;
-    pendingTopicsCount: number;
-    reviewedTopicsCount: number;
-    currentCycleDiscipline: Discipline | undefined;
-    currentCycleTargetMinutes: number;
-    weakTopics: WeakTopicItem[];
-    currentStreakDays: number;
-    recordStreakDays: number;
-  };
-
-  // Automated Daily Backups
-  dailyBackups: DailyBackupItem[];
-  lastDailyBackupTime: string | null;
-  isBackingUp: boolean;
-  refreshDailyBackups: () => Promise<void>;
-  triggerManualDailyBackup: () => Promise<{ success: boolean; message?: string }>;
-  restoreDailyBackup: (backupId: string) => Promise<boolean>;
-  deleteDailyBackup: (backupId: string) => Promise<boolean>;
-  downloadDailyBackup: (backupId: string) => void;
-
-  // Data management & Clean Slate
-  exportBackup: () => void;
-  importBackup: (jsonStr: string) => boolean;
-  resetEditalProgress: (editalId?: string) => void;
-  clearAllUserData: () => void;
-  resetToInitialData: () => void;
-}
-
-const getStorageKeys = (userId?: string) => {
-  const prefix = userId ? `farda_u_${userId}_` : `farda_guest_`;
-  return {
-    EDITAIS: `${prefix}editais_v7`,
-    ACTIVE_EDITAL_ID: `${prefix}active_edital_id_v7`,
-    STUDY_PLANS: `${prefix}study_plans_v7`,
-    STUDY_SESSIONS: `${prefix}study_sessions_v7`,
-    SCHEDULED_REVIEWS: `${prefix}scheduled_reviews_v7`,
-    SIMULADOS: `${prefix}simulados_v7`,
-    REMINDERS: `${prefix}reminders_v7`,
-    USER_SETTINGS: `${prefix}user_settings_v7`,
-    DAILY_BACKUPS_META: `${prefix}daily_backups_meta_v1`,
-    SIDEBAR_COLLAPSED: "farda_sidebar_collapsed_v8",
-  };
-};
-
-const StudyContext = createContext<StudyContextType | undefined>(undefined);
-
-export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const { user, authStatus, completeUserOnboarding } = useAuth();
-  const [activeTab, setActiveTab] = useState<ActiveTab>("dashboard");
-
-  const storageKeys = useMemo(() => getStorageKeys(user?.id), [user?.id]);
-
-  // Sidebar state
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState<boolean>(() => {
-    try {
-      const saved = localStorage.getItem(storageKeys.SIDEBAR_COLLAPSED);
-      return saved !== null ? JSON.parse(saved) : true;
-    } catch {
-      return true;
-    }
-  });
-
-  const toggleSidebar = () => {
-    setIsSidebarCollapsed((prev) => {
-      const next = !prev;
-      localStorage.setItem(storageKeys.SIDEBAR_COLLAPSED, JSON.stringify(next));
-      return next;
-    });
-  };
-
-  // User Settings
-  const [userSettings, setUserSettings] = useState<UserSettings>(() => {
-    try {
-      const saved = localStorage.getItem(storageKeys.USER_SETTINGS);
-      if (saved) return JSON.parse(saved);
-      return {
-        ...INITIAL_USER_SETTINGS,
-        userName: user?.name || "Operador",
-        userEmail: user?.email || "",
-      };
-    } catch {
-      return INITIAL_USER_SETTINGS;
-    }
-  });
-
-  const updateUserSettings = (updates: Partial<UserSettings>) => {
-    setUserSettings((prev) => {
-      const next = { ...prev, ...updates };
-      localStorage.setItem(storageKeys.USER_SETTINGS, JSON.stringify(next));
-      if (user?.id) {
-        saveUserSettingsToFirestore(user.id, next).catch((err) =>
-          console.error("Erro ao salvar configurações no Firestore:", err)
-        );
-      }
-      return next;
-    });
-  };
-
-  // Helper to sanitize stored data and purge legacy mock seeds
-  const sanitizeStoredArray = <T,>(jsonString: string | null): T[] => {
-    if (!jsonString) return [];
-    try {
-      const parsed = JSON.parse(jsonString);
-      if (!Array.isArray(parsed)) return [];
-      const hasLegacy = parsed.some((item: any) => {
-        const str = JSON.stringify(item);
-        return str.includes("edital-gcm-manaus") || str.includes("plan-gcm-manaus") || str.includes("Guarda Civil Municipal de Manaus");
-      });
-      if (hasLegacy) {
-        return [];
-      }
-      return parsed;
-    } catch {
-      return [];
-    }
-  };
-
-  // Editais
-  const [editais, setEditais] = useState<Edital[]>(() => {
-    try {
-      const saved = localStorage.getItem(storageKeys.EDITAIS);
-      return sanitizeStoredArray<Edital>(saved);
-    } catch {
-      return [];
-    }
-  });
-
-  const [activeEditalId, setActiveEditalId] = useState<string>(() => {
-    try {
-      const saved = localStorage.getItem(storageKeys.ACTIVE_EDITAL_ID);
-      if (saved && !saved.includes("gcm-manaus")) {
-        return saved;
-      }
-      return "";
-    } catch {
-      return "";
-    }
-  });
-
-  const [studyPlans, setStudyPlans] = useState<StudyPlan[]>(() => {
-    try {
-      const saved = localStorage.getItem(storageKeys.STUDY_PLANS);
-      return sanitizeStoredArray<StudyPlan>(saved);
-    } catch {
-      return [];
-    }
-  });
-
-  // Zero-latency in-memory and local cache for plan images
-  const [planImages, setPlanImages] = useState<Record<string, string>>(() => {
-    const initial: Record<string, string> = {};
-    try {
-      if (typeof window !== "undefined") {
-        for (let i = 0; i < localStorage.length; i++) {
-          const key = localStorage.key(i);
-          if (key && key.startsWith("nexo_plan_img_")) {
-            const pid = key.replace("nexo_plan_img_", "");
-            const val = localStorage.getItem(key);
-            if (val) initial[pid] = val;
-          }
-        }
-      }
-    } catch {}
-    return initial;
-  });
-
-  const [loadingPlanImages, setLoadingPlanImages] = useState<Record<string, boolean>>({});
-
-  const getPlanImageUrl = (planId: string): string | undefined => {
-    return planImages[planId] || getCachedPlanImage(planId) || undefined;
-  };
-
-  const isPlanImageLoading = (planId: string): boolean => {
-    return !!loadingPlanImages[planId];
-  };
-
-  const setPlanImageCache = (planId: string, dataUrl: string | null) => {
-    setCachedPlanImage(planId, dataUrl);
-    setPlanImages((prev) => {
-      if (dataUrl) {
-        return { ...prev, [planId]: dataUrl };
-      } else {
-        const next = { ...prev };
-        delete next[planId];
-        return next;
-      }
-    });
-  };
-
-  const refreshPlanImage = async (planId: string): Promise<string | null> => {
-    const uid = auth.currentUser?.uid || user?.id;
-    if (!uid || !planId) return null;
-    setLoadingPlanImages((prev) => ({ ...prev, [planId]: true }));
-    try {
-      const dataUrl = await fetchPlanImageFromFirestore(uid, planId);
-      if (dataUrl) {
-        setPlanImages((prev) => ({ ...prev, [planId]: dataUrl }));
-      }
-      return dataUrl;
-    } finally {
-      setLoadingPlanImages((prev) => ({ ...prev, [planId]: false }));
-    }
-  };
-
-  const [studySessions, setStudySessions] = useState<StudySession[]>(() => {
-    try {
-      const saved = localStorage.getItem(storageKeys.STUDY_SESSIONS);
-      return sanitizeStoredArray<StudySession>(saved);
-    } catch {
-      return [];
-    }
-  });
-
-  const [scheduledReviews, setScheduledReviews] = useState<ScheduledReview[]>(() => {
-    try {
-      const saved = localStorage.getItem(storageKeys.SCHEDULED_REVIEWS);
-      return sanitizeStoredArray<ScheduledReview>(saved);
-    } catch {
-      return [];
-    }
-  });
-
-  const [reminders, setReminders] = useState<Reminder[]>(() => {
-    try {
-      const saved = localStorage.getItem(storageKeys.REMINDERS);
-      return sanitizeStoredArray<Reminder>(saved);
-    } catch {
-      return [];
-    }
-  });
-
-  const [simulados, setSimulados] = useState<Simulado[]>(() => {
-    try {
-      const saved = localStorage.getItem(storageKeys.SIMULADOS);
-      return sanitizeStoredArray<Simulado>(saved);
-    } catch {
-      return [];
-    }
-  });
-
-  // Global Plan Templates - DEPRECATED in favor of permanent catalogEditais
-  const [globalTemplates, setGlobalTemplates] = useState<PlanTemplate[]>([]);
-  const [isLoadingTemplates, setIsLoadingTemplates] = useState<boolean>(false);
-
-  // Catálogo Oficial Permanente de Editais
-  // Fonte da verdade: banco de dados do servidor (PostgreSQL) via
-  // /api/catalog/published-editais. O Firestore é mantido como espelho
-  // opcional (legado) — as duas listas são mescladas e deduplicadas.
-  const [serverCatalogEditais, setServerCatalogEditais] = useState<PublishedEditalSnapshot[]>([]);
+  // Fonte da verdade: Firestore /catalogEditais.
+  // Editais publicados são compartilhados entre todos os usuários autenticados.
   const [firestoreCatalogEditais, setFirestoreCatalogEditais] = useState<CatalogEdital[]>([]);
   const [isLoadingCatalog, setIsLoadingCatalog] = useState<boolean>(true);
 
   const refreshCatalogEditais = async (): Promise<CatalogEdital[]> => {
     setIsLoadingCatalog(true);
     try {
-      const [serverList, firestoreList] = await Promise.all([
-        fetchPublishedEditaisFromServer(),
-        getPublishedEditais(),
-      ]);
-      setServerCatalogEditais(serverList);
-      setFirestoreCatalogEditais(firestoreList);
-      return [...serverList, ...firestoreList];
+      const list = await getPublishedEditais();
+      setFirestoreCatalogEditais(list);
+      return list;
     } finally {
       setIsLoadingCatalog(false);
     }
   };
 
-  // Carga inicial do catálogo do servidor + assinatura em tempo real do espelho Firestore
+  // Carga inicial e sincronização em tempo real exclusivamente pelo Firestore.
   useEffect(() => {
     let isMounted = true;
-    fetchPublishedEditaisFromServer().then((list) => {
-      if (isMounted) {
-        setServerCatalogEditais(list);
-        setIsLoadingCatalog(false);
-      }
-    });
-
     const unsubCatalog = subscribePublishedEditais((list) => {
       if (isMounted) {
         setFirestoreCatalogEditais(list);
@@ -591,31 +228,13 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     };
   }, []);
 
-  // Lista mesclada e deduplicada (servidor tem prioridade)
   const catalogEditais = useMemo<CatalogEdital[]>(() => {
-    const seen = new Set<string>();
-    const merged: CatalogEdital[] = [];
-    const tryPush = (ed: CatalogEdital) => {
-      const identity = [
-        (ed.institution || "").toLowerCase().trim(),
-        ed.year || "",
-        (ed.editalNumber || "").toLowerCase().trim(),
-        (ed.title || "").toLowerCase().trim(),
-      ].join("|");
-      if (seen.has(ed.id) || seen.has(identity)) return;
-      seen.add(ed.id);
-      seen.add(identity);
-      merged.push(ed);
-    };
-    serverCatalogEditais.forEach(tryPush);
-    firestoreCatalogEditais.forEach(tryPush);
-    merged.sort(
+    return [...firestoreCatalogEditais].sort(
       (a, b) =>
         new Date(b.publicationDate || b.createdAt).getTime() -
         new Date(a.publicationDate || a.createdAt).getTime()
     );
-    return merged;
-  }, [serverCatalogEditais, firestoreCatalogEditais]);
+  }, [firestoreCatalogEditais]);
 
   const fetchGlobalTemplates = async () => {
     // Permanent architecture uses catalogEditais. Mocks/seeds are never used.
