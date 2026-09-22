@@ -555,6 +555,8 @@ export interface CreateCatalogEditalInput {
   sourceHash: string;
   normalizedIdentity?: string;
   logoUrl: string;
+  /** Imagem comprimida incorporada ao documento do catálogo para exibição por todos os usuários. */
+  logoDataUrl?: string;
   status?: CatalogEditalStatus;
   description?: string;
 }
@@ -621,6 +623,7 @@ export async function createCatalogEdital(
     sourceHash: data.sourceHash,
     normalizedIdentity: data.normalizedIdentity,
     logoUrl: data.logoUrl,
+    logoDataUrl: data.logoDataUrl,
     cargoPretendido: data.cargoPretendido.trim(),
     imagemTipo: "logo_oficial",
     dadosVerificados: true,
