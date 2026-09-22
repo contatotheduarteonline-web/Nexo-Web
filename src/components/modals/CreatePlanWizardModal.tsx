@@ -219,6 +219,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
   } | null>(null);
   const [ignoreDuplicityWarning, setIgnoreDuplicityWarning] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const imageInputRef = useRef<HTMLInputElement | null>(null);
 
   // Image Upload State
   const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null);
@@ -1905,6 +1906,62 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                       className="mt-1 w-full rounded-xl border border-[#384154] bg-[#171B25] px-3.5 py-2 text-xs font-bold text-white focus:border-[#F3AA2D] focus:bg-[#252B38] focus:outline-hidden dark:border-[#384154] dark:bg-[#171B25] dark:text-white"
                     />
                   </div>
+                </div>
+
+                {/* Imagem do Plano */}
+                <div>
+                  <label className="text-xs font-bold uppercase tracking-wider text-white dark:text-white">
+                    Imagem do Plano (JPG, PNG, WebP)
+                  </label>
+                  <input
+                    ref={imageInputRef}
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp"
+                    className="hidden"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (!file) return;
+                      setSelectedImageFile(file);
+                      setPreviewImageUrl(URL.createObjectURL(file));
+                    }}
+                  />
+                  {previewImageUrl ? (
+                    <div className="mt-1 flex items-center gap-3 rounded-xl border border-[#384154] bg-[#252B38] p-2.5 dark:border-[#384154] dark:bg-[#252B38]">
+                      <img
+                        src={previewImageUrl}
+                        alt="Imagem do plano"
+                        className="h-12 w-12 shrink-0 rounded-lg object-cover border border-[#384154] dark:border-[#384154]"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => imageInputRef.current?.click()}
+                        className="text-xs font-semibold text-white hover:text-white dark:text-white dark:hover:text-white truncate flex-1 cursor-pointer"
+                      >
+                        {selectedImageFile?.name}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSelectedImageFile(null);
+                          setPreviewImageUrl(null);
+                          if (imageInputRef.current) imageInputRef.current.value = "";
+                        }}
+                        className="rounded-lg p-1.5 text-white hover:text-red-500 hover:bg-red-950/30 transition"
+                        title="Remover imagem"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => imageInputRef.current?.click()}
+                      className="mt-1 flex w-full items-center justify-center gap-2 rounded-xl border-2 border-dashed border-[#384154] hover:border-[#F3AA2D] bg-[#171B25]/50 hover:bg-[#F3AA2D]/5 dark:border-[#384154] dark:bg-[#252B38]/40 px-3 py-3 text-xs font-bold text-white dark:text-white transition cursor-pointer"
+                    >
+                      <Upload className="h-4 w-4 text-[#F3AA2D]" />
+                      Selecionar imagem
+                    </button>
+                  )}
                 </div>
 
               </div>
