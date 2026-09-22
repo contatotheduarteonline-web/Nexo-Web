@@ -66,10 +66,10 @@ export const ManualStudyModal: React.FC<ManualStudyModalProps> = ({
   const [manualHours, setManualHours] = useState<number>(0);
   const [manualMinutes, setManualMinutes] = useState<number>(0);
 
-  // Questions: questões = acertos + erros
+  // Questions: three independent counters
   const [questionsDone, setQuestionsDone] = useState<number>(0);
   const [questionsCorrect, setQuestionsCorrect] = useState<number>(0);
-  const wrongQuestions = Math.max(0, questionsDone - questionsCorrect);
+  const [questionsWrong, setQuestionsWrong] = useState<number>(0);
 
   // Study date
   const [dateSelectionType, setDateSelectionType] = useState<"today" | "yesterday" | "custom">("today");
@@ -98,6 +98,7 @@ export const ManualStudyModal: React.FC<ManualStudyModalProps> = ({
       setManualMinutes(0);
       setQuestionsDone(0);
       setQuestionsCorrect(0);
+      setQuestionsWrong(0);
       setDateSelectionType("today");
       setCustomDate(getTodayYmd());
       setNotes("");
@@ -147,21 +148,13 @@ export const ManualStudyModal: React.FC<ManualStudyModalProps> = ({
     setElapsedSeconds((prev) => Math.max(0, prev + mins * 60));
   };
 
-  // Questions handlers (strict invariant: done = correct + wrong)
-  const handleAddCorrect = () => {
-    setQuestionsCorrect((p) => p + 1);
-    setQuestionsDone((p) => p + 1);
-  };
-  const handleSubtractCorrect = () => {
-    if (questionsCorrect > 0) {
-      setQuestionsCorrect((p) => p - 1);
-      setQuestionsDone((p) => Math.max(0, p - 1));
-    }
-  };
-  const handleAddWrong = () => setQuestionsDone((p) => p + 1);
-  const handleSubtractWrong = () => {
-    if (wrongQuestions > 0) setQuestionsDone((p) => Math.max(questionsCorrect, p - 1));
-  };
+  // Questions handlers — each counter is fully independent
+  const handleAddDone = () => setQuestionsDone((p) => p + 1);
+  const handleSubtractDone = () => setQuestionsDone((p) => Math.max(0, p - 1));
+  const handleAddCorrect = () => setQuestionsCorrect((p) => p + 1);
+  const handleSubtractCorrect = () => setQuestionsCorrect((p) => Math.max(0, p - 1));
+  const handleAddWrong = () => setQuestionsWrong((p) => p + 1);
+  const handleSubtractWrong = () => setQuestionsWrong((p) => Math.max(0, p - 1));
 
   const effectiveStudyDate =
     dateSelectionType === "today"
@@ -201,7 +194,12 @@ export const ManualStudyModal: React.FC<ManualStudyModalProps> = ({
       alert("Selecione uma disciplina.");
       return;
     }
-    if (durationMinutes <= 0 && questionsDone <= 0) {
+    if (
+      durationMinutes <= 0 &&
+      questionsDone <= 0 &&
+      questionsCorrect <= 0 &&
+      questionsWrong <= 0
+    ) {
       alert("Informe o tempo estudado ou registre questões para salvar.");
       return;
     }
@@ -469,14 +467,14 @@ export const ManualStudyModal: React.FC<ManualStudyModalProps> = ({
                 <div className="mt-2 flex items-center justify-center gap-1">
                   <button
                     type="button"
-                    onClick={() => setQuestionsDone((p) => Math.max(questionsCorrect, p - 1))}
+                    onClick={handleSubtractDone}
                     className="flex h-6 w-6 items-center justify-center rounded-lg border border-[#384154] text-white hover:border-[#F3AA2D]/40 cursor-pointer"
                   >
                     <Minus className="h-3 w-3" />
                   </button>
                   <button
                     type="button"
-                    onClick={handleAddWrong}
+                    onClick={handleAddDone}
                     className="flex h-6 w-6 items-center justify-center rounded-lg bg-[#384154] text-white hover:bg-[#4A556E] cursor-pointer"
                   >
                     <Plus className="h-3 w-3" />
@@ -511,7 +509,7 @@ export const ManualStudyModal: React.FC<ManualStudyModalProps> = ({
               {/* Erros */}
               <div className="nx-deep rounded-xl p-3">
                 <div className="num-condensed text-[24px] font-bold text-[#F87171]">
-                  {wrongQuestions}
+                  {questionsWrong}
                 </div>
                 <div className="mt-0.5 text-[11px] text-[#F87171]/70">Erros</div>
                 <div className="mt-2 flex items-center justify-center gap-1">

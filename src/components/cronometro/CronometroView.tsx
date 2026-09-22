@@ -179,41 +179,25 @@ export const CronometroView: React.FC = () => {
     return topics.filter((t) => t.name.toLowerCase().includes(term));
   }, [topics, topicSearchTerm]);
 
-  // 2. Questions Counter State (Strict Invariant: questoes = acertos + erros)
+  // 2. Questions Counter State (three independent counters)
   const [questionsDone, setQuestionsDone] = useState<number>(0);
   const [questionsCorrect, setQuestionsCorrect] = useState<number>(0);
+  const [questionsWrong, setQuestionsWrong] = useState<number>(0);
 
-  const wrongQuestions = Math.max(0, questionsDone - questionsCorrect);
   const accuracyRate = questionsDone > 0 ? Math.round((questionsCorrect / questionsDone) * 100) : 0;
 
-  const handleAddCorrect = () => {
-    setQuestionsCorrect((prev) => prev + 1);
-    setQuestionsDone((prev) => prev + 1);
-  };
-
+  const handleAddCorrect = () => setQuestionsCorrect((prev) => prev + 1);
   const handleSubtractCorrect = () => {
-    if (questionsCorrect > 0) {
-      setQuestionsCorrect((prev) => prev - 1);
-      setQuestionsDone((prev) => Math.max(0, prev - 1));
-    }
+    setQuestionsCorrect((prev) => Math.max(0, prev - 1));
   };
 
-  const handleAddWrong = () => {
-    setQuestionsDone((prev) => prev + 1);
-  };
-
+  const handleAddWrong = () => setQuestionsWrong((prev) => prev + 1);
   const handleSubtractWrong = () => {
-    if (wrongQuestions > 0) {
-      setQuestionsDone((prev) => Math.max(questionsCorrect, prev - 1));
-    }
+    setQuestionsWrong((prev) => Math.max(0, prev - 1));
   };
 
   const handleDirectQuestionsDoneChange = (val: number) => {
-    const nextVal = Math.max(0, val);
-    setQuestionsDone(nextVal);
-    if (questionsCorrect > nextVal) {
-      setQuestionsCorrect(nextVal);
-    }
+    setQuestionsDone(Math.max(0, val));
   };
 
   // 3. Time Mode State (Stopwatch vs Manual Time Input)
@@ -302,7 +286,7 @@ export const CronometroView: React.FC = () => {
         ? manualHours * 60 + manualMinutes
         : Math.round(timer.elapsedSeconds / 60);
 
-    if (duration <= 0 && questionsDone === 0) {
+    if (duration <= 0 && questionsDone === 0 && questionsCorrect === 0 && questionsWrong === 0) {
       alert("Informe o tempo estudado (no cronômetro ou manualmente) ou registre questões para salvar.");
       return;
     }
@@ -345,6 +329,7 @@ export const CronometroView: React.FC = () => {
       // Reset local inputs cleanly
       setQuestionsDone(0);
       setQuestionsCorrect(0);
+      setQuestionsWrong(0);
       setSessionNotes("");
       setTheoryCompleted(false);
       setScheduleReviews(false);
@@ -784,7 +769,7 @@ export const CronometroView: React.FC = () => {
               {/* Erros */}
               <div className="rounded-lg bg-rose-50/50 p-3 dark:bg-rose-950/20">
                 <div className="text-2xl font-bold text-rose-600 dark:text-rose-400">
-                  {wrongQuestions}
+                  {questionsWrong}
                 </div>
                 <div className="mt-0.5 text-[11px] text-rose-600/70 dark:text-rose-400/70">
                   Erros
