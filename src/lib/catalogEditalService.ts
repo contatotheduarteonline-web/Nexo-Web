@@ -536,6 +536,8 @@ export function validateCatalogEditalData(
 }
 
 export interface CreateCatalogEditalInput {
+  /** ID explícito (usado para espelhar o mesmo registro publicado no banco do servidor). */
+  id?: string;
   title: string;
   cargoPretendido: string;
   institution: string;
@@ -599,7 +601,7 @@ export async function createCatalogEdital(
   }
 
   const now = new Date().toISOString();
-  const editalId = `catalog-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`;
+  const editalId = data.id || `catalog-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`;
 
   const newEdital: CatalogEdital = {
     id: editalId,

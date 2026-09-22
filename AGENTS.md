@@ -32,6 +32,13 @@
 - Prisma migrations: `npx prisma migrate deploy` runs on container startup.
 - Type check: `npm run lint` (tsc --noEmit).
 
+## Official Edital Catalog (published editais)
+- **Source of truth**: PostgreSQL table `PublishedEdital` (model in `prisma/schema.prisma`). Each row stores the full edital snapshot (cargos + disciplines + topics) in `dataJson`.
+- Server API: `GET/POST /api/catalog/published-editais` in `server.ts`. POST upserts by id; GET returns only `status: "published"`.
+- Frontend service: `src/lib/serverCatalogService.ts` (`fetchPublishedEditaisFromServer`, `publishEditalToServer`).
+- `StudyContext` merges server list + legacy Firestore mirror (`catalogEditais`) and dedupes; the wizard (Step 3) reads embedded `cargos` from the snapshot instead of Firestore subcollections.
+- Rule: when an admin publishes an edital in the plan wizard, it is written to PostgreSQL first (visible errors on failure); the Firestore mirror is best-effort. Published editais appear immediately for ALL users.
+
 ## Key Files
 - `server.ts` — Express API + Vite middleware (the entire backend).
 - `src/lib/prisma.ts` — Prisma client singleton with DB connection testing.

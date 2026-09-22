@@ -69,6 +69,10 @@ import {
   getFullCargoStructure,
   checkForPlanEditalUpdate,
 } from "../lib/catalogEditalService";
+import {
+  fetchPublishedEditaisFromServer,
+  PublishedEditalSnapshot,
+} from "../lib/serverCatalogService";
 import { auth } from "../lib/firebase";
 import {
   fetchPlanImageFromFirestore,
@@ -542,31 +546,76 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   const [globalTemplates, setGlobalTemplates] = useState<PlanTemplate[]>([]);
   const [isLoadingTemplates, setIsLoadingTemplates] = useState<boolean>(false);
 
-  // Catálogo Oficial Permanente de Editais (Firestore)
-  const [catalogEditais, setCatalogEditais] = useState<CatalogEdital[]>([]);
+  // Catálogo Oficial Permanente de Editais
+  // Fonte da verdade: banco de dados do servidor (PostgreSQL) via
+  // /api/catalog/published-editais. O Firestore é mantido como espelho
+  // opcional (legado) — as duas listas são mescladas e deduplicadas.
+  const [serverCatalogEditais, setServerCatalogEditais] = useState<PublishedEditalSnapshot[]>([]);
+  const [firestoreCatalogEditais, setFirestoreCatalogEditais] = useState<CatalogEdital[]>([]);
   const [isLoadingCatalog, setIsLoadingCatalog] = useState<boolean>(true);
-
-  // Assinatura em tempo real de editais publicados
-  useEffect(() => {
-    const unsubCatalog = subscribePublishedEditais((list) => {
-      setCatalogEditais(list);
-      setIsLoadingCatalog(false);
-    });
-    return () => {
-      unsubCatalog();
-    };
-  }, []);
 
   const refreshCatalogEditais = async (): Promise<CatalogEdital[]> => {
     setIsLoadingCatalog(true);
     try {
-      const list = await getPublishedEditais();
-      setCatalogEditais(list);
-      return list;
+      const [serverList, firestoreList] = await Promise.all([
+        fetchPublishedEditaisFromServer(),
+        getPublishedEditais(),
+      ]);
+      setServerCatalogEditais(serverList);
+      setFirestoreCatalogEditais(firestoreList);
+      return [...serverList, ...firestoreList];
     } finally {
       setIsLoadingCatalog(false);
     }
   };
+
+  // Carga inicial do catálogo do servidor + assinatura em tempo real do espelho Firestore
+  useEffect(() => {
+    let isMounted = true;
+    fetchPublishedEditaisFromServer().then((list) => {
+      if (isMounted) {
+        setServerCatalogEditais(list);
+        setIsLoadingCatalog(false);
+      }
+    });
+
+    const unsubCatalog = subscribePublishedEditais((list) => {
+      if (isMounted) {
+        setFirestoreCatalogEditais(list);
+        setIsLoadingCatalog(false);
+      }
+    });
+    return () => {
+      isMounted = false;
+      unsubCatalog();
+    };
+  }, []);
+
+  // Lista mesclada e deduplicada (servidor tem prioridade)
+  const catalogEditais = useMemo<CatalogEdital[]>(() => {
+    const seen = new Set<string>();
+    const merged: CatalogEdital[] = [];
+    const tryPush = (ed: CatalogEdital) => {
+      const identity = [
+        (ed.institution || "").toLowerCase().trim(),
+        ed.year || "",
+        (ed.editalNumber || "").toLowerCase().trim(),
+        (ed.title || "").toLowerCase().trim(),
+      ].join("|");
+      if (seen.has(ed.id) || seen.has(identity)) return;
+      seen.add(ed.id);
+      seen.add(identity);
+      merged.push(ed);
+    };
+    serverCatalogEditais.forEach(tryPush);
+    firestoreCatalogEditais.forEach(tryPush);
+    merged.sort(
+      (a, b) =>
+        new Date(b.publicationDate || b.createdAt).getTime() -
+        new Date(a.publicationDate || a.createdAt).getTime()
+    );
+    return merged;
+  }, [serverCatalogEditais, firestoreCatalogEditais]);
 
   const fetchGlobalTemplates = async () => {
     // Permanent architecture uses catalogEditais. Mocks/seeds are never used.

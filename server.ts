@@ -3602,6 +3602,84 @@ function generateCatalogSlug(orgao: string, cargo: string, banca: string, ano: n
   return `${base}-${Date.now().toString(36).substr(-4)}`;
 }
 
+// ============================================================================
+// CATÁLOGO OFICIAL DE EDITAIS PUBLICADOS (PostgreSQL — fonte da verdade)
+// Qualquer edital publicado aqui aparece imediatamente como opção de plano
+// para todos os usuários, sem depender de serviços externos.
+// ============================================================================
+
+// GET /api/catalog/published-editais - Lista editais com status "published"
+app.get("/api/catalog/published-editais", async (_req, res) => {
+  try {
+    if (!isDatabaseConnected()) {
+      return res.json({ success: true, editais: [] });
+    }
+
+    const rows = await prisma.publishedEdital.findMany({
+      where: { status: "published" },
+      orderBy: { createdAt: "desc" },
+    });
+
+    const editais = rows
+      .map((row) => safeJsonParse<any>(row.dataJson, null))
+      .filter(Boolean);
+
+    return res.json({ success: true, editais });
+  } catch (error: any) {
+    console.error("[CATALOG DB] Erro ao listar editais publicados:", error);
+    return res.json({ success: true, editais: [] });
+  }
+});
+
+// POST /api/catalog/published-editais - Publica (upsert) um edital completo no catálogo oficial
+// Body: { edital: CatalogEdital, cargos: [{ ..., disciplines: [{ ..., topics: [...] }] }] }
+app.post("/api/catalog/published-editais", async (req, res) => {
+  try {
+    if (!isDatabaseConnected()) {
+      return res.status(503).json({ error: "Banco de dados PostgreSQL não conectado." });
+    }
+
+    const { edital, cargos } = req.body || {};
+    if (!edital || !edital.id || !edital.title || !edital.institution) {
+      return res.status(400).json({ error: "Dados do edital incompletos: id, título e órgão são obrigatórios." });
+    }
+
+    const cargosList = Array.isArray(cargos) ? cargos : [];
+    const snapshot = {
+      ...edital,
+      cargosCount: cargosList.length,
+      cargos: cargosList,
+    };
+
+    const row = {
+      id: String(edital.id),
+      status: String(edital.status || "published"),
+      title: String(edital.title),
+      institution: String(edital.institution || ""),
+      uf: edital.uf || edital.state || null,
+      careerId: edital.careerId || null,
+      year: Number(edital.year) || null,
+      editalNumber: edital.editalNumber || null,
+      board: edital.board || null,
+      cargoPretendido: edital.cargoPretendido || null,
+      logoUrl: edital.logoUrl || null,
+      sourceHash: edital.sourceHash || null,
+      dataJson: JSON.stringify(snapshot),
+    };
+
+    await prisma.publishedEdital.upsert({
+      where: { id: row.id },
+      create: row,
+      update: { ...row, updatedAt: new Date() },
+    });
+
+    return res.json({ success: true, edital: snapshot });
+  } catch (error: any) {
+    console.error("[CATALOG DB] Erro ao publicar edital:", error);
+    return res.status(500).json({ error: error.message || "Erro ao publicar edital no catálogo." });
+  }
+});
+
 // GET /api/catalog/templates - List all official catalog templates with disciplines & topics
 app.get("/api/catalog/templates", async (_req, res) => {
   try {
