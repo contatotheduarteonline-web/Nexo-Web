@@ -79,6 +79,7 @@ import {
   normalizeHex,
 } from "../../utils/disciplineColors";
 import { DisciplineColorPickerModal } from "../disciplinas/DisciplineColorPickerModal";
+import { WizardSidePanel, WizardSelectionPanel } from "./wizard/WizardSidePanel";
 
 interface CreatePlanWizardModalProps {
   isOpen: boolean;
@@ -185,6 +186,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
 
   // Step 3: Edital
   const [concursoSearchQuery, setConcursoSearchQuery] = useState("");
+  const [ufFilter, setUfFilter] = useState<string>("all");
   const [selectedCatalogEdital, setSelectedCatalogEdital] = useState<CatalogEdital | null>(null);
   const [selectedCatalogCargo, setSelectedCatalogCargo] = useState<CatalogCargo | null>(null);
   const [availableCatalogCargos, setAvailableCatalogCargos] = useState<CatalogCargo[]>([]);
@@ -271,6 +273,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
       setSelectedObjective("Concurso Público");
       setSelectedCareerId("policial");
       setConcursoSearchQuery("");
+      setUfFilter("all");
       setSelectedCatalogEdital(null);
       setSelectedCatalogCargo(null);
       setAvailableCatalogCargos([]);
@@ -327,6 +330,10 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
       if (ed.careerId) {
         if (ed.careerId.toLowerCase() !== selectedCareerId.toLowerCase()) return false;
       }
+      if (ufFilter !== "all") {
+        const edUf = (ed.uf || ed.state || "").trim().toUpperCase();
+        if (edUf !== ufFilter) return false;
+      }
       const q = concursoSearchQuery.toLowerCase().trim();
       if (!q) return true;
       return (
@@ -338,7 +345,18 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
         (ed.state || "").toLowerCase().includes(q)
       );
     });
-  }, [catalogEditais, selectedCareerId, concursoSearchQuery]);
+  }, [catalogEditais, selectedCareerId, concursoSearchQuery, ufFilter]);
+
+  // UFs disponíveis nos editais da carreira selecionada (para o filtro da etapa de edital)
+  const availableUfs = useMemo(() => {
+    const ufSet = new Set<string>();
+    catalogEditais.forEach((ed) => {
+      if (ed.careerId && ed.careerId.toLowerCase() !== selectedCareerId.toLowerCase()) return;
+      const uf = (ed.uf || ed.state || "").trim().toUpperCase();
+      if (uf) ufSet.add(uf);
+    });
+    return Array.from(ufSet).sort();
+  }, [catalogEditais, selectedCareerId]);
 
   // Efeito para carregar a contagem de cargos dos editais da carreira selecionada
   useEffect(() => {
@@ -1212,13 +1230,13 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-3 sm:p-4 backdrop-blur-xs">
-      <div className="relative flex flex-col w-full max-w-3xl max-h-[92vh] overflow-hidden rounded-2xl border border-[#384154] bg-[#252B38] shadow-2xl dark:border-[#384154] dark:bg-[#252B38]">
+      <div className="relative flex flex-col w-full max-w-5xl max-h-[92vh] overflow-hidden rounded-2xl border border-[#384154] bg-[#252B38] shadow-2xl dark:border-[#384154] dark:bg-[#252B38]">
         {/* Modal Header */}
         <div className="flex items-center justify-between border-b border-[#384154] bg-[#171B25] px-5 sm:px-6 py-3.5 dark:border-[#384154] dark:bg-[#11151F]">
           <div>
-            <h2 className="text-sm sm:text-base font-bold text-white dark:text-white flex items-center gap-2">
-              <Shield className="h-4 w-4 text-[#F3AA2D]" />
-              <span>Criar Novo Plano de Estudos</span>
+            <h2 className="font-condensed text-lg sm:text-xl font-bold uppercase tracking-wide text-white dark:text-white flex items-baseline gap-1">
+              <span>Seu Plano</span>
+              <span className="text-[#F3AA2D]">.</span>
             </h2>
             <p className="text-[11px] sm:text-xs text-white dark:text-white">
               {step === "objective" && "Etapa 1 de 6: Objetivo principal"}
@@ -1270,49 +1288,48 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
           {/* ETAPA 1: OBJETIVO PRINCIPAL (LISTA VERTICAL ROLÁVEL) */}
           {/* ========================================================================= */}
           {step === "objective" && (
-            <div className="space-y-3">
-              <div>
+            <div className="grid gap-5 lg:grid-cols-[1fr_290px]">
+              <div className="min-w-0">
                 <h3 className="text-sm font-bold text-white dark:text-white">
-                  Qual é o seu objetivo?
+                  Qual o seu objetivo com o NEXO?
                 </h3>
                 <p className="text-xs text-white dark:text-white mt-0.5">
-                  Selecione o tipo de preparação que você irá iniciar:
+                  Escolha o tipo de preparação que você vai iniciar:
                 </p>
-              </div>
 
-              {/* Lista Vertical Rolável Padronizada */}
-              <div className="max-h-[380px] overflow-y-auto divide-y divide-[#384154] dark:divide-[#384154] rounded-xl border border-[#384154] dark:border-[#384154] bg-[#252B38] dark:bg-[#252B38] pr-0.5">
-                {OBJECTIVE_OPTIONS.map((opt) => {
-                  const Icon = opt.icon;
-                  const isSelected = selectedObjective === opt.id;
-                  return (
-                    <button
-                      key={opt.id}
-                      type="button"
-                      onClick={() => setSelectedObjective(opt.id)}
-                      className={`w-full flex items-center justify-between p-3 text-left transition cursor-pointer ${
-                        isSelected
-                          ? "bg-[#F3AA2D]/10 dark:bg-[#F3AA2D]/15 border-l-4 border-l-[#F3AA2D]"
-                          : "hover:bg-[#2D3442] dark:hover:bg-[#2D3442]"
-                      }`}
-                    >
-                      <div className="flex items-center gap-3 min-w-0">
+                {/* Botões de objetivo com faixa lateral */}
+                <div className="mt-4 max-h-[380px] space-y-2 overflow-y-auto pr-0.5">
+                  {OBJECTIVE_OPTIONS.map((opt) => {
+                    const Icon = opt.icon;
+                    const isSelected = selectedObjective === opt.id;
+                    return (
+                      <button
+                        key={opt.id}
+                        type="button"
+                        onClick={() => setSelectedObjective(opt.id)}
+                        className={`flex w-full items-center gap-3 rounded-2xl border p-3 text-left transition cursor-pointer ${
+                          isSelected
+                            ? "border-[#F3AA2D]/60 bg-[#F3AA2D]/10"
+                            : "border-[#384154] bg-[#171B25] hover:border-[#4A5470] hover:bg-[#1B2129]"
+                        }`}
+                      >
+                        <span
+                          className={`h-9 w-1.5 shrink-0 rounded-full transition ${
+                            isSelected ? "bg-[#F3AA2D]" : "bg-[#384154]"
+                          }`}
+                        />
                         <div
-                          className={`p-2 rounded-lg shrink-0 transition ${
-                            isSelected
-                              ? "bg-[#F3AA2D] text-white"
-                              : "bg-[#171B25] text-white dark:bg-[#171B25] dark:text-white"
+                          className={`p-1.5 rounded-lg shrink-0 transition ${
+                            isSelected ? "bg-[#F3AA2D] text-[#11151F]" : "bg-[#252B38] text-white"
                           }`}
                         >
                           <Icon className="h-4 w-4" />
                         </div>
-                        <div className="min-w-0">
+                        <div className="min-w-0 flex-1">
                           <div className="flex items-center gap-2">
                             <span
                               className={`text-xs block font-bold truncate ${
-                                isSelected
-                                  ? "text-[#F3AA2D] dark:text-[#F3AA2D]"
-                                  : "text-white dark:text-white"
+                                isSelected ? "text-[#F3AA2D]" : "text-white dark:text-white"
                               }`}
                             >
                               {opt.title}
@@ -1323,25 +1340,26 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                               </span>
                             )}
                           </div>
-                          <span className="text-[11px] text-white dark:text-white line-clamp-1 mt-0.5">
+                          <span className="text-[11px] text-white/70 dark:text-white line-clamp-1 mt-0.5">
                             {opt.description}
                           </span>
                         </div>
-                      </div>
 
-                      <div className="shrink-0 pl-2">
                         {isSelected ? (
-                          <div className="flex h-5 w-5 items-center justify-center rounded-full bg-[#F3AA2D] text-white">
+                          <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#F3AA2D] text-[#11151F]">
                             <Check className="h-3 w-3" />
                           </div>
                         ) : (
-                          <div className="h-4 w-4 rounded-full border border-[#384154] dark:border-[#384154]" />
+                          <div className="h-4 w-4 shrink-0 rounded-full border border-[#384154]" />
                         )}
-                      </div>
-                    </button>
-                  );
-                })}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
+
+              {/* Painel lateral com os diferenciais do NEXO */}
+              <WizardSidePanel title="Sua jornada de estudos começa aqui!" />
             </div>
           )}
 
@@ -1349,76 +1367,47 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
           {/* ETAPA 2: CARREIRA (LISTA VERTICAL ROLÁVEL) */}
           {/* ========================================================================= */}
           {step === "career" && (
-            <div className="space-y-3">
-              <div>
-                <h3 className="text-sm font-bold text-white dark:text-white">
-                  Qual é a sua carreira de foco?
+            <div className="grid gap-5 lg:grid-cols-[1fr_290px]">
+              <div className="min-w-0">
+                <span className="text-[10px] font-bold text-white/60 uppercase tracking-wider block">
+                  Áreas de interesse
+                </span>
+                <h3 className="text-sm font-bold text-white dark:text-white mt-1">
+                  Qual área combina com o seu objetivo?
                 </h3>
                 <p className="text-xs text-white dark:text-white mt-0.5">
-                  Filtraremos os editais cadastrados e estruturaremos seu catálogo por carreira:
+                  Usamos a área para organizar o catálogo de editais do NEXO:
                 </p>
+
+                {/* Grade de áreas em formato de pílulas */}
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {CAREER_OPTIONS.map((area) => {
+                    const isSelected = selectedCareerId === area.id;
+                    return (
+                      <button
+                        key={area.id}
+                        type="button"
+                        onClick={() => {
+                          setSelectedCareerId(area.id);
+                          setSelectedCatalogEdital(null);
+                          setSelectedCatalogCargo(null);
+                          setAvailableCatalogCargos([]);
+                          setUfFilter("all");
+                        }}
+                        className={`rounded-full border px-3.5 py-2 text-xs font-semibold transition cursor-pointer ${
+                          isSelected
+                            ? "border-[#F3AA2D] bg-[#F3AA2D] text-[#11151F]"
+                            : "border-[#384154] bg-[#171B25] text-white hover:border-[#4A5470] hover:bg-[#1B2129]"
+                        }`}
+                      >
+                        {area.title}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
 
-              {/* Lista Vertical Rolável Profissional */}
-              <div className="max-h-[380px] overflow-y-auto divide-y divide-[#384154] dark:divide-[#384154] rounded-xl border border-[#384154] dark:border-[#384154] bg-[#252B38] dark:bg-[#252B38] pr-0.5">
-                {CAREER_OPTIONS.map((area) => {
-                  const Icon = area.icon;
-                  const isSelected = selectedCareerId === area.id;
-                  return (
-                    <button
-                      key={area.id}
-                      type="button"
-                      onClick={() => {
-                        setSelectedCareerId(area.id);
-                        setSelectedCatalogEdital(null);
-                        setSelectedCatalogCargo(null);
-                        setAvailableCatalogCargos([]);
-                      }}
-                      className={`w-full flex items-center justify-between p-3 text-left transition cursor-pointer ${
-                        isSelected
-                          ? "bg-[#F3AA2D]/10 dark:bg-[#F3AA2D]/15 border-l-4 border-l-[#F3AA2D]"
-                          : "hover:bg-[#2D3442] dark:hover:bg-[#2D3442]"
-                      }`}
-                    >
-                      <div className="flex items-center gap-3 min-w-0">
-                        <div
-                          className={`p-2 rounded-lg shrink-0 transition ${
-                            isSelected
-                              ? "bg-[#F3AA2D] text-white"
-                              : "bg-[#171B25] text-white dark:bg-[#171B25] dark:text-white"
-                          }`}
-                        >
-                          <Icon className="h-4 w-4" />
-                        </div>
-                        <div className="min-w-0">
-                          <span
-                            className={`text-xs block font-bold truncate ${
-                              isSelected
-                                ? "text-[#F3AA2D] dark:text-[#F3AA2D]"
-                                : "text-white dark:text-white"
-                            }`}
-                          >
-                            {area.title}
-                          </span>
-                          <span className="text-[11px] text-white dark:text-white line-clamp-1 mt-0.5">
-                            {area.description}
-                          </span>
-                        </div>
-                      </div>
-
-                      <div className="shrink-0 pl-2">
-                        {isSelected ? (
-                          <div className="flex h-5 w-5 items-center justify-center rounded-full bg-[#F3AA2D] text-white">
-                            <Check className="h-3 w-3" />
-                          </div>
-                        ) : (
-                          <div className="h-4 w-4 rounded-full border border-[#384154] dark:border-[#384154]" />
-                        )}
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
+              <WizardSidePanel title="Editais organizados pela sua área" />
             </div>
           )}
 
@@ -1426,199 +1415,194 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
           {/* ETAPA 3: EDITAL E CARGO (BUSCA, LISTA VERTICAL E SELEÇÃO DE CARGO) */}
           {/* ========================================================================= */}
           {step === "edital" && (
-            <div className="space-y-4">
-              <div>
-                <h3 className="text-sm font-bold text-white dark:text-white">
-                  Escolha seu edital
-                </h3>
-                <p className="text-xs text-white dark:text-white mt-0.5">
-                  Carreira: <strong className="text-white dark:text-white">{currentCareer.title}</strong> • Selecione o certame desejado e indique o cargo que você pretende disputar:
-                </p>
-              </div>
-
-              {/* Barra de Busca Funcional e Ações Rápidas */}
-              <div className="space-y-2">
-                <div className="relative w-full">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-white" />
-                  <input
-                    type="text"
-                    value={concursoSearchQuery}
-                    onChange={(e) => setConcursoSearchQuery(e.target.value)}
-                    placeholder={`Buscar edital de ${currentCareer.title}...`}
-                    className="w-full rounded-xl border border-[#384154] bg-[#252B38] py-2 pl-9 pr-3.5 text-xs text-white placeholder:text-white/50 focus:border-[#F3AA2D] focus:outline-hidden dark:border-[#384154] dark:bg-[#252B38] dark:text-white"
-                  />
+            <div className="grid gap-5 lg:grid-cols-[1fr_250px]">
+              <div className="min-w-0 space-y-4">
+                <div>
+                  <h3 className="text-sm font-bold text-white dark:text-white">
+                    Escolha seu edital
+                  </h3>
+                  <p className="text-xs text-white dark:text-white mt-0.5">
+                    Área: <strong className="text-white dark:text-white">{currentCareer.title}</strong> • Selecione o certame e, em seguida, o cargo pretendido:
+                  </p>
                 </div>
 
-                <div className="flex flex-wrap items-center gap-2">
-                  <button
-                    type="button"
-                    onClick={handleStartImportEdital}
-                    className="flex-1 min-w-[140px] inline-flex items-center justify-center gap-1.5 rounded-xl border border-[#384154] bg-[#171B25] hover:bg-[#2D3442] dark:border-[#384154] dark:bg-[#2D3442] dark:hover:bg-[#2D3442] px-3 py-1.5 text-xs font-semibold text-white dark:text-white transition cursor-pointer"
-                  >
-                    <Upload className="h-3.5 w-3.5 text-[#F3AA2D]" />
-                    <span>Importar edital (PDF)</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleSelectCustomPlan}
-                    className="flex-1 min-w-[140px] inline-flex items-center justify-center gap-1.5 rounded-xl border border-[#384154] bg-[#171B25] hover:bg-[#2D3442] dark:border-[#384154] dark:bg-[#2D3442] dark:hover:bg-[#2D3442] px-3 py-1.5 text-xs font-semibold text-white dark:text-white transition cursor-pointer"
-                  >
-                    <Plus className="h-3.5 w-3.5 text-[#F3AA2D]" />
-                    <span>Criar plano personalizado</span>
-                  </button>
-                </div>
-              </div>
-
-              {/* Lista Vertical Rolável de Editais */}
-              <div className="space-y-1.5">
-                <span className="text-[10px] font-bold text-white uppercase tracking-wider block">
-                  Editais disponíveis ({editaisForCareer.length})
-                </span>
-
-                {editaisForCareer.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center py-8 px-4 rounded-xl border border-dashed border-[#384154] dark:border-[#384154] bg-[#171B25]/50 dark:bg-[#252B38]/40 text-center">
-                    <BookOpen className="w-5 h-5 text-white mb-2" />
-                    <h4 className="text-xs font-bold text-white dark:text-white">
-                      Nenhum edital encontrado para esta carreira.
-                    </h4>
-                    <p className="text-[11px] text-white dark:text-white mt-0.5 max-w-sm">
-                      Utilize os botões acima para importar o PDF oficial ou montar um plano livre.
-                    </p>
+                {/* Filtros e Ações Rápidas */}
+                <div className="flex flex-col gap-2">
+                  <div className="relative w-full">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-white" />
+                    <input
+                      type="text"
+                      value={concursoSearchQuery}
+                      onChange={(e) => setConcursoSearchQuery(e.target.value)}
+                      placeholder={`Buscar edital de ${currentCareer.title}...`}
+                      className="w-full rounded-xl border border-[#384154] bg-[#171B25] py-2 pl-9 pr-3.5 text-xs text-white placeholder:text-white/50 focus:border-[#F3AA2D] focus:outline-hidden dark:border-[#384154] dark:bg-[#171B25] dark:text-white"
+                    />
                   </div>
-                ) : (
-                  <div className="max-h-52 overflow-y-auto divide-y divide-[#384154] dark:divide-[#384154] rounded-xl border border-[#384154] dark:border-[#384154] bg-[#252B38] dark:bg-[#252B38] pr-0.5">
-                    {editaisForCareer.map((ed) => {
-                      const isSelected = selectedCatalogEdital?.id === ed.id;
-                      const cargosCount = editalCargosCountMap[ed.id] ?? ed.cargosCount ?? 1;
 
-                      return (
-                        <button
-                          key={ed.id}
-                          type="button"
-                          onClick={() => handleSelectCatalogEdital(ed)}
-                          disabled={isLoadingCargos}
-                          className={`w-full flex items-center justify-between p-3 text-left transition cursor-pointer ${
-                            isSelected
-                              ? "bg-[#F3AA2D]/10 dark:bg-[#F3AA2D]/15 border-l-4 border-l-[#F3AA2D]"
-                              : "hover:bg-[#2D3442] dark:hover:bg-[#2D3442]"
-                          }`}
-                        >
-                          <div className="flex items-center gap-3 min-w-0">
-                            <div
-                              className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg transition ${
-                                isSelected
-                                  ? "bg-[#F3AA2D] text-white"
-                                  : "bg-[#171B25] dark:bg-[#171B25] text-white dark:text-white"
-                              }`}
-                            >
-                              <Shield className="h-4 w-4" />
-                            </div>
-                            <div className="min-w-0">
-                              <span className="font-bold text-xs text-white dark:text-white block truncate">
-                                {ed.title || ed.institution}
-                              </span>
-                              <span className="text-[11px] text-white dark:text-white block truncate mt-0.5">
-                                {ed.institution}
-                              </span>
-                              <span className="text-[10px] text-white dark:text-white block truncate mt-0.5">
-                                Banca: {ed.board || "A definir"} • {ed.year || "2024"} • {ed.state || ed.uf || "BR"} • {cargosCount} {cargosCount === 1 ? "cargo" : "cargos"}
-                              </span>
-                            </div>
-                          </div>
-
-                          <div className="shrink-0 pl-2">
-                            {isSelected ? (
-                              <div className="flex h-5 w-5 items-center justify-center rounded-full bg-[#F3AA2D] text-white">
-                                <Check className="h-3 w-3" />
-                              </div>
-                            ) : (
-                              <ChevronRight className="h-4 w-4 text-white dark:text-white" />
-                            )}
-                          </div>
-                        </button>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-
-              {/* SELEÇÃO DE CARGO NESTA MESMA ETAPA (quando edital selecionado) */}
-              {selectedCatalogEdital && (
-                <div className="space-y-2 pt-1">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <span className="text-[10px] font-bold text-[#F3AA2D] uppercase tracking-wider block">
-                        Escolha o cargo deste edital
-                      </span>
-                      <span className="text-xs text-white dark:text-white">
-                        {selectedCatalogEdital.institution}
-                      </span>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <div className="relative">
+                      <select
+                        value={ufFilter}
+                        onChange={(e) => setUfFilter(e.target.value)}
+                        className="appearance-none rounded-full border border-[#384154] bg-[#171B25] py-1.5 pl-3.5 pr-8 text-xs font-semibold text-white focus:border-[#F3AA2D] focus:outline-hidden cursor-pointer dark:border-[#384154] dark:bg-[#171B25] dark:text-white"
+                      >
+                        <option value="all">Todas as UFs</option>
+                        {availableUfs.map((uf) => (
+                          <option key={uf} value={uf}>
+                            {uf}
+                          </option>
+                        ))}
+                      </select>
+                      <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-white" />
                     </div>
-                    {isLoadingCargos && (
-                      <span className="text-xs text-white inline-flex items-center gap-1">
-                        <Loader2 className="h-3 w-3 animate-spin text-[#F3AA2D]" />
-                        Carregando cargos...
-                      </span>
-                    )}
-                  </div>
 
-                  <div className="max-h-48 overflow-y-auto divide-y divide-[#384154] dark:divide-[#384154] rounded-xl border border-[#384154] dark:border-[#384154] bg-[#252B38] dark:bg-[#252B38] pr-0.5">
-                    {availableCatalogCargos.length === 0 && !isLoadingCargos ? (
-                      <div className="p-3 text-xs text-white text-center">
-                        Nenhum cargo específico cadastrado. Conteúdo geral selecionado.
-                      </div>
-                    ) : (
-                      availableCatalogCargos.map((cargoItem) => {
-                        const isCargoSelected = selectedCatalogCargo?.id === cargoItem.id;
+                    <button
+                      type="button"
+                      onClick={handleStartImportEdital}
+                      className="flex-1 min-w-[140px] inline-flex items-center justify-center gap-1.5 rounded-full border border-[#384154] bg-[#171B25] hover:bg-[#2D3442] dark:border-[#384154] dark:bg-[#171B25] dark:hover:bg-[#2D3442] px-3 py-1.5 text-xs font-semibold text-white dark:text-white transition cursor-pointer"
+                    >
+                      <Upload className="h-3.5 w-3.5 text-[#F3AA2D]" />
+                      <span>Importar edital (PDF)</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleSelectCustomPlan}
+                      className="flex-1 min-w-[140px] inline-flex items-center justify-center gap-1.5 rounded-full border border-[#384154] bg-[#171B25] hover:bg-[#2D3442] dark:border-[#384154] dark:bg-[#171B25] dark:hover:bg-[#2D3442] px-3 py-1.5 text-xs font-semibold text-white dark:text-white transition cursor-pointer"
+                    >
+                      <Plus className="h-3.5 w-3.5 text-[#F3AA2D]" />
+                      <span>Criar plano personalizado</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Cards de instituições com cargos em pílulas */}
+                <div>
+                  <span className="text-[10px] font-bold text-white uppercase tracking-wider block">
+                    Editais disponíveis ({editaisForCareer.length})
+                  </span>
+
+                  {editaisForCareer.length === 0 ? (
+                    <div className="mt-2 flex flex-col items-center justify-center py-8 px-4 rounded-xl border border-dashed border-[#384154] dark:border-[#384154] bg-[#171B25]/50 dark:bg-[#252B38]/40 text-center">
+                      <BookOpen className="w-5 h-5 text-white mb-2" />
+                      <h4 className="text-xs font-bold text-white dark:text-white">
+                        Nenhum edital encontrado para esta área.
+                      </h4>
+                      <p className="text-[11px] text-white dark:text-white mt-0.5 max-w-sm">
+                        Utilize os botões acima para importar o PDF oficial ou montar um plano livre.
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="mt-2 max-h-[340px] space-y-2.5 overflow-y-auto pr-0.5">
+                      {editaisForCareer.map((ed) => {
+                        const isSelected = selectedCatalogEdital?.id === ed.id;
+                        const cargosCount = editalCargosCountMap[ed.id] ?? ed.cargosCount ?? 1;
+                        const initials = (ed.acronym || ed.institution || "ED")
+                          .split(/\s+/)
+                          .map((w) => w[0])
+                          .join("")
+                          .slice(0, 2)
+                          .toUpperCase();
+
                         return (
-                          <button
-                            key={cargoItem.id}
-                            type="button"
-                            onClick={() => handleSelectCatalogCargo(selectedCatalogEdital, cargoItem)}
-                            className={`w-full flex items-center justify-between p-3 text-left transition cursor-pointer ${
-                              isCargoSelected
-                                ? "bg-[#F3AA2D]/10 dark:bg-[#F3AA2D]/15 border-l-4 border-l-[#F3AA2D]"
-                                : "hover:bg-[#2D3442] dark:hover:bg-[#2D3442]"
+                          <div
+                            key={ed.id}
+                            className={`rounded-2xl border p-3.5 transition ${
+                              isSelected
+                                ? "border-[#F3AA2D]/60 bg-[#F3AA2D]/[0.07]"
+                                : "border-[#384154] bg-[#171B25] hover:border-[#4A5470]"
                             }`}
                           >
-                            <div className="flex items-start gap-2.5 min-w-0">
-                              <div className="pt-0.5 shrink-0">
-                                {isCargoSelected ? (
-                                  <div className="h-4 w-4 rounded-full bg-[#F3AA2D] flex items-center justify-center text-white">
-                                    <div className="h-1.5 w-1.5 rounded-full bg-[#252B38]" />
-                                  </div>
+                            <button
+                              type="button"
+                              onClick={() => handleSelectCatalogEdital(ed)}
+                              disabled={isLoadingCargos}
+                              className="flex w-full items-center gap-3 text-left transition cursor-pointer"
+                            >
+                              <div
+                                className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full border font-condensed text-xs font-bold transition ${
+                                  isSelected
+                                    ? "border-[#F3AA2D] bg-[#F3AA2D] text-[#11151F]"
+                                    : "border-[#384154] bg-[#252B38] text-[#F3AA2D]"
+                                }`}
+                              >
+                                {initials}
+                              </div>
+                              <div className="min-w-0 flex-1">
+                                <span className="font-bold text-xs text-white dark:text-white block truncate">
+                                  {ed.institution}
+                                </span>
+                                <span className="text-[10px] text-white/70 dark:text-white block truncate mt-0.5">
+                                  Banca: {ed.board || "A definir"} • {ed.year || "—"} • {ed.state || ed.uf || "BR"} • {cargosCount} {cargosCount === 1 ? "cargo" : "cargos"}
+                                </span>
+                              </div>
+
+                              {isSelected ? (
+                                <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#F3AA2D] text-[#11151F]">
+                                  <Check className="h-3 w-3" />
+                                </div>
+                              ) : (
+                                <ChevronRight className="h-4 w-4 shrink-0 text-white/50" />
+                              )}
+                            </button>
+
+                            {/* Cargos do edital selecionado em formato de pílulas */}
+                            {isSelected && (
+                              <div className="mt-3 border-t border-[#384154] pt-3">
+                                {isLoadingCargos ? (
+                                  <span className="text-[11px] text-white inline-flex items-center gap-1.5">
+                                    <Loader2 className="h-3 w-3 animate-spin text-[#F3AA2D]" />
+                                    Carregando cargos...
+                                  </span>
+                                ) : availableCatalogCargos.length === 0 ? (
+                                  <p className="text-[11px] text-white/70">
+                                    Nenhum cargo específico cadastrado. Conteúdo geral selecionado.
+                                  </p>
                                 ) : (
-                                  <div className="h-4 w-4 rounded-full border border-[#384154] dark:border-[#384154]" />
+                                  <div className="flex flex-wrap gap-2">
+                                    {availableCatalogCargos.map((cargoItem) => {
+                                      const isCargoSelected = selectedCatalogCargo?.id === cargoItem.id;
+                                      return (
+                                        <button
+                                          key={cargoItem.id}
+                                          type="button"
+                                          onClick={() =>
+                                            handleSelectCatalogCargo(selectedCatalogEdital, cargoItem)
+                                          }
+                                          className={`rounded-full px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-wide transition cursor-pointer ${
+                                            isCargoSelected
+                                              ? "bg-[#F3AA2D] text-[#11151F]"
+                                              : "bg-[#252B38] text-white hover:bg-[#2D3442]"
+                                          }`}
+                                        >
+                                          {cargoItem.name}
+                                        </button>
+                                      );
+                                    })}
+                                  </div>
                                 )}
                               </div>
-                              <div className="min-w-0">
-                                <span
-                                  className={`text-xs block font-bold truncate ${
-                                    isCargoSelected
-                                      ? "text-[#F3AA2D] dark:text-[#F3AA2D]"
-                                      : "text-white dark:text-white"
-                                  }`}
-                                >
-                                  {cargoItem.name}
-                                </span>
-                                <span className="text-[11px] text-white dark:text-white block truncate mt-0.5">
-                                  Nível: {cargoItem.level === "superior" ? "Superior" : cargoItem.level === "medio" ? "Médio" : "Geral"} • Vagas: {cargoItem.vacancies || "Conforme edital"}
-                                </span>
-                              </div>
-                            </div>
-
-                            {isCargoSelected && (
-                              <span className="text-[10px] font-bold text-[#F3AA2D] shrink-0 pl-2">
-                                Selecionado
-                              </span>
                             )}
-                          </button>
+                          </div>
                         );
-                      })
-                    )}
-                  </div>
+                      })}
+                    </div>
+                  )}
                 </div>
-              )}
+              </div>
+
+              {/* Resumo da seleção atual */}
+              <WizardSelectionPanel
+                edital={selectedCatalogEdital}
+                cargo={selectedCatalogCargo}
+                disciplinesCount={totalDisciplinesAcrossAllCargos}
+                topicsCount={totalTopicsAcrossAllCargos}
+                isLoading={isLoadingCargos}
+                onClear={() => {
+                  setSelectedCatalogEdital(null);
+                  setSelectedCatalogCargo(null);
+                  setAvailableCatalogCargos([]);
+                }}
+              />
             </div>
           )}
 
@@ -2942,7 +2926,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                   type="button"
                   disabled={isSaving || activeCargoDisciplines.length === 0}
                   onClick={() => handleFinalSubmitCreatePlan(false, false)}
-                  className="flex items-center gap-1.5 rounded-xl bg-[#F3AA2D] px-5 py-2 text-xs font-bold text-white shadow-sm hover:bg-[#1f8771] transition disabled:opacity-50"
+                  className="flex items-center gap-1.5 rounded-xl bg-[#F3AA2D] px-5 py-2 text-xs font-bold text-[#11151F] shadow-sm hover:bg-[#e09a1d] transition disabled:opacity-50"
                 >
                   <Check className="h-4 w-4" />
                   <span>Criar Plano de Estudos</span>
@@ -3014,9 +2998,9 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                     setStep("review");
                   }
                 }}
-                className="flex items-center gap-1.5 rounded-xl bg-[#F3AA2D] px-5 py-2 text-xs font-bold text-white shadow-sm hover:bg-[#1f8771] transition disabled:opacity-40 disabled:cursor-not-allowed"
+                className="flex items-center gap-1.5 rounded-xl bg-[#F3AA2D] px-5 py-2 text-xs font-bold text-[#11151F] shadow-sm hover:bg-[#e09a1d] transition disabled:opacity-40 disabled:cursor-not-allowed"
               >
-                <span>Continuar</span>
+                <span>Avançar</span>
                 <ChevronRight className="h-4 w-4" />
               </button>
             )}
