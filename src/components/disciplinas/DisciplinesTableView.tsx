@@ -36,7 +36,7 @@ export const DisciplinesTableView: React.FC<DisciplinesTableViewProps> = ({
 
   if (!activeEdital) {
     return (
-      <div className="rounded-xl border border-[#E2E8F0] bg-white p-8 text-center dark:border-[#1E293B] dark:bg-[#1E293B]">
+      <div className="rounded-xl border border-[#E2E8F0] bg-white p-8 text-center dark:border-[#1E293B] dark:bg-[#252B38]">
         <BookOpen className="mx-auto h-8 w-8 text-[#737D89]" />
         <h3 className="mt-3 text-sm font-bold text-[#374151] dark:text-white">
           Nenhum Edital Ativo
@@ -86,7 +86,7 @@ export const DisciplinesTableView: React.FC<DisciplinesTableViewProps> = ({
   return (
     <div className="space-y-4">
       {/* Disciplines Data Table */}
-      <div className="overflow-hidden rounded-xl border border-[#E2E8F0] bg-white shadow-[0_1px_3px_rgba(0,0,0,0.02)] dark:border-[#1E293B] dark:bg-[#1E293B]">
+      <div className="overflow-hidden rounded-xl border border-[#E2E8F0] bg-white shadow-[0_1px_3px_rgba(0,0,0,0.02)] dark:border-[#1E293B] dark:bg-[#252B38]">
         <div className="border-b border-[#E2E8F0] bg-[#F8FAFC]/60 px-4 py-3 dark:border-[#1E293B] dark:bg-[#0F172A]/40">
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#374151] dark:text-white">
             Quadro Comparativo de Desempenho
@@ -202,7 +202,7 @@ export const DisciplinesTableView: React.FC<DisciplinesTableViewProps> = ({
                         <button
                           onClick={() => setEditingDiscipline(row.discipline)}
                           title="Editar disciplina"
-                          className="rounded-md border border-slate-200 bg-white p-1.5 text-slate-500 hover:bg-slate-50 hover:text-black dark:border-slate-800 dark:bg-[#0F172A] dark:text-slate-400 dark:hover:text-white"
+                          className="rounded-md border border-slate-200 bg-white p-1.5 text-slate-500 hover:bg-slate-50 hover:text-black dark:border-slate-800 dark:bg-[#252B38] dark:text-slate-400 dark:hover:text-white"
                         >
                           <Settings2 className="h-3 w-3" />
                         </button>
@@ -218,7 +218,7 @@ export const DisciplinesTableView: React.FC<DisciplinesTableViewProps> = ({
 
       {/* Detail Accordion / Panel of the Selected Discipline */}
       {selectedStats && (
-        <div className="rounded-xl border border-amber-500/40 bg-white p-4 shadow-xs dark:border-amber-500/40 dark:bg-[#1E293B]">
+        <div className="rounded-xl border border-amber-500/40 bg-white p-4 shadow-xs dark:border-amber-500/40 dark:bg-[#252B38]">
           <div className="flex flex-col justify-between gap-2 border-b border-slate-100 pb-3 sm:flex-row sm:items-center dark:border-[#1E293B]">
             <div className="flex items-center gap-2.5">
               <span

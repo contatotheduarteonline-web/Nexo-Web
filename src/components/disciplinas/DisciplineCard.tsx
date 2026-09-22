@@ -46,7 +46,7 @@ export const DisciplineCard: React.FC<DisciplineCardProps> = ({
   const formattedTime = hours > 0 ? `${hours}h${mins > 0 ? ` ${mins}m` : ""}` : `${mins}m`;
 
   return (
-    <div className="group relative flex flex-col justify-between rounded-2xl border border-zinc-200 bg-white p-5 shadow-xs transition hover:border-amber-500/60 hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900">
+    <div className="group relative flex flex-col justify-between rounded-2xl border border-zinc-200 bg-white p-5 shadow-xs transition hover:border-amber-500/60 hover:shadow-md dark:border-zinc-800 dark:bg-[#252B38]">
       <div>
         {/* Header: Color Accent + Name + Plan Tag */}
         <div className="flex items-start justify-between gap-3">

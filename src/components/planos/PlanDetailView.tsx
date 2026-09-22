@@ -126,7 +126,7 @@ export const PlanDetailView: React.FC<PlanDetailViewProps> = ({
       <div className="flex items-center justify-between">
         <button
           onClick={onBack}
-          className="group flex items-center gap-2 rounded-xl border border-zinc-200 bg-white px-3.5 py-2 text-xs font-bold text-zinc-700 hover:border-zinc-300 hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-850 transition"
+          className="group flex items-center gap-2 rounded-xl border border-zinc-200 bg-white px-3.5 py-2 text-xs font-bold text-zinc-700 hover:border-zinc-300 hover:bg-zinc-50 dark:border-zinc-800 dark:bg-[#252B38] dark:text-zinc-300 dark:hover:bg-zinc-850 transition"
         >
           <ArrowLeft className="h-4 w-4 transition group-hover:-translate-x-0.5" />
           <span>Voltar para todos os planos</span>
@@ -140,7 +140,7 @@ export const PlanDetailView: React.FC<PlanDetailViewProps> = ({
       </div>
 
       {/* Hero Card with Plan info */}
-      <div className="relative overflow-hidden rounded-2xl border border-zinc-200 bg-white p-6 shadow-xs dark:border-zinc-800 dark:bg-zinc-900">
+      <div className="relative overflow-hidden rounded-2xl border border-zinc-200 bg-white p-6 shadow-xs dark:border-zinc-800 dark:bg-[#252B38]">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5 min-w-0">
             {/* Plan Logo / Cover */}
@@ -220,7 +220,7 @@ export const PlanDetailView: React.FC<PlanDetailViewProps> = ({
                     className="fixed inset-0 z-20"
                     onClick={() => setIsMenuOpen(false)}
                   />
-                  <div className="absolute right-0 z-30 mt-1 w-44 rounded-xl border border-zinc-200 bg-white py-1.5 shadow-xl dark:border-zinc-800 dark:bg-zinc-900">
+                  <div className="absolute right-0 z-30 mt-1 w-44 rounded-xl border border-zinc-200 bg-white py-1.5 shadow-xl dark:border-zinc-800 dark:bg-[#252B38]">
                     <button
                       onClick={() => {
                         setIsMenuOpen(false);
@@ -262,7 +262,7 @@ export const PlanDetailView: React.FC<PlanDetailViewProps> = ({
       {/* Indicadores do Plano (Real Data) */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Horas Estudadas */}
-        <div className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-xs dark:border-zinc-800 dark:bg-zinc-900">
+        <div className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-xs dark:border-zinc-800 dark:bg-[#252B38]">
           <div className="flex items-center justify-between text-zinc-500 dark:text-zinc-400">
             <span className="text-xs font-bold uppercase tracking-wider">Horas Estudadas</span>
             <div className="rounded-xl bg-amber-500/10 p-2 text-[#F59E0B]">
@@ -280,7 +280,7 @@ export const PlanDetailView: React.FC<PlanDetailViewProps> = ({
         </div>
 
         {/* Questões Resolvidas */}
-        <div className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-xs dark:border-zinc-800 dark:bg-zinc-900">
+        <div className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-xs dark:border-zinc-800 dark:bg-[#252B38]">
           <div className="flex items-center justify-between text-zinc-500 dark:text-zinc-400">
             <span className="text-xs font-bold uppercase tracking-wider">Questões Resolvidas</span>
             <div className="rounded-xl bg-blue-500/10 p-2 text-blue-500">
@@ -298,7 +298,7 @@ export const PlanDetailView: React.FC<PlanDetailViewProps> = ({
         </div>
 
         {/* Desempenho */}
-        <div className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-xs dark:border-zinc-800 dark:bg-zinc-900">
+        <div className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-xs dark:border-zinc-800 dark:bg-[#252B38]">
           <div className="flex items-center justify-between text-zinc-500 dark:text-zinc-400">
             <span className="text-xs font-bold uppercase tracking-wider">Desempenho Médio</span>
             <div className="rounded-xl bg-emerald-500/10 p-2 text-emerald-500">
@@ -316,7 +316,7 @@ export const PlanDetailView: React.FC<PlanDetailViewProps> = ({
         </div>
 
         {/* Progresso Geral */}
-        <div className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-xs dark:border-zinc-800 dark:bg-zinc-900">
+        <div className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-xs dark:border-zinc-800 dark:bg-[#252B38]">
           <div className="flex items-center justify-between text-zinc-500 dark:text-zinc-400">
             <span className="text-xs font-bold uppercase tracking-wider">Progresso Geral</span>
             <div className="rounded-xl bg-amber-500/10 p-2 text-[#F59E0B]">
@@ -363,7 +363,7 @@ export const PlanDetailView: React.FC<PlanDetailViewProps> = ({
 
         {/* Empty state or Grid */}
         {disciplines.length === 0 ? (
-          <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-zinc-200 bg-white p-12 text-center dark:border-zinc-800 dark:bg-zinc-900">
+          <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-zinc-200 bg-white p-12 text-center dark:border-zinc-800 dark:bg-[#252B38]">
             <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-500/10 text-[#F59E0B]">
               <BookOpen className="h-6 w-6" />
             </div>
@@ -420,7 +420,7 @@ export const PlanDetailView: React.FC<PlanDetailViewProps> = ({
                 <div
                   key={disc.id}
                   onClick={() => setSelectedDisciplineForEdit(disc)}
-                  className="group relative flex flex-col justify-between rounded-2xl border border-zinc-200 bg-white p-5 shadow-xs transition hover:border-[#F59E0B] hover:shadow-md cursor-pointer dark:border-zinc-800 dark:bg-zinc-900"
+                  className="group relative flex flex-col justify-between rounded-2xl border border-zinc-200 bg-white p-5 shadow-xs transition hover:border-[#F59E0B] hover:shadow-md cursor-pointer dark:border-zinc-800 dark:bg-[#252B38]"
                 >
                   <div>
                     {/* Header: Color Indicator + Title + Tag */}

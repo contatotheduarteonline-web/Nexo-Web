@@ -67,7 +67,7 @@ export const PlanCard: React.FC<PlanCardProps> = ({
   const displayImage = customImageUrl || plan.imageUrl || edital?.imageUrl;
 
   return (
-    <div className="group relative flex flex-col justify-between rounded-2xl border border-zinc-200 bg-white p-5 shadow-xs transition hover:border-[#F59E0B]/50 hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900">
+    <div className="group relative flex flex-col justify-between rounded-2xl border border-zinc-200 bg-white p-5 shadow-xs transition hover:border-[#F59E0B]/50 hover:shadow-md dark:border-zinc-800 dark:bg-[#252B38]">
       <div>
         {/* Top bar: Image + Info + Menu */}
         <div className="flex items-start justify-between gap-3">
@@ -132,7 +132,7 @@ export const PlanCard: React.FC<PlanCardProps> = ({
                   className="fixed inset-0 z-20"
                   onClick={() => setIsMenuOpen(false)}
                 />
-                <div className="absolute right-0 z-30 mt-1 w-44 rounded-xl border border-zinc-200 bg-white py-1.5 shadow-xl dark:border-zinc-800 dark:bg-zinc-900">
+                <div className="absolute right-0 z-30 mt-1 w-44 rounded-xl border border-zinc-200 bg-white py-1.5 shadow-xl dark:border-zinc-800 dark:bg-[#252B38]">
                   <button
                     onClick={() => {
                       setIsMenuOpen(false);

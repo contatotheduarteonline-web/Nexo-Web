@@ -94,15 +94,15 @@ export const LembretesView: React.FC = () => {
 
       {/* KPI Cards */}
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-        <div className="rounded-xl border border-[#E2E8F0] bg-white p-4 shadow-[0_1px_3px_rgba(0,0,0,0.02)] dark:border-[#1E293B] dark:bg-[#1E293B]">
+        <div className="rounded-xl border border-[#E2E8F0] bg-white p-4 shadow-[0_1px_3px_rgba(0,0,0,0.02)] dark:border-[#1E293B] dark:bg-[#252B38]">
           <div className="text-[10px] font-bold text-[#737D89] uppercase dark:text-[#94A3B8]">Total de Lembretes</div>
           <div className="mt-1 text-2xl font-extrabold text-[#374151] dark:text-white">{stats.total}</div>
         </div>
-        <div className="rounded-xl border border-[#E2E8F0] bg-white p-4 shadow-[0_1px_3px_rgba(0,0,0,0.02)] dark:border-[#1E293B] dark:bg-[#1E293B]">
+        <div className="rounded-xl border border-[#E2E8F0] bg-white p-4 shadow-[0_1px_3px_rgba(0,0,0,0.02)] dark:border-[#1E293B] dark:bg-[#252B38]">
           <div className="text-[10px] font-bold text-[#F59E0B] uppercase dark:text-[#FBBF24]">Pendentes</div>
           <div className="mt-1 text-2xl font-extrabold text-[#374151] dark:text-white">{stats.pending}</div>
         </div>
-        <div className="rounded-xl border border-[#E2E8F0] bg-white p-4 shadow-[0_1px_3px_rgba(0,0,0,0.02)] dark:border-[#1E293B] dark:bg-[#1E293B]">
+        <div className="rounded-xl border border-[#E2E8F0] bg-white p-4 shadow-[0_1px_3px_rgba(0,0,0,0.02)] dark:border-[#1E293B] dark:bg-[#252B38]">
           <div className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase">Concluídos</div>
           <div className="mt-1 text-2xl font-extrabold text-[#374151] dark:text-white">{stats.completed}</div>
         </div>
@@ -181,7 +181,7 @@ export const LembretesView: React.FC = () => {
       )}
 
       {/* Filters Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-2 rounded-2xl border border-[#E2E8F0] bg-white p-3 dark:border-[#1E293B] dark:bg-[#1E293B]">
+      <div className="flex flex-wrap items-center justify-between gap-2 rounded-2xl border border-[#E2E8F0] bg-white p-3 dark:border-[#1E293B] dark:bg-[#252B38]">
         {/* Category Tabs */}
         <div className="flex flex-wrap gap-1">
           {(["TODOS", "INSCRICOES", "PROVAS", "PAGAMENTOS", "GERAL"] as const).map((cat) => (
@@ -220,7 +220,7 @@ export const LembretesView: React.FC = () => {
       {/* Reminders List */}
       <div className="space-y-2">
         {filteredReminders.length === 0 ? (
-          <div className="rounded-2xl border border-[#E2E8F0] bg-white p-8 text-center text-xs text-[#737D89] dark:border-[#1E293B] dark:bg-[#1E293B] dark:text-[#94A3B8]">
+          <div className="rounded-2xl border border-[#E2E8F0] bg-white p-8 text-center text-xs text-[#737D89] dark:border-[#1E293B] dark:bg-[#252B38] dark:text-[#94A3B8]">
             <CheckCircle2 className="mx-auto mb-2 h-8 w-8 text-[#F59E0B]" />
             <p className="font-semibold">Nenhum lembrete encontrado para este filtro.</p>
           </div>

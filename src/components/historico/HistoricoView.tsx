@@ -293,7 +293,7 @@ export const HistoricoView: React.FC = () => {
       {/* 2. RESUMO SUPERIOR (compacto e elegante) */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         {/* SESSÕES */}
-        <div className="rounded-xl border border-slate-200 bg-white p-3.5 sm:p-4 shadow-xs dark:border-slate-800 dark:bg-[#0F172A]">
+        <div className="rounded-xl border border-slate-200 bg-white p-3.5 sm:p-4 shadow-xs dark:border-slate-800 dark:bg-[#252B38]">
           <div className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-400">
             Sessões
           </div>
@@ -303,7 +303,7 @@ export const HistoricoView: React.FC = () => {
         </div>
 
         {/* TEMPO LÍQUIDO */}
-        <div className="rounded-xl border border-slate-200 bg-white p-3.5 sm:p-4 shadow-xs dark:border-slate-800 dark:bg-[#0F172A]">
+        <div className="rounded-xl border border-slate-200 bg-white p-3.5 sm:p-4 shadow-xs dark:border-slate-800 dark:bg-[#252B38]">
           <div className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-400">
             Tempo Líquido
           </div>
@@ -313,7 +313,7 @@ export const HistoricoView: React.FC = () => {
         </div>
 
         {/* QUESTÕES */}
-        <div className="rounded-xl border border-slate-200 bg-white p-3.5 sm:p-4 shadow-xs dark:border-slate-800 dark:bg-[#0F172A]">
+        <div className="rounded-xl border border-slate-200 bg-white p-3.5 sm:p-4 shadow-xs dark:border-slate-800 dark:bg-[#252B38]">
           <div className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-400">
             Questões
           </div>
@@ -323,7 +323,7 @@ export const HistoricoView: React.FC = () => {
         </div>
 
         {/* APROVEITAMENTO */}
-        <div className="rounded-xl border border-slate-200 bg-white p-3.5 sm:p-4 shadow-xs dark:border-slate-800 dark:bg-[#0F172A]">
+        <div className="rounded-xl border border-slate-200 bg-white p-3.5 sm:p-4 shadow-xs dark:border-slate-800 dark:bg-[#252B38]">
           <div className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-400">
             Aproveitamento
           </div>
@@ -334,7 +334,7 @@ export const HistoricoView: React.FC = () => {
       </div>
 
       {/* 3. ÁREA DE FILTROS COMPACTA E MODERNA */}
-      <div className="rounded-xl border border-slate-200 bg-white p-3.5 sm:p-4 shadow-xs dark:border-slate-800 dark:bg-[#0F172A] space-y-3">
+      <div className="rounded-xl border border-slate-200 bg-white p-3.5 sm:p-4 shadow-xs dark:border-slate-800 dark:bg-[#252B38] space-y-3">
         {/* Linha superior: Busca, Modalidade e Disciplina */}
         <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-12">
           {/* Busca */}
@@ -464,7 +464,7 @@ export const HistoricoView: React.FC = () => {
       {/* 4. LISTA DE REGISTROS MODERNOS (Substitui completamente a tabela tradicional) */}
       {studySessions.length === 0 ? (
         /* ESTADO VAZIO LIMPO (quando não há nenhum estudo registrado) */
-        <div className="rounded-2xl border border-slate-200 bg-white p-12 text-center shadow-xs dark:border-slate-800 dark:bg-[#0F172A]">
+        <div className="rounded-2xl border border-slate-200 bg-white p-12 text-center shadow-xs dark:border-slate-800 dark:bg-[#252B38]">
           <h2 className="text-base font-bold text-slate-900 dark:text-white">
             Nenhum estudo registrado
           </h2>
@@ -484,7 +484,7 @@ export const HistoricoView: React.FC = () => {
         </div>
       ) : sortedSessions.length === 0 ? (
         /* VAZIO DEVIDO A FILTROS */
-        <div className="rounded-xl border border-slate-200 bg-white p-8 text-center shadow-xs dark:border-slate-800 dark:bg-[#0F172A]">
+        <div className="rounded-xl border border-slate-200 bg-white p-8 text-center shadow-xs dark:border-slate-800 dark:bg-[#252B38]">
           <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
             Nenhum estudo encontrado com os filtros selecionados.
           </p>
@@ -525,7 +525,7 @@ export const HistoricoView: React.FC = () => {
             return (
               <div
                 key={session.id}
-                className="group relative rounded-xl border border-slate-200 bg-white p-4 shadow-xs transition hover:border-slate-300 dark:border-slate-800 dark:bg-[#0F172A] dark:hover:border-slate-700"
+                className="group relative rounded-xl border border-slate-200 bg-white p-4 shadow-xs transition hover:border-slate-300 dark:border-slate-800 dark:bg-[#252B38] dark:hover:border-slate-700"
               >
                 {/* Linha Superior: Data do Estudo & Menu 3 Pontos */}
                 <div className="flex items-start justify-between gap-2">
@@ -556,7 +556,7 @@ export const HistoricoView: React.FC = () => {
 
                     {/* Dropdown discreto de ações */}
                     {isMenuOpen && (
-                      <div className="absolute right-0 top-8 z-20 w-44 rounded-xl border border-slate-200 bg-white py-1 shadow-lg dark:border-slate-800 dark:bg-[#11151F]">
+                      <div className="absolute right-0 top-8 z-20 w-44 rounded-xl border border-slate-200 bg-white py-1 shadow-lg dark:border-slate-800 dark:bg-[#252B38]">
                         <button
                           type="button"
                           onClick={(e) => {
@@ -664,7 +664,7 @@ export const HistoricoView: React.FC = () => {
       {/* 5. MODAL COMPACTO DE CONFIRMAÇÃO DE EXCLUSÃO */}
       {sessionToDelete && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-xs p-4 animate-in fade-in duration-150">
-          <div className="w-full max-w-sm rounded-2xl border border-slate-200 bg-white p-5 shadow-xl dark:border-slate-800 dark:bg-[#11151F]">
+          <div className="w-full max-w-sm rounded-2xl border border-slate-200 bg-white p-5 shadow-xl dark:border-slate-800 dark:bg-[#252B38]">
             <h3 className="text-sm font-bold text-slate-900 dark:text-white">
               Excluir este registro de estudo?
             </h3>

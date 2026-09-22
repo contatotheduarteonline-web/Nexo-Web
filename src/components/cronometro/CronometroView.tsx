@@ -389,7 +389,7 @@ export const CronometroView: React.FC = () => {
         {/* COLUNA ESQUERDA (~65%) */}
         <div className="space-y-6 lg:col-span-8">
           {/* Seletor Compacto: Disciplina e Tópico com busca */}
-          <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-xs dark:border-slate-800 dark:bg-[#0F172A]">
+          <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-xs dark:border-slate-800 dark:bg-[#252B38]">
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               {/* Disciplina */}
               <div>
@@ -441,7 +441,7 @@ export const CronometroView: React.FC = () => {
 
                 {/* Popover pesquisável */}
                 {isTopicDropdownOpen && (
-                  <div className="absolute left-0 right-0 z-30 mt-1 max-h-72 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl dark:border-slate-800 dark:bg-[#11151F]">
+                  <div className="absolute left-0 right-0 z-30 mt-1 max-h-72 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl dark:border-slate-800 dark:bg-[#252B38]">
                     <div className="border-b border-slate-100 p-2 dark:border-slate-800">
                       <div className="relative">
                         <Search className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400" />
@@ -493,7 +493,7 @@ export const CronometroView: React.FC = () => {
           </div>
 
           {/* Atividade: Segmented Control Compacto */}
-          <div className="rounded-xl border border-slate-200 bg-white p-3 shadow-xs dark:border-slate-800 dark:bg-[#0F172A]">
+          <div className="rounded-xl border border-slate-200 bg-white p-3 shadow-xs dark:border-slate-800 dark:bg-[#252B38]">
             <div className="grid grid-cols-3 gap-1.5 sm:grid-cols-6">
               {modalities.map((item) => {
                 const IconComp = item.icon;
@@ -518,7 +518,7 @@ export const CronometroView: React.FC = () => {
           </div>
 
           {/* Cronômetro & Registro Manual de Tempo */}
-          <div className="relative rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 text-center shadow-xs dark:border-slate-800 dark:bg-[#0F172A]">
+          <div className="relative rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 text-center shadow-xs dark:border-slate-800 dark:bg-[#252B38]">
             {/* Alternador discreto entre Cronômetro e Tempo Manual */}
             <div className="mb-4 inline-flex items-center rounded-lg bg-slate-100 p-1 dark:bg-slate-900">
               <button
@@ -718,7 +718,7 @@ export const CronometroView: React.FC = () => {
           </div>
 
           {/* Questões: Card Compacto com 3 métricas */}
-          <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-xs dark:border-slate-800 dark:bg-[#0F172A]">
+          <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-xs dark:border-slate-800 dark:bg-[#252B38]">
             <div className="flex items-center justify-between">
               <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
                 QUESTÕES
@@ -813,7 +813,7 @@ export const CronometroView: React.FC = () => {
         {/* COLUNA DIREITA (~35%) */}
         <div className="space-y-5 lg:col-span-4">
           {/* Data do Estudo (Hoje, Ontem, Outra data) */}
-          <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-xs dark:border-slate-800 dark:bg-[#0F172A]">
+          <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-xs dark:border-slate-800 dark:bg-[#252B38]">
             <div className="flex items-center justify-between">
               <label className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
                 Data do estudo
@@ -884,7 +884,7 @@ export const CronometroView: React.FC = () => {
           </div>
 
           {/* Anotações */}
-          <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-xs dark:border-slate-800 dark:bg-[#0F172A]">
+          <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-xs dark:border-slate-800 dark:bg-[#252B38]">
             <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400">
               Anotações
             </h3>
@@ -1172,7 +1172,7 @@ export const CronometroView: React.FC = () => {
               return (
                 <div
                   key={s.id}
-                  className="flex flex-col justify-between rounded-xl border border-slate-200 bg-white p-4 shadow-xs transition hover:border-slate-300 dark:border-slate-800 dark:bg-[#0F172A] dark:hover:border-slate-700"
+                  className="flex flex-col justify-between rounded-xl border border-slate-200 bg-white p-4 shadow-xs transition hover:border-slate-300 dark:border-slate-800 dark:bg-[#252B38] dark:hover:border-slate-700"
                 >
                   <div>
                     <div className="flex items-center justify-between text-[11px]">

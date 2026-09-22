@@ -286,7 +286,7 @@ export const DisciplinasView: React.FC<DisciplinasViewProps> = ({
 
       {/* Main Content: Cards or Table */}
       {filteredDisciplines.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-zinc-200 bg-white p-12 text-center dark:border-zinc-800 dark:bg-zinc-900">
+        <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-zinc-200 bg-white p-12 text-center dark:border-zinc-800 dark:bg-[#252B38]">
           <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-500/10 text-[#F59E0B]">
             <BookOpen className="h-6 w-6" />
           </div>
@@ -309,7 +309,7 @@ export const DisciplinasView: React.FC<DisciplinasViewProps> = ({
           )}
         </div>
       ) : viewMode === "table" ? (
-        <div className="rounded-2xl border border-zinc-200 bg-white p-4 shadow-xs dark:border-zinc-800 dark:bg-zinc-900">
+        <div className="rounded-2xl border border-zinc-200 bg-white p-4 shadow-xs dark:border-zinc-800 dark:bg-[#252B38]">
           <DisciplinesTableView
             onOpenNewTopicModal={(discId) => onOpenNewTopicModal?.(discId)}
           />

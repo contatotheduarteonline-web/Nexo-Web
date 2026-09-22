@@ -104,7 +104,7 @@ export const SimuladosView: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col justify-between gap-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-xs sm:flex-row sm:items-center dark:border-slate-800 dark:bg-slate-900">
+      <div className="flex flex-col justify-between gap-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-xs sm:flex-row sm:items-center dark:border-slate-800 dark:bg-[#252B38]">
         <div>
           <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
             Simulados
@@ -122,7 +122,7 @@ export const SimuladosView: React.FC = () => {
 
       {/* Evolution Chart */}
       {simulados.length > 0 && (
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs dark:border-slate-800 dark:bg-slate-900">
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs dark:border-slate-800 dark:bg-[#252B38]">
           <h3 className="text-base font-bold text-slate-900 dark:text-white">
             Evolução de Aproveitamento nos Simulados (%)
           </h3>
@@ -154,7 +154,7 @@ export const SimuladosView: React.FC = () => {
 
       {/* Simulados Cards Grid */}
       {simulados.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-slate-200 bg-white p-12 text-center shadow-xs dark:border-slate-800 dark:bg-slate-900">
+        <div className="rounded-2xl border border-dashed border-slate-200 bg-white p-12 text-center shadow-xs dark:border-slate-800 dark:bg-[#252B38]">
           <FileCheck className="mx-auto h-12 w-12 text-slate-400" />
           <h3 className="mt-4 text-base font-bold text-slate-900 dark:text-white">
             Nenhum Simulado Registrado
@@ -174,7 +174,7 @@ export const SimuladosView: React.FC = () => {
           {simulados.map((sim) => (
             <div
               key={sim.id}
-              className="flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-5 shadow-xs transition hover:shadow-md dark:border-slate-800 dark:bg-slate-900"
+              className="flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-5 shadow-xs transition hover:shadow-md dark:border-slate-800 dark:bg-[#252B38]"
             >
               <div>
                 <div className="flex items-center justify-between">
@@ -258,7 +258,7 @@ export const SimuladosView: React.FC = () => {
       {/* Add Simulado Modal */}
       {isAddOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-xs">
-          <div className="max-h-[90vh] w-full max-w-xl overflow-y-auto rounded-2xl border border-slate-200 bg-white p-6 shadow-xl dark:border-slate-800 dark:bg-slate-900">
+          <div className="max-h-[90vh] w-full max-w-xl overflow-y-auto rounded-2xl border border-slate-200 bg-white p-6 shadow-xl dark:border-slate-800 dark:bg-[#252B38]">
             <h3 className="text-base font-bold text-slate-900 dark:text-white">
               Registrar Resultado de Simulado
             </h3>

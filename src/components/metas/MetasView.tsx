@@ -131,7 +131,7 @@ export const MetasView: React.FC = () => {
   return (
     <div className="mx-auto max-w-6xl space-y-6 pb-16 font-sans">
       {/* Header */}
-      <div className="flex flex-col justify-between gap-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-xs sm:flex-row sm:items-center dark:border-slate-800 dark:bg-slate-900">
+      <div className="flex flex-col justify-between gap-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-xs sm:flex-row sm:items-center dark:border-slate-800 dark:bg-[#252B38]">
         <div>
           <h2 className="text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tight">
             Metas de Estudo
@@ -151,7 +151,7 @@ export const MetasView: React.FC = () => {
       {/* Overview Cards (Real-time Progress) */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {/* Meta Diária */}
-        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs dark:border-slate-800 dark:bg-slate-900">
+        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs dark:border-slate-800 dark:bg-[#252B38]">
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
               Meta Diária (Hoje)
@@ -180,7 +180,7 @@ export const MetasView: React.FC = () => {
         </div>
 
         {/* Meta Semanal de Horas */}
-        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs dark:border-slate-800 dark:bg-slate-900">
+        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs dark:border-slate-800 dark:bg-[#252B38]">
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
               Meta Semanal (Horas)
@@ -209,7 +209,7 @@ export const MetasView: React.FC = () => {
         </div>
 
         {/* Meta de Questões */}
-        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs dark:border-slate-800 dark:bg-slate-900">
+        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs dark:border-slate-800 dark:bg-[#252B38]">
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
               Questões na Semana
@@ -238,7 +238,7 @@ export const MetasView: React.FC = () => {
         </div>
 
         {/* Sequência / Taxa de Acertos */}
-        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs dark:border-slate-800 dark:bg-slate-900">
+        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs dark:border-slate-800 dark:bg-[#252B38]">
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
               Taxa Geral de Acertos
@@ -271,7 +271,7 @@ export const MetasView: React.FC = () => {
 
       {/* Form de Configuração e Ajuste de Metas */}
       <form onSubmit={handleSaveGoals} className="space-y-6">
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs dark:border-slate-800 dark:bg-slate-900">
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs dark:border-slate-800 dark:bg-[#252B38]">
           <div className="flex items-center gap-2 border-b border-slate-100 pb-4 dark:border-slate-800">
             <Sliders className="h-5 w-5 text-[#F59E0B]" />
             <h3 className="text-base font-bold text-slate-900 dark:text-white">
@@ -415,7 +415,7 @@ export const MetasView: React.FC = () => {
       </form>
 
       {/* Dica de Consistência e Atalhos */}
-      <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs dark:border-slate-800 dark:bg-slate-900">
+      <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs dark:border-slate-800 dark:bg-[#252B38]">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-50 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400">

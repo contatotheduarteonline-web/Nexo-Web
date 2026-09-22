@@ -168,7 +168,7 @@ export const RevisoesView: React.FC = () => {
       )}
 
       {/* Header */}
-      <div className="flex flex-col justify-between gap-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-xs sm:flex-row sm:items-center dark:border-slate-800 dark:bg-slate-900">
+      <div className="flex flex-col justify-between gap-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-xs sm:flex-row sm:items-center dark:border-slate-800 dark:bg-[#252B38]">
         <div>
           <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
             Revisões
@@ -219,7 +219,7 @@ export const RevisoesView: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setIsBatchConfirmOpen("tomorrow")}
-                className="flex items-center gap-1.5 rounded-lg border border-red-300 bg-white px-3 py-1.5 text-xs font-bold text-red-700 hover:bg-red-50 dark:border-red-800 dark:bg-slate-900 dark:text-red-300 dark:hover:bg-slate-800"
+                className="flex items-center gap-1.5 rounded-lg border border-red-300 bg-white px-3 py-1.5 text-xs font-bold text-red-700 hover:bg-red-50 dark:border-red-800 dark:bg-[#252B38] dark:text-red-300 dark:hover:bg-slate-800"
               >
                 <FastForward className="h-3.5 w-3.5" />
                 Mover para Amanhã
@@ -239,7 +239,7 @@ export const RevisoesView: React.FC = () => {
       )}
 
       {/* Filter Tabs, Search & Discipline Dropdown */}
-      <div className="flex flex-col gap-3 rounded-xl border border-slate-200 bg-white p-4 shadow-xs dark:border-slate-800 dark:bg-slate-900">
+      <div className="flex flex-col gap-3 rounded-xl border border-slate-200 bg-white p-4 shadow-xs dark:border-slate-800 dark:bg-[#252B38]">
         <div className="flex flex-col justify-between gap-3 lg:flex-row lg:items-center">
           {/* Sub-tabs */}
           <div className="flex flex-wrap items-center gap-1.5">
@@ -356,7 +356,7 @@ export const RevisoesView: React.FC = () => {
       {/* Reviews List */}
       <div className="space-y-3">
         {filteredReviews.length === 0 ? (
-          <div className="rounded-2xl border border-slate-200 bg-white p-12 text-center shadow-xs dark:border-slate-800 dark:bg-slate-900">
+          <div className="rounded-2xl border border-slate-200 bg-white p-12 text-center shadow-xs dark:border-slate-800 dark:bg-[#252B38]">
             <CheckCircle2 className="mx-auto h-12 w-12 text-emerald-500" />
             <h3 className="mt-4 text-base font-bold text-slate-900 dark:text-white">
               Nenhuma revisão nesta lista!
@@ -553,7 +553,7 @@ export const RevisoesView: React.FC = () => {
       {/* Batch Action Modal for Overdue Reviews */}
       {isBatchConfirmOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-xs">
-          <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-6 shadow-2xl dark:border-slate-800 dark:bg-slate-900">
+          <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-6 shadow-2xl dark:border-slate-800 dark:bg-[#252B38]">
             <div className="flex flex-col items-center text-center">
               <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-50 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400">
                 <AlertTriangle className="h-6 w-6" />
@@ -595,7 +595,7 @@ export const RevisoesView: React.FC = () => {
       {/* Manual Schedule Modal */}
       {isAddModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-xs">
-          <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-6 shadow-xl dark:border-slate-800 dark:bg-slate-900">
+          <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-6 shadow-xl dark:border-slate-800 dark:bg-[#252B38]">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3 dark:border-slate-800">
               <h3 className="text-base font-bold text-slate-900 dark:text-white">
                 Agendar Revisão Espaçada

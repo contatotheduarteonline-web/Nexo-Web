@@ -70,10 +70,10 @@ export const PlanImageUploader: React.FC<PlanImageUploaderProps> = ({
   const displayError = internalError || error;
 
   return (
-    <div className="rounded-2xl border border-[#E2E8F0] bg-[#F9FAFB] p-4 dark:border-[#1E293B] dark:bg-[#1A2228]">
+    <div className="rounded-2xl border border-[#E2E8F0] bg-[#F9FAFB] p-4 dark:border-[#1E293B] dark:bg-[#252B38]">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
         {/* 96x96 Image / Icon Container */}
-        <div className="relative flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-[#E2E8F0] bg-white shadow-xs dark:border-[#1E293B] dark:bg-[#0F172A]">
+        <div className="relative flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-[#E2E8F0] bg-white shadow-xs dark:border-[#1E293B] dark:bg-[#252B38]">
           {displayUrl ? (
             <img
               src={displayUrl}
@@ -137,7 +137,7 @@ export const PlanImageUploader: React.FC<PlanImageUploaderProps> = ({
               type="button"
               onClick={handleChooseClick}
               disabled={disabled || isUploading}
-              className="flex items-center gap-1.5 rounded-xl border border-[#E2E8F0] bg-white px-3.5 py-1.5 text-xs font-bold text-[#374151] shadow-2xs transition hover:bg-[#F3F4F6] disabled:opacity-50 dark:border-[#1E293B] dark:bg-[#1E293B] dark:text-white dark:hover:bg-[#1E293B] cursor-pointer"
+              className="flex items-center gap-1.5 rounded-xl border border-[#E2E8F0] bg-white px-3.5 py-1.5 text-xs font-bold text-[#374151] shadow-2xs transition hover:bg-[#F3F4F6] disabled:opacity-50 dark:border-[#1E293B] dark:bg-[#252B38] dark:text-white dark:hover:bg-[#1E293B] cursor-pointer"
             >
               {isUploading ? (
                 <>

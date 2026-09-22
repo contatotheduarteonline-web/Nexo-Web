@@ -170,7 +170,7 @@ export const EditalView: React.FC = () => {
 
           <button
             onClick={() => setIsEditalInfoOpen(true)}
-            className="rounded-xl border border-[#E2E8F0] bg-white p-2.5 text-[#6B7280] hover:bg-[#F3F4F6] dark:border-[#1E293B] dark:bg-[#0F172A] dark:text-[#9CA3AF] dark:hover:bg-[#1E293B]"
+            className="rounded-xl border border-[#E2E8F0] bg-white p-2.5 text-[#6B7280] hover:bg-[#F3F4F6] dark:border-[#1E293B] dark:bg-[#252B38] dark:text-[#9CA3AF] dark:hover:bg-[#1E293B]"
             title="Configurações do Edital"
           >
             <Sliders className="h-4 w-4" />
@@ -181,7 +181,7 @@ export const EditalView: React.FC = () => {
       {/* LISTA DE DISCIPLINAS (ACORDEÃO) */}
       <div className="space-y-3">
         {disciplines.length === 0 ? (
-          <div className="rounded-2xl border border-dashed border-[#E2E8F0] bg-white p-12 text-center dark:border-[#1E293B] dark:bg-[#0F172A]">
+          <div className="rounded-2xl border border-dashed border-[#E2E8F0] bg-white p-12 text-center dark:border-[#1E293B] dark:bg-[#252B38]">
             <p className="text-sm font-semibold text-[#6B7280] dark:text-[#9CA3AF]">
               Nenhuma disciplina cadastrada neste edital.
             </p>
@@ -212,7 +212,7 @@ export const EditalView: React.FC = () => {
             return (
               <div
                 key={discipline.id}
-                className={`overflow-hidden rounded-2xl border bg-white shadow-2xs dark:bg-[#0F172A] transition ${
+                className={`overflow-hidden rounded-2xl border bg-white shadow-2xs dark:bg-[#252B38] transition ${
                   isDisciplineFullyCompleted
                     ? "border-emerald-300/80 dark:border-emerald-900/60"
                     : "border-[#E2E8F0] dark:border-[#1E293B]"

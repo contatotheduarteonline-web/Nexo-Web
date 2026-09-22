@@ -76,7 +76,7 @@ export const EstatisticasView: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col justify-between gap-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-xs sm:flex-row sm:items-center dark:border-slate-800 dark:bg-slate-900">
+      <div className="flex flex-col justify-between gap-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-xs sm:flex-row sm:items-center dark:border-slate-800 dark:bg-[#252B38]">
         <div>
           <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
             Estatísticas
@@ -120,7 +120,7 @@ export const EstatisticasView: React.FC = () => {
 
       {/* Top Metric Cards */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-xs dark:border-slate-800 dark:bg-slate-900">
+        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-xs dark:border-slate-800 dark:bg-[#252B38]">
           <span className="text-xs font-semibold text-slate-400 uppercase">Horas Totais</span>
           <div className="mt-2 text-2xl font-bold text-slate-900 dark:text-white">
             {metrics.totalHoursStudied}h
@@ -128,7 +128,7 @@ export const EstatisticasView: React.FC = () => {
           <p className="mt-1 text-xs text-slate-500">{studySessions.length} sessões registradas</p>
         </div>
 
-        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-xs dark:border-slate-800 dark:bg-slate-900">
+        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-xs dark:border-slate-800 dark:bg-[#252B38]">
           <span className="text-xs font-semibold text-slate-400 uppercase">Questões Feitas</span>
           <div className="mt-2 text-2xl font-bold text-slate-900 dark:text-white">
             {metrics.totalQuestionsDone}
@@ -136,7 +136,7 @@ export const EstatisticasView: React.FC = () => {
           <p className="mt-1 text-xs text-slate-500">{metrics.totalQuestionsCorrect} corretas ({metrics.overallAccuracyRate}%)</p>
         </div>
 
-        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-xs dark:border-slate-800 dark:bg-slate-900">
+        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-xs dark:border-slate-800 dark:bg-[#252B38]">
           <span className="text-xs font-semibold text-slate-400 uppercase">Média Diária</span>
           <div className="mt-2 text-2xl font-bold text-[#F59E0B] dark:text-[#FBBF24]">
             {(metrics.hoursThisWeek / 7).toFixed(1)}h/dia
@@ -144,7 +144,7 @@ export const EstatisticasView: React.FC = () => {
           <p className="mt-1 text-xs text-slate-500">Ritmo sustentável</p>
         </div>
 
-        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-xs dark:border-slate-800 dark:bg-slate-900">
+        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-xs dark:border-slate-800 dark:bg-[#252B38]">
           <span className="text-xs font-semibold text-slate-400 uppercase">Cobertura do Edital</span>
           <div className="mt-2 text-2xl font-bold text-[#F59E0B] dark:text-[#FBBF24]">
             {metrics.editalStudiedPercentage}%
@@ -156,7 +156,7 @@ export const EstatisticasView: React.FC = () => {
       {/* Charts Grid */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
         {/* Horas por Dia (Bar Chart) */}
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs lg:col-span-8 dark:border-slate-800 dark:bg-slate-900">
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs lg:col-span-8 dark:border-slate-800 dark:bg-[#252B38]">
           <div className="flex items-center justify-between">
             <h3 className="text-base font-bold text-slate-900 dark:text-white">
               Horas Líquidas por Dia da Semana
@@ -181,7 +181,7 @@ export const EstatisticasView: React.FC = () => {
         </div>
 
         {/* Modalidade de Estudo (Pie Chart) */}
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs lg:col-span-4 dark:border-slate-800 dark:bg-slate-900">
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs lg:col-span-4 dark:border-slate-800 dark:bg-[#252B38]">
           <h3 className="text-base font-bold text-slate-900 dark:text-white">
             Distribuição por Modalidade
           </h3>
@@ -231,7 +231,7 @@ export const EstatisticasView: React.FC = () => {
       </div>
 
       {/* Disciplines Horas & Acertos Breakdown Table */}
-      <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs dark:border-slate-800 dark:bg-slate-900">
+      <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs dark:border-slate-800 dark:bg-[#252B38]">
         <h3 className="text-base font-bold text-slate-900 dark:text-white">
           Desempenho Detalhado por Disciplina
         </h3>

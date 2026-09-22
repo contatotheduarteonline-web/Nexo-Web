@@ -405,7 +405,7 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
       {/* ========================================================================= */}
       {/* TOP HEADER & STEPPER (MINIMALIST & ELEGANT)                               */}
       {/* ========================================================================= */}
-      <div className="rounded-2xl border border-slate-200/80 bg-white/90 p-4.5 shadow-2xs backdrop-blur-xs dark:border-[#1E293B] dark:bg-[#0E131F]">
+      <div className="rounded-2xl border border-slate-200/80 bg-white/90 p-4.5 shadow-2xs backdrop-blur-xs dark:border-[#1E293B] dark:bg-[#252B38]">
         <div className="flex items-center justify-between gap-3">
           <div>
             <h2 className="text-base font-bold tracking-tight text-slate-900 dark:text-white flex items-center gap-2">
@@ -473,7 +473,7 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
       {/* PASSO 1: ESCOLHA DO FORMATO                                               */}
       {/* ========================================================================= */}
       {currentStep === 1 && (
-        <div className="rounded-2xl border border-slate-200/80 bg-white/90 p-5 shadow-2xs dark:border-[#1E293B] dark:bg-[#0E131F]">
+        <div className="rounded-2xl border border-slate-200/80 bg-white/90 p-5 shadow-2xs dark:border-[#1E293B] dark:bg-[#252B38]">
           <div className="mb-4">
             <h3 className="text-sm font-bold text-slate-900 dark:text-white">
               Escolha o formato dos estudos
@@ -588,7 +588,7 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
       {/* PASSO 2: DISPONIBILIDADE DIÁRIA                                           */}
       {/* ========================================================================= */}
       {currentStep === 2 && (
-        <div className="rounded-2xl border border-slate-200/80 bg-white/90 p-5 shadow-2xs dark:border-[#1E293B] dark:bg-[#0E131F]">
+        <div className="rounded-2xl border border-slate-200/80 bg-white/90 p-5 shadow-2xs dark:border-[#1E293B] dark:bg-[#252B38]">
           <div className="flex items-center justify-between gap-2 mb-4">
             <div>
               <h3 className="text-sm font-bold text-slate-900 dark:text-white">
@@ -695,7 +695,7 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
       {/* PASSO 3: DOMÍNIO DO EDITAL (1 A 5)                                        */}
       {/* ========================================================================= */}
       {currentStep === 3 && (
-        <div className="rounded-2xl border border-slate-200/80 bg-white/90 p-5 shadow-2xs dark:border-[#1E293B] dark:bg-[#0E131F]">
+        <div className="rounded-2xl border border-slate-200/80 bg-white/90 p-5 shadow-2xs dark:border-[#1E293B] dark:bg-[#252B38]">
           <div className="flex items-center justify-between gap-2 mb-3.5">
             <div>
               <h3 className="text-sm font-bold text-slate-900 dark:text-white">
@@ -818,7 +818,7 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
       {/* PASSO 4: RESUMO & SALVAR                                                  */}
       {/* ========================================================================= */}
       {currentStep === 4 && (
-        <div className="rounded-2xl border border-slate-200/80 bg-white/90 p-5 shadow-2xs dark:border-[#1E293B] dark:bg-[#0E131F]">
+        <div className="rounded-2xl border border-slate-200/80 bg-white/90 p-5 shadow-2xs dark:border-[#1E293B] dark:bg-[#252B38]">
           <div className="flex items-center justify-between gap-2 mb-4">
             <div>
               <h3 className="text-sm font-bold text-slate-900 dark:text-white">
