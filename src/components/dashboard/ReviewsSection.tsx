@@ -1,5 +1,5 @@
 import React from "react";
-import { RotateCcw, CheckCircle2, ArrowUpRight } from "lucide-react";
+import { RotateCcw, ArrowUpRight } from "lucide-react";
 import { ScheduledReview } from "../../types";
 
 interface ReviewsSectionProps {
@@ -30,12 +30,7 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({
             <span className="rounded-full border border-[#F3AA2D]/25 bg-[#F3AA2D]/10 px-2 py-0.5 text-[11px] font-bold text-[#F3AA2D]">
               {todayReviews.length} {todayReviews.length === 1 ? "pendente" : "pendentes"}
             </span>
-          ) : (
-            <span className="inline-flex items-center gap-1 rounded-full border border-emerald-400/25 bg-emerald-400/10 px-2.5 py-0.5 text-[11px] font-semibold text-[#34D399]">
-              <CheckCircle2 className="h-3 w-3" />
-              <span>Em dia</span>
-            </span>
-          )}
+          ) : null}
         </div>
 
         <button

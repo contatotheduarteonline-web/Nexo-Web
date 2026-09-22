@@ -141,9 +141,6 @@ export const OfensivaCard: React.FC<OfensivaCardProps> = ({ className = "" }) =>
     });
   }, [studiedDatesSet]);
 
-  const todayStr = useMemo(() => getLocalDateString(new Date()), []);
-  const studiedToday = studiedDatesSet.has(todayStr);
-
   return (
     <section
       id="section-ofensiva-semana"
@@ -174,20 +171,7 @@ export const OfensivaCard: React.FC<OfensivaCardProps> = ({ className = "" }) =>
             </span>
           </div>
 
-          <div
-            className={`flex items-center gap-1.5 rounded-xl px-3 py-1.5 font-medium transition-colors duration-200 ${
-              studiedToday
-                ? "border border-emerald-400/25 bg-emerald-400/10 text-[#34D399]"
-                : "border border-[#F3AA2D]/25 bg-[#F3AA2D]/10 text-[#F3AA2D]"
-            }`}
-          >
-            <span
-              className={`h-2 w-2 rounded-full shrink-0 ${
-                studiedToday ? "bg-[#34D399]" : "bg-[#F3AA2D]"
-              }`}
-            />
-            <span>{studiedToday ? "Hoje concluído" : "Pendente hoje"}</span>
-          </div>
+
         </div>
       </div>
 

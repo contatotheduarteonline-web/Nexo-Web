@@ -33,11 +33,7 @@ export const TodayScheduleSection: React.FC<TodayScheduleSectionProps> = ({
           <h2 className="font-condensed text-[19px] font-bold text-[#F5F4EF]">
             Planejamento de hoje
           </h2>
-          {plannedBlocks.length > 0 && (
-            <span className="rounded-full border border-[#F3AA2D]/25 bg-[#F3AA2D]/10 px-2 py-0.5 text-[11px] font-bold text-[#F3AA2D]">
-              {plannedBlocks.length} {plannedBlocks.length === 1 ? "bloco" : "blocos"}
-            </span>
-          )}
+
         </div>
 
         <button
