@@ -76,26 +76,23 @@ export const StatCardsRow: React.FC<StatCardsRowProps> = ({
           </div>
         </div>
 
-        <div className="mt-4 flex items-baseline gap-1.5">
-          <span className="num-condensed block text-[32px] font-bold leading-none text-white">
-            {todayQuestionsDone}
-          </span>
-          <span className="text-[13px] font-medium text-white">
-            resolvidas
-          </span>
+        <div className="mt-4 space-y-1">
+          <div className="flex items-baseline gap-1.5">
+            <span className="num-condensed text-[16px] font-bold leading-none text-[#34D399]">
+              {todayQuestionsCorrect}
+            </span>
+            <span className="text-[13px] font-medium text-[#34D399]">Acertos</span>
+          </div>
+          <div className="flex items-baseline gap-1.5">
+            <span className="num-condensed text-[16px] font-bold leading-none text-[#D84A4A]">
+              {todayQuestionsWrong}
+            </span>
+            <span className="text-[13px] font-medium text-[#D84A4A]">Erro</span>
+          </div>
         </div>
 
-        <div className="mt-4 pt-3 border-t border-[#384154] flex items-center gap-1.5 text-[12px] text-white">
-          <span
-            className={`h-2 w-2 rounded-full shrink-0 transition-colors ${
-              todayQuestionsCorrect > 0 ? "bg-[#F3AA2D]" : "bg-[#4A556E]"
-            }`}
-          />
-          <span className="truncate">
-            {todayQuestionsCorrect} {todayQuestionsCorrect === 1 ? "acerto" : "acertos"}
-            {" · "}
-            {todayQuestionsWrong} {todayQuestionsWrong === 1 ? "erro" : "erros"}
-            {" · "}
+        <div className="mt-4 flex items-end justify-end">
+          <span className="num-condensed text-[36px] font-bold leading-none text-white">
             {todayPercentage !== null ? `${todayPercentage}%` : "—"}
           </span>
         </div>

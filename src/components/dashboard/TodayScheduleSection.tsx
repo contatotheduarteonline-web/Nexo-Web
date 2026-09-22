@@ -83,7 +83,7 @@ export const TodayScheduleSection: React.FC<TodayScheduleSectionProps> = ({
                 <div
                   key={block.id}
                   id={`planned-block-${block.id}`}
-                  className={`nx-deep relative overflow-hidden p-4 pl-5 ${
+                  className={`nx-deep group relative overflow-hidden p-4 pl-5 ${
                     idx > 0 ? "nx-deep-hover cursor-pointer hover:border-[#F3AA2D]/40" : ""
                   }`}
                   onClick={idx > 0 ? () => onStartStudy(block.disciplineId, block.targetMinutes) : undefined}
@@ -117,7 +117,7 @@ export const TodayScheduleSection: React.FC<TodayScheduleSectionProps> = ({
 
                   {/* Ações da primeira matéria (expandida) */}
                   {idx === 0 && (
-                    <div className="mt-4 flex flex-wrap items-center gap-2.5">
+                    <div className="mt-4 flex flex-wrap items-center gap-2.5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity duration-200">
                       <button
                         type="button"
                         id={`btn-estudar-bloco-${block.id}`}
