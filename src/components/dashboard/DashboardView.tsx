@@ -103,6 +103,16 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy 
     setActiveTab("cronometro");
   };
 
+  // Minutes studied today per discipline (for the progress bars)
+  const studiedMinutesByDiscipline = useMemo(() => {
+    const map = new Map<string, number>();
+    todaySessions.forEach((s) => {
+      const key = s.disciplineId || s.disciplineName;
+      map.set(key, (map.get(key) || 0) + s.durationMinutes);
+    });
+    return map;
+  }, [todaySessions]);
+
   // Planned blocks for today (completely generic, derived from activePlan or activeEdital)
   const todayPlannedBlocks: PlannedBlockItem[] = useMemo(() => {
     let list: PlannedBlockItem[] = [];
@@ -124,6 +134,8 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy 
               disciplineId: b.disciplineId,
               disciplineName: disc?.name || "Disciplina",
               targetMinutes: b.targetMinutes || 60,
+              color: disc?.color,
+              studiedMinutes: studiedMinutesByDiscipline.get(b.disciplineId) || 0,
             };
           });
         }
@@ -142,6 +154,8 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy 
               disciplineId: step.disciplineId,
               disciplineName: disc?.name || "Disciplina",
               targetMinutes: step.targetMinutes || 60,
+              color: disc?.color,
+              studiedMinutes: studiedMinutesByDiscipline.get(step.disciplineId) || 0,
             };
           });
         }
@@ -156,11 +170,13 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy 
         disciplineId: d.id,
         disciplineName: d.name,
         targetMinutes: 60,
+        color: d.color,
+        studiedMinutes: studiedMinutesByDiscipline.get(d.id) || 0,
       }));
     }
 
     return list;
-  }, [activePlan, activeEdital]);
+  }, [activePlan, activeEdital, studiedMinutesByDiscipline]);
 
   // Today's Scheduled Reviews (Clean filtered list)
   const todayReviews = useMemo(() => {
@@ -321,22 +337,22 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy 
       <OfensivaCard />
 
       {/* ========================================================================= */}
-      {/* 3. PLANEJAMENTO                                                          */}
+      {/* 3 E 4. GRID: PLANEJAMENTO E REVISÕES                                     */}
       {/* ========================================================================= */}
-      <TodayScheduleSection
-        plannedBlocks={todayPlannedBlocks}
-        onStartStudy={handleStartStudy}
-        onNavigateToPlanning={() => setActiveTab("planejamento")}
-      />
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+        <TodayScheduleSection
+          plannedBlocks={todayPlannedBlocks}
+          onStartStudy={handleStartStudy}
+          onOpenManualStudy={onOpenManualStudy}
+          onNavigateToPlanning={() => setActiveTab("planejamento")}
+        />
 
-      {/* ========================================================================= */}
-      {/* 5. REVISÕES                                                               */}
-      {/* ========================================================================= */}
-      <ReviewsSection
-        todayReviews={todayReviews}
-        onOpenReview={(rev) => setSelectedReviewForModal(rev)}
-        onNavigateToReviews={() => setActiveTab("revisoes")}
-      />
+        <ReviewsSection
+          todayReviews={todayReviews}
+          onOpenReview={(rev) => setSelectedReviewForModal(rev)}
+          onNavigateToReviews={() => setActiveTab("revisoes")}
+        />
+      </div>
 
       {/* ========================================================================= */}
       {/* 6. DESEMPENHO POR DISCIPLINA                                              */}

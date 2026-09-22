@@ -53,7 +53,7 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({
           </div>
         ) : (
           <div className="space-y-3">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-60 overflow-y-auto pr-1 scrollbar-thin">
+            <div className="grid grid-cols-1 gap-3 max-h-[420px] overflow-y-auto pr-1 scrollbar-thin">
               {todayReviews.slice(0, 6).map((rev) => (
                 <div
                   key={rev.id}
