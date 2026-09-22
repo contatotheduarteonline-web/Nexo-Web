@@ -48,18 +48,14 @@ export const StatCardsRow: React.FC<StatCardsRowProps> = ({
           </span>
         </div>
 
-        <div className="mt-4 pt-3 border-t border-[#384154] flex items-center gap-1.5 text-[12px] text-white">
-          <span
-            className={`h-2 w-2 rounded-full shrink-0 transition-colors ${
-              todaySessionsCount > 0 ? "bg-[#F3AA2D]" : "bg-[#4A556E]"
-            }`}
-          />
-          <span className="truncate">
-            {todaySessionsCount > 0
-              ? `${todaySessionsCount} ${todaySessionsCount === 1 ? "sessão hoje" : "sessões hoje"}`
-              : "Sem registros hoje"}
-          </span>
-        </div>
+        {todaySessionsCount > 0 && (
+          <div className="mt-4 pt-3 border-t border-[#384154] flex items-center gap-1.5 text-[12px] text-white">
+            <span className="h-2 w-2 rounded-full shrink-0 bg-[#F3AA2D]" />
+            <span className="truncate">
+              {todaySessionsCount} {todaySessionsCount === 1 ? "sessão hoje" : "sessões hoje"}
+            </span>
+          </div>
+        )}
       </div>
 
       {/* 2. Desempenho */}
