@@ -31,7 +31,7 @@ export const TodayScheduleSection: React.FC<TodayScheduleSectionProps> = ({
             <BookOpen className="h-4 w-4" />
           </div>
           <h2 className="font-condensed text-[19px] font-bold text-white">
-            Planejamento de hoje
+            PLANEJAMENTO
           </h2>
 
         </div>

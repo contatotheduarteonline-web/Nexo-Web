@@ -1,5 +1,5 @@
 import React from "react";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, BookOpen } from "lucide-react";
 
 interface EditalProgressCardProps {
   title?: string;
@@ -12,7 +12,6 @@ interface EditalProgressCardProps {
 
 export const EditalProgressCard: React.FC<EditalProgressCardProps> = ({
   title,
-  cargo,
   percentage,
   completedTopicsCount,
   totalTopicsCount,
@@ -22,43 +21,34 @@ export const EditalProgressCard: React.FC<EditalProgressCardProps> = ({
   const hasEdital = Boolean(title);
 
   return (
-    <section id="section-progresso-edital" className="nx-card p-5 sm:p-7">
-      <div className="flex flex-col lg:flex-row lg:items-center gap-5 lg:gap-8">
-        {/* Identificação do edital */}
-        <div className="min-w-0 flex-1">
-          <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-white">
-            Progresso no edital
-          </span>
-
-          <h2 className="font-condensed mt-1.5 text-[24px] sm:text-[28px] font-bold leading-tight text-white truncate">
-            {hasEdital ? title : "Nenhum edital ativo"}
-          </h2>
-
-          {hasEdital && cargo && (
-            <span className="mt-2 inline-flex items-center rounded-full border border-[#384154] bg-[#2D3442] px-2.5 py-0.5 text-[11px] font-semibold text-white">
-              {cargo}
-            </span>
-          )}
-        </div>
-
-        {/* Percentual em destaque */}
-        <div className="flex shrink-0 lg:justify-end">
-          <span className="num-condensed block text-[56px] sm:text-[64px] font-bold leading-none text-[#F3AA2D]">
-            {hasEdital ? `${clamped}%` : "—"}
-          </span>
+    <div
+      id="card-progresso-edital"
+      className="nx-card nx-card-hover p-5 flex flex-col justify-between"
+    >
+      <div className="flex items-center justify-between">
+        <span className="text-[12px] font-semibold text-white">
+          PROGRESSO NO EDITAL
+        </span>
+        <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#384154] bg-[#171B25] text-[#F3AA2D]">
+          <BookOpen className="h-4 w-4" />
         </div>
       </div>
 
-      {/* Barra de progresso + informação essencial */}
-      <div className="mt-5">
-        <div className="h-2.5 w-full overflow-hidden rounded-full border border-[#384154] bg-[#171B25]">
+      <div className="mt-4">
+        <span className="num-condensed block text-[32px] font-bold leading-none text-white">
+          {hasEdital ? `${clamped}%` : "—"}
+        </span>
+      </div>
+
+      <div className="mt-4 pt-3 border-t border-[#384154]">
+        <div className="h-1.5 w-full overflow-hidden rounded-full bg-[#171B25]">
           <div
             className="h-full rounded-full bg-[#F3AA2D] transition-all duration-500"
             style={{ width: `${clamped}%` }}
           />
         </div>
 
-        <div className="mt-3 flex items-center justify-between gap-3 text-[12px]">
+        <div className="mt-2.5 flex items-center justify-between gap-3 text-[12px]">
           <span className="num-condensed font-semibold text-white truncate">
             {hasEdital
               ? `${completedTopicsCount} de ${totalTopicsCount} tópicos`
@@ -75,6 +65,6 @@ export const EditalProgressCard: React.FC<EditalProgressCardProps> = ({
           </button>
         </div>
       </div>
-    </section>
+    </div>
   );
 };

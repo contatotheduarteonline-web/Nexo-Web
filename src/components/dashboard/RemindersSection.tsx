@@ -40,7 +40,7 @@ export const RemindersSection: React.FC<RemindersSectionProps> = ({
               <Calendar className="h-4 w-4" />
             </div>
             <h3 className="font-condensed text-[19px] font-bold text-white">
-              Lembretes
+              LEMBRETES
             </h3>
           </div>
 

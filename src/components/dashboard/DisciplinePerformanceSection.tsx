@@ -37,7 +37,7 @@ export const DisciplinePerformanceSection: React.FC<DisciplinePerformanceSection
             <Layers className="h-4 w-4" />
           </div>
           <h2 className="font-condensed text-[19px] font-bold text-white">
-            Desempenho por disciplina
+            PAINEL
           </h2>
         </div>
 

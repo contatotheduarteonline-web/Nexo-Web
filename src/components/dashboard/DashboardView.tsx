@@ -25,7 +25,6 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy 
     activeEdital,
     activePlan,
     userSettings,
-    metrics,
     studySessions,
     scheduledReviews,
     simulados,
@@ -77,13 +76,6 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy 
   const todayQuestionsCorrect = useMemo(() => {
     return todaySessions.reduce((acc, s) => acc + (s.questionsCorrect || 0), 0);
   }, [todaySessions]);
-
-  const todayAccuracy = useMemo(() => {
-    if (todayQuestionsDone > 0) {
-      return Math.round((todayQuestionsCorrect / todayQuestionsDone) * 100);
-    }
-    return null;
-  }, [todayQuestionsDone, todayQuestionsCorrect]);
 
   // Handle Quick Start Study for a planned block or discipline
   const handleStartStudy = (disciplineId: string, durationMinutes: number = 60) => {
@@ -305,16 +297,23 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy 
       </div>
 
       {/* ========================================================================= */}
-      {/* 1. INDICADORES DE HOJE: TEMPO, QUESTÕES E PRECISÃO                        */}
+      {/* 1. INDICADORES DE HOJE: TEMPO, DESEMPENHO E PROGRESSO NO EDITAL          */}
       {/* ========================================================================= */}
       <StatCardsRow
         todayMinutes={todayMinutes}
         todaySessionsCount={todaySessions.length}
         todayQuestionsDone={todayQuestionsDone}
         todayQuestionsCorrect={todayQuestionsCorrect}
-        accuracyRate={todayAccuracy}
-        overallAccuracyRate={metrics.overallAccuracyRate}
-      />
+      >
+        <EditalProgressCard
+          title={activeEdital?.title}
+          cargo={activeEdital?.cargo}
+          percentage={gamification.globalProgressPercentage}
+          completedTopicsCount={gamification.completedTopicsCount}
+          totalTopicsCount={gamification.totalTopicsCount}
+          onNavigateToEdital={() => setActiveTab("edital")}
+        />
+      </StatCardsRow>
 
       {/* ========================================================================= */}
       {/* 2. OFENSIVA                                                               */}
@@ -322,19 +321,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy 
       <OfensivaCard />
 
       {/* ========================================================================= */}
-      {/* 3. PROGRESSO NO EDITAL — ELEMENTO-CHAVE DA HOME                           */}
-      {/* ========================================================================= */}
-      <EditalProgressCard
-        title={activeEdital?.title}
-        cargo={activeEdital?.cargo}
-        percentage={gamification.globalProgressPercentage}
-        completedTopicsCount={gamification.completedTopicsCount}
-        totalTopicsCount={gamification.totalTopicsCount}
-        onNavigateToEdital={() => setActiveTab("edital")}
-      />
-
-      {/* ========================================================================= */}
-      {/* 4. PLANEJAMENTO DE HOJE                                                   */}
+      {/* 3. PLANEJAMENTO                                                          */}
       {/* ========================================================================= */}
       <TodayScheduleSection
         plannedBlocks={todayPlannedBlocks}

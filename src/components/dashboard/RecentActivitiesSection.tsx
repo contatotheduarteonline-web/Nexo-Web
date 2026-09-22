@@ -23,7 +23,7 @@ export const RecentActivitiesSection: React.FC<RecentActivitiesSectionProps> = (
               <History className="h-4 w-4" />
             </div>
             <h3 className="font-condensed text-[19px] font-bold text-white">
-              Últimas atividades
+              HISTÓRICO
             </h3>
           </div>
 

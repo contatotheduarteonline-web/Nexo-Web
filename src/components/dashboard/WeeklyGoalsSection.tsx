@@ -53,7 +53,7 @@ export const WeeklyGoalsSection: React.FC<WeeklyGoalsSectionProps> = ({
             <Target className="h-4 w-4" />
           </div>
           <h2 className="font-condensed text-[19px] font-bold text-white">
-            Meta da semana
+            META DA SEMANA
           </h2>
         </div>
 
