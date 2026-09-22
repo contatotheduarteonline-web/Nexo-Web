@@ -115,29 +115,33 @@ export const TodayScheduleSection: React.FC<TodayScheduleSectionProps> = ({
                     />
                   </div>
 
-                  {/* Ações da primeira matéria (expandida) */}
-                  {idx === 0 && (
-                    <div className="mt-4 flex flex-wrap items-center gap-2.5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity duration-200">
-                      <button
-                        type="button"
-                        id={`btn-estudar-bloco-${block.id}`}
-                        onClick={() => onStartStudy(block.disciplineId, block.targetMinutes)}
-                        className="nx-btn-primary inline-flex items-center justify-center gap-1.5 px-4 py-2 text-[13px] cursor-pointer"
-                      >
-                        <Play className="h-3.5 w-3.5 fill-[#11151F]" />
-                        <span>Iniciar Estudo</span>
-                      </button>
-                      <button
-                        type="button"
-                        id="btn-estudo-manual-planejamento"
-                        onClick={onOpenManualStudy}
-                        className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-[#384154] bg-[#171B25] px-4 py-2 text-[13px] font-semibold text-white hover:border-[#F3AA2D]/40 hover:text-[#F3AA2D] cursor-pointer transition-colors duration-200"
-                      >
-                        <Plus className="h-3.5 w-3.5" />
-                        <span>Adicionar Estudo Manualmente</span>
-                      </button>
-                    </div>
-                  )}
+                  {/* Ações (reveladas ao passar o cursor) */}
+                  <div className="mt-4 flex flex-wrap items-center gap-2.5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity duration-200">
+                    <button
+                      type="button"
+                      id={`btn-estudar-bloco-${block.id}`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onStartStudy(block.disciplineId, block.targetMinutes);
+                      }}
+                      className="nx-btn-primary inline-flex items-center justify-center gap-1.5 px-4 py-2 text-[13px] cursor-pointer"
+                    >
+                      <Play className="h-3.5 w-3.5 fill-[#11151F]" />
+                      <span>Iniciar Estudo</span>
+                    </button>
+                    <button
+                      type="button"
+                      id="btn-estudo-manual-planejamento"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onOpenManualStudy();
+                      }}
+                      className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-[#384154] bg-[#171B25] px-4 py-2 text-[13px] font-semibold text-white hover:border-[#F3AA2D]/40 hover:text-[#F3AA2D] cursor-pointer transition-colors duration-200"
+                    >
+                      <Plus className="h-3.5 w-3.5" />
+                      <span>Adicionar Estudo Manualmente</span>
+                    </button>
+                  </div>
                 </div>
               );
             })}

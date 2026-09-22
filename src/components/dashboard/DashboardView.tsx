@@ -339,7 +339,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy 
       {/* ========================================================================= */}
       {/* 3 E 4. GRID: PLANEJAMENTO E REVISÕES                                     */}
       {/* ========================================================================= */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
         <TodayScheduleSection
           plannedBlocks={todayPlannedBlocks}
           onStartStudy={handleStartStudy}
