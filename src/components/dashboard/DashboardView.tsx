@@ -97,9 +97,13 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy 
       modality: "Teoria",
       targetMinutes: durationMinutes,
       mode: "stopwatch",
+      elapsedSeconds: 0,
+      isRunning: false,
+      startedAt: undefined,
     });
 
-    startTimer();
+    // Abrir o cronômetro NÃO inicia a contagem.
+    // O aluno decide quando começar pelo botão "Iniciar".
     setActiveTab("cronometro");
   };
 

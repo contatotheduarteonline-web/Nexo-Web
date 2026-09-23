@@ -83,7 +83,7 @@ export const TodayScheduleSection: React.FC<TodayScheduleSectionProps> = ({
                 <div
                   key={block.id}
                   id={`planned-block-${block.id}`}
-                  className={`nx-deep group relative overflow-hidden p-4 pl-5 ${
+                  className={`nx-deep group relative overflow-hidden p-4 pl-5 touch-manipulation ${
                     idx > 0 ? "nx-deep-hover cursor-pointer hover:border-[#F3AA2D]/40" : ""
                   }`}
                   onClick={idx > 0 ? () => onStartStudy(block.disciplineId, block.targetMinutes) : undefined}
@@ -115,8 +115,9 @@ export const TodayScheduleSection: React.FC<TodayScheduleSectionProps> = ({
                     />
                   </div>
 
-                  {/* Ações (reveladas ao passar o cursor) */}
-                  <div className="mt-4 flex flex-wrap items-center gap-2.5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity duration-200">
+                  {/* Ações: sempre acessíveis em mouse, tablet e celular. */}
+                  <div className="mt-4 flex flex-wrap items-center gap-2.5">
+
                     <button
                       type="button"
                       id={`btn-estudar-bloco-${block.id}`}
@@ -124,7 +125,7 @@ export const TodayScheduleSection: React.FC<TodayScheduleSectionProps> = ({
                         e.stopPropagation();
                         onStartStudy(block.disciplineId, block.targetMinutes);
                       }}
-                      className="nx-btn-primary inline-flex items-center justify-center gap-1.5 px-4 py-2 text-[13px] cursor-pointer"
+                      className="nx-btn-primary inline-flex items-center justify-center gap-1.5 px-4 py-2 text-[13px] cursor-pointer touch-manipulation"
                     >
                       <Play className="h-3.5 w-3.5 fill-[#11151F]" />
                       <span>Iniciar Estudo</span>
@@ -136,7 +137,7 @@ export const TodayScheduleSection: React.FC<TodayScheduleSectionProps> = ({
                         e.stopPropagation();
                         onOpenManualStudy();
                       }}
-                      className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-[#384154] bg-[#171B25] px-4 py-2 text-[13px] font-semibold text-white hover:border-[#F3AA2D]/40 hover:text-[#F3AA2D] cursor-pointer transition-colors duration-200"
+                      className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-[#384154] bg-[#171B25] px-4 py-2 text-[13px] font-semibold text-white hover:border-[#F3AA2D]/40 hover:text-[#F3AA2D] cursor-pointer transition-colors duration-200 touch-manipulation"
                     >
                       <Plus className="h-3.5 w-3.5" />
                       <span>Adicionar Estudo Manualmente</span>
