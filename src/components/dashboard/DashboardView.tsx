@@ -33,7 +33,6 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy 
     toggleReminder,
     addReminder,
     setTimerConfig,
-    startTimer,
   } = useStudy();
 
   const { user } = useAuth();
