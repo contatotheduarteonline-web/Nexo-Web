@@ -22,6 +22,30 @@ import {
 } from "../types";
 
 // ============================================================================
+// SERIALIZAÇÃO SEGURA PARA FIRESTORE
+// ============================================================================
+/** Remove recursivamente valores undefined antes de gravar no Firestore. */
+function stripUndefinedDeep<T>(value: T): T {
+  if (Array.isArray(value)) {
+    return value
+      .filter((item) => item !== undefined)
+      .map((item) => stripUndefinedDeep(item)) as T;
+  }
+
+  if (value && typeof value === "object") {
+    const result: Record<string, unknown> = {};
+    Object.entries(value as Record<string, unknown>).forEach(([key, item]) => {
+      if (item !== undefined) {
+        result[key] = stripUndefinedDeep(item);
+      }
+    });
+    return result as T;
+  }
+
+  return value;
+}
+
+// ============================================================================
 // VERIFICAÇÃO ADMINISTRATIVA SEGURA
 // ============================================================================
 /**
@@ -637,7 +661,7 @@ export async function createCatalogEdital(
   };
 
   const docRef = doc(db, "catalogEditais", editalId);
-  await setDoc(docRef, newEdital);
+  await setDoc(docRef, stripUndefinedDeep(newEdital));
 
   return newEdital;
 }
@@ -662,7 +686,7 @@ export async function addCargoToCatalogEdital(
   };
 
   const cargoRef = doc(db, "catalogEditais", editalId, "cargos", cargoId);
-  await setDoc(cargoRef, fullCargo);
+  await setDoc(cargoRef, stripUndefinedDeep(fullCargo));
 
   // Atualiza timestamp do edital
   await updateDoc(doc(db, "catalogEditais", editalId), {
@@ -702,7 +726,7 @@ export async function addDisciplineToCargo(
     "disciplines",
     discId
   );
-  await setDoc(discRef, fullDisc);
+  await setDoc(discRef, stripUndefinedDeep(fullDisc));
 
   return fullDisc;
 }
@@ -738,7 +762,7 @@ export async function addTopicToDiscipline(
     "topics",
     topicId
   );
-  await setDoc(topicRef, fullTopic);
+  await setDoc(topicRef, stripUndefinedDeep(fullTopic));
 
   return fullTopic;
 }
@@ -764,11 +788,11 @@ export async function updateCatalogEdital(
   const current = snap.data() as CatalogEdital;
   const newVersion = incrementVersion ? (current.version || 1) + 1 : current.version || 1;
 
-  await updateDoc(editalRef, {
+  await updateDoc(editalRef, stripUndefinedDeep({
     ...updates,
     version: newVersion,
     updatedAt: new Date().toISOString(),
-  });
+  }));
 }
 
 /**
@@ -836,7 +860,7 @@ export async function submitUserEdital(
   };
 
   const docRef = doc(db, "editalSubmissions", submissionId);
-  await setDoc(docRef, submission);
+  await setDoc(docRef, stripUndefinedDeep(submission));
 
   return submission;
 }
