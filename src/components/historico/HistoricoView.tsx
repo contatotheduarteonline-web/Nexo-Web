@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect, useRef } from "react";
 import { useStudy } from "../../context/StudyContext";
 import { StudyModality, StudySession } from "../../types";
+import { StudySessionEditModal } from "./StudySessionEditModal";
 import {
   Search,
   Trash2,
@@ -15,6 +16,7 @@ import {
   X,
   Loader2,
   Plus,
+  Pencil,
 } from "lucide-react";
 
 // Helpers for dates without timezone off-by-one errors
@@ -114,6 +116,7 @@ export const HistoricoView: React.FC = () => {
   // Interaction state
   const [openMenuSessionId, setOpenMenuSessionId] = useState<string | null>(null);
   const [expandedSessionId, setExpandedSessionId] = useState<string | null>(null);
+  const [sessionToEdit, setSessionToEdit] = useState<StudySession | null>(null);
   const [sessionToDelete, setSessionToDelete] = useState<StudySession | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -264,6 +267,11 @@ export const HistoricoView: React.FC = () => {
     setSearchQuery("");
     setCustomStartDate("");
     setCustomEndDate("");
+  };
+
+  const handleEditSession = (session: StudySession) => {
+    setOpenMenuSessionId(null);
+    setSessionToEdit(session);
   };
 
   // Execution of session deletion
@@ -561,6 +569,17 @@ export const HistoricoView: React.FC = () => {
                           type="button"
                           onClick={(e) => {
                             e.stopPropagation();
+                            handleEditSession(session);
+                          }}
+                          className="flex w-full items-center gap-2 px-3 py-2 text-left text-xs font-semibold text-white hover:bg-slate-100 dark:text-white dark:hover:bg-slate-800 cursor-pointer transition"
+                        >
+                          <Pencil className="h-3.5 w-3.5" />
+                          <span>Editar registro</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
                             setOpenMenuSessionId(null);
                             setSessionToDelete(session);
                           }}
@@ -697,6 +716,14 @@ export const HistoricoView: React.FC = () => {
             </div>
           </div>
         </div>
+      )}
+
+      {sessionToEdit && (
+        <StudySessionEditModal
+          session={sessionToEdit}
+          onClose={() => setSessionToEdit(null)}
+          onSaved={() => setSessionToEdit(null)}
+        />
       )}
     </div>
   );
