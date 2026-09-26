@@ -10,65 +10,37 @@ interface StatCardsRowProps {
   children?: React.ReactNode;
 }
 
-function getLocalStudyDate(session: { studyDate?: unknown; date?: unknown }): string {
-  // Prefer the explicit study date saved by the study-registration flow.
-  if (typeof session.studyDate === "string" && /^\d{4}-\d{2}-\d{2}$/.test(session.studyDate)) {
-    return session.studyDate;
-  }
-
-  const rawDate = session.date as any;
-  const date =
-    rawDate && typeof rawDate?.toDate === "function"
-      ? rawDate.toDate()
-      : new Date(rawDate as any);
-
-  if (Number.isNaN(date.getTime())) return "";
-
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
-}
-
-function getTodayLocalYmd(): string {
-  const now = new Date();
-  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
-}
-
 export const StatCardsRow: React.FC<StatCardsRowProps> = ({ children }) => {
-  // The Home cards read directly from the same real-time study-session state used
-  // by the registration/history screens. This keeps the cards synchronized after
-  // a study is saved, edited, or loaded from Firestore.
   const { studySessions } = useStudy();
 
-  const todaySessions = useMemo(() => {
-    const today = getTodayLocalYmd();
-    return studySessions.filter((session) => getLocalStudyDate(session) === today);
-  }, [studySessions]);
+  // Use the complete synchronized study-session collection. The history screen
+  // and these Home cards therefore use the same source of truth, including
+  // studies that were registered before this dashboard synchronization update.
+  const registeredSessions = useMemo(() => studySessions || [], [studySessions]);
 
-  const todayMinutes = useMemo(
-    () => todaySessions.reduce((total, session) => total + Number(session.durationMinutes || 0), 0),
-    [todaySessions]
+  const totalMinutes = useMemo(
+    () => registeredSessions.reduce((total, session) => total + Number(session.durationMinutes || 0), 0),
+    [registeredSessions]
   );
 
-  const todayQuestionsDone = useMemo(
-    () => todaySessions.reduce((total, session) => total + Number(session.questionsDone || 0), 0),
-    [todaySessions]
+  const totalQuestionsDone = useMemo(
+    () => registeredSessions.reduce((total, session) => total + Number(session.questionsDone || 0), 0),
+    [registeredSessions]
   );
 
-  const todayQuestionsCorrect = useMemo(
-    () => todaySessions.reduce((total, session) => total + Number(session.questionsCorrect || 0), 0),
-    [todaySessions]
+  const totalQuestionsCorrect = useMemo(
+    () => registeredSessions.reduce((total, session) => total + Number(session.questionsCorrect || 0), 0),
+    [registeredSessions]
   );
 
-  const hours = Math.floor(todayMinutes / 60);
-  const minutes = todayMinutes % 60;
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
   const timeFormatted = `${hours}h${minutes.toString().padStart(2, "0")}min`;
 
-  const todayQuestionsWrong = Math.max(0, todayQuestionsDone - todayQuestionsCorrect);
-  const todayPercentage =
-    todayQuestionsDone > 0
-      ? Math.round((todayQuestionsCorrect / todayQuestionsDone) * 100)
+  const totalQuestionsWrong = Math.max(0, totalQuestionsDone - totalQuestionsCorrect);
+  const totalPercentage =
+    totalQuestionsDone > 0
+      ? Math.round((totalQuestionsCorrect / totalQuestionsDone) * 100)
       : null;
 
   return (
@@ -93,11 +65,11 @@ export const StatCardsRow: React.FC<StatCardsRowProps> = ({ children }) => {
           </span>
         </div>
 
-        {todaySessions.length > 0 && (
+        {registeredSessions.length > 0 && (
           <div className="mt-4 pt-3 border-t border-[#384154] flex items-center gap-1.5 text-[12px] text-white">
             <span className="h-2 w-2 rounded-full shrink-0 bg-[#F3AA2D]" />
             <span className="truncate">
-              {todaySessions.length} {todaySessions.length === 1 ? "sessão hoje" : "sessões hoje"}
+              {registeredSessions.length} {registeredSessions.length === 1 ? "sessão registrada" : "sessões registradas"}
             </span>
           </div>
         )}
@@ -120,13 +92,13 @@ export const StatCardsRow: React.FC<StatCardsRowProps> = ({ children }) => {
         <div className="mt-4 space-y-1">
           <div className="flex items-baseline gap-1.5">
             <span className="num-condensed text-[16px] font-bold leading-none text-[#34D399]">
-              {todayQuestionsCorrect}
+              {totalQuestionsCorrect}
             </span>
             <span className="text-[13px] font-medium text-[#34D399]">Acertos</span>
           </div>
           <div className="flex items-baseline gap-1.5">
             <span className="num-condensed text-[16px] font-bold leading-none text-[#D84A4A]">
-              {todayQuestionsWrong}
+              {totalQuestionsWrong}
             </span>
             <span className="text-[13px] font-medium text-[#D84A4A]">Erros</span>
           </div>
@@ -134,7 +106,7 @@ export const StatCardsRow: React.FC<StatCardsRowProps> = ({ children }) => {
 
         <div className="mt-4 flex items-end justify-end">
           <span className="num-condensed text-[36px] font-bold leading-none text-white">
-            {todayPercentage !== null ? `${todayPercentage}%` : "0%"}
+            {totalPercentage !== null ? `${totalPercentage}%` : "0%"}
           </span>
         </div>
       </div>
