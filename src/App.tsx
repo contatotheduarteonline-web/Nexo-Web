@@ -18,6 +18,7 @@ import { FirstAccessOnboarding } from "./components/onboarding/FirstAccessOnboar
 import { Sidebar } from "./components/layout/Sidebar";
 import { Header } from "./components/layout/Header";
 import { DashboardView } from "./components/dashboard/DashboardView";
+import { FloatingTimerWidget } from "./components/dashboard/FloatingTimerWidget";
 import { EditalView } from "./components/edital/EditalView";
 import { CronometroModal } from "./components/cronometro/CronometroModal";
 import { RevisoesView } from "./components/revisoes/RevisoesView";
@@ -43,11 +44,9 @@ const AuthenticatedApp: React.FC = () => {
   const { activeTab, setActiveTab, isSidebarCollapsed, setIsSidebarCollapsed, studyPlans } = useStudy();
   const { user, isAdmin, hasSeenOnboarding, setHasSeenOnboarding } = useAuth();
 
-  // Watch for gamification XP and Rank milestones across the entire app
   useGamificationTracker();
 
-  // "Registro de Estudos" is no longer a sidebar destination — it renders as an
-  // overlay popup on top of the last visited view, opened by study actions.
+  // "Registro de Estudos" is an overlay popup on top of the last visited view.
   const [lastMainTab, setLastMainTab] = useState<ActiveTab>("dashboard");
   useEffect(() => {
     if (activeTab && activeTab !== "cronometro") {
@@ -64,10 +63,6 @@ const AuthenticatedApp: React.FC = () => {
   const [manualStudyTopicId, setManualStudyTopicId] = useState<string | undefined>(undefined);
   const [selectedDisciplineForTopic, setSelectedDisciplineForTopic] = useState<string | undefined>(undefined);
 
-  // First Access Onboarding Guard:
-  // Decided STRICTLY by users/{uid}.onboarding.completed.
-  // studyPlans.length is NEVER used as a permanent condition to decide whether onboarding appears.
-  // Legacy profiles without the onboarding object fall back to onboardingCompleted.
   const isOnboardingActive =
     Boolean(user) &&
     (user?.onboarding ? user.onboarding.completed === false : user?.onboardingCompleted === false);
@@ -127,25 +122,17 @@ const AuthenticatedApp: React.FC = () => {
 
   return (
     <div className="flex h-screen w-full flex-col overflow-hidden bg-[#E9EAEC] font-sans text-[#172033] antialiased dark:bg-[#0F172A] dark:text-[#F1F5F9] relative">
-      {/* Background Institutional Watermark Texture */}
       <GlobalWatermark />
-
-      {/* Animated Gamification Toasts in Top Portal */}
       <GamificationToastContainer />
-
-      {/* Console-Grade Achievement Unlock Popup (Bottom) */}
       <AchievementUnlockToast />
 
-      {/* Top Header */}
       <Header
         onOpenAiModal={() => setIsAiModalOpen(true)}
         onOpenNewEditalModal={() => setIsNewEditalOpen(true)}
         onOpenManualStudy={() => handleOpenManualStudy()}
       />
 
-      {/* Body Area with Sidebar and Main Content */}
       <div className="flex flex-1 overflow-hidden relative">
-        {/* Left Sidebar below Topbar */}
         <Sidebar
           activeTab={mainTab}
           setActiveTab={setActiveTab}
@@ -153,13 +140,14 @@ const AuthenticatedApp: React.FC = () => {
           setIsCollapsed={setIsSidebarCollapsed}
         />
 
-        {/* Scrollable View Canvas */}
         <main className="flex-1 overflow-y-auto bg-[#F4F5F7] p-4 md:p-6 lg:p-7 dark:bg-[#11151F]">
           <div className="mx-auto max-w-7xl">{renderActiveView()}</div>
         </main>
       </div>
 
-      {/* Modals */}
+      {/* Mantém o relógio flutuante disponível fora da Home também. */}
+      {mainTab !== "dashboard" && <FloatingTimerWidget />}
+
       <CronometroModal
         isOpen={activeTab === "cronometro"}
         onClose={() => setActiveTab(lastMainTab)}
