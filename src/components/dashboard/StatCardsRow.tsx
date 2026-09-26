@@ -83,7 +83,7 @@ export const StatCardsRow: React.FC<StatCardsRowProps> = ({
             <span className="num-condensed text-[16px] font-bold leading-none text-[#D84A4A]">
               {todayQuestionsWrong}
             </span>
-            <span className="text-[13px] font-medium text-[#D84A4A]">Erro</span>
+            <span className="text-[13px] font-medium text-[#D84A4A]">Erros</span>
           </div>
         </div>
 
