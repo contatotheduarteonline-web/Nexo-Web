@@ -432,6 +432,12 @@ export interface StudySession {
   questionsDone: number;
   questionsCorrect: number;
   notes: string;
+  material?: string;
+  pagesStart?: number;
+  pagesEnd?: number;
+  videoTitle?: string;
+  videoStart?: string;
+  videoEnd?: string;
   theoryCompleted?: boolean;
   reviewsScheduled?: number;
   createdReviewsCount?: number;
