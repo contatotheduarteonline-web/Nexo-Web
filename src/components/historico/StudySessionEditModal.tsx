@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { X, Save, Loader2, CalendarDays, Clock3, BookOpen, Target, CheckCircle2, FileText, Video } from "lucide-react";
+import { X, Save, Loader2, CalendarDays, BookOpen, Target, CheckCircle2, FileText, Video } from "lucide-react";
 import { StudyModality, StudySession } from "../../types";
 import { useAuth } from "../../context/AuthContext";
 import { saveStudySessionToFirestore } from "../../lib/firestoreService";
@@ -136,7 +136,7 @@ export const StudySessionEditModal: React.FC<StudySessionEditModalProps> = ({
         <div className="mt-5 max-h-[70vh] overflow-y-auto pr-1">
           <div className="mb-4 flex items-center gap-2 text-xs text-slate-300">
             <CalendarDays className="h-4 w-4" />
-            <span>Edite o registro completo do estudo e salve todas as informações.</span>
+            <span>Edite todos os campos do registro e salve. As alterações são persistidas no Firestore.</span>
           </div>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <label className="text-xs font-semibold text-slate-200">
