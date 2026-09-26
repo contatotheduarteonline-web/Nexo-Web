@@ -20,6 +20,21 @@ interface DashboardViewProps {
   onOpenManualStudy: () => void;
 }
 
+function getLocalStudyDate(session: { studyDate?: string; date: string }): string {
+  if (session.studyDate) return session.studyDate;
+  const date = new Date(session.date);
+  if (Number.isNaN(date.getTime())) return "";
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function getTodayLocalYmd(): string {
+  const now = new Date();
+  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
+}
+
 export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy }) => {
   const {
     activeEdital,
@@ -58,10 +73,12 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy 
     return computeGamificationData(activeEdital, studySessions, scheduledReviews, simulados);
   }, [activeEdital, studySessions, scheduledReviews, simulados]);
 
-  // Today's Study Sessions and metrics derived dynamically from studySessions
+  // Today's Study Sessions and metrics derived from the user's local study date.
+  // Using studyDate avoids the UTC/local-time rollover bug that made evening studies
+  // appear as 0h/0 questions on the Home dashboard.
   const todaySessions = useMemo(() => {
-    const todayStr = new Date().toISOString().split("T")[0];
-    return studySessions.filter((s) => s.date.startsWith(todayStr));
+    const todayStr = getTodayLocalYmd();
+    return studySessions.filter((s) => getLocalStudyDate(s) === todayStr);
   }, [studySessions]);
 
   const todayMinutes = useMemo(() => {
@@ -183,7 +200,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy 
 
   // Today's Scheduled Reviews (Clean filtered list)
   const todayReviews = useMemo(() => {
-    const todayStr = new Date().toISOString().split("T")[0];
+    const todayStr = getTodayLocalYmd();
     return scheduledReviews.filter(
       (r) => (!activeEdital || r.editalId === activeEdital.id) && !r.completed && r.dueDate <= todayStr
     );
