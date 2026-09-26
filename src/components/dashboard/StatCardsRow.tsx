@@ -1,21 +1,66 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Clock, CheckSquare } from "lucide-react";
+import { useStudy } from "../../context/StudyContext";
 
 interface StatCardsRowProps {
-  todayMinutes: number;
-  todaySessionsCount: number;
-  todayQuestionsDone: number;
-  todayQuestionsCorrect: number;
+  todayMinutes?: number;
+  todaySessionsCount?: number;
+  todayQuestionsDone?: number;
+  todayQuestionsCorrect?: number;
   children?: React.ReactNode;
 }
 
-export const StatCardsRow: React.FC<StatCardsRowProps> = ({
-  todayMinutes,
-  todaySessionsCount,
-  todayQuestionsDone,
-  todayQuestionsCorrect,
-  children,
-}) => {
+function getLocalStudyDate(session: { studyDate?: unknown; date?: unknown }): string {
+  // Prefer the explicit study date saved by the study-registration flow.
+  if (typeof session.studyDate === "string" && /^\d{4}-\d{2}-\d{2}$/.test(session.studyDate)) {
+    return session.studyDate;
+  }
+
+  const rawDate = session.date as any;
+  const date =
+    rawDate && typeof rawDate?.toDate === "function"
+      ? rawDate.toDate()
+      : new Date(rawDate as any);
+
+  if (Number.isNaN(date.getTime())) return "";
+
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function getTodayLocalYmd(): string {
+  const now = new Date();
+  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
+}
+
+export const StatCardsRow: React.FC<StatCardsRowProps> = ({ children }) => {
+  // The Home cards read directly from the same real-time study-session state used
+  // by the registration/history screens. This keeps the cards synchronized after
+  // a study is saved, edited, or loaded from Firestore.
+  const { studySessions } = useStudy();
+
+  const todaySessions = useMemo(() => {
+    const today = getTodayLocalYmd();
+    return studySessions.filter((session) => getLocalStudyDate(session) === today);
+  }, [studySessions]);
+
+  const todayMinutes = useMemo(
+    () => todaySessions.reduce((total, session) => total + Number(session.durationMinutes || 0), 0),
+    [todaySessions]
+  );
+
+  const todayQuestionsDone = useMemo(
+    () => todaySessions.reduce((total, session) => total + Number(session.questionsDone || 0), 0),
+    [todaySessions]
+  );
+
+  const todayQuestionsCorrect = useMemo(
+    () => todaySessions.reduce((total, session) => total + Number(session.questionsCorrect || 0), 0),
+    [todaySessions]
+  );
+
   const hours = Math.floor(todayMinutes / 60);
   const minutes = todayMinutes % 60;
   const timeFormatted = `${hours}h${minutes.toString().padStart(2, "0")}min`;
@@ -48,11 +93,11 @@ export const StatCardsRow: React.FC<StatCardsRowProps> = ({
           </span>
         </div>
 
-        {todaySessionsCount > 0 && (
+        {todaySessions.length > 0 && (
           <div className="mt-4 pt-3 border-t border-[#384154] flex items-center gap-1.5 text-[12px] text-white">
             <span className="h-2 w-2 rounded-full shrink-0 bg-[#F3AA2D]" />
             <span className="truncate">
-              {todaySessionsCount} {todaySessionsCount === 1 ? "sessão hoje" : "sessões hoje"}
+              {todaySessions.length} {todaySessions.length === 1 ? "sessão hoje" : "sessões hoje"}
             </span>
           </div>
         )}
