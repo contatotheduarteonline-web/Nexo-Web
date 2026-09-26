@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { X, Save, Loader2 } from "lucide-react";
+import { X, Save, Loader2, CalendarDays, Clock3, BookOpen, Target, CheckCircle2, FileText, Video } from "lucide-react";
 import { StudyModality, StudySession } from "../../types";
 import { useAuth } from "../../context/AuthContext";
 import { saveStudySessionToFirestore } from "../../lib/firestoreService";
@@ -45,6 +45,13 @@ export const StudySessionEditModal: React.FC<StudySessionEditModalProps> = ({
   const [questionsDone, setQuestionsDone] = useState(String(Math.max(0, session.questionsDone || 0)));
   const [questionsCorrect, setQuestionsCorrect] = useState(String(Math.max(0, session.questionsCorrect || 0)));
   const [notes, setNotes] = useState(session.notes || "");
+  const [theoryCompleted, setTheoryCompleted] = useState(Boolean(session.theoryCompleted));
+  const [material, setMaterial] = useState((session as StudySession & { material?: string }).material || "");
+  const [pagesStart, setPagesStart] = useState(String((session as StudySession & { pagesStart?: number }).pagesStart ?? 0));
+  const [pagesEnd, setPagesEnd] = useState(String((session as StudySession & { pagesEnd?: number }).pagesEnd ?? 0));
+  const [videoTitle, setVideoTitle] = useState((session as StudySession & { videoTitle?: string }).videoTitle || "");
+  const [videoStart, setVideoStart] = useState((session as StudySession & { videoStart?: string }).videoStart || "00:00:00");
+  const [videoEnd, setVideoEnd] = useState((session as StudySession & { videoEnd?: string }).videoEnd || "00:00:00");
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -78,6 +85,13 @@ export const StudySessionEditModal: React.FC<StudySessionEditModalProps> = ({
         questionsDone: parsedQuestionsDone,
         questionsCorrect: parsedQuestionsCorrect,
         notes: notes.trim(),
+        theoryCompleted,
+        material: material.trim(),
+        pagesStart: Math.max(0, Math.floor(Number(pagesStart) || 0)),
+        pagesEnd: Math.max(0, Math.floor(Number(pagesEnd) || 0)),
+        videoTitle: videoTitle.trim(),
+        videoStart,
+        videoEnd,
       };
 
       await saveStudySessionToFirestore(user.id, updatedSession);
@@ -119,7 +133,12 @@ export const StudySessionEditModal: React.FC<StudySessionEditModalProps> = ({
           </button>
         </div>
 
-        <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
+        <div className="mt-5 max-h-[70vh] overflow-y-auto pr-1">
+          <div className="mb-4 flex items-center gap-2 text-xs text-slate-300">
+            <CalendarDays className="h-4 w-4" />
+            <span>Edite o registro completo do estudo e salve todas as informações.</span>
+          </div>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <label className="text-xs font-semibold text-slate-200">
             Data do estudo
             <input
@@ -185,6 +204,34 @@ export const StudySessionEditModal: React.FC<StudySessionEditModalProps> = ({
             />
           </label>
 
+          <label className="flex items-center gap-2 rounded-lg border border-slate-700 bg-[#0F172A] px-3 py-2 text-xs font-semibold text-slate-200 sm:col-span-2">
+            <input type="checkbox" checked={theoryCompleted} onChange={(e) => setTheoryCompleted(e.target.checked)} disabled={isSaving} className="h-4 w-4 accent-[#F59E0B]" />
+            <CheckCircle2 className="h-4 w-4 text-emerald-400" />
+            Teoria finalizada
+          </label>
+
+          <label className="text-xs font-semibold text-slate-200">
+            <span className="flex items-center gap-1"><BookOpen className="h-3.5 w-3.5" /> Material</span>
+            <input type="text" value={material} onChange={(e) => setMaterial(e.target.value)} disabled={isSaving} placeholder="Ex.: Aula 01" className="mt-1.5 w-full rounded-lg border border-slate-700 bg-[#0F172A] px-3 py-2 text-sm text-white outline-none focus:border-[#F59E0B]" />
+          </label>
+
+          <div className="text-xs font-semibold text-slate-200">
+            <span className="flex items-center gap-1"><FileText className="h-3.5 w-3.5" /> Páginas</span>
+            <div className="mt-1.5 grid grid-cols-2 gap-2">
+              <input type="number" min="0" value={pagesStart} onChange={(e) => setPagesStart(e.target.value)} disabled={isSaving} placeholder="Início" className="w-full rounded-lg border border-slate-700 bg-[#0F172A] px-3 py-2 text-sm text-white outline-none focus:border-[#F59E0B]" />
+              <input type="number" min="0" value={pagesEnd} onChange={(e) => setPagesEnd(e.target.value)} disabled={isSaving} placeholder="Fim" className="w-full rounded-lg border border-slate-700 bg-[#0F172A] px-3 py-2 text-sm text-white outline-none focus:border-[#F59E0B]" />
+            </div>
+          </div>
+
+          <div className="text-xs font-semibold text-slate-200 sm:col-span-2">
+            <span className="flex items-center gap-1"><Video className="h-3.5 w-3.5" /> Videoaula</span>
+            <div className="mt-1.5 grid grid-cols-1 gap-2 sm:grid-cols-3">
+              <input type="text" value={videoTitle} onChange={(e) => setVideoTitle(e.target.value)} disabled={isSaving} placeholder="Título do vídeo" className="w-full rounded-lg border border-slate-700 bg-[#0F172A] px-3 py-2 text-sm text-white outline-none focus:border-[#F59E0B]" />
+              <input type="text" value={videoStart} onChange={(e) => setVideoStart(e.target.value)} disabled={isSaving} placeholder="00:00:00" className="w-full rounded-lg border border-slate-700 bg-[#0F172A] px-3 py-2 text-sm text-white outline-none focus:border-[#F59E0B]" />
+              <input type="text" value={videoEnd} onChange={(e) => setVideoEnd(e.target.value)} disabled={isSaving} placeholder="00:00:00" className="w-full rounded-lg border border-slate-700 bg-[#0F172A] px-3 py-2 text-sm text-white outline-none focus:border-[#F59E0B]" />
+            </div>
+          </div>
+
           <label className="text-xs font-semibold text-slate-200 sm:col-span-2">
             Anotação
             <textarea
@@ -196,6 +243,7 @@ export const StudySessionEditModal: React.FC<StudySessionEditModalProps> = ({
               className="mt-1.5 w-full resize-y rounded-lg border border-slate-700 bg-[#0F172A] px-3 py-2 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-[#F59E0B]"
             />
           </label>
+          </div>
         </div>
 
         {error && (
