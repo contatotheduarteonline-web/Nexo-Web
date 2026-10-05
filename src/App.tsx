@@ -7,11 +7,6 @@ import React, { useState, useEffect } from "react";
 import { ActiveTab } from "./types";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import { StudyProvider, useStudy } from "./context/StudyContext";
-import { ToastProvider } from "./context/ToastContext";
-import { AchievementQueueProvider } from "./context/AchievementQueueContext";
-import { GamificationToastContainer } from "./components/common/GamificationToastContainer";
-import { AchievementUnlockToast } from "./components/medalhas/AchievementUnlockToast";
-import { useGamificationTracker } from "./hooks/useGamificationTracker";
 import { LoginView } from "./components/auth/LoginView";
 import { CadastroView } from "./components/auth/CadastroView";
 import { FirstAccessOnboarding } from "./components/onboarding/FirstAccessOnboarding";
@@ -41,10 +36,8 @@ import { NewTopicModal } from "./components/modals/NewTopicModal";
 import { ManualStudyModal } from "./components/modals/ManualStudyModal";
 
 const AuthenticatedApp: React.FC = () => {
-  const { activeTab, setActiveTab, isSidebarCollapsed, setIsSidebarCollapsed, studyPlans } = useStudy();
-  const { user, isAdmin, hasSeenOnboarding, setHasSeenOnboarding } = useAuth();
-
-  useGamificationTracker();
+  const { activeTab, setActiveTab, isSidebarCollapsed, setIsSidebarCollapsed } = useStudy();
+  const { user } = useAuth();
 
   // "Registro de Estudos" is an overlay popup on top of the last visited view.
   const [lastMainTab, setLastMainTab] = useState<ActiveTab>("dashboard");
@@ -123,8 +116,6 @@ const AuthenticatedApp: React.FC = () => {
   return (
     <div className="flex h-screen w-full flex-col overflow-hidden bg-[#E9EAEC] font-sans text-[#172033] antialiased dark:bg-[#0F172A] dark:text-[#F1F5F9] relative">
       <GlobalWatermark />
-      <GamificationToastContainer />
-      <AchievementUnlockToast />
 
       <Header
         onOpenAiModal={() => setIsAiModalOpen(true)}
@@ -203,11 +194,7 @@ const RootRouter: React.FC = () => {
 
   return (
     <StudyProvider>
-      <ToastProvider>
-        <AchievementQueueProvider>
-          <AuthenticatedApp />
-        </AchievementQueueProvider>
-      </ToastProvider>
+      <AuthenticatedApp />
     </StudyProvider>
   );
 };
