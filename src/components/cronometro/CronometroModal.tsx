@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Maximize2, Minimize2, X } from "lucide-react";
 import { CronometroView } from "./CronometroView";
 
@@ -8,11 +8,14 @@ interface CronometroModalProps {
 }
 
 /**
- * Registro de Estudos como overlay popup.
- * Mantém a estrutura visual original do popup e usa o CronometroView
- * atualizado como conteúdo, preservando as novas funcionalidades do registro.
+ * Registro de Estudos em overlay responsivo.
+ *
+ * O botão de maximizar usa a Fullscreen API quando disponível. Em navegadores
+ * que não permitem fullscreen via API, o componente mantém um fallback CSS
+ * que ocupa toda a viewport sem criar overflow horizontal.
  */
 export const CronometroModal: React.FC<CronometroModalProps> = ({ isOpen, onClose }) => {
+  const dialogRef = useRef<HTMLDivElement>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
   useEffect(() => {
@@ -21,9 +24,15 @@ export const CronometroModal: React.FC<CronometroModalProps> = ({ isOpen, onClos
       return;
     }
 
+    const handleFullscreenChange = () => {
+      setIsFullscreen(document.fullscreenElement === dialogRef.current);
+    };
+
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
-        if (isFullscreen) {
+        if (document.fullscreenElement === dialogRef.current) {
+          void document.exitFullscreen?.();
+        } else if (isFullscreen) {
           setIsFullscreen(false);
         } else {
           onClose();
@@ -31,30 +40,90 @@ export const CronometroModal: React.FC<CronometroModalProps> = ({ isOpen, onClos
       }
     };
 
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
     document.addEventListener("keydown", handleKey);
-    return () => document.removeEventListener("keydown", handleKey);
+
+    return () => {
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
+      document.removeEventListener("keydown", handleKey);
+    };
   }, [isOpen, onClose, isFullscreen]);
+
+  useEffect(() => {
+    if (!isOpen && document.fullscreenElement === dialogRef.current) {
+      void document.exitFullscreen?.();
+    }
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
+  const toggleFullscreen = async () => {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+
+    try {
+      if (document.fullscreenElement === dialog) {
+        await document.exitFullscreen?.();
+        setIsFullscreen(false);
+        return;
+      }
+
+      if (document.fullscreenElement) {
+        await document.exitFullscreen?.();
+      }
+
+      if (dialog.requestFullscreen) {
+        await dialog.requestFullscreen();
+      }
+
+      setIsFullscreen(true);
+    } catch {
+      // Fallback para navegadores que bloqueiam a Fullscreen API.
+      setIsFullscreen((prev) => !prev);
+    }
+  };
+
+  const handleClose = async () => {
+    if (document.fullscreenElement === dialogRef.current) {
+      try {
+        await document.exitFullscreen?.();
+      } catch {
+        // Ignora falha ao sair do fullscreen e fecha o modal normalmente.
+      }
+    }
+    setIsFullscreen(false);
+    onClose();
+  };
+
   return (
     <div
-      className="study-registration-modal fixed inset-0 z-50 flex items-center justify-center bg-[#0d0f12]/70 p-4 backdrop-blur-md"
-      onClick={onClose}
+      className={`study-registration-modal fixed inset-0 z-50 flex items-center justify-center bg-[#0d0f12]/70 backdrop-blur-md${
+        isFullscreen ? " is-modal-fullscreen" : " p-4"
+      }`}
+      onClick={handleClose}
     >
       <style>{`
         .study-registration-modal-dialog {
           width: min(96vw, 1280px);
           height: min(94vh, 920px);
-          max-height: 94vh;
+          max-width: calc(100vw - 32px);
+          max-height: calc(100vh - 32px);
           min-width: 0;
+          box-sizing: border-box;
         }
 
-        .study-registration-modal-dialog.is-fullscreen {
+        .study-registration-modal.is-modal-fullscreen {
+          padding: 0;
+          overflow: hidden;
+        }
+
+        .study-registration-modal-dialog.is-fullscreen,
+        .study-registration-modal-dialog:fullscreen {
           width: 100vw;
           height: 100vh;
           max-width: none;
           max-height: none;
+          min-width: 0;
           border-radius: 0;
           border-width: 0;
         }
@@ -64,6 +133,7 @@ export const CronometroModal: React.FC<CronometroModalProps> = ({ isOpen, onClos
           overflow-x: hidden;
           overflow-y: auto;
           padding: 24px clamp(16px, 2.5vw, 32px);
+          box-sizing: border-box;
         }
 
         .study-registration-modal-content > div {
@@ -131,7 +201,7 @@ export const CronometroModal: React.FC<CronometroModalProps> = ({ isOpen, onClos
           }
 
           .study-registration-modal-content .grid.lg\\:grid-cols-12 {
-            grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) !important;
+            grid-template-columns: minmax(0, 2fr) minmax(260px, 1fr) !important;
             column-gap: 24px;
             align-items: start;
           }
@@ -146,7 +216,7 @@ export const CronometroModal: React.FC<CronometroModalProps> = ({ isOpen, onClos
         }
 
         @media (min-width: 1200px) {
-          .study-registration-modal-dialog:not(.is-fullscreen) {
+          .study-registration-modal-dialog:not(:fullscreen):not(.is-fullscreen) {
             width: min(94vw, 1480px);
           }
         }
@@ -196,7 +266,7 @@ export const CronometroModal: React.FC<CronometroModalProps> = ({ isOpen, onClos
         }
 
         @media (max-width: 899px) {
-          .study-registration-modal-dialog:not(.is-fullscreen) {
+          .study-registration-modal-dialog:not(:fullscreen):not(.is-fullscreen) {
             width: min(96vw, 720px);
           }
 
@@ -226,21 +296,24 @@ export const CronometroModal: React.FC<CronometroModalProps> = ({ isOpen, onClos
       `}</style>
 
       <div
-        className={`study-registration-modal-dialog flex w-full max-w-6xl flex-col overflow-hidden rounded-2xl border border-[#384154] bg-[#11151F] shadow-2xl${isFullscreen ? " is-fullscreen" : ""}`}
+        ref={dialogRef}
+        className={`study-registration-modal-dialog flex w-full max-w-6xl flex-col overflow-hidden rounded-2xl border border-[#384154] bg-[#11151F] shadow-2xl${
+          isFullscreen ? " is-fullscreen" : ""
+        }`}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex shrink-0 items-center justify-between border-b border-[#384154] px-5 py-3">
-          <div className="flex items-center gap-2.5">
-            <span className="h-2 w-2 rounded-full bg-[#F3AA2D]" />
-            <h2 className="text-sm font-bold tracking-wide text-white uppercase">
+          <div className="flex min-w-0 items-center gap-2.5">
+            <span className="h-2 w-2 shrink-0 rounded-full bg-[#F3AA2D]" />
+            <h2 className="truncate text-sm font-bold tracking-wide text-white uppercase">
               Registro de Estudos
             </h2>
           </div>
 
-          <div className="flex items-center gap-1">
+          <div className="flex shrink-0 items-center gap-1">
             <button
               type="button"
-              onClick={() => setIsFullscreen((prev) => !prev)}
+              onClick={toggleFullscreen}
               className="rounded-lg p-1.5 text-white transition hover:bg-[#252B38] hover:text-white cursor-pointer"
               title={isFullscreen ? "Sair da Tela Cheia" : "Abrir Registro de Estudos em Tela Cheia"}
               aria-label={isFullscreen ? "Sair da tela cheia" : "Abrir Registro de Estudos em Tela Cheia"}
@@ -250,16 +323,17 @@ export const CronometroModal: React.FC<CronometroModalProps> = ({ isOpen, onClos
 
             <button
               type="button"
-              onClick={onClose}
+              onClick={handleClose}
               className="rounded-lg p-1.5 text-white transition hover:bg-[#252B38] hover:text-white cursor-pointer"
               title="Fechar"
+              aria-label="Fechar Registro de Estudos"
             >
               <X className="h-4 w-4" />
             </button>
           </div>
         </div>
 
-        <div className="study-registration-modal-content scrollbar-thin">
+        <div className="study-registration-modal-content scrollbar-thin flex-1">
           <CronometroView />
         </div>
       </div>
