@@ -107,16 +107,15 @@ export const CronometroModal: React.FC<CronometroModalProps> = ({ isOpen, onClos
           }
 
           .study-registration-modal-content .grid.lg\\:grid-cols-12 {
-            grid-template-columns: minmax(0, 1.45fr) minmax(300px, 0.9fr) !important;
+            grid-template-columns: minmax(0, 1.45fr) minmax(240px, 0.9fr) !important;
             align-items: start;
           }
 
-          .study-registration-modal-content .lg\\:col-span-8 {
-            grid-column: span 8 / span 8 !important;
-          }
-
+          /* O grid acima usa 2 colunas reais; não manter os spans 8/4 do Tailwind,
+             pois eles criariam colunas implícitas e fariam o conteúdo estourar. */
+          .study-registration-modal-content .lg\\:col-span-8,
           .study-registration-modal-content .lg\\:col-span-4 {
-            grid-column: span 4 / span 4 !important;
+            grid-column: auto !important;
           }
         }
 
@@ -126,7 +125,7 @@ export const CronometroModal: React.FC<CronometroModalProps> = ({ isOpen, onClos
           }
 
           .study-registration-modal-content .grid.lg\\:grid-cols-12 {
-            grid-template-columns: minmax(0, 1.6fr) minmax(320px, 0.85fr) !important;
+            grid-template-columns: minmax(0, 1.6fr) minmax(280px, 0.85fr) !important;
           }
         }
 
