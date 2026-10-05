@@ -257,3 +257,104 @@
     outline-offset: 2px;
   }
 }
+
+/* ===== REGISTRO DE ESTUDOS — DIMENSÕES RESPONSIVAS DO POPUP ===== */
+/* Ajuste somente de layout: evita compressão de cards/textos em tablet e desktop. */
+.study-registration-modal-dialog {
+  width: min(96vw, 1280px) !important;
+  max-width: 1280px !important;
+  max-height: 92vh !important;
+  min-width: 0 !important;
+}
+
+.study-registration-modal-content {
+  width: 100% !important;
+  min-width: 0 !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  box-sizing: border-box !important;
+}
+
+.study-registration-modal-content > div,
+.study-registration-modal-content .grid,
+.study-registration-modal-content .space-y-6,
+.study-registration-modal-content .space-y-5 {
+  min-width: 0 !important;
+  max-width: 100% !important;
+}
+
+.study-registration-modal-content .lg\:col-span-8,
+.study-registration-modal-content .lg\:col-span-4,
+.study-registration-modal-content .sm\:grid-cols-2,
+.study-registration-modal-content .sm\:grid-cols-6,
+.study-registration-modal-content button,
+.study-registration-modal-content input,
+.study-registration-modal-content select,
+.study-registration-modal-content textarea {
+  min-width: 0 !important;
+  max-width: 100% !important;
+}
+
+.study-registration-modal-content button,
+.study-registration-modal-content label,
+.study-registration-modal-content span,
+.study-registration-modal-content p,
+.study-registration-modal-content h1,
+.study-registration-modal-content h2,
+.study-registration-modal-content h3 {
+  overflow-wrap: anywhere;
+}
+
+/* Tablet: uma coluna evita que a coluna lateral comprima os cards da área principal. */
+@media (min-width: 768px) and (max-width: 1199px) {
+  .study-registration-modal-dialog {
+    width: min(94vw, 920px) !important;
+  }
+
+  .study-registration-modal-content .grid.lg\:grid-cols-12 {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 16px !important;
+  }
+
+  .study-registration-modal-content .lg\:col-span-8,
+  .study-registration-modal-content .lg\:col-span-4 {
+    grid-column: 1 / -1 !important;
+  }
+
+  .study-registration-modal-content .grid.sm\:grid-cols-6 {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+}
+
+/* Desktop: duas colunas proporcionais, sem largura mínima rígida na lateral. */
+@media (min-width: 1200px) {
+  .study-registration-modal-content .grid.lg\:grid-cols-12 {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr) !important;
+  }
+
+  .study-registration-modal-content .lg\:col-span-8 {
+    grid-column: span 7 / span 7 !important;
+  }
+
+  .study-registration-modal-content .lg\:col-span-4 {
+    grid-column: span 5 / span 5 !important;
+  }
+
+  .study-registration-modal-content .grid.sm\:grid-cols-6 {
+    grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+  }
+
+  .study-registration-modal-content .grid.sm\:grid-cols-6 > button {
+    min-width: 0 !important;
+    padding-inline: 6px !important;
+    white-space: normal !important;
+    line-height: 1.15 !important;
+  }
+}
+
+/* Tablet/desktop landscape: controles de atividade podem quebrar o texto sem estourar o card. */
+.study-registration-modal-content .grid.sm\:grid-cols-6 > button {
+  min-height: 44px !important;
+  overflow-wrap: anywhere !important;
+  text-align: center !important;
+}
