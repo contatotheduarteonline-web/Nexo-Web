@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { X } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { Maximize2, Minimize2, X } from "lucide-react";
 import { CronometroView } from "./CronometroView";
 
 interface CronometroModalProps {
@@ -8,19 +8,32 @@ interface CronometroModalProps {
 }
 
 /**
- * Registro de Estudos as an overlay popup.
+ * Registro de Estudos como overlay popup.
  * Mantém a estrutura visual original do popup e usa o CronometroView
  * atualizado como conteúdo, preservando as novas funcionalidades do registro.
  */
 export const CronometroModal: React.FC<CronometroModalProps> = ({ isOpen, onClose }) => {
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
   useEffect(() => {
-    if (!isOpen) return;
+    if (!isOpen) {
+      setIsFullscreen(false);
+      return;
+    }
+
     const handleKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+      if (e.key === "Escape") {
+        if (isFullscreen) {
+          setIsFullscreen(false);
+        } else {
+          onClose();
+        }
+      }
     };
+
     document.addEventListener("keydown", handleKey);
     return () => document.removeEventListener("keydown", handleKey);
-  }, [isOpen, onClose]);
+  }, [isOpen, onClose, isFullscreen]);
 
   if (!isOpen) return null;
 
@@ -35,6 +48,15 @@ export const CronometroModal: React.FC<CronometroModalProps> = ({ isOpen, onClos
           height: min(94vh, 920px);
           max-height: 94vh;
           min-width: 0;
+        }
+
+        .study-registration-modal-dialog.is-fullscreen {
+          width: 100vw;
+          height: 100vh;
+          max-width: none;
+          max-height: none;
+          border-radius: 0;
+          border-width: 0;
         }
 
         .study-registration-modal-content {
@@ -124,7 +146,7 @@ export const CronometroModal: React.FC<CronometroModalProps> = ({ isOpen, onClos
         }
 
         @media (min-width: 1200px) {
-          .study-registration-modal-dialog {
+          .study-registration-modal-dialog:not(.is-fullscreen) {
             width: min(94vw, 1480px);
           }
         }
@@ -174,7 +196,7 @@ export const CronometroModal: React.FC<CronometroModalProps> = ({ isOpen, onClos
         }
 
         @media (max-width: 899px) {
-          .study-registration-modal-dialog {
+          .study-registration-modal-dialog:not(.is-fullscreen) {
             width: min(96vw, 720px);
           }
 
@@ -204,7 +226,7 @@ export const CronometroModal: React.FC<CronometroModalProps> = ({ isOpen, onClos
       `}</style>
 
       <div
-        className="study-registration-modal-dialog flex max-h-[90vh] w-full max-w-6xl flex-col overflow-hidden rounded-2xl border border-[#384154] bg-[#11151F] shadow-2xl"
+        className={`study-registration-modal-dialog flex w-full max-w-6xl flex-col overflow-hidden rounded-2xl border border-[#384154] bg-[#11151F] shadow-2xl${isFullscreen ? " is-fullscreen" : ""}`}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex shrink-0 items-center justify-between border-b border-[#384154] px-5 py-3">
@@ -214,14 +236,27 @@ export const CronometroModal: React.FC<CronometroModalProps> = ({ isOpen, onClos
               Registro de Estudos
             </h2>
           </div>
-          <button
-            type="button"
-            onClick={onClose}
-            className="rounded-lg p-1.5 text-white transition hover:bg-[#252B38] hover:text-white cursor-pointer"
-            title="Fechar"
-          >
-            <X className="h-4 w-4" />
-          </button>
+
+          <div className="flex items-center gap-1">
+            <button
+              type="button"
+              onClick={() => setIsFullscreen((prev) => !prev)}
+              className="rounded-lg p-1.5 text-white transition hover:bg-[#252B38] hover:text-white cursor-pointer"
+              title={isFullscreen ? "Sair da Tela Cheia" : "Abrir Registro de Estudos em Tela Cheia"}
+              aria-label={isFullscreen ? "Sair da tela cheia" : "Abrir Registro de Estudos em Tela Cheia"}
+            >
+              {isFullscreen ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
+            </button>
+
+            <button
+              type="button"
+              onClick={onClose}
+              className="rounded-lg p-1.5 text-white transition hover:bg-[#252B38] hover:text-white cursor-pointer"
+              title="Fechar"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          </div>
         </div>
 
         <div className="study-registration-modal-content scrollbar-thin">
