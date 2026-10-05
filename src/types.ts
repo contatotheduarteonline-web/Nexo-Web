@@ -514,11 +514,8 @@ export interface WeakTopicItem {
 
 export interface ActiveTimerState {
   isRunning: boolean;
-  mode: "stopwatch" | "pomodoro";
+  mode: "stopwatch";
   elapsedSeconds: number;
-  pomodoroWorkMinutes: number;
-  pomodoroBreakMinutes: number;
-  isBreak: boolean;
   planId?: string;
   editalId: string;
   cargo?: string;

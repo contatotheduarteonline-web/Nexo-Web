@@ -814,9 +814,6 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     isRunning: false,
     mode: "stopwatch",
     elapsedSeconds: 0,
-    pomodoroWorkMinutes: 25,
-    pomodoroBreakMinutes: 5,
-    isBreak: false,
     editalId: "",
     disciplineId: "",
     topicId: "",
@@ -842,33 +839,45 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   }, [editais, activeEditalId, studyPlans, studySessions, scheduledReviews, simulados, reminders, storageKeys]);
 
   // Timer Tick
+  // O tempo real é calculado a partir de startedAt, e não da quantidade
+  // de execuções do setInterval. Isso mantém o cronômetro correto quando
+  // o navegador é colocado em segundo plano no celular/tablet.
   useEffect(() => {
-    let interval: any = null;
-    if (timer.isRunning) {
-      interval = setInterval(() => {
-        setTimer((prev) => {
-          const nextSeconds = prev.elapsedSeconds + 1;
-          if (prev.mode === "pomodoro") {
-            const limit = prev.isBreak ? prev.pomodoroBreakMinutes * 60 : prev.pomodoroWorkMinutes * 60;
-            if (nextSeconds >= limit) {
-              return {
-                ...prev,
-                elapsedSeconds: 0,
-                isBreak: !prev.isBreak,
-              };
-            }
-          }
-          return {
-            ...prev,
-            elapsedSeconds: nextSeconds,
-          };
-        });
-      }, 1000);
-    }
-    return () => {
-      if (interval) clearInterval(interval);
+    if (!timer.isRunning || !timer.startedAt) return;
+
+    const updateElapsedTime = () => {
+      setTimer((prev) => {
+        if (!prev.isRunning || !prev.startedAt) return prev;
+
+        const elapsedSinceStart = Math.max(
+          0,
+          Math.floor((Date.now() - prev.startedAt) / 1000)
+        );
+
+        return {
+          ...prev,
+          elapsedSeconds: elapsedSinceStart,
+        };
+      });
     };
-  }, [timer.isRunning, timer.mode, timer.isBreak, timer.pomodoroBreakMinutes, timer.pomodoroWorkMinutes]);
+
+    updateElapsedTime();
+
+    const interval = window.setInterval(updateElapsedTime, 1000);
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        updateElapsedTime();
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      window.clearInterval(interval);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, [timer.isRunning, timer.startedAt]);
 
   // Derived Active Entities
   const activePlan = useMemo(() => {
@@ -1103,8 +1112,7 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       ...prev,
       isRunning: false,
       elapsedSeconds: 0,
-      isBreak: false,
-      questionsDone: 0,
+        questionsDone: 0,
       questionsCorrect: 0,
       notes: "",
     }));
@@ -1414,10 +1422,7 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
           isRunning: false,
           mode: "stopwatch",
           elapsedSeconds: 0,
-          pomodoroWorkMinutes: 25,
-          pomodoroBreakMinutes: 5,
-          isBreak: false,
-          editalId: "",
+                            editalId: "",
           disciplineId: "",
           disciplineName: "",
           topicId: "",
@@ -1856,9 +1861,6 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
           isRunning: false,
           mode: "stopwatch",
           elapsedSeconds: 0,
-          pomodoroWorkMinutes: 25,
-          pomodoroBreakMinutes: 5,
-          isBreak: false,
           editalId: "",
           disciplineId: "",
           disciplineName: "",
