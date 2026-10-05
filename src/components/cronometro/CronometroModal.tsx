@@ -51,11 +51,15 @@ export const CronometroModal: React.FC<CronometroModalProps> = ({ isOpen, onClos
 
         .study-registration-modal-content .grid.lg\\:grid-cols-12 {
           min-width: 0;
+          width: 100%;
+          grid-template-columns: minmax(0, 1fr) !important;
         }
 
         .study-registration-modal-content .lg\\:col-span-8,
         .study-registration-modal-content .lg\\:col-span-4 {
           min-width: 0;
+          width: 100%;
+          grid-column: auto !important;
         }
 
         .study-registration-modal-content button,
@@ -64,20 +68,13 @@ export const CronometroModal: React.FC<CronometroModalProps> = ({ isOpen, onClos
         .study-registration-modal-content textarea {
           min-width: 0;
           max-width: 100%;
+          box-sizing: border-box;
         }
 
-        @media (min-width: 1024px) {
-          .study-registration-modal-content .grid.lg\\:grid-cols-12 {
-            grid-template-columns: minmax(0, 7fr) minmax(320px, 5fr) !important;
-          }
-
-          .study-registration-modal-content .lg\\:col-span-8 {
-            grid-column: span 7 / span 7 !important;
-          }
-
-          .study-registration-modal-content .lg\\:col-span-4 {
-            grid-column: span 5 / span 5 !important;
-          }
+        .study-registration-modal-content .grid.sm\\:grid-cols-2,
+        .study-registration-modal-content .grid.sm\\:grid-cols-6,
+        .study-registration-modal-content .grid.grid-cols-3 {
+          min-width: 0;
         }
 
         .study-registration-modal-content .grid.sm\\:grid-cols-6 {
@@ -85,11 +82,52 @@ export const CronometroModal: React.FC<CronometroModalProps> = ({ isOpen, onClos
         }
 
         .study-registration-modal-content .grid.sm\\:grid-cols-6 > button {
+          min-width: 0;
           min-height: 44px;
           padding-inline: 8px;
           line-height: 1.2;
           white-space: normal;
           overflow-wrap: anywhere;
+          word-break: break-word;
+        }
+
+        .study-registration-modal-content .font-mono {
+          min-width: 0;
+          max-width: 100%;
+          overflow-wrap: anywhere;
+        }
+
+        .study-registration-modal-content .grid.grid-cols-3.gap-3 {
+          grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+        }
+
+        @media (min-width: 900px) {
+          .study-registration-modal-content {
+            padding-inline: clamp(20px, 3vw, 40px);
+          }
+
+          .study-registration-modal-content .grid.lg\\:grid-cols-12 {
+            grid-template-columns: minmax(0, 1.45fr) minmax(300px, 0.9fr) !important;
+            align-items: start;
+          }
+
+          .study-registration-modal-content .lg\\:col-span-8 {
+            grid-column: span 8 / span 8 !important;
+          }
+
+          .study-registration-modal-content .lg\\:col-span-4 {
+            grid-column: span 4 / span 4 !important;
+          }
+        }
+
+        @media (min-width: 1200px) {
+          .study-registration-modal-dialog {
+            width: min(94vw, 1400px);
+          }
+
+          .study-registration-modal-content .grid.lg\\:grid-cols-12 {
+            grid-template-columns: minmax(0, 1.6fr) minmax(320px, 0.85fr) !important;
+          }
         }
 
         .study-registration-modal-content .space-y-5 > .rounded-xl:first-child > .flex.items-center.justify-between {
