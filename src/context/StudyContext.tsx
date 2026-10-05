@@ -1239,7 +1239,10 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     }
 
     // 5. Update local React state
-    setStudySessions((prev) => [newSession, ...prev]);
+    setStudySessions((prev) => {
+      const withoutCurrentSession = prev.filter((s) => s.id !== newSession.id);
+      return [newSession, ...withoutCurrentSession];
+    });
     if (createdReviews.length > 0) {
       setScheduledReviews((prev) => [...createdReviews, ...prev]);
     }

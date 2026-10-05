@@ -267,9 +267,14 @@ export const CronometroView: React.FC = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [savedSuccess, setSavedSuccess] = useState(false);
 
+  // Trava síncrona: evita dois salvamentos antes que o React atualize isSaving.
+  // useRef é usado porque sua alteração é imediata e não depende de re-render.
+  const saveInFlightRef = useRef(false);
+
   // Finish and Save Handler
   const handleFinishAndSave = async () => {
-    if (isSaving) return;
+    // Proteção síncrona contra duplo clique/disparo simultâneo.
+    if (saveInFlightRef.current || isSaving) return;
 
     if (!selectedPlanId || !currentPlan) {
       alert("Por favor, selecione um Plano de Estudos.");
@@ -291,6 +296,8 @@ export const CronometroView: React.FC = () => {
       return;
     }
 
+    // A trava precisa acontecer antes de qualquer await.
+    saveInFlightRef.current = true;
     setIsSaving(true);
 
     try {
@@ -341,6 +348,7 @@ export const CronometroView: React.FC = () => {
       console.error("Erro ao finalizar estudo:", error);
       alert("Erro ao salvar sua sessão de estudos. Tente novamente.");
     } finally {
+      saveInFlightRef.current = false;
       setIsSaving(false);
     }
   };
