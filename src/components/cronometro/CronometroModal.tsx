@@ -32,6 +32,7 @@ export const CronometroModal: React.FC<CronometroModalProps> = ({ isOpen, onClos
       <style>{`
         .study-registration-modal-dialog {
           width: min(96vw, 1280px);
+          height: min(94vh, 920px);
           max-height: 94vh;
           min-width: 0;
         }
@@ -79,6 +80,7 @@ export const CronometroModal: React.FC<CronometroModalProps> = ({ isOpen, onClos
 
         .study-registration-modal-content .grid.sm\\:grid-cols-6 {
           grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+          width: 100%;
         }
 
         .study-registration-modal-content .grid.sm\\:grid-cols-6 > button {
@@ -107,25 +109,23 @@ export const CronometroModal: React.FC<CronometroModalProps> = ({ isOpen, onClos
           }
 
           .study-registration-modal-content .grid.lg\\:grid-cols-12 {
-            grid-template-columns: minmax(0, 1.45fr) minmax(240px, 0.9fr) !important;
+            grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) !important;
+            column-gap: 24px;
             align-items: start;
           }
 
-          /* O grid acima usa 2 colunas reais; não manter os spans 8/4 do Tailwind,
-             pois eles criariam colunas implícitas e fariam o conteúdo estourar. */
-          .study-registration-modal-content .lg\\:col-span-8,
+          .study-registration-modal-content .lg\\:col-span-8 {
+            grid-column: 1 !important;
+          }
+
           .study-registration-modal-content .lg\\:col-span-4 {
-            grid-column: auto !important;
+            grid-column: 2 !important;
           }
         }
 
         @media (min-width: 1200px) {
           .study-registration-modal-dialog {
-            width: min(94vw, 1400px);
-          }
-
-          .study-registration-modal-content .grid.lg\\:grid-cols-12 {
-            grid-template-columns: minmax(0, 1.6fr) minmax(280px, 0.85fr) !important;
+            width: min(94vw, 1480px);
           }
         }
 
@@ -147,7 +147,7 @@ export const CronometroModal: React.FC<CronometroModalProps> = ({ isOpen, onClos
 
         .study-registration-modal-content .inline-flex.items-center.rounded-lg {
           max-width: 100%;
-          flex-wrap: wrap;
+          flex-wrap: nowrap;
           justify-content: center;
         }
 
@@ -157,8 +157,12 @@ export const CronometroModal: React.FC<CronometroModalProps> = ({ isOpen, onClos
         }
 
         .study-registration-modal-content .font-mono.text-7xl {
+          width: 100%;
           max-width: 100%;
-          overflow-wrap: anywhere;
+          font-size: clamp(3.5rem, 6vw, 6.5rem);
+          line-height: 1;
+          overflow-wrap: normal;
+          white-space: nowrap;
         }
 
         .study-registration-modal-content .grid.grid-cols-3.gap-3 > div {
@@ -167,6 +171,21 @@ export const CronometroModal: React.FC<CronometroModalProps> = ({ isOpen, onClos
 
         .study-registration-modal-content .grid.grid-cols-3.gap-3 > div button {
           flex-shrink: 0;
+        }
+
+        @media (max-width: 899px) {
+          .study-registration-modal-dialog {
+            width: min(96vw, 720px);
+          }
+
+          .study-registration-modal-content .grid.lg\\:grid-cols-12 {
+            grid-template-columns: 1fr !important;
+          }
+
+          .study-registration-modal-content .lg\\:col-span-8,
+          .study-registration-modal-content .lg\\:col-span-4 {
+            grid-column: 1 !important;
+          }
         }
 
         @media (max-width: 639px) {
