@@ -16,11 +16,11 @@ interface CronometroModalProps {
  */
 export const CronometroModal: React.FC<CronometroModalProps> = ({ isOpen, onClose }) => {
   const dialogRef = useRef<HTMLDivElement>(null);
-  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(true);
 
   useEffect(() => {
     if (!isOpen) {
-      setIsFullscreen(false);
+      setIsFullscreen(true);
       return;
     }
 
@@ -62,24 +62,12 @@ export const CronometroModal: React.FC<CronometroModalProps> = ({ isOpen, onClos
     if (!dialog) return;
 
     try {
-      if (document.fullscreenElement === dialog) {
-        await document.exitFullscreen?.();
-        setIsFullscreen(false);
-        return;
-      }
-
-      if (document.fullscreenElement) {
-        await document.exitFullscreen?.();
-      }
-
-      if (dialog.requestFullscreen) {
+      if (document.fullscreenElement !== dialog && dialog.requestFullscreen) {
         await dialog.requestFullscreen();
       }
-
       setIsFullscreen(true);
     } catch {
-      // Fallback para navegadores que bloqueiam a Fullscreen API.
-      setIsFullscreen((prev) => !prev);
+      setIsFullscreen(true);
     }
   };
 
@@ -98,7 +86,7 @@ export const CronometroModal: React.FC<CronometroModalProps> = ({ isOpen, onClos
   return (
     <div
       className={`study-registration-modal fixed inset-0 z-50 flex items-center justify-center bg-[#0d0f12]/70 backdrop-blur-md${
-        isFullscreen ? " is-modal-fullscreen" : " p-4"
+        " is-modal-fullscreen"
       }`}
       onClick={handleClose}
     >
@@ -315,10 +303,10 @@ export const CronometroModal: React.FC<CronometroModalProps> = ({ isOpen, onClos
               type="button"
               onClick={toggleFullscreen}
               className="rounded-lg p-1.5 text-white transition hover:bg-[#252B38] hover:text-white cursor-pointer"
-              title={isFullscreen ? "Sair da Tela Cheia" : "Abrir Registro de Estudos em Tela Cheia"}
-              aria-label={isFullscreen ? "Sair da tela cheia" : "Abrir Registro de Estudos em Tela Cheia"}
+              title="Registro de Estudos em Tela Cheia"
+              aria-label="Registro de Estudos em Tela Cheia"
             >
-              {isFullscreen ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
+              <Maximize2 className="h-4 w-4" />
             </button>
 
             <button
