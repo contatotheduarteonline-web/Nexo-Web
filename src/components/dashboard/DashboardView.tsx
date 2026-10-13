@@ -15,6 +15,7 @@ import { DisciplinePerformanceSection, UnifiedDisciplineStat } from "./Disciplin
 import { WeeklyGoalsSection, WeeklyChartData } from "./WeeklyGoalsSection";
 import { RecentActivitiesSection } from "./RecentActivitiesSection";
 import { RemindersSection } from "./RemindersSection";
+import { DashboardHeaderActions } from "./DashboardHeaderActions";
 
 interface DashboardViewProps {
   onOpenManualStudy: () => void;
@@ -329,11 +330,13 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy 
       {/* ========================================================================= */}
       {/* CABEÇALHO                                                                 */}
       {/* ========================================================================= */}
-      <div className="relative pt-1 pb-1">
+      <div className="relative flex flex-col gap-4 pt-1 pb-1 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="font-condensed text-[32px] sm:text-[36px] font-bold leading-tight tracking-[0.01em]">
           <span className="text-white">{greeting}, </span>
           <span className="text-white">{userName}</span>
         </h1>
+
+        <DashboardHeaderActions onOpenManualStudy={onOpenManualStudy} />
       </div>
 
       {/* ========================================================================= */}
