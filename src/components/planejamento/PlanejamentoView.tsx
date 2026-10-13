@@ -767,7 +767,7 @@ export const PlanejamentoViewContent: React.FC = () => {
                                   {r.stage}
                                 </span>
                               </div>
-                              <p className="mt-1 truncate text-[10px] font-bold text-emerald-900 dark:text-emerald-200">
+                              <p className="mt-1 line-clamp-3 text-[9px] font-bold leading-tight text-emerald-900 dark:text-emerald-200">
                                 {r.disciplineName}
                               </p>
                             </button>
@@ -793,7 +793,7 @@ export const PlanejamentoViewContent: React.FC = () => {
                                 onClick={() => handleOpenEditBlock(block)}
                                 className={`group relative cursor-pointer rounded-xl border p-2.5 transition-all hover:-translate-y-0.5 hover:shadow-md ${palette.bg} ${palette.border}`}
                               >
-                                <p className={`text-xs font-bold leading-snug line-clamp-2 ${palette.text}`}>
+                                <p className={`text-[9px] font-bold leading-tight line-clamp-3 ${palette.text}`}>
                                   {disc?.name || "Disciplina"}
                                 </p>
                                 <div className="mt-2 flex items-center justify-between">
