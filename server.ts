@@ -3190,8 +3190,9 @@ app.post("/api/auth/forgot-password", recoveryRateLimiter, async (req, res) => {
 
     recoveryCodesStore.set(cleanEmail, { code: recoveryCode, expiresAt });
 
+    // Security: never log the recovery code itself — only its issuance.
     console.log(
-      `[AUTH SEGURANÇA] Código de recuperação gerado para ${cleanEmail}: ${recoveryCode} (Válido por 15min)`
+      `[AUTH SEGURANÇA] Código de recuperação gerado para ${cleanEmail} (Válido por 15min)`
     );
 
     // Dispatch real email via system dispatcher (SMTP or Resend)
