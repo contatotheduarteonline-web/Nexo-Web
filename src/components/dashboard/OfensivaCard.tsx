@@ -175,8 +175,16 @@ export const OfensivaCard: React.FC<OfensivaCardProps> = ({ className = "" }) =>
         </div>
       </div>
 
+      {/* Mensagem amigável (como no exemplo de Constância) */}
+      <p className="mt-4 text-[12.5px] text-[#C4CEDB]">
+        Você está há{" "}
+        <span className="font-bold text-[#F4B544]">{currentStreak} {currentStreak === 1 ? "dia" : "dias"}</span>{" "}
+        sem faltar! Seu recorde é de{" "}
+        <span className="font-bold text-white">{recordStreak} {recordStreak === 1 ? "dia" : "dias"}</span>.
+      </p>
+
       {/* Grid Semanal Limpo (sem repetição do texto 'Pendente' / 'Estudado') */}
-      <div className="mt-5">
+      <div className="mt-4">
         <div className="grid grid-cols-7 gap-2 sm:gap-3 md:gap-4">
           {currentWeekDays.map((day) => {
             return (
@@ -185,12 +193,12 @@ export const OfensivaCard: React.FC<OfensivaCardProps> = ({ className = "" }) =>
                 id={`ofensiva-dia-${day.label.toLowerCase()}`}
                 className={`relative flex flex-col items-center justify-between rounded-xl py-3.5 px-2 sm:px-3 text-center transition-colors duration-200 ${
                   day.isStudied
-                    ? "border border-[#2BBF8A]/30 bg-[#2BBF8A]/[0.08]"
+                    ? "border border-[#2BBF8A]/35 bg-[#2BBF8A]/15"
                     : day.isToday
                     ? "border-2 border-[#F4B544] bg-[#111B2D]"
                     : day.isFuture
                     ? "border border-dashed border-[#263447] bg-[#111B2D]/60 opacity-60"
-                    : "border border-[#263447] bg-[#111B2D]"
+                    : "border border-[#F16D75]/30 bg-[#F16D75]/[0.08]"
                 }`}
               >
                 {/* Rótulo do dia (SEG, TER, QUA...) */}
@@ -226,9 +234,9 @@ export const OfensivaCard: React.FC<OfensivaCardProps> = ({ className = "" }) =>
                   {day.isStudied ? (
                     <div
                       title="Estudado"
-                      className="flex h-5 w-5 items-center justify-center rounded-lg bg-[#2BBF8A]/25 text-[#2BBF8A]"
+                      className="flex h-6 w-6 items-center justify-center rounded-lg bg-[#2BBF8A]/30 text-[#2BBF8A]"
                     >
-                      <Check className="h-3.5 w-3.5 stroke-[3]" />
+                      <Check className="h-4 w-4 stroke-[3]" />
                     </div>
                   ) : day.isToday ? (
                     <span className="inline-flex items-center rounded-full border border-[#F4B544]/25 bg-[#527DFF]/10 px-2 py-0.5 text-[10px] font-bold text-[#F4B544]">
@@ -239,9 +247,9 @@ export const OfensivaCard: React.FC<OfensivaCardProps> = ({ className = "" }) =>
                   ) : (
                     <span
                       title="Sem estudo"
-                      className="flex h-5 w-5 items-center justify-center rounded-lg bg-[#F16D75]/15 text-[#F16D75]"
+                      className="flex h-6 w-6 items-center justify-center rounded-lg bg-[#F16D75]/25 text-[#F16D75]"
                     >
-                      <X className="h-3 w-3 stroke-[3]" />
+                      <X className="h-4 w-4 stroke-[3]" />
                     </span>
                   )}
                 </div>
