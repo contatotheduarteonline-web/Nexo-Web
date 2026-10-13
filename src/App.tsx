@@ -35,7 +35,7 @@ import { NewEditalModal } from "./components/modals/NewEditalModal";
 import { NewTopicModal } from "./components/modals/NewTopicModal";
 
 const AuthenticatedApp: React.FC = () => {
-  const { activeTab, setActiveTab, isSidebarCollapsed, setIsSidebarCollapsed } = useStudy();
+  const { activeTab, setActiveTab, isSidebarCollapsed, setIsSidebarCollapsed, timer } = useStudy();
   const { user } = useAuth();
 
   // "Registro de Estudos" is an overlay popup on top of the last visited view.
@@ -141,6 +141,8 @@ const AuthenticatedApp: React.FC = () => {
       <RegistroEstudoModal
         open={activeTab === "cronometro"}
         fromTimer
+        preselectedDisciplineId={timer.disciplineId || undefined}
+        preselectedTopicId={timer.topicId || undefined}
         onClose={() => setActiveTab(lastMainTab)}
       />
 
