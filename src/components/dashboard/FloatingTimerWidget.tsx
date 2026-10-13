@@ -27,7 +27,7 @@ export const FloatingTimerWidget: React.FC = () => {
         className={`relative flex h-12 w-12 items-center justify-center rounded-2xl cursor-pointer select-none transition-colors duration-200 border ${
           timer.isRunning
             ? "border-[#2BBF8A]/40 bg-[#2BBF8A] text-white shadow-[0_10px_28px_-8px_rgba(16,185,129,0.5)]"
-            : "border-[#527DFF]/40 bg-[#527DFF] text-white shadow-[0_10px_28px_-8px_rgba(82,125,255,0.5)] hover:bg-[#416CEB]"
+            : "border-[#2BBF8A]/40 bg-[#2BBF8A] text-white shadow-[0_10px_28px_-8px_rgba(43,191,138,0.5)] hover:bg-[#25A87A]"
         }`}
       >
         <div className="relative flex items-center justify-center">
