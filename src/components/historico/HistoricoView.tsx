@@ -294,16 +294,16 @@ export const HistoricoView: React.FC = () => {
   };
 
   const selectClass =
-    "w-full appearance-none rounded-lg border border-[#E3E6EB] bg-white px-3 py-2 pr-8 text-[13px] font-medium text-[#1A2332] outline-none transition focus:border-[#527DFF] focus:ring-1 focus:ring-[#527DFF] cursor-pointer truncate";
+    "w-full appearance-none rounded-lg border border-[#263447] bg-[#1D2B40] px-3 py-2 pr-8 text-[13px] font-medium text-white outline-none transition focus:border-[#527DFF] focus:ring-1 focus:ring-[#527DFF] cursor-pointer truncate";
 
   const outlineBtn =
-    "inline-flex items-center gap-2 rounded-lg border border-[#E3E6EB] bg-white px-3.5 py-2 text-[13px] font-semibold text-[#1A2332] transition hover:bg-[#F7F8FA] cursor-pointer";
+    "inline-flex items-center gap-2 rounded-lg border border-[#263447] bg-[#1D2B40] px-3.5 py-2 text-[13px] font-semibold text-white transition hover:bg-[#0B1120] cursor-pointer";
 
   return (
     <div className="space-y-5 pb-12">
       {/* ===== CABEÇALHO ===== */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <h1 className="text-[26px] font-bold tracking-tight text-[#1A2332]">Histórico</h1>
+        <h1 className="text-[26px] font-bold tracking-tight text-white">Histórico</h1>
 
         <div className="flex flex-wrap items-center gap-2.5" ref={actionsRef}>
           <button
@@ -324,10 +324,10 @@ export const HistoricoView: React.FC = () => {
             >
               <Globe className="h-4 w-4 text-[#527DFF]" />
               <span className="max-w-[160px] truncate">{activePlan?.name || "Meu Plano"}</span>
-              <ChevronDown className="h-3.5 w-3.5 text-[#8A93A3]" />
+              <ChevronDown className="h-3.5 w-3.5 text-[#93A2B7]" />
             </button>
             {openDropdown === "plan" && (
-              <div className="absolute right-0 top-11 z-30 w-64 rounded-xl border border-[#E3E6EB] bg-white p-1.5 shadow-xl">
+              <div className="absolute right-0 top-11 z-30 w-64 rounded-xl border border-[#263447] bg-[#1D2B40] p-1.5 shadow-xl">
                 {studyPlans.map((p) => (
                   <button
                     key={p.id}
@@ -336,14 +336,14 @@ export const HistoricoView: React.FC = () => {
                       setActivePlanId(p.id);
                       setOpenDropdown(null);
                     }}
-                    className="flex w-full items-center justify-between gap-2 rounded-lg px-3 py-2 text-left text-[13px] font-medium text-[#1A2332] transition hover:bg-[#F7F8FA] cursor-pointer"
+                    className="flex w-full items-center justify-between gap-2 rounded-lg px-3 py-2 text-left text-[13px] font-medium text-white transition hover:bg-[#0B1120] cursor-pointer"
                   >
                     <span className="truncate">{p.name}</span>
                     {p.id === activePlan?.id && <Check className="h-4 w-4 text-[#2BBF8A]" />}
                   </button>
                 ))}
                 {studyPlans.length === 0 && (
-                  <p className="px-3 py-2 text-[13px] text-[#8A93A3]">Nenhum plano criado.</p>
+                  <p className="px-3 py-2 text-[13px] text-[#93A2B7]">Nenhum plano criado.</p>
                 )}
               </div>
             )}
@@ -359,26 +359,26 @@ export const HistoricoView: React.FC = () => {
               <Filter className="h-4 w-4 text-[#527DFF]" />
               Filtros
               {isFiltered && <span className="h-2 w-2 rounded-full bg-[#2BBF8A]" />}
-              <ChevronDown className="h-3.5 w-3.5 text-[#8A93A3]" />
+              <ChevronDown className="h-3.5 w-3.5 text-[#93A2B7]" />
             </button>
             {openDropdown === "filters" && (
-              <div className="absolute right-0 top-11 z-30 w-[400px] max-w-[calc(100vw-2rem)] space-y-3 rounded-xl border border-[#E3E6EB] bg-white p-4 shadow-xl">
+              <div className="absolute right-0 top-11 z-30 w-[400px] max-w-[calc(100vw-2rem)] space-y-3 rounded-xl border border-[#263447] bg-[#1D2B40] p-4 shadow-xl">
                 {/* Busca */}
                 <div className="relative">
-                  <Search className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#8A93A3]" />
+                  <Search className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#93A2B7]" />
                   <input
                     id="history-search-input"
                     type="text"
                     placeholder="Buscar por disciplina, assunto ou anotação..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full rounded-lg border border-[#E3E6EB] bg-[#F7F8FA] py-2 pl-8 pr-8 text-[13px] text-[#1A2332] placeholder:text-[#AEB7C4] outline-none focus:border-[#527DFF] focus:ring-1 focus:ring-[#527DFF]"
+                    className="w-full rounded-lg border border-[#263447] bg-[#0B1120] py-2 pl-8 pr-8 text-[13px] text-white placeholder:text-[#5B6B80] outline-none focus:border-[#527DFF] focus:ring-1 focus:ring-[#527DFF]"
                   />
                   {searchQuery && (
                     <button
                       type="button"
                       onClick={() => setSearchQuery("")}
-                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#AEB7C4] hover:text-[#1A2332] cursor-pointer"
+                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#5B6B80] hover:text-white cursor-pointer"
                     >
                       <X className="h-3.5 w-3.5" />
                     </button>
@@ -400,7 +400,7 @@ export const HistoricoView: React.FC = () => {
                         </option>
                       ))}
                     </select>
-                    <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#8A93A3]" />
+                    <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#93A2B7]" />
                   </div>
                   <div className="relative">
                     <select
@@ -416,12 +416,12 @@ export const HistoricoView: React.FC = () => {
                         </option>
                       ))}
                     </select>
-                    <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#8A93A3]" />
+                    <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#93A2B7]" />
                   </div>
                 </div>
 
                 {/* Período */}
-                <div className="flex flex-wrap items-center gap-1.5 border-t border-[#EEF1F5] pt-3">
+                <div className="flex flex-wrap items-center gap-1.5 border-t border-[#263447] pt-3">
                   {(
                     [
                       { key: "all", label: "Todos" },
@@ -440,7 +440,7 @@ export const HistoricoView: React.FC = () => {
                         className={`rounded-lg px-2.5 py-1 text-[12px] font-semibold transition cursor-pointer ${
                           isSelected
                             ? "bg-[#527DFF] text-white"
-                            : "bg-[#F7F8FA] text-[#1A2332] hover:bg-[#EEF1F5]"
+                            : "bg-[#0B1120] text-white hover:bg-[#172235]"
                         }`}
                       >
                         {p.label}
@@ -460,19 +460,19 @@ export const HistoricoView: React.FC = () => {
 
                 {periodFilter === "custom" && (
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className="text-[12px] text-[#8A93A3]">De:</span>
+                    <span className="text-[12px] text-[#93A2B7]">De:</span>
                     <input
                       type="date"
                       value={customStartDate}
                       onChange={(e) => setCustomStartDate(e.target.value)}
-                      className="rounded-lg border border-[#E3E6EB] bg-[#F7F8FA] px-2.5 py-1 text-[12px] text-[#1A2332] outline-none focus:border-[#527DFF]"
+                      className="rounded-lg border border-[#263447] bg-[#0B1120] px-2.5 py-1 text-[12px] text-white outline-none focus:border-[#527DFF]"
                     />
-                    <span className="text-[12px] text-[#8A93A3]">Até:</span>
+                    <span className="text-[12px] text-[#93A2B7]">Até:</span>
                     <input
                       type="date"
                       value={customEndDate}
                       onChange={(e) => setCustomEndDate(e.target.value)}
-                      className="rounded-lg border border-[#E3E6EB] bg-[#F7F8FA] px-2.5 py-1 text-[12px] text-[#1A2332] outline-none focus:border-[#527DFF]"
+                      className="rounded-lg border border-[#263447] bg-[#0B1120] px-2.5 py-1 text-[12px] text-white outline-none focus:border-[#527DFF]"
                     />
                   </div>
                 )}
@@ -485,20 +485,20 @@ export const HistoricoView: React.FC = () => {
       {/* ===== CARDS DE RESUMO ===== */}
       <div className="grid grid-cols-2 gap-3.5 lg:grid-cols-4">
         {/* TEMPO DE ESTUDO */}
-        <div className="rounded-xl border border-[#E7EAF0] bg-white p-4 shadow-[0_1px_2px_rgba(16,24,40,0.05)]">
-          <div className="text-[11px] font-bold uppercase tracking-[0.08em] text-[#8A93A3]">
+        <div className="rounded-xl border border-[#263447] bg-[#1D2B40] p-4 shadow-xs">
+          <div className="text-[11px] font-bold uppercase tracking-[0.08em] text-[#93A2B7]">
             Tempo de Estudo
           </div>
           <div className="mt-4 flex min-h-[32px] items-end justify-end">
-            <span className="num-condensed text-[22px] font-bold leading-none text-[#1A2332]">
+            <span className="num-condensed text-[22px] font-bold leading-none text-white">
               {formatHM(summary.totalMinutes)}
             </span>
           </div>
         </div>
 
         {/* DESEMPENHO */}
-        <div className="rounded-xl border border-[#E7EAF0] bg-white p-4 shadow-[0_1px_2px_rgba(16,24,40,0.05)]">
-          <div className="text-[11px] font-bold uppercase tracking-[0.08em] text-[#8A93A3]">
+        <div className="rounded-xl border border-[#263447] bg-[#1D2B40] p-4 shadow-xs">
+          <div className="text-[11px] font-bold uppercase tracking-[0.08em] text-[#93A2B7]">
             Desempenho
           </div>
           <div className="mt-2.5 flex min-h-[32px] items-end justify-between gap-2">
@@ -510,15 +510,15 @@ export const HistoricoView: React.FC = () => {
                 {`${summary.erros} Erros`}
               </span>
             </div>
-            <span className="num-condensed text-[22px] font-bold leading-none text-[#1A2332]">
+            <span className="num-condensed text-[22px] font-bold leading-none text-white">
               {summary.desempenho}%
             </span>
           </div>
         </div>
 
         {/* PROGRESSO NO EDITAL */}
-        <div className="rounded-xl border border-[#E7EAF0] bg-white p-4 shadow-[0_1px_2px_rgba(16,24,40,0.05)]">
-          <div className="text-[11px] font-bold uppercase tracking-[0.08em] text-[#8A93A3]">
+        <div className="rounded-xl border border-[#263447] bg-[#1D2B40] p-4 shadow-xs">
+          <div className="text-[11px] font-bold uppercase tracking-[0.08em] text-[#93A2B7]">
             Progresso no Edital
           </div>
           <div className="mt-2.5 flex min-h-[32px] items-end justify-between gap-2">
@@ -530,22 +530,22 @@ export const HistoricoView: React.FC = () => {
                 {`${summary.pendentes} Tópicos Pendentes`}
               </span>
             </div>
-            <span className="num-condensed text-[22px] font-bold leading-none text-[#1A2332]">
+            <span className="num-condensed text-[22px] font-bold leading-none text-white">
               {summary.progresso}%
             </span>
           </div>
         </div>
 
         {/* PÁGINAS LIDAS */}
-        <div className="rounded-xl border border-[#E7EAF0] bg-white p-4 shadow-[0_1px_2px_rgba(16,24,40,0.05)]">
-          <div className="text-[11px] font-bold uppercase tracking-[0.08em] text-[#8A93A3]">
+        <div className="rounded-xl border border-[#263447] bg-[#1D2B40] p-4 shadow-xs">
+          <div className="text-[11px] font-bold uppercase tracking-[0.08em] text-[#93A2B7]">
             Páginas Lidas
           </div>
           <div className="mt-2.5 flex min-h-[32px] items-end justify-between gap-2">
-            <span className="text-[12px] font-medium text-[#8A93A3] pb-0.5">
+            <span className="text-[12px] font-medium text-[#93A2B7] pb-0.5">
               {summary.paginasPorHora > 0 ? `${summary.paginasPorHora.toFixed(1)} páginas por hora` : "—"}
             </span>
-            <span className="num-condensed text-[22px] font-bold leading-none text-[#1A2332]">
+            <span className="num-condensed text-[22px] font-bold leading-none text-white">
               {summary.paginas}
             </span>
           </div>
@@ -554,9 +554,9 @@ export const HistoricoView: React.FC = () => {
 
       {/* ===== LISTA CRONOLÓGICA ===== */}
       {studySessions.length === 0 ? (
-        <div className="rounded-xl border border-[#E7EAF0] bg-white p-12 text-center shadow-[0_1px_2px_rgba(16,24,40,0.05)]">
-          <h2 className="text-base font-bold text-[#1A2332]">Nenhum estudo registrado</h2>
-          <p className="mx-auto mt-1 max-w-sm text-[13px] text-[#8A93A3]">
+        <div className="rounded-xl border border-[#263447] bg-[#1D2B40] p-12 text-center shadow-xs">
+          <h2 className="text-base font-bold text-white">Nenhum estudo registrado</h2>
+          <p className="mx-auto mt-1 max-w-sm text-[13px] text-[#93A2B7]">
             Seus estudos aparecerão aqui depois que você finalizar uma sessão.
           </p>
           <div className="mt-5">
@@ -571,8 +571,8 @@ export const HistoricoView: React.FC = () => {
           </div>
         </div>
       ) : sortedSessions.length === 0 ? (
-        <div className="rounded-xl border border-[#E7EAF0] bg-white p-8 text-center shadow-[0_1px_2px_rgba(16,24,40,0.05)]">
-          <p className="text-[13px] font-medium text-[#8A93A3]">
+        <div className="rounded-xl border border-[#263447] bg-[#1D2B40] p-8 text-center shadow-xs">
+          <p className="text-[13px] font-medium text-[#93A2B7]">
             Nenhum estudo encontrado com os filtros selecionados.
           </p>
           <button
@@ -589,18 +589,18 @@ export const HistoricoView: React.FC = () => {
             <section key={group.date}>
               {/* Header do dia com linha do tempo */}
               <div className="flex items-center gap-3 px-0.5">
-                <h2 className="text-[15px] font-bold uppercase tracking-[0.08em] text-[#1A2332]">
+                <h2 className="text-[15px] font-bold uppercase tracking-[0.08em] text-white">
                   {group.label}
                 </h2>
-                <div className="h-px flex-1 bg-[#D9DEE7]" />
-                <span className="inline-flex items-center gap-1.5 text-[13px] font-medium text-[#8A93A3]">
+                <div className="h-px flex-1 bg-[#263447]" />
+                <span className="inline-flex items-center gap-1.5 text-[13px] font-medium text-[#93A2B7]">
                   <Clock className="h-3.5 w-3.5" />
                   {formatHM(group.minutes)}
                 </span>
               </div>
 
               {/* Linhas do dia */}
-              <div className="mt-2.5 divide-y divide-[#EEF1F5] overflow-hidden rounded-xl border border-[#E7EAF0] bg-white shadow-[0_1px_2px_rgba(16,24,40,0.05)]">
+              <div className="mt-2.5 divide-y divide-[#263447] overflow-hidden rounded-xl border border-[#263447] bg-[#1D2B40] shadow-xs">
                 {group.sessions.map((session) => {
                   const accuracy =
                     session.questionsDone > 0
@@ -617,23 +617,23 @@ export const HistoricoView: React.FC = () => {
                       <span
                         className={`inline-flex h-7 min-w-[36px] items-center justify-center rounded-md px-1.5 text-[12px] font-bold ${
                           accuracy >= 80
-                            ? "bg-[#2BBF8A]/15 text-[#1F9E6E]"
+                            ? "bg-[#2BBF8A]/15 text-[#2BBF8A]"
                             : accuracy >= 60
-                            ? "bg-[#F4B544]/25 text-[#B07C0A]"
+                            ? "bg-[#F4B544]/25 text-[#F4B544]"
                             : "bg-[#F16D75]/15 text-[#F16D75]"
                         }`}
                       >
                         {accuracy}
                       </span>
                     ) : (
-                      <span className="inline-flex h-7 min-w-[36px] items-center justify-center rounded-md border border-[#EEF1F5] px-1.5 text-[12px] font-bold text-[#8A93A3]">
+                      <span className="inline-flex h-7 min-w-[36px] items-center justify-center rounded-md border border-[#263447] px-1.5 text-[12px] font-bold text-[#93A2B7]">
                         0
                       </span>
                     );
 
                   return (
                     <div key={session.id} className="group">
-                      <div className="flex items-center gap-3 px-3 py-3 transition hover:bg-[#FAFBFC]">
+                      <div className="flex items-center gap-3 px-3 py-3 transition hover:bg-[#172235]">
                         {/* Barra de cor da disciplina */}
                         <div
                           className="h-10 w-1 shrink-0 rounded-full"
@@ -642,16 +642,16 @@ export const HistoricoView: React.FC = () => {
 
                         {/* Disciplina + tópico */}
                         <div className="min-w-0 flex-1">
-                          <div className="truncate text-[13px] font-bold uppercase tracking-wide text-[#1A2332]">
+                          <div className="truncate text-[13px] font-bold uppercase tracking-wide text-white">
                             {session.disciplineName || "Disciplina"}
                           </div>
-                          <div className="mt-0.5 truncate text-[12px] text-[#8A93A3]">
+                          <div className="mt-0.5 truncate text-[12px] text-[#93A2B7]">
                             {session.topicName || "Geral"}
                           </div>
                         </div>
 
                         {/* Duração */}
-                        <div className="hidden w-[96px] items-center justify-end gap-1.5 text-[12.5px] text-[#8A93A3] sm:flex">
+                        <div className="hidden w-[96px] items-center justify-end gap-1.5 text-[12.5px] text-[#93A2B7] sm:flex">
                           <Clock className="h-3.5 w-3.5" />
                           <span className="num-condensed">{formatHM(session.durationMinutes)}</span>
                         </div>
@@ -687,8 +687,8 @@ export const HistoricoView: React.FC = () => {
                             onClick={() =>
                               hasNotes && setExpandedSessionId(isExpanded ? null : session.id)
                             }
-                            className={`flex h-8 w-8 items-center justify-center rounded-lg transition hover:bg-[#F1F4F8] cursor-pointer ${
-                              hasNotes ? "text-[#527DFF]" : "text-[#C3CAD4]"
+                            className={`flex h-8 w-8 items-center justify-center rounded-lg transition hover:bg-[#172235] cursor-pointer ${
+                              hasNotes ? "text-[#527DFF]" : "text-[#5B6B80]"
                             } ${hasNotes ? "" : "cursor-default"}`}
                           >
                             <MessageSquare className="h-4 w-4" />
@@ -697,7 +697,7 @@ export const HistoricoView: React.FC = () => {
                             type="button"
                             title="Editar registro"
                             onClick={() => setSessionToEdit(session)}
-                            className="flex h-8 w-8 items-center justify-center rounded-lg text-[#AEB7C4] transition hover:bg-[#F1F4F8] hover:text-[#1A2332] cursor-pointer"
+                            className="flex h-8 w-8 items-center justify-center rounded-lg text-[#5B6B80] transition hover:bg-[#172235] hover:text-white cursor-pointer"
                           >
                             <Pencil className="h-4 w-4" />
                           </button>
@@ -705,7 +705,7 @@ export const HistoricoView: React.FC = () => {
                             type="button"
                             title="Excluir registro"
                             onClick={() => setSessionToDelete(session)}
-                            className="flex h-8 w-8 items-center justify-center rounded-lg text-[#AEB7C4] transition hover:bg-[#FDEBEC] hover:text-[#F16D75] cursor-pointer"
+                            className="flex h-8 w-8 items-center justify-center rounded-lg text-[#5B6B80] transition hover:bg-[#F16D75]/10 hover:text-[#F16D75] cursor-pointer"
                           >
                             <Trash2 className="h-4 w-4" />
                           </button>
@@ -714,18 +714,18 @@ export const HistoricoView: React.FC = () => {
 
                       {/* Anotação expandida */}
                       {isExpanded && hasNotes && (
-                        <div className="border-t border-[#EEF1F5] bg-[#F7F8FA] px-4 py-3">
+                        <div className="border-t border-[#263447] bg-[#0B1120] px-4 py-3">
                           <div className="flex items-center justify-between">
-                            <span className="text-[10px] font-bold uppercase tracking-wider text-[#8A93A3]">
+                            <span className="text-[10px] font-bold uppercase tracking-wider text-[#93A2B7]">
                               Anotações da sessão
                             </span>
                             {session.cargo && (
-                              <span className="text-[11px] font-medium text-[#8A93A3]">
+                              <span className="text-[11px] font-medium text-[#93A2B7]">
                                 Cargo: {session.cargo}
                               </span>
                             )}
                           </div>
-                          <p className="mt-1.5 whitespace-pre-wrap text-[13px] leading-relaxed text-[#3B4453]">
+                          <p className="mt-1.5 whitespace-pre-wrap text-[13px] leading-relaxed text-[#C4CEDB]">
                             {session.notes}
                           </p>
                         </div>
@@ -742,11 +742,11 @@ export const HistoricoView: React.FC = () => {
       {/* ===== MODAL DE CONFIRMAÇÃO DE EXCLUSÃO ===== */}
       {sessionToDelete && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#0B1120]/40 p-4 backdrop-blur-xs animate-in fade-in duration-150">
-          <div className="w-full max-w-sm rounded-2xl border border-[#E7EAF0] bg-white p-5 shadow-xl">
-            <h3 className="text-[15px] font-bold text-[#1A2332]">
+          <div className="w-full max-w-sm rounded-2xl border border-[#263447] bg-[#1D2B40] p-5 shadow-xl">
+            <h3 className="text-[15px] font-bold text-white">
               Excluir este registro de estudo?
             </h3>
-            <p className="mt-2 text-[13px] leading-relaxed text-[#8A93A3]">
+            <p className="mt-2 text-[13px] leading-relaxed text-[#93A2B7]">
               Essa ação também removerá os dados relacionados a este estudo.
             </p>
 
@@ -755,7 +755,7 @@ export const HistoricoView: React.FC = () => {
                 type="button"
                 disabled={isDeleting}
                 onClick={() => setSessionToDelete(null)}
-                className="rounded-lg border border-[#E3E6EB] bg-white px-3.5 py-2 text-[13px] font-semibold text-[#1A2332] transition hover:bg-[#F7F8FA] cursor-pointer disabled:opacity-50"
+                className="rounded-lg border border-[#263447] bg-[#1D2B40] px-3.5 py-2 text-[13px] font-semibold text-white transition hover:bg-[#0B1120] cursor-pointer disabled:opacity-50"
               >
                 Cancelar
               </button>

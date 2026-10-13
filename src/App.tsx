@@ -130,11 +130,7 @@ const AuthenticatedApp: React.FC = () => {
           setIsCollapsed={setIsSidebarCollapsed}
         />
 
-        <main
-          className={`flex-1 overflow-y-auto bg-[#F4F5F7] p-4 md:p-6 lg:p-7 ${
-            mainTab === "historico" ? "dark:bg-[#F4F5F7]" : "dark:bg-[#101827]"
-          }`}
-        >
+        <main className="flex-1 overflow-y-auto bg-[#F4F5F7] p-4 md:p-6 lg:p-7 dark:bg-[#101827]">
           <div className="mx-auto max-w-7xl">{renderActiveView()}</div>
         </main>
       </div>
