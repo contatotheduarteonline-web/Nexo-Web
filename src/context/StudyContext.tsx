@@ -250,6 +250,8 @@ interface StudyContextType {
   rescheduleReview: (reviewId: string, newDueDate: string, stage?: ReviewInterval) => void;
   deleteScheduledReview: (reviewId: string) => void;
   updateScheduledReview: (reviewId: string, updates: Partial<ScheduledReview>) => void;
+  ignoreScheduledReview: (reviewId: string) => void;
+  reactivateScheduledReview: (reviewId: string) => void;
   batchRescheduleOverdueReviews: (newDueDate?: string) => void;
   clearAllScheduledReviews: () => void;
   pendingReviewsToday: ScheduledReview[];
@@ -2622,6 +2624,34 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     );
   };
 
+  // Mark a review as ignored WITHOUT deleting it: it stays stored, just leaves
+  // the pending queue. It can be reactivated later from the "Ignoradas" tab.
+  const ignoreScheduledReview = (reviewId: string) => {
+    setScheduledReviews((prev) =>
+      prev.map((r) => {
+        if (r.id === reviewId) {
+          const updated = { ...r, status: "Ignorada" as const };
+          if (user?.id) saveScheduledReviewToFirestore(user.id, updated).catch(console.error);
+          return updated;
+        }
+        return r;
+      })
+    );
+  };
+
+  const reactivateScheduledReview = (reviewId: string) => {
+    setScheduledReviews((prev) =>
+      prev.map((r) => {
+        if (r.id === reviewId) {
+          const updated = { ...r, status: "Pendente" as const };
+          if (user?.id) saveScheduledReviewToFirestore(user.id, updated).catch(console.error);
+          return updated;
+        }
+        return r;
+      })
+    );
+  };
+
   const batchRescheduleOverdueReviews = (newDueDate?: string) => {
     const todayStr = new Date().toISOString().split("T")[0];
     const targetDate = newDueDate || todayStr;
@@ -3134,6 +3164,8 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         rescheduleReview,
         deleteScheduledReview,
         updateScheduledReview,
+        ignoreScheduledReview,
+        reactivateScheduledReview,
         batchRescheduleOverdueReviews,
         clearAllScheduledReviews,
         pendingReviewsToday,

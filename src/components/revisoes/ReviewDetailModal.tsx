@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useStudy } from "../../context/StudyContext";
 import { ScheduledReview, ReviewInterval } from "../../types";
+import { getIntervalLabel } from "./reviewHelpers";
 import {
   X,
   Calendar,
@@ -9,22 +10,19 @@ import {
   CheckCircle2,
   Trash2,
   Edit3,
-  BookOpen,
   Brain,
   Target,
   Play,
-  ArrowRight,
   AlertTriangle,
-  FileText,
-  Sparkles,
   Save,
-  RotateCcw,
+  Ban,
+  Settings2,
 } from "lucide-react";
 
 interface ReviewDetailModalProps {
   review: ScheduledReview | null;
   onClose: () => void;
-  initialTab?: "study" | "reschedule" | "delete";
+  initialTab?: "study" | "manage";
   onSuccessToast?: (msg: string) => void;
 }
 
@@ -51,10 +49,11 @@ export const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({
     rescheduleReview,
     deleteScheduledReview,
     updateScheduledReview,
+    ignoreScheduledReview,
     launchStudySessionForTopic,
   } = useStudy();
 
-  const [activeTab, setActiveTab] = useState<"study" | "reschedule" | "delete">(initialTab);
+  const [activeTab, setActiveTab] = useState<"study" | "manage">(initialTab);
 
   // Form states for Study Registration
   const [notes, setNotes] = useState("");
@@ -69,8 +68,13 @@ export const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({
   const [newDueDate, setNewDueDate] = useState<string>("");
   const [newStage, setNewStage] = useState<ReviewInterval>("24h");
 
-  // Delete confirmation state
-  const [isDeleting, setIsDeleting] = useState(false);
+  // Confirmation states (manage tab)
+  const [confirmingIgnore, setConfirmingIgnore] = useState(false);
+  const [confirmingDelete, setConfirmingDelete] = useState(false);
+
+  // Double-submit guards
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const submittedRef = useRef(false);
 
   useEffect(() => {
     if (review) {
@@ -80,18 +84,23 @@ export const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({
       setQuestionsCorrect(review.questionsCorrect || 0);
       setReviewMethod(review.reviewMethod || "Resumo Próprio");
       setRetentionLevel(review.retentionLevel || "bom");
+      setLogAsSession(true);
       setNewDueDate(review.dueDate);
       setNewStage(review.stage);
       setActiveTab(initialTab);
-      setIsDeleting(false);
+      setConfirmingIgnore(false);
+      setConfirmingDelete(false);
+      setIsSubmitting(false);
+      submittedRef.current = false;
     }
   }, [review, initialTab]);
 
   if (!review) return null;
 
   const todayStr = new Date().toISOString().split("T")[0];
-  const isLate = !review.completed && review.dueDate < todayStr;
-  const isToday = !review.completed && review.dueDate === todayStr;
+  const isIgnored = !review.completed && review.status === "Ignorada";
+  const isLate = !review.completed && !isIgnored && review.dueDate < todayStr;
+  const isToday = !review.completed && !isIgnored && review.dueDate === todayStr;
 
   const getRelativeDateString = (offsetDays: number) => {
     const d = new Date();
@@ -99,48 +108,83 @@ export const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({
     return d.toISOString().split("T")[0];
   };
 
+  // Derived display value only — the counters themselves stay autonomous.
   const calculatedAccuracy =
-    questionsDone > 0 ? Math.round((questionsCorrect / questionsDone) * 100) : 0;
+    questionsDone > 0 ? Math.round((questionsCorrect / questionsDone) * 100) : null;
+  const calculatedErrors = Math.max(0, questionsDone - questionsCorrect);
+
+  const guardDoubleSubmit = (): boolean => {
+    if (submittedRef.current) return false;
+    submittedRef.current = true;
+    setIsSubmitting(true);
+    return true;
+  };
+
+  const releaseGuard = () => {
+    submittedRef.current = false;
+    setIsSubmitting(false);
+  };
 
   const handleSaveNotesOnly = (e: React.FormEvent) => {
     e.preventDefault();
-    updateScheduledReview(review.id, {
-      notes,
-      durationMinutes: durationMinutes > 0 ? durationMinutes : undefined,
-      questionsDone: questionsDone > 0 ? questionsDone : undefined,
-      questionsCorrect: questionsDone > 0 ? questionsCorrect : undefined,
-      reviewMethod: reviewMethod as any,
-      retentionLevel,
-    });
-    onSuccessToast?.("Anotações da revisão salvas!");
-    onClose();
+    if (!guardDoubleSubmit()) return;
+    try {
+      updateScheduledReview(review.id, {
+        notes,
+        durationMinutes: durationMinutes > 0 ? durationMinutes : undefined,
+        questionsDone: questionsDone > 0 ? questionsDone : undefined,
+        questionsCorrect: questionsDone > 0 ? questionsCorrect : undefined,
+        reviewMethod: reviewMethod as any,
+        retentionLevel,
+      });
+      onSuccessToast?.("Anotações da revisão salvas!");
+      onClose();
+    } finally {
+      releaseGuard();
+    }
   };
 
   const handleCompleteReview = (e: React.FormEvent) => {
     e.preventDefault();
-    completeScheduledReview(review.id, {
-      notes,
-      durationMinutes,
-      questionsDone,
-      questionsCorrect,
-      reviewMethod: reviewMethod as any,
-      retentionLevel,
-      logAsSession,
-    });
-    onSuccessToast?.(
-      retentionLevel === "errei"
-        ? "Revisão concluída! Reforço agendado para amanhã."
-        : "Revisão concluída e próximo ciclo programado!"
-    );
-    onClose();
+    if (review.completed) {
+      // Already completed: only persist edits, never re-create the session or
+      // the next cycle a second time.
+      handleSaveNotesOnly(e);
+      return;
+    }
+    if (!guardDoubleSubmit()) return;
+    try {
+      completeScheduledReview(review.id, {
+        notes,
+        durationMinutes,
+        questionsDone,
+        questionsCorrect,
+        reviewMethod: reviewMethod as any,
+        retentionLevel,
+        logAsSession,
+      });
+      onSuccessToast?.(
+        retentionLevel === "errei"
+          ? "Revisão concluída! Reforço agendado para amanhã."
+          : "Revisão concluída e próximo ciclo programado!"
+      );
+      onClose();
+    } finally {
+      releaseGuard();
+    }
   };
 
-  const handleReschedule = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleReschedule = () => {
     if (!newDueDate) return;
     rescheduleReview(review.id, newDueDate, newStage);
     const dateFormatted = new Date(newDueDate + "T12:00:00").toLocaleDateString("pt-BR");
     onSuccessToast?.(`Revisão movida para ${dateFormatted}!`);
+    onClose();
+  };
+
+  const handleIgnore = () => {
+    ignoreScheduledReview(review.id);
+    onSuccessToast?.("Revisão ignorada. O registro continua salvo em 'Ignoradas'.");
     onClose();
   };
 
@@ -166,11 +210,15 @@ export const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({
                 {review.disciplineName}
               </span>
               <span className="rounded-full bg-blue-100 px-2.5 py-0.5 text-[10px] font-bold text-blue-800 dark:bg-blue-950 dark:text-blue-300">
-                Etapa {review.stage}
+                {getIntervalLabel(review.stage)} (Etapa {review.stage})
               </span>
               {review.completed ? (
                 <span className="rounded-full bg-emerald-100 px-2.5 py-0.5 text-[10px] font-bold text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
                   Concluída
+                </span>
+              ) : isIgnored ? (
+                <span className="rounded-full bg-slate-200 px-2.5 py-0.5 text-[10px] font-bold text-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                  Ignorada
                 </span>
               ) : isLate ? (
                 <span className="rounded-full bg-red-100 px-2.5 py-0.5 text-[10px] font-bold text-red-700 dark:bg-red-950 dark:text-red-300">
@@ -216,28 +264,19 @@ export const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({
 
           <button
             type="button"
-            onClick={() => setActiveTab("reschedule")}
+            onClick={() => {
+              setActiveTab("manage");
+              setConfirmingIgnore(false);
+              setConfirmingDelete(false);
+            }}
             className={`flex items-center gap-2 border-b-2 px-4 py-2.5 text-xs font-bold transition ${
-              activeTab === "reschedule"
+              activeTab === "manage"
                 ? "border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400"
                 : "border-transparent text-white hover:text-white dark:text-white dark:hover:text-white"
             }`}
           >
-            <CalendarDays className="h-4 w-4" />
-            <span>Mover para Outro Dia</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setActiveTab("delete")}
-            className={`ml-auto flex items-center gap-1.5 border-b-2 px-3 py-2.5 text-xs font-bold transition ${
-              activeTab === "delete"
-                ? "border-red-600 text-red-600 dark:border-red-400 dark:text-red-400"
-                : "border-transparent text-white hover:text-red-600 dark:hover:text-red-400"
-            }`}
-          >
-            <Trash2 className="h-3.5 w-3.5" />
-            <span>Excluir</span>
+            <Settings2 className="h-4 w-4" />
+            <span>Gerenciar Revisão</span>
           </button>
         </div>
 
@@ -247,28 +286,30 @@ export const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({
           {activeTab === "study" && (
             <div className="space-y-5">
               {/* Quick Timer trigger Banner */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl border border-blue-100 bg-blue-50/60 p-3.5 dark:border-blue-900/40 dark:bg-blue-950/20">
-                <div className="flex items-center gap-2.5">
-                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-600 text-white shadow-xs">
-                    <Play className="h-4 w-4 fill-white" />
+              {!review.completed && (
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl border border-blue-100 bg-blue-50/60 p-3.5 dark:border-blue-900/40 dark:bg-blue-950/20">
+                  <div className="flex items-center gap-2.5">
+                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-600 text-white shadow-xs">
+                      <Play className="h-4 w-4 fill-white" />
+                    </div>
+                    <div>
+                      <p className="text-xs font-bold text-white dark:text-white">
+                        Quer cronometrar esta revisão agora?
+                      </p>
+                      <p className="text-[11px] text-white">
+                        Inicie o cronômetro com a disciplina e tópico já configurados.
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-xs font-bold text-white dark:text-white">
-                      Quer cronometrar esta revisão agora?
-                    </p>
-                    <p className="text-[11px] text-white">
-                      Inicie o cronômetro com a disciplina e tópico já configurados.
-                    </p>
-                  </div>
+                  <button
+                    type="button"
+                    onClick={handleStartTimer}
+                    className="rounded-lg bg-blue-600 px-3 py-1.5 text-xs font-bold text-white shadow-xs hover:bg-blue-700 active:scale-98 transition self-start sm:self-auto"
+                  >
+                    Iniciar Cronômetro
+                  </button>
                 </div>
-                <button
-                  type="button"
-                  onClick={handleStartTimer}
-                  className="rounded-lg bg-blue-600 px-3 py-1.5 text-xs font-bold text-white shadow-xs hover:bg-blue-700 active:scale-98 transition self-start sm:self-auto"
-                >
-                  Iniciar Cronômetro
-                </button>
-              </div>
+              )}
 
               {/* Textarea: O que você estudou / Anotações */}
               <div>
@@ -310,7 +351,7 @@ export const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({
                 </div>
               </div>
 
-              {/* Tempo & Questões */}
+              {/* Tempo & Desempenho (contadores autônomos) */}
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 {/* Tempo estudado */}
                 <div className="rounded-xl border border-slate-200 bg-slate-50/50 p-3.5 dark:border-slate-800 dark:bg-slate-800/40">
@@ -346,31 +387,30 @@ export const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({
                   </div>
                 </div>
 
-                {/* Questões resolvidas */}
+                {/* Registro de desempenho — contadores independentes: alterar
+                    um NÃO altera os outros (nenhum acoplamento automático). */}
                 <div className="rounded-xl border border-slate-200 bg-slate-50/50 p-3.5 dark:border-slate-800 dark:bg-slate-800/40">
                   <div className="flex items-center justify-between">
                     <label className="flex items-center gap-1.5 text-xs font-bold text-white dark:text-white">
                       <Target className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
-                      <span>Questões Feitas</span>
+                      <span>Registro de Desempenho</span>
                     </label>
-                    {questionsDone > 0 && (
+                    {calculatedAccuracy !== null && (
                       <span className={`text-[11px] font-bold ${calculatedAccuracy >= 75 ? "text-emerald-600" : calculatedAccuracy >= 50 ? "text-amber-600" : "text-red-600"}`}>
                         {calculatedAccuracy}% de acerto
                       </span>
                     )}
                   </div>
-                  <div className="mt-2 grid grid-cols-2 gap-2">
+                  <div className="mt-2 grid grid-cols-3 gap-2">
                     <div>
-                      <span className="text-[10px] font-medium text-white">Total:</span>
+                      <span className="text-[10px] font-medium text-white">Questões:</span>
                       <input
                         type="number"
                         min={0}
                         value={questionsDone}
-                        onChange={(e) => {
-                          const done = Math.max(0, parseInt(e.target.value) || 0);
-                          setQuestionsDone(done);
-                          if (questionsCorrect > done) setQuestionsCorrect(done);
-                        }}
+                        onChange={(e) =>
+                          setQuestionsDone(Math.max(0, parseInt(e.target.value) || 0))
+                        }
                         className="mt-0.5 w-full rounded-lg border border-slate-200 bg-white p-1.5 text-center text-xs font-bold text-slate-900 focus:border-blue-500 focus:outline-hidden dark:border-slate-700 dark:bg-slate-900 dark:text-white"
                       />
                     </div>
@@ -379,17 +419,26 @@ export const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({
                       <input
                         type="number"
                         min={0}
-                        max={questionsDone}
                         value={questionsCorrect}
                         onChange={(e) =>
-                          setQuestionsCorrect(
-                            Math.min(questionsDone, Math.max(0, parseInt(e.target.value) || 0))
-                          )
+                          setQuestionsCorrect(Math.max(0, parseInt(e.target.value) || 0))
                         }
                         className="mt-0.5 w-full rounded-lg border border-slate-200 bg-white p-1.5 text-center text-xs font-bold text-[#F59E0B] focus:border-[#F59E0B] focus:outline-hidden dark:border-slate-700 dark:bg-slate-900 dark:text-[#FBBF24]"
                       />
                     </div>
+                    <div>
+                      <span className="text-[10px] font-medium text-white">Erros:</span>
+                      <input
+                        type="text"
+                        readOnly
+                        value={calculatedErrors}
+                        className="mt-0.5 w-full cursor-default rounded-lg border border-slate-200 bg-slate-100 p-1.5 text-center text-xs font-bold text-red-500 focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-red-400"
+                      />
+                    </div>
                   </div>
+                  <p className="mt-1.5 text-[10px] text-slate-400 dark:text-slate-500">
+                    Cada contador é independente — alterar um não modifica os demais.
+                  </p>
                 </div>
               </div>
 
@@ -463,124 +512,206 @@ export const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({
               </div>
 
               {/* Toggle: Salvar no histórico de sessões */}
-              <div className="flex items-center gap-2 pt-1">
-                <input
-                  type="checkbox"
-                  id="logAsSessionCheck"
-                  checked={logAsSession}
-                  onChange={(e) => setLogAsSession(e.target.checked)}
-                  className="h-4 w-4 rounded text-blue-600 focus:ring-blue-500"
-                />
-                <label htmlFor="logAsSessionCheck" className="text-xs text-white dark:text-white">
-                  Registrar automaticamente como sessão de estudo no histórico e gráficos
-                </label>
-              </div>
-            </div>
-          )}
-
-          {/* TAB 2: REAGENDAR / MOVER PARA OUTRO DIA */}
-          {activeTab === "reschedule" && (
-            <div className="space-y-5">
-              <div className="rounded-xl border border-blue-100 bg-blue-50/50 p-4 dark:border-blue-900/40 dark:bg-blue-950/20">
-                <h4 className="text-xs font-bold text-white dark:text-white">
-                  Colocar para outro dia (Reagendamento)
-                </h4>
-                <p className="mt-0.5 text-[11px] text-white dark:text-white">
-                  Reorganize sua fila de revisões sem perder o histórico do edital.
-                </p>
-              </div>
-
-              {/* Quick Preset Buttons */}
-              <div>
-                <label className="block text-xs font-bold text-white dark:text-white">
-                  Atalhos Rápidos de Reagendamento
-                </label>
-                <div className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-4">
-                  {[
-                    { label: "Para Hoje", offset: 0 },
-                    { label: "Amanhã (+1d)", offset: 1 },
-                    { label: "Em 3 dias", offset: 3 },
-                    { label: "Em 7 dias", offset: 7 },
-                    { label: "Em 15 dias", offset: 15 },
-                    { label: "Em 30 dias", offset: 30 },
-                    { label: "Em 60 dias", offset: 60 },
-                  ].map((preset) => {
-                    const presetDate = getRelativeDateString(preset.offset);
-                    const isSelected = newDueDate === presetDate;
-                    return (
-                      <button
-                        key={preset.label}
-                        type="button"
-                        onClick={() => setNewDueDate(presetDate)}
-                        className={`rounded-xl border p-2.5 text-center text-xs font-semibold transition ${
-                          isSelected
-                            ? "border-blue-600 bg-blue-50 text-blue-700 dark:border-blue-500 dark:bg-blue-950/40 dark:text-blue-300 ring-2 ring-blue-500"
-                            : "border-slate-200 bg-white hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300"
-                        }`}
-                      >
-                        {preset.label}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Specific Date & Cycle Stage Picker */}
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <div>
-                  <label className="block text-xs font-bold text-white dark:text-white">
-                    Data Personalizada
-                  </label>
+              {!review.completed && (
+                <div className="flex items-center gap-2 pt-1">
                   <input
-                    type="date"
-                    required
-                    value={newDueDate}
-                    onChange={(e) => setNewDueDate(e.target.value)}
-                    className="mt-1.5 w-full rounded-xl border border-slate-200 bg-white p-2.5 text-xs text-slate-900 focus:border-[#F59E0B] focus:ring-1 focus:ring-[#F59E0B] focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                    type="checkbox"
+                    id="logAsSessionCheck"
+                    checked={logAsSession}
+                    onChange={(e) => setLogAsSession(e.target.checked)}
+                    className="h-4 w-4 rounded text-blue-600 focus:ring-blue-500"
                   />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold text-white dark:text-white">
-                    Etapa / Ciclo de Repetição
+                  <label htmlFor="logAsSessionCheck" className="text-xs text-white dark:text-white">
+                    Registrar automaticamente como sessão de estudo no histórico e gráficos
                   </label>
-                  <select
-                    value={newStage}
-                    onChange={(e) => setNewStage(e.target.value as ReviewInterval)}
-                    className="mt-1.5 w-full rounded-xl border border-slate-200 bg-white p-2.5 text-xs text-slate-900 focus:border-[#F59E0B] focus:ring-1 focus:ring-[#F59E0B] focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
-                  >
-                    <option value="24h">24 Horas (R1)</option>
-                    <option value="7d">7 Dias (R2)</option>
-                    <option value="15d">15 Dias (R3)</option>
-                    <option value="30d">30 Dias (R4)</option>
-                    <option value="60d">60 Dias (R5)</option>
-                  </select>
                 </div>
-              </div>
+              )}
             </div>
           )}
 
-          {/* TAB 3: EXCLUIR REVISÃO */}
-          {activeTab === "delete" && (
-            <div className="space-y-4 py-4">
-              <div className="flex flex-col items-center text-center">
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-red-100 text-red-600 dark:bg-red-950/60 dark:text-red-400">
-                  <AlertTriangle className="h-7 w-7" />
+          {/* TAB 2: GERENCIAR (Reagendar / Ignorar / Excluir) */}
+          {activeTab === "manage" && (
+            <div className="space-y-6">
+              {/* --- Reagendar --- */}
+              <div className="space-y-4">
+                <div className="rounded-xl border border-blue-100 bg-blue-50/50 p-4 dark:border-blue-900/40 dark:bg-blue-950/20">
+                  <h4 className="text-xs font-bold text-white dark:text-white">
+                    Reagendar (mover para outro dia)
+                  </h4>
+                  <p className="mt-0.5 text-[11px] text-white dark:text-white">
+                    Reorganize sua fila de revisões sem perder o histórico do edital.
+                  </p>
                 </div>
-                <h3 className="mt-4 text-base font-bold text-white dark:text-white">
-                  Excluir esta revisão programada?
-                </h3>
-                <p className="mt-1 max-w-md text-xs text-white dark:text-white">
-                  Você está prestes a apagar a revisão de{" "}
-                  <strong className="text-white dark:text-white">
-                    {review.disciplineName} — {review.topicName}
-                  </strong>{" "}
-                  (Etapa {review.stage}, data {review.dueDate}). Esta ação não pode ser desfeita.
-                </p>
+
+                {/* Quick Preset Buttons */}
+                <div>
+                  <label className="block text-xs font-bold text-white dark:text-white">
+                    Atalhos Rápidos de Reagendamento
+                  </label>
+                  <div className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-4">
+                    {[
+                      { label: "Para Hoje", offset: 0 },
+                      { label: "Amanhã (+1d)", offset: 1 },
+                      { label: "Em 3 dias", offset: 3 },
+                      { label: "Em 7 dias", offset: 7 },
+                      { label: "Em 15 dias", offset: 15 },
+                      { label: "Em 30 dias", offset: 30 },
+                      { label: "Em 60 dias", offset: 60 },
+                    ].map((preset) => {
+                      const presetDate = getRelativeDateString(preset.offset);
+                      const isSelected = newDueDate === presetDate;
+                      return (
+                        <button
+                          key={preset.label}
+                          type="button"
+                          onClick={() => setNewDueDate(presetDate)}
+                          className={`rounded-xl border p-2.5 text-center text-xs font-semibold transition ${
+                            isSelected
+                              ? "border-blue-600 bg-blue-50 text-blue-700 dark:border-blue-500 dark:bg-blue-950/40 dark:text-blue-300 ring-2 ring-blue-500"
+                              : "border-slate-200 bg-white hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300"
+                          }`}
+                        >
+                          {preset.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Specific Date & Cycle Stage Picker */}
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  <div>
+                    <label className="block text-xs font-bold text-white dark:text-white">
+                      Data Personalizada
+                    </label>
+                    <input
+                      type="date"
+                      required
+                      value={newDueDate}
+                      onChange={(e) => setNewDueDate(e.target.value)}
+                      className="mt-1.5 w-full rounded-xl border border-slate-200 bg-white p-2.5 text-xs text-slate-900 focus:border-[#F59E0B] focus:ring-1 focus:ring-[#F59E0B] focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-white dark:text-white">
+                      Etapa / Ciclo de Repetição
+                    </label>
+                    <select
+                      value={newStage}
+                      onChange={(e) => setNewStage(e.target.value as ReviewInterval)}
+                      className="mt-1.5 w-full rounded-xl border border-slate-200 bg-white p-2.5 text-xs text-slate-900 focus:border-[#F59E0B] focus:ring-1 focus:ring-[#F59E0B] focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                    >
+                      <option value="24h">24 Horas (R1)</option>
+                      <option value="7d">7 Dias (R2)</option>
+                      <option value="15d">15 Dias (R3)</option>
+                      <option value="30d">30 Dias (R4)</option>
+                      <option value="60d">60 Dias (R5)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="flex justify-end">
+                  <button
+                    type="button"
+                    onClick={handleReschedule}
+                    className="flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#F59E0B] to-[#FBBF24] hover:from-[#D97706] hover:to-[#F59E0B] px-5 py-2.5 text-xs font-bold text-white shadow-md shadow-amber-500/25 active:scale-98 transition cursor-pointer"
+                  >
+                    <Calendar className="h-4 w-4" />
+                    <span>Confirmar Nova Data</span>
+                  </button>
+                </div>
               </div>
 
-              <div className="rounded-xl border border-amber-200 bg-amber-50/50 p-3 text-xs text-amber-800 dark:border-amber-900/40 dark:bg-amber-950/20 dark:text-amber-300 text-center">
-                💡 Dica: Se você apenas não puder revisar hoje, recomendamos usar a aba <strong>"Mover para Outro Dia"</strong> ao invés de excluir.
+              {/* --- Ignorar (não exclui o registro) --- */}
+              <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-4 dark:border-slate-800 dark:bg-slate-800/40">
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <h4 className="flex items-center gap-1.5 text-xs font-bold text-white dark:text-white">
+                      <Ban className="h-3.5 w-3.5 text-slate-500" />
+                      Ignorar esta revisão
+                    </h4>
+                    <p className="mt-0.5 text-[11px] text-white dark:text-white">
+                      A revisão sai da fila pendente, mas <strong>continua salva</strong> e pode ser reativada na aba "Ignoradas".
+                    </p>
+                  </div>
+                  {!confirmingIgnore ? (
+                    <button
+                      type="button"
+                      onClick={() => setConfirmingIgnore(true)}
+                      className="shrink-0 rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-bold text-slate-600 hover:bg-slate-100 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300"
+                    >
+                      Ignorar
+                    </button>
+                  ) : null}
+                </div>
+                {confirmingIgnore && (
+                  <div className="mt-3 flex flex-wrap items-center justify-end gap-2 border-t border-slate-200 pt-3 dark:border-slate-700">
+                    <span className="mr-auto text-[11px] font-semibold text-white dark:text-white">
+                      Confirmar que deseja ignorar esta revisão?
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setConfirmingIgnore(false)}
+                      className="rounded-lg px-3 py-1.5 text-xs font-semibold text-white hover:bg-slate-100 dark:text-white dark:hover:bg-slate-700"
+                    >
+                      Cancelar
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleIgnore}
+                      className="rounded-lg bg-slate-600 px-4 py-1.5 text-xs font-bold text-white hover:bg-slate-700"
+                    >
+                      Confirmar Ignorar
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* --- Excluir (permanente) --- */}
+              <div className="rounded-xl border border-red-200 bg-red-50/50 p-4 dark:border-red-900/40 dark:bg-red-950/20">
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <h4 className="flex items-center gap-1.5 text-xs font-bold text-red-700 dark:text-red-300">
+                      <Trash2 className="h-3.5 w-3.5" />
+                      Excluir esta revisão
+                    </h4>
+                    <p className="mt-0.5 text-[11px] text-red-700/80 dark:text-red-300/80">
+                      Ação permanente e irreversível. Se você apenas não puder revisar hoje, prefira <strong>Ignorar</strong> ou <strong>Reagendar</strong>.
+                    </p>
+                  </div>
+                  {!confirmingDelete ? (
+                    <button
+                      type="button"
+                      onClick={() => setConfirmingDelete(true)}
+                      className="shrink-0 rounded-lg border border-red-300 bg-white px-3 py-1.5 text-xs font-bold text-red-600 hover:bg-red-100 dark:border-red-800 dark:bg-red-950/40 dark:text-red-300"
+                    >
+                      Excluir
+                    </button>
+                  ) : null}
+                </div>
+                {confirmingDelete && (
+                  <div className="mt-3 flex flex-wrap items-center justify-end gap-2 border-t border-red-200 pt-3 dark:border-red-800">
+                    <span className="mr-auto text-[11px] font-semibold text-red-700 dark:text-red-200">
+                      <AlertTriangle className="mr-1 inline h-3.5 w-3.5" />
+                      Excluir definitivamente "{review.disciplineName} — {review.topicName}" (Etapa {review.stage})?
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setConfirmingDelete(false)}
+                      className="rounded-lg px-3 py-1.5 text-xs font-semibold text-white hover:bg-red-100/60 dark:text-white dark:hover:bg-red-900/40"
+                    >
+                      Cancelar
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleDelete}
+                      className="rounded-lg bg-red-600 px-4 py-1.5 text-xs font-bold text-white hover:bg-red-700"
+                    >
+                      Sim, Excluir
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           )}
@@ -593,7 +724,8 @@ export const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({
               <button
                 type="button"
                 onClick={handleSaveNotesOnly}
-                className="flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-semibold text-slate-700 hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 cursor-pointer"
+                disabled={isSubmitting}
+                className="flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-semibold text-slate-700 hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 cursor-pointer disabled:opacity-50"
               >
                 <Save className="h-3.5 w-3.5 text-white" />
                 <span>Salvar Rascunho</span>
@@ -603,62 +735,39 @@ export const ReviewDetailModal: React.FC<ReviewDetailModalProps> = ({
                 <button
                   type="button"
                   onClick={onClose}
-                  className="rounded-xl px-4 py-2.5 text-xs font-semibold text-white hover:bg-slate-200/60 dark:text-white dark:hover:bg-slate-800 cursor-pointer"
+                  disabled={isSubmitting}
+                  className="rounded-xl px-4 py-2.5 text-xs font-semibold text-white hover:bg-slate-200/60 dark:text-white dark:hover:bg-slate-800 cursor-pointer disabled:opacity-50"
                 >
                   Cancelar
                 </button>
-                <button
-                  type="button"
-                  onClick={handleCompleteReview}
-                  className="flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#F59E0B] to-[#FBBF24] hover:from-[#D97706] hover:to-[#F59E0B] px-5 py-2.5 text-xs font-bold text-white shadow-md shadow-amber-500/25 active:scale-98 transition cursor-pointer"
-                >
-                  <CheckCircle2 className="h-4 w-4" />
-                  <span>Concluir Revisão</span>
-                </button>
+                {!review.completed ? (
+                  <button
+                    type="button"
+                    onClick={handleCompleteReview}
+                    disabled={isSubmitting}
+                    className="flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#F59E0B] to-[#FBBF24] hover:from-[#D97706] hover:to-[#F59E0B] px-5 py-2.5 text-xs font-bold text-white shadow-md shadow-amber-500/25 active:scale-98 transition cursor-pointer disabled:opacity-50"
+                  >
+                    <CheckCircle2 className="h-4 w-4" />
+                    <span>Concluir Revisão</span>
+                  </button>
+                ) : (
+                  <span className="rounded-xl bg-emerald-500/10 px-4 py-2.5 text-xs font-bold text-emerald-600 dark:text-emerald-400">
+                    <CheckCircle2 className="mr-1 inline h-4 w-4" />
+                    Revisão já concluída — alterações são salvas no registro
+                  </span>
+                )}
               </div>
             </>
           )}
 
-          {activeTab === "reschedule" && (
-            <>
-              <button
-                type="button"
-                onClick={onClose}
-                className="rounded-xl px-4 py-2.5 text-xs font-semibold text-white hover:bg-slate-200/60 dark:text-white dark:hover:bg-slate-800 cursor-pointer"
-              >
-                Cancelar
-              </button>
-
-              <button
-                type="button"
-                onClick={handleReschedule}
-                className="flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#F59E0B] to-[#FBBF24] hover:from-[#D97706] hover:to-[#F59E0B] px-5 py-2.5 text-xs font-bold text-white shadow-md shadow-amber-500/25 active:scale-98 transition cursor-pointer"
-              >
-                <Calendar className="h-4 w-4" />
-                <span>Confirmar Nova Data</span>
-              </button>
-            </>
-          )}
-
-          {activeTab === "delete" && (
-            <>
-              <button
-                type="button"
-                onClick={() => setActiveTab("study")}
-                className="rounded-xl px-4 py-2.5 text-xs font-semibold text-white hover:bg-slate-200/60 dark:text-white dark:hover:bg-slate-800"
-              >
-                Voltar
-              </button>
-
-              <button
-                type="button"
-                onClick={handleDelete}
-                className="flex items-center gap-1.5 rounded-xl bg-red-600 px-5 py-2.5 text-xs font-bold text-white shadow-xs hover:bg-red-700 active:scale-98 transition"
-              >
-                <Trash2 className="h-4 w-4" />
-                <span>Sim, Excluir Definitivamente</span>
-              </button>
-            </>
+          {activeTab === "manage" && (
+            <button
+              type="button"
+              onClick={onClose}
+              className="rounded-xl px-4 py-2.5 text-xs font-semibold text-white hover:bg-slate-200/60 dark:text-white dark:hover:bg-slate-800 cursor-pointer"
+            >
+              Fechar
+            </button>
           )}
         </div>
       </div>

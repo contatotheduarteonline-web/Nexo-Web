@@ -461,7 +461,7 @@ export interface ScheduledReview {
   stage: ReviewInterval;
   intervalDays?: number;
   dueDate: string; // YYYY-MM-DD
-  status?: "Pendente" | "Concluída" | "Atrasada";
+  status?: "Pendente" | "Concluída" | "Atrasada" | "Ignorada";
   completed: boolean;
   completedAt?: string;
   notes?: string;

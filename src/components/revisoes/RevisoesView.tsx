@@ -1,52 +1,116 @@
 import React, { useState, useMemo } from "react";
 import { useStudy } from "../../context/StudyContext";
-import { ScheduledReview, ReviewInterval } from "../../types";
+import { ScheduledReview, ReviewInterval, StudySession, StudyModality } from "../../types";
 import { ReviewDetailModal } from "./ReviewDetailModal";
 import {
-  Repeat,
-  Clock,
+  getIntervalLabel,
+  getDateParts,
+  formatShortDate,
+  formatDurationClock,
+  getSessionLocalDate,
+  isPendingReview,
+  groupReviewsByDate,
+} from "./reviewHelpers";
+import {
   CheckCircle2,
   AlertTriangle,
   Calendar,
   Play,
   Plus,
-  RotateCw,
-  Sparkles,
   Check,
   Trash2,
   CalendarDays,
-  ArrowRight,
   X,
   FastForward,
-  CheckCheck,
   Search,
-  BookOpen,
-  Brain,
+  RotateCcw,
   FileText,
+  Clock,
   Target,
-  ChevronRight,
-  Filter,
+  Ban,
 } from "lucide-react";
+
+type ReviewTab = "programadas" | "atrasadas" | "ignoradas" | "concluidas";
+
+/** Compact study-record row (real StudySession data) shown under a review. */
+const StudyRecordRow: React.FC<{ session: StudySession }> = ({ session }) => {
+  const accuracy =
+    session.questionsDone > 0
+      ? Math.round((session.questionsCorrect / session.questionsDone) * 100)
+      : null;
+  const errors = Math.max(0, (session.questionsDone || 0) - (session.questionsCorrect || 0));
+
+  const modalityClasses: Record<string, string> = {
+    Teoria: "bg-indigo-500/15 text-indigo-300 border-indigo-500/30",
+    "Questões": "bg-emerald-500/15 text-emerald-300 border-emerald-500/30",
+    "Revisão": "bg-amber-500/15 text-amber-300 border-amber-500/30",
+    "Videoaula": "bg-sky-500/15 text-sky-300 border-sky-500/30",
+    "Lei Seca": "bg-slate-500/15 text-slate-300 border-slate-500/30",
+    "Simulado": "bg-rose-500/15 text-rose-300 border-rose-500/30",
+  };
+
+  return (
+    <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-[11px] text-slate-600 dark:border-slate-700 dark:bg-slate-800/70 dark:text-slate-300">
+      <span className="font-semibold text-slate-700 dark:text-slate-200">
+        {formatShortDate(getSessionLocalDate(session))}
+      </span>
+      <span
+        className={`rounded-md border px-2 py-0.5 text-[10px] font-bold uppercase ${
+          modalityClasses[session.modality] || modalityClasses["Teoria"]
+        }`}
+      >
+        {session.modality}
+      </span>
+      <span className="flex items-center gap-1 font-mono">
+        <Clock className="h-3 w-3" />
+        {formatDurationClock(session.durationMinutes)}
+      </span>
+      {session.questionsDone > 0 && (
+        <>
+          <span className="flex items-center gap-1 font-semibold text-emerald-600 dark:text-emerald-400">
+            <Target className="h-3 w-3" />
+            {session.questionsCorrect}
+          </span>
+          <span className="font-semibold text-red-500 dark:text-red-400">{errors}</span>
+          {accuracy !== null && (
+            <span className="rounded bg-amber-100 px-1.5 py-0.5 text-[10px] font-bold text-amber-700 dark:bg-amber-950 dark:text-amber-300">
+              {accuracy}%
+            </span>
+          )}
+        </>
+      )}
+      {session.material && (
+        <span className="truncate max-w-[140px] text-slate-500 dark:text-slate-400" title={session.material}>
+          {session.material}
+        </span>
+      )}
+      <div className="ml-auto flex items-center gap-1 text-slate-400" title={session.notes ? "Com anotações" : undefined}>
+        {session.notes && <FileText className="h-3.5 w-3.5" />}
+      </div>
+    </div>
+  );
+};
 
 export const RevisoesView: React.FC = () => {
   const {
     activeEdital,
     scheduledReviews,
-    completeScheduledReview,
+    studySessions,
     createScheduledReview,
     rescheduleReview,
     deleteScheduledReview,
+    reactivateScheduledReview,
     batchRescheduleOverdueReviews,
     launchStudySessionForTopic,
   } = useStudy();
 
-  const [activeSubTab, setActiveSubTab] = useState<"hoje" | "atrasadas" | "proximas" | "concluidas">("hoje");
+  const [activeSubTab, setActiveSubTab] = useState<ReviewTab>("programadas");
   const [selectedDiscipline, setSelectedDiscipline] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
 
-  // Review Detail Modal (for logging study notes, questions, moving or deleting)
+  // Review Detail Modal (register/complete study, reschedule, ignore, delete)
   const [selectedReviewForModal, setSelectedReviewForModal] = useState<ScheduledReview | null>(null);
-  const [modalInitialTab, setModalInitialTab] = useState<"study" | "reschedule" | "delete">("study");
+  const [modalInitialTab, setModalInitialTab] = useState<"study" | "manage">("study");
 
   // Manual Add Modal state
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -76,50 +140,65 @@ export const RevisoesView: React.FC = () => {
     return d.toISOString().split("T")[0];
   };
 
+  const editalReviews = useMemo(
+    () => scheduledReviews.filter((r) => !activeEdital || r.editalId === activeEdital.id),
+    [scheduledReviews, activeEdital]
+  );
+
+  const matchesSearch = (r: ScheduledReview) => {
+    if (!searchQuery.trim()) return true;
+    const q = searchQuery.toLowerCase();
+    return (
+      r.topicName.toLowerCase().includes(q) ||
+      r.disciplineName.toLowerCase().includes(q) ||
+      r.notes?.toLowerCase().includes(q)
+    );
+  };
+
   const filteredReviews = useMemo(() => {
-    return scheduledReviews.filter((r) => {
-      if (activeEdital && r.editalId !== activeEdital.id) return false;
+    const base = editalReviews.filter((r) => {
       if (selectedDiscipline !== "all" && r.disciplineId !== selectedDiscipline) return false;
+      return matchesSearch(r);
+    });
 
-      if (searchQuery.trim()) {
-        const q = searchQuery.toLowerCase();
-        const matchTopic = r.topicName.toLowerCase().includes(q);
-        const matchDisc = r.disciplineName.toLowerCase().includes(q);
-        const matchNotes = r.notes?.toLowerCase().includes(q);
-        if (!matchTopic && !matchDisc && !matchNotes) return false;
-      }
-
-      if (activeSubTab === "hoje") {
-        return !r.completed && r.dueDate === todayStr;
+    const byTab = base.filter((r) => {
+      if (activeSubTab === "programadas") {
+        return isPendingReview(r) && r.dueDate >= todayStr;
       }
       if (activeSubTab === "atrasadas") {
-        return !r.completed && r.dueDate < todayStr;
+        return isPendingReview(r) && r.dueDate < todayStr;
       }
-      if (activeSubTab === "proximas") {
-        return !r.completed && r.dueDate > todayStr;
+      if (activeSubTab === "ignoradas") {
+        return !r.completed && r.status === "Ignorada";
       }
-      if (activeSubTab === "concluidas") {
-        return r.completed;
-      }
-      return true;
+      return r.completed; // concluidas
     });
-  }, [scheduledReviews, activeEdital, selectedDiscipline, searchQuery, activeSubTab, todayStr]);
 
-  const countHoje = scheduledReviews.filter(
-    (r) => !r.completed && r.dueDate === todayStr && (!activeEdital || r.editalId === activeEdital.id)
-  ).length;
+    return byTab.sort((a, b) => a.dueDate.localeCompare(b.dueDate));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editalReviews, selectedDiscipline, searchQuery, activeSubTab, todayStr]);
 
-  const countAtrasadas = scheduledReviews.filter(
-    (r) => !r.completed && r.dueDate < todayStr && (!activeEdital || r.editalId === activeEdital.id)
-  ).length;
+  const countProgramadas = editalReviews.filter((r) => isPendingReview(r) && r.dueDate >= todayStr).length;
+  const countAtrasadas = editalReviews.filter((r) => isPendingReview(r) && r.dueDate < todayStr).length;
+  const countIgnoradas = editalReviews.filter((r) => !r.completed && r.status === "Ignorada").length;
+  const countConcluidas = editalReviews.filter((r) => r.completed).length;
 
-  const countProximas = scheduledReviews.filter(
-    (r) => !r.completed && r.dueDate > todayStr && (!activeEdital || r.editalId === activeEdital.id)
-  ).length;
+  // Real study sessions related to each review, grouped by topicId.
+  const sessionsByTopic = useMemo(() => {
+    const map = new Map<string, StudySession[]>();
+    studySessions.forEach((s) => {
+      if (!s.topicId) return;
+      const arr = map.get(s.topicId);
+      if (arr) arr.push(s);
+      else map.set(s.topicId, [s]);
+    });
+    map.forEach((arr) => {
+      arr.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    });
+    return map;
+  }, [studySessions]);
 
-  const countConcluidas = scheduledReviews.filter(
-    (r) => r.completed && (!activeEdital || r.editalId === activeEdital.id)
-  ).length;
+  const groupedReviews = useMemo(() => groupReviewsByDate(filteredReviews), [filteredReviews]);
 
   const handleAddManualReview = (e: React.FormEvent) => {
     e.preventDefault();
@@ -143,8 +222,8 @@ export const RevisoesView: React.FC = () => {
       batchRescheduleOverdueReviews(tomorrowStr);
       showToast("Todas as revisões atrasadas foram reagendadas para amanhã!");
     } else if (isBatchConfirmOpen === "delete") {
-      const overdueIds = scheduledReviews
-        .filter((r) => !r.completed && r.dueDate < todayStr && (!activeEdital || r.editalId === activeEdital.id))
+      const overdueIds = editalReviews
+        .filter((r) => isPendingReview(r) && r.dueDate < todayStr)
         .map((r) => r.id);
       overdueIds.forEach((id) => deleteScheduledReview(id));
       showToast(`${overdueIds.length} revisões atrasadas foram excluídas.`);
@@ -152,9 +231,81 @@ export const RevisoesView: React.FC = () => {
     setIsBatchConfirmOpen(null);
   };
 
-  const openReviewModal = (review: ScheduledReview, tab: "study" | "reschedule" | "delete" = "study") => {
+  const openReviewModal = (review: ScheduledReview, tab: "study" | "manage" = "study") => {
     setSelectedReviewForModal(review);
     setModalInitialTab(tab);
+  };
+
+  const handleReactivate = (review: ScheduledReview) => {
+    reactivateScheduledReview(review.id);
+    showToast("Revisão reativada! Ela voltou para a fila pendente.");
+  };
+
+  const tabs: { key: ReviewTab; label: string; count: number; activeClasses: string; badgeClasses: string }[] = [
+    {
+      key: "programadas",
+      label: "Programadas",
+      count: countProgramadas,
+      activeClasses: "bg-[#F59E0B] text-white shadow-xs",
+      badgeClasses: activeSubTab === "programadas" ? "bg-white/20 text-white" : "bg-amber-100 text-[#F59E0B] dark:bg-amber-950 dark:text-[#FBBF24]",
+    },
+    {
+      key: "atrasadas",
+      label: "Atrasadas",
+      count: countAtrasadas,
+      activeClasses: "bg-red-600 text-white shadow-xs",
+      badgeClasses: activeSubTab === "atrasadas" ? "bg-white/20 text-white" : "bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-300",
+    },
+    {
+      key: "ignoradas",
+      label: "Ignoradas",
+      count: countIgnoradas,
+      activeClasses: "bg-slate-600 text-white shadow-xs",
+      badgeClasses: activeSubTab === "ignoradas" ? "bg-white/20 text-white" : "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300",
+    },
+    {
+      key: "concluidas",
+      label: "Concluídas",
+      count: countConcluidas,
+      activeClasses: "bg-emerald-600 text-white shadow-xs",
+      badgeClasses: activeSubTab === "concluidas" ? "bg-white/20 text-white" : "bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300",
+    },
+  ];
+
+  const statusBadge = (rev: ScheduledReview) => {
+    if (rev.completed) {
+      return (
+        <span className="rounded-md bg-emerald-500 px-2 py-0.5 text-[10px] font-bold text-white shadow-xs">
+          Concluída
+        </span>
+      );
+    }
+    if (rev.status === "Ignorada") {
+      return (
+        <span className="rounded-md bg-slate-500 px-2 py-0.5 text-[10px] font-bold text-white shadow-xs">
+          Ignorada
+        </span>
+      );
+    }
+    if (rev.dueDate < todayStr) {
+      return (
+        <span className="rounded-md bg-red-500 px-2 py-0.5 text-[10px] font-bold text-white shadow-xs">
+          Atrasada
+        </span>
+      );
+    }
+    if (rev.dueDate === todayStr) {
+      return (
+        <span className="rounded-md bg-amber-500 px-2 py-0.5 text-[10px] font-bold text-white shadow-xs">
+          Hoje
+        </span>
+      );
+    }
+    return (
+      <span className="rounded-md border border-slate-200 bg-slate-100 px-2 py-0.5 text-[10px] font-bold text-slate-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
+        Agendada
+      </span>
+    );
   };
 
   return (
@@ -189,7 +340,7 @@ export const RevisoesView: React.FC = () => {
         </button>
       </div>
 
-      {/* Overdue Banner with Quick Actions (When on 'atrasadas' or when there are late reviews) */}
+      {/* Overdue Banner with Quick Actions */}
       {countAtrasadas > 0 && activeSubTab === "atrasadas" && (
         <div className="rounded-xl border border-red-200 bg-red-50/80 p-4 dark:border-red-900/40 dark:bg-red-950/20">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -241,87 +392,24 @@ export const RevisoesView: React.FC = () => {
       {/* Filter Tabs, Search & Discipline Dropdown */}
       <div className="flex flex-col gap-3 rounded-xl border border-slate-200 bg-white p-4 shadow-xs dark:border-slate-800 dark:bg-[#252B38]">
         <div className="flex flex-col justify-between gap-3 lg:flex-row lg:items-center">
-          {/* Sub-tabs */}
+          {/* Category tabs */}
           <div className="flex flex-wrap items-center gap-1.5">
-            <button
-              onClick={() => setActiveSubTab("hoje")}
-              className={`flex items-center gap-2 rounded-xl px-3.5 py-2 text-xs font-bold transition ${
-                activeSubTab === "hoje"
-                  ? "bg-[#F59E0B] text-white shadow-xs"
-                  : "text-white hover:bg-slate-100 dark:text-white dark:hover:bg-slate-800"
-              }`}
-            >
-              <span>Para Hoje</span>
-              <span
-                className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${
-                  activeSubTab === "hoje"
-                    ? "bg-white/20 text-white"
-                    : "bg-amber-100 text-[#F59E0B] dark:bg-amber-950 dark:text-[#FBBF24]"
+            {tabs.map((tab) => (
+              <button
+                key={tab.key}
+                onClick={() => setActiveSubTab(tab.key)}
+                className={`flex items-center gap-2 rounded-xl px-3.5 py-2 text-xs font-bold transition ${
+                  activeSubTab === tab.key
+                    ? tab.activeClasses
+                    : "text-white hover:bg-slate-100 dark:text-white dark:hover:bg-slate-800"
                 }`}
               >
-                {countHoje}
-              </span>
-            </button>
-
-            <button
-              onClick={() => setActiveSubTab("atrasadas")}
-              className={`flex items-center gap-2 rounded-xl px-3.5 py-2 text-xs font-bold transition ${
-                activeSubTab === "atrasadas"
-                  ? "bg-red-600 text-white shadow-xs"
-                  : "text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950/40"
-              }`}
-            >
-              <span>Atrasadas</span>
-              <span
-                className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${
-                  activeSubTab === "atrasadas"
-                    ? "bg-white/20 text-white"
-                    : "bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-300"
-                }`}
-              >
-                {countAtrasadas}
-              </span>
-            </button>
-
-            <button
-              onClick={() => setActiveSubTab("proximas")}
-              className={`flex items-center gap-2 rounded-xl px-3.5 py-2 text-xs font-bold transition ${
-                activeSubTab === "proximas"
-                  ? "bg-[#F59E0B] text-white shadow-xs"
-                  : "text-white hover:bg-slate-100 dark:text-white dark:hover:bg-slate-800"
-              }`}
-            >
-              <span>Próximas (Futuras)</span>
-              <span
-                className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${
-                  activeSubTab === "proximas"
-                    ? "bg-white/20 text-white"
-                    : "bg-slate-100 text-white dark:bg-slate-800 dark:text-white"
-                }`}
-              >
-                {countProximas}
-              </span>
-            </button>
-
-            <button
-              onClick={() => setActiveSubTab("concluidas")}
-              className={`flex items-center gap-2 rounded-xl px-3.5 py-2 text-xs font-bold transition ${
-                activeSubTab === "concluidas"
-                  ? "bg-emerald-600 text-white shadow-xs"
-                  : "text-white hover:bg-slate-100 dark:text-white dark:hover:bg-slate-800"
-              }`}
-            >
-              <span>Concluídas</span>
-              <span
-                className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${
-                  activeSubTab === "concluidas"
-                    ? "bg-white/20 text-white"
-                    : "bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300"
-                }`}
-              >
-                {countConcluidas}
-              </span>
-            </button>
+                <span>{tab.label}</span>
+                <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${tab.badgeClasses}`}>
+                  {tab.count}
+                </span>
+              </button>
+            ))}
           </div>
 
           {/* Search & Discipline Filter */}
@@ -353,8 +441,8 @@ export const RevisoesView: React.FC = () => {
         </div>
       </div>
 
-      {/* Reviews List */}
-      <div className="space-y-3">
+      {/* Chronologically Grouped Reviews */}
+      <div className="space-y-8">
         {filteredReviews.length === 0 ? (
           <div className="rounded-2xl border border-slate-200 bg-white p-12 text-center shadow-xs dark:border-slate-800 dark:bg-[#252B38]">
             <CheckCircle2 className="mx-auto h-12 w-12 text-emerald-500" />
@@ -364,175 +452,190 @@ export const RevisoesView: React.FC = () => {
             <p className="mx-auto mt-1 max-w-md text-xs text-white">
               {activeSubTab === "atrasadas"
                 ? "Excelente! Você não tem nenhuma revisão atrasada pendente."
-                : activeSubTab === "hoje"
-                ? "Você concluiu todas as revisões de hoje ou pode agendar novas manualmente no botão acima."
-                : "Quando você estudar tópicos no edital, as revisões espaçadas serão agendadas automaticamente."}
+                : activeSubTab === "ignoradas"
+                ? "Revisões que você ignorar aparecerão aqui — elas permanecem salvas e podem ser reativadas."
+                : activeSubTab === "concluidas"
+                ? "Quando você concluir revisões, elas aparecerão aqui com o registro do estudo realizado."
+                : "Você concluiu todas as revisões programadas ou pode agendar novas manualmente no botão acima."}
             </p>
           </div>
         ) : (
-          filteredReviews.map((rev) => {
-            const isLate = !rev.completed && rev.dueDate < todayStr;
-            const isToday = !rev.completed && rev.dueDate === todayStr;
-
+          groupedReviews.map(([dateKey, reviews]) => {
+            const parts = getDateParts(dateKey);
             return (
-              <div
-                key={rev.id}
-                onClick={() => openReviewModal(rev, "study")}
-                className={`group relative flex flex-col justify-between gap-4 rounded-2xl border p-4.5 shadow-xs transition-all hover:shadow-md cursor-pointer sm:flex-row sm:items-center ${
-                  isLate
-                    ? "border-red-200 bg-red-50/40 hover:border-red-300 dark:border-red-900/40 dark:bg-red-950/15"
-                    : isToday
-                    ? "border-amber-200 bg-amber-50/40 hover:border-amber-300 dark:border-amber-900/40 dark:bg-amber-950/15"
-                    : rev.completed
-                    ? "border-emerald-200 bg-emerald-50/30 hover:border-emerald-300 dark:border-emerald-900/40 dark:bg-emerald-950/10"
-                    : "border-slate-200 bg-white hover:border-blue-300 dark:border-slate-800 dark:bg-slate-900 dark:hover:border-slate-700"
-                }`}
-              >
-                {/* Left Content */}
-                <div className="space-y-1.5 flex-1 pr-2">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <span className="text-xs font-bold uppercase tracking-wider text-[#F59E0B] dark:text-[#FBBF24]">
-                      {rev.disciplineName}
+              <div key={dateKey} className="space-y-3">
+                {/* Date group header: big day + month/year + weekday + timeline line */}
+                <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-[26px] font-bold leading-none text-white dark:text-white">
+                      {parts.day}
                     </span>
-                    <span className="rounded-md bg-amber-100 px-2 py-0.5 text-[10px] font-bold text-[#F59E0B] dark:bg-amber-950 dark:text-[#FBBF24]">
-                      Etapa {rev.stage}
+                    <span className="flex flex-col text-[10px] font-bold uppercase leading-tight text-slate-500 dark:text-slate-400">
+                      <span>{parts.month}/{parts.year}</span>
+                      <span>{parts.weekday}</span>
                     </span>
-
-                    {isLate && (
-                      <span className="rounded-md bg-red-500 px-2 py-0.5 text-[10px] font-bold text-white shadow-xs">
-                        Atrasada ({rev.dueDate})
-                      </span>
-                    )}
-                    {isToday && (
-                      <span className="rounded-md bg-amber-500 px-2 py-0.5 text-[10px] font-bold text-white shadow-xs">
-                        Hoje
-                      </span>
-                    )}
-                    {rev.completed && (
-                      <span className="rounded-md bg-emerald-500 px-2 py-0.5 text-[10px] font-bold text-white shadow-xs">
-                        Concluída
-                      </span>
-                    )}
-
-                    {rev.reviewMethod && (
-                      <span className="rounded-md border border-slate-200 bg-slate-100 px-2 py-0.5 text-[10px] font-medium text-white dark:border-slate-700 dark:bg-slate-800 dark:text-white">
-                        {rev.reviewMethod}
-                      </span>
-                    )}
                   </div>
-
-                  <h4 className="text-sm font-bold text-white group-hover:text-[#F59E0B] dark:text-white dark:group-hover:text-[#FBBF24] transition">
-                    {rev.topicName}
-                  </h4>
-
-                  {/* Notes / Details Preview */}
-                  {rev.notes && (
-                    <p className="line-clamp-1 text-xs text-white dark:text-white italic flex items-center gap-1">
-                      <FileText className="h-3 w-3 text-white shrink-0" />
-                      <span>"{rev.notes}"</span>
-                    </p>
-                  )}
-
-                  <div className="flex flex-wrap items-center gap-3 text-[11px] text-white pt-0.5">
-                    <span className="flex items-center gap-1">
-                      <Calendar className="h-3 w-3 text-white" />
-                      Prevista: <strong className="text-white dark:text-white">{rev.dueDate}</strong>
-                    </span>
-
-                    {rev.durationMinutes ? (
-                      <span className="flex items-center gap-1">
-                        <Clock className="h-3 w-3 text-white" />
-                        {rev.durationMinutes} min
-                      </span>
-                    ) : null}
-
-                    {rev.questionsDone ? (
-                      <span className="flex items-center gap-1">
-                        <Target className="h-3 w-3 text-emerald-500" />
-                        {rev.questionsCorrect}/{rev.questionsDone} questões (
-                        {Math.round(((rev.questionsCorrect || 0) / rev.questionsDone) * 100)}%)
-                      </span>
-                    ) : null}
-
-                    {rev.completedAt && (
-                      <span>
-                        • Realizada em {new Date(rev.completedAt).toLocaleDateString("pt-BR")}
-                      </span>
-                    )}
-                  </div>
+                  <div className="h-px flex-1 bg-slate-200 dark:bg-slate-700" />
+                  <span className="text-[10px] font-semibold text-slate-400 dark:text-slate-500">
+                    {reviews.length} {reviews.length === 1 ? "revisão" : "revisões"}
+                  </span>
                 </div>
 
-                {/* Actions & Quick Buttons */}
-                <div
-                  className="flex flex-wrap items-center gap-2 self-start sm:self-center"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  {!rev.completed ? (
-                    <>
-                      {/* Main action: Click to register / complete */}
-                      <button
-                        type="button"
-                        onClick={() => openReviewModal(rev, "study")}
-                        className="flex items-center gap-1.5 rounded-xl bg-[#F59E0B] px-3.5 py-2 text-xs font-bold text-white shadow-xs transition hover:bg-[#D97706] active:scale-98"
-                      >
-                        <Check className="h-3.5 w-3.5" />
-                        <span>Registrar / Concluir</span>
-                      </button>
+                {/* Review rows for this date */}
+                <div className="space-y-3">
+                  {reviews.map((rev) => {
+                    const relatedSessions = (sessionsByTopic.get(rev.topicId) || []).slice(0, 2);
 
-                      {/* Launch floating timer */}
-                      <button
-                        type="button"
-                        onClick={() => launchStudySessionForTopic(rev.disciplineId, rev.topicId, "Revisão")}
-                        className="flex items-center gap-1 rounded-xl border border-slate-200 bg-white p-2 text-xs font-semibold text-slate-700 hover:bg-slate-100 hover:text-[#F59E0B] dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700"
-                        title="Iniciar Cronômetro de Estudo"
+                    return (
+                      <div
+                        key={rev.id}
+                        className="space-y-2"
                       >
-                        <Play className="h-3.5 w-3.5 fill-current" />
-                      </button>
+                        {/* Action line: interval + quick actions + discipline */}
+                        <div
+                          id={`review-row-${rev.id}`}
+                          onClick={() => openReviewModal(rev, rev.completed ? "study" : "manage")}
+                          className="flex flex-wrap items-center gap-2 cursor-pointer group"
+                        >
+                          <span className="rounded-lg border border-slate-200 bg-white px-3 py-1 text-[11px] font-semibold text-slate-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                            {getIntervalLabel(rev.stage)}
+                          </span>
 
-                      {/* Reschedule Button */}
-                      <button
-                        type="button"
-                        onClick={() => openReviewModal(rev, "reschedule")}
-                        className="flex items-center gap-1 rounded-xl border border-slate-200 bg-white px-2.5 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700"
-                        title="Mover para outro dia"
-                      >
-                        <CalendarDays className="h-3.5 w-3.5 text-[#F59E0B] dark:text-[#FBBF24]" />
-                        <span>Mover</span>
-                      </button>
+                          {!rev.completed && rev.status !== "Ignorada" && (
+                            <>
+                              {/* Iniciar revisão (cronômetro com disciplina/tópico prontos) */}
+                              <button
+                                type="button"
+                                title="Iniciar revisão no cronômetro"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  launchStudySessionForTopic(rev.disciplineId, rev.topicId, "Revisão");
+                                }}
+                                className="flex h-7 w-7 items-center justify-center rounded-full bg-emerald-500/90 text-white shadow-xs transition hover:bg-emerald-600"
+                              >
+                                <Play className="h-3.5 w-3.5 fill-current" />
+                              </button>
 
-                      {/* Delete Button */}
-                      <button
-                        type="button"
-                        onClick={() => openReviewModal(rev, "delete")}
-                        className="rounded-xl border border-slate-200 bg-white p-2 text-slate-400 hover:border-red-200 hover:bg-red-50 hover:text-red-600 dark:border-slate-700 dark:bg-slate-800 dark:hover:bg-red-950/40 dark:hover:text-red-400 transition"
-                        title="Excluir esta revisão"
-                      >
-                        <Trash2 className="h-3.5 w-3.5" />
-                      </button>
-                    </>
-                  ) : (
-                    <div className="flex items-center gap-2">
-                      <button
-                        type="button"
-                        onClick={() => openReviewModal(rev, "study")}
-                        className="flex items-center gap-1 rounded-xl bg-emerald-50 px-3 py-1.5 text-xs font-bold text-emerald-700 hover:bg-emerald-100 dark:bg-emerald-950/60 dark:text-emerald-300"
-                      >
-                        <CheckCircle2 className="h-3.5 w-3.5" />
-                        <span>Ver Registro</span>
-                      </button>
+                              {/* Registrar estudo (modal) */}
+                              <button
+                                type="button"
+                                title="Registrar estudo"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  openReviewModal(rev, "study");
+                                }}
+                                className="flex h-7 w-7 items-center justify-center rounded-full bg-emerald-500/90 text-white shadow-xs transition hover:bg-emerald-600"
+                              >
+                                <Plus className="h-3.5 w-3.5" />
+                              </button>
 
-                      <button
-                        type="button"
-                        onClick={() => openReviewModal(rev, "delete")}
-                        className="rounded-xl p-2 text-white hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950/40 dark:hover:text-red-400 transition"
-                        title="Remover do histórico"
-                      >
-                        <Trash2 className="h-3.5 w-3.5" />
-                      </button>
-                    </div>
-                  )}
+                              {/* Gerenciar revisão (reagendar / ignorar / excluir) */}
+                              <button
+                                type="button"
+                                title="Gerenciar revisão"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  openReviewModal(rev, "manage");
+                                }}
+                                className="flex h-7 w-7 items-center justify-center rounded-full bg-red-400/90 text-white shadow-xs transition hover:bg-red-500"
+                              >
+                                <X className="h-3.5 w-3.5" />
+                              </button>
+                            </>
+                          )}
 
-                  <ChevronRight className="hidden sm:block h-4 w-4 text-white group-hover:text-[#F59E0B] dark:group-hover:text-[#FBBF24] transition" />
+                          {rev.status === "Ignorada" && !rev.completed && (
+                            <button
+                              type="button"
+                              title="Reativar revisão"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleReactivate(rev);
+                              }}
+                              className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-500 text-white shadow-xs transition hover:bg-slate-600"
+                            >
+                              <RotateCcw className="h-3.5 w-3.5" />
+                            </button>
+                          )}
+
+                          <span className="text-xs font-bold uppercase tracking-wide text-white group-hover:text-[#F59E0B] dark:text-white dark:group-hover:text-[#FBBF24] transition">
+                            {rev.disciplineName}
+                          </span>
+
+                          {statusBadge(rev)}
+
+                          <span className="hidden sm:inline text-[10px] text-slate-400 dark:text-slate-500">
+                            Etapa {rev.stage}
+                          </span>
+
+                          <span className="ml-auto hidden sm:flex items-center gap-1 text-[11px] text-slate-400 dark:text-slate-500">
+                            <CalendarDays className="h-3 w-3" />
+                            {formatShortDate(rev.dueDate)}
+                          </span>
+                        </div>
+
+                        {/* Topic + related study records box */}
+                        <div className="space-y-1.5 rounded-xl border border-slate-200 bg-slate-50/70 p-3 dark:border-slate-800 dark:bg-[#1B202B]">
+                          <div className="flex items-center gap-2">
+                            <p
+                              onClick={() => openReviewModal(rev, rev.completed ? "study" : "manage")}
+                              className="min-w-0 flex-1 cursor-pointer truncate text-[12px] font-semibold text-white dark:text-white"
+                              title={rev.topicName}
+                            >
+                              {rev.topicName}
+                            </p>
+                            {rev.reviewMethod && (
+                              <span className="rounded-md border border-slate-200 bg-white px-2 py-0.5 text-[10px] font-medium text-slate-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                                {rev.reviewMethod}
+                              </span>
+                            )}
+                          </div>
+
+                          {relatedSessions.length === 0 ? (
+                            <div className="flex items-center gap-1.5 rounded-lg border border-dashed border-slate-300 px-3 py-1.5 text-[11px] text-slate-400 dark:border-slate-700 dark:text-slate-500">
+                              <Ban className="h-3 w-3 shrink-0" />
+                              Nenhum registro de estudo associado — use <strong className="mx-0.5">Registrar estudo</strong> para lançar sua revisão.
+                            </div>
+                          ) : (
+                            relatedSessions.map((s) => <StudyRecordRow key={s.id} session={s} />)
+                          )}
+
+                          {/* Completion details of this review, when they exist */}
+                          {rev.completed && (rev.durationMinutes || rev.questionsDone) && (
+                            <div className="flex flex-wrap items-center gap-3 rounded-lg border border-emerald-500/25 bg-emerald-500/5 px-3 py-1.5 text-[11px] text-slate-600 dark:text-slate-300">
+                              <span className="flex items-center gap-1 font-semibold text-emerald-600 dark:text-emerald-400">
+                                <Check className="h-3 w-3" />
+                                Revisão realizada
+                              </span>
+                              {rev.durationMinutes ? (
+                                <span className="flex items-center gap-1 font-mono">
+                                  <Clock className="h-3 w-3" />
+                                  {formatDurationClock(rev.durationMinutes)}
+                                </span>
+                              ) : null}
+                              {rev.questionsDone ? (
+                                <span className="flex items-center gap-1">
+                                  <Target className="h-3 w-3 text-emerald-500" />
+                                  {rev.questionsCorrect}/{rev.questionsDone} (
+                                  {Math.round(((rev.questionsCorrect || 0) / rev.questionsDone) * 100)}%)
+                                </span>
+                              ) : null}
+                              {rev.completedAt && (
+                                <span className="text-slate-400 dark:text-slate-500">
+                                  em {new Date(rev.completedAt).toLocaleDateString("pt-BR")}
+                                </span>
+                              )}
+                              {rev.retentionLevel && (
+                                <span className="rounded bg-amber-100 px-1.5 py-0.5 text-[10px] font-bold text-amber-700 dark:bg-amber-950 dark:text-amber-300">
+                                  {{ errei: "Errei", dificil: "Difícil", bom: "Bom", facil: "Fácil" }[rev.retentionLevel]}
+                                </span>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             );

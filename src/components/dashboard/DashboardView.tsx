@@ -198,12 +198,14 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy 
     return list;
   }, [activePlan, activeEdital, studiedMinutesByDiscipline]);
 
-  // Today's Scheduled Reviews (Clean filtered list)
-  const todayReviews = useMemo(() => {
-    const todayStr = getTodayLocalYmd();
-    return scheduledReviews.filter(
-      (r) => (!activeEdital || r.editalId === activeEdital.id) && !r.completed && r.dueDate <= todayStr
-    );
+  // Pending scheduled reviews for the dashboard card: same source of truth as
+  // the Revisões page (excludes ignored, sorted by dueDate — overdue first).
+  const pendingReviews = useMemo(() => {
+    return scheduledReviews
+      .filter(
+        (r) => (!activeEdital || r.editalId === activeEdital.id) && !r.completed && r.status !== "Ignorada"
+      )
+      .sort((a, b) => a.dueDate.localeCompare(b.dueDate));
   }, [scheduledReviews, activeEdital]);
 
   // Unified Discipline Performance (Combines Questions, Accuracy, Time and Topic Progress)
@@ -368,7 +370,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy 
         />
 
         <ReviewsSection
-          todayReviews={todayReviews}
+          pendingReviews={pendingReviews}
           onOpenReview={(rev) => setSelectedReviewForModal(rev)}
           onNavigateToReviews={() => setActiveTab("revisoes")}
         />
