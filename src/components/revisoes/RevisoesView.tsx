@@ -112,6 +112,7 @@ export const RevisoesView: React.FC = () => {
     scheduledReviews,
     studySessions,
     activePlan,
+    studyPlans,
     getPlanImageUrl,
     createScheduledReview,
     rescheduleReview,
@@ -251,7 +252,14 @@ export const RevisoesView: React.FC = () => {
             {/* Seletor do plano de estudos */}
             {editais.length > 0 && (
               <PlanSelector
-                items={editais.map((ed) => ({ id: ed.id, title: ed.title, imageUrl: ed.imageUrl }))}
+                items={editais.map((ed) => {
+                  const plan = studyPlans.find((p) => p.editalId === ed.id);
+                  return {
+                    id: ed.id,
+                    title: ed.title,
+                    imageUrl: (plan ? getPlanImageUrl(plan.id) : null) || plan?.imageUrl || ed.imageUrl,
+                  };
+                })}
                 activeId={activeEdital?.id}
                 activeLabel={activeEdital?.title || "Plano"}
                 imageUrl={

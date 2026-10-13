@@ -6,6 +6,8 @@ import {
   getDocs,
   getDoc,
   onSnapshot,
+  query,
+  where,
   writeBatch,
   Unsubscribe,
 } from "firebase/firestore";
@@ -268,6 +270,12 @@ export async function purgeOrphanOrArtificialEditais(userId: string): Promise<nu
 
     let count = 0;
     const hasNoPlans = plansSnap.empty;
+    const planEditalIds = new Set(
+      plansSnap.docs.map((d) => String((d.data() as { editalId?: string }).editalId || ""))
+    );
+
+    // Ids of editais removed as artificial/orphan — related study data is purged too
+    const orphanEditalIds = new Set<string>();
 
     for (const docSnap of editaisSnap.docs) {
       const item = docSnap.data() as Edital;
@@ -289,16 +297,44 @@ export async function purgeOrphanOrArtificialEditais(userId: string): Promise<nu
         titleLower.includes("papiloscopista") ||
         organLower.includes("polícia federal");
 
+      // Orphan edital: no study plan references it (e.g. plan was deleted but edital remained)
+      const isOrphan = !hasNoPlans && !planEditalIds.has(String(item.id));
+
       // If artificial or if user has no study plans (meaning leftover test editais from previous sessions)
-      if (isArt || hasNoPlans) {
+      if (isArt || hasNoPlans || isOrphan) {
+        orphanEditalIds.add(String(item.id));
         await deleteDoc(docSnap.ref);
         count++;
       }
+    }
+
+    // Purge study data tied to removed editais (sessions, reviews, simulados)
+    for (const orphanId of orphanEditalIds) {
+      await purgeDataByEditalId(userId, orphanId);
     }
     return count;
   } catch (err) {
     console.warn("[FIRESTORE] Erro ao limpar editais residuais:", err);
     return 0;
+  }
+}
+
+/**
+ * Deletes every study record (sessions, reviews, simulados) tied to an edital id.
+ */
+async function purgeDataByEditalId(userId: string, editalId: string): Promise<void> {
+  const collections = ["studySessions", "scheduledReviews", "simulados"];
+  for (const coll of collections) {
+    try {
+      const snap = await getDocs(
+        query(collection(db, "users", userId, coll), where("editalId", "==", editalId))
+      );
+      for (const d of snap.docs) {
+        await deleteDoc(d.ref);
+      }
+    } catch (err) {
+      console.warn(`[FIRESTORE] Erro ao limpar ${coll} do edital órfão:`, err);
+    }
   }
 }
 

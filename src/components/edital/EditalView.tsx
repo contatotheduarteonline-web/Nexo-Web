@@ -29,6 +29,7 @@ export const EditalView: React.FC = () => {
     editais,
     toggleTopicStudied,
     activePlan,
+    studyPlans,
     getPlanImageUrl,
   } = useStudy();
 
@@ -158,7 +159,14 @@ export const EditalView: React.FC = () => {
           {/* Plano selector dropdown */}
           {editais.length > 0 && (
             <PlanSelector
-              items={editais.map((ed) => ({ id: ed.id, title: ed.title, imageUrl: ed.imageUrl }))}
+              items={editais.map((ed) => {
+                const plan = studyPlans.find((p) => p.editalId === ed.id);
+                return {
+                  id: ed.id,
+                  title: ed.title,
+                  imageUrl: (plan ? getPlanImageUrl(plan.id) : null) || plan?.imageUrl || ed.imageUrl,
+                };
+              })}
               activeId={activeEditalId || undefined}
               activeLabel={activeEdital?.title || "Plano"}
               imageUrl={planImage}
