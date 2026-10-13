@@ -46,7 +46,7 @@ export const TodayScheduleSection: React.FC<TodayScheduleSectionProps> = ({
           type="button"
           id="btn-gerenciar-planejamento"
           onClick={onNavigateToPlanning}
-          className="inline-flex items-center gap-1 text-[13px] font-semibold text-[#F3AA2D] hover:text-[#D98F20] hover:underline cursor-pointer transition-colors duration-200"
+          className="inline-flex items-center gap-1 text-[13px] font-semibold text-[#F59E0B] hover:text-[#D97706] hover:underline cursor-pointer transition-colors duration-200"
         >
           <span>Gerenciar</span>
           <ArrowUpRight className="h-3.5 w-3.5" />
@@ -77,14 +77,14 @@ export const TodayScheduleSection: React.FC<TodayScheduleSectionProps> = ({
                 100,
                 block.targetMinutes > 0 ? Math.round((studied / block.targetMinutes) * 100) : 0
               );
-              const color = block.color || "#F3AA2D";
+              const color = block.color || "#F59E0B";
 
               return (
                 <div
                   key={block.id}
                   id={`planned-block-${block.id}`}
                   className={`nx-deep group relative overflow-hidden p-4 pl-5 touch-manipulation ${
-                    idx > 0 ? "nx-deep-hover cursor-pointer hover:border-[#F3AA2D]/40" : ""
+                    idx > 0 ? "nx-deep-hover cursor-pointer hover:border-[#F59E0B]/40" : ""
                   }`}
                   onClick={idx > 0 ? () => onStartStudy(block.disciplineId, block.targetMinutes) : undefined}
                 >
@@ -137,7 +137,7 @@ export const TodayScheduleSection: React.FC<TodayScheduleSectionProps> = ({
                         e.stopPropagation();
                         onOpenManualStudy();
                       }}
-                      className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-[#384154] bg-[#171B25] px-4 py-2 text-[13px] font-semibold text-white hover:border-[#F3AA2D]/40 hover:text-[#F3AA2D] cursor-pointer transition-colors duration-200 touch-manipulation"
+                      className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-[#384154] bg-[#171B25] px-4 py-2 text-[13px] font-semibold text-white hover:border-[#F59E0B]/40 hover:text-[#F59E0B] cursor-pointer transition-colors duration-200 touch-manipulation"
                     >
                       <Plus className="h-3.5 w-3.5" />
                       <span>Adicionar Estudo Manualmente</span>

@@ -106,7 +106,7 @@ export const QuadroSemanalView: React.FC = () => {
         <div className="flex flex-wrap items-center gap-2">
           <button
             onClick={() => setActiveTab("ciclo")}
-            className="flex items-center gap-1.5 rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-3.5 py-2 text-xs font-bold text-[#374151] hover:bg-[#E2E8F0] dark:border-[#1E293B] dark:bg-[#1E293B] dark:text-white"
+            className="flex items-center gap-1.5 rounded-xl border border-[#E2E8F0] bg-[#F1F5F9] px-3.5 py-2 text-xs font-bold text-[#374151] hover:bg-[#E2E8F0] dark:border-[#1E293B] dark:bg-[#1E293B] dark:text-white"
           >
             <Layers className="h-3.5 w-3.5" />
             <span>Alternar p/ Ciclo Dinâmico</span>
@@ -184,7 +184,7 @@ export const QuadroSemanalView: React.FC = () => {
                     <span className="text-xs font-black text-[#374151] dark:text-white">
                       {shortLabel}
                     </span>
-                    <span className="rounded-md bg-[#F8FAFC] px-1.5 py-0.5 text-[10px] font-bold text-[#737D89] dark:bg-[#1E293B] dark:text-[#94A3B8]">
+                    <span className="rounded-md bg-[#F1F5F9] px-1.5 py-0.5 text-[10px] font-bold text-[#737D89] dark:bg-[#1E293B] dark:text-[#94A3B8]">
                       {scheduledHours}h / {plannedDailyHours}h
                     </span>
                   </div>
@@ -205,7 +205,7 @@ export const QuadroSemanalView: React.FC = () => {
                       return (
                         <div
                           key={block.id}
-                          className="group relative rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] p-2.5 transition-all duration-200 hover:border-[#F59E0B] hover:bg-white hover:shadow-xs dark:border-[#1E293B] dark:bg-[#1E293B]/60 dark:hover:bg-[#1E293B]"
+                          className="group relative rounded-xl border border-[#E2E8F0] bg-[#F1F5F9] p-2.5 transition-all duration-200 hover:border-[#F59E0B] hover:bg-white hover:shadow-xs dark:border-[#1E293B] dark:bg-[#1E293B]/60 dark:hover:bg-[#1E293B]"
                         >
                           <div className="flex items-start justify-between gap-1">
                             <div className="flex items-center gap-1.5">
@@ -269,7 +269,7 @@ export const QuadroSemanalView: React.FC = () => {
               </h3>
               <button
                 onClick={() => setIsAddModalOpen(false)}
-                className="rounded-lg p-1 text-[#737D89] hover:bg-[#F8FAFC] dark:hover:bg-[#1E293B]"
+                className="rounded-lg p-1 text-[#737D89] hover:bg-[#F1F5F9] dark:hover:bg-[#1E293B]"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -283,7 +283,7 @@ export const QuadroSemanalView: React.FC = () => {
                 <select
                   value={selectedDay}
                   onChange={(e) => setSelectedDay(e.target.value as any)}
-                  className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] p-2.5 text-xs text-[#374151] focus:border-[#F59E0B] focus:bg-white focus:outline-hidden dark:border-[#1E293B] dark:bg-[#1E293B] dark:text-white"
+                  className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-[#F1F5F9] p-2.5 text-xs text-[#374151] focus:border-[#F59E0B] focus:bg-white focus:outline-hidden dark:border-[#1E293B] dark:bg-[#1E293B] dark:text-white"
                 >
                   {days.map((d) => (
                     <option key={d.key} value={d.key}>
@@ -301,7 +301,7 @@ export const QuadroSemanalView: React.FC = () => {
                   required
                   value={selectedDisciplineId}
                   onChange={(e) => setSelectedDisciplineId(e.target.value)}
-                  className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] p-2.5 text-xs text-[#374151] focus:border-[#F59E0B] focus:bg-white focus:outline-hidden dark:border-[#1E293B] dark:bg-[#1E293B] dark:text-white"
+                  className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-[#F1F5F9] p-2.5 text-xs text-[#374151] focus:border-[#F59E0B] focus:bg-white focus:outline-hidden dark:border-[#1E293B] dark:bg-[#1E293B] dark:text-white"
                 >
                   <option value="">Selecione a disciplina...</option>
                   {activeEdital?.disciplines.map((d) => (
@@ -319,7 +319,7 @@ export const QuadroSemanalView: React.FC = () => {
                 <select
                   value={blockDurationMinutes}
                   onChange={(e) => setBlockDurationMinutes(Number(e.target.value))}
-                  className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] p-2.5 text-xs text-[#374151] focus:border-[#F59E0B] focus:bg-white focus:outline-hidden dark:border-[#1E293B] dark:bg-[#1E293B] dark:text-white"
+                  className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-[#F1F5F9] p-2.5 text-xs text-[#374151] focus:border-[#F59E0B] focus:bg-white focus:outline-hidden dark:border-[#1E293B] dark:bg-[#1E293B] dark:text-white"
                 >
                   <option value={30}>30 minutos</option>
                   <option value={45}>45 minutos</option>
@@ -334,7 +334,7 @@ export const QuadroSemanalView: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setIsAddModalOpen(false)}
-                  className="rounded-xl px-4 py-2 text-xs font-semibold text-[#737D89] hover:bg-[#F8FAFC]"
+                  className="rounded-xl px-4 py-2 text-xs font-semibold text-[#737D89] hover:bg-[#F1F5F9]"
                 >
                   Cancelar
                 </button>

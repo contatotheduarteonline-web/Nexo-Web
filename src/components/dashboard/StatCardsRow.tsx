@@ -54,7 +54,7 @@ export const StatCardsRow: React.FC<StatCardsRowProps> = ({ children }) => {
           <span className="text-[12px] font-semibold text-white">
             TEMPO DE ESTUDO
           </span>
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#384154] bg-[#171B25] text-[#F3AA2D]">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#384154] bg-[#171B25] text-[#F59E0B]">
             <Clock className="h-4 w-4" />
           </div>
         </div>
@@ -77,23 +77,23 @@ export const StatCardsRow: React.FC<StatCardsRowProps> = ({ children }) => {
           <span className="text-[12px] font-semibold text-white">
             DESEMPENHO
           </span>
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#384154] bg-[#171B25] text-[#F3AA2D]">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#384154] bg-[#171B25] text-[#F59E0B]">
             <CheckSquare className="h-4 w-4" />
           </div>
         </div>
 
         <div className="mt-4 space-y-1">
           <div className="flex items-baseline gap-1.5">
-            <span className="num-condensed text-[16px] font-bold leading-none text-[#34D399]">
+            <span className="num-condensed text-[16px] font-bold leading-none text-[#48C3A7]">
               {totalQuestionsCorrect}
             </span>
-            <span className="text-[13px] font-medium text-[#34D399]">Acertos</span>
+            <span className="text-[13px] font-medium text-[#48C3A7]">Acertos</span>
           </div>
           <div className="flex items-baseline gap-1.5">
-            <span className="num-condensed text-[16px] font-bold leading-none text-[#D84A4A]">
+            <span className="num-condensed text-[16px] font-bold leading-none text-[#DC4B4B]">
               {totalQuestionsWrong}
             </span>
-            <span className="text-[13px] font-medium text-[#D84A4A]">Erros</span>
+            <span className="text-[13px] font-medium text-[#DC4B4B]">Erros</span>
           </div>
         </div>
 

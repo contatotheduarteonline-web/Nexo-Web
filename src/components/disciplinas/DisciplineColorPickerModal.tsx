@@ -236,7 +236,7 @@ export const DisciplineColorPickerModal: React.FC<DisciplineColorPickerModalProp
               type="button"
               disabled={isDuplicate}
               onClick={() => handleApply(selectedColor)}
-              className="rounded-xl bg-[#249D84] px-4 py-1.5 text-xs font-bold text-white hover:bg-[#1f8771] disabled:opacity-40 disabled:cursor-not-allowed transition shadow-sm cursor-pointer"
+              className="rounded-xl bg-[#249D84] px-4 py-1.5 text-xs font-bold text-white hover:bg-[#1F826D] disabled:opacity-40 disabled:cursor-not-allowed transition shadow-sm cursor-pointer"
             >
               Aplicar Cor
             </button>

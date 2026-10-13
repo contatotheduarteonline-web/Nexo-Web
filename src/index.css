@@ -2,6 +2,46 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Utilidades Tailwind geradas a partir da paleta semântica oficial.
+   Uso: bg-surface, bg-surface-elevated, bg-surface-input, bg-brand,
+   text-heading, text-body, text-subtle, text-muted, border-line,
+   border-line-strong, bg-success, bg-error, bg-info, etc. */
+@theme inline {
+  --color-background: var(--background);
+  --color-content: var(--background-deep);
+  --color-surface: var(--surface);
+  --color-surface-elevated: var(--surface-elevated);
+  --color-surface-input: var(--surface-input);
+  --color-surface-hover: var(--surface-hover);
+  --color-surface-selected: var(--surface-selected);
+  --color-surface-deep: var(--surface-deep);
+  --color-brand: var(--primary);
+  --color-brand-hover: var(--primary-hover);
+  --color-brand-pressed: var(--primary-pressed);
+  --color-brand-soft: var(--primary-soft);
+  --color-on-brand: var(--primary-foreground);
+  --color-heading: var(--text-heading);
+  --color-body: var(--text-primary);
+  --color-subtle: var(--text-secondary);
+  --color-muted: var(--text-muted);
+  --color-disabled: var(--text-disabled);
+  --color-link: var(--link);
+  --color-line: var(--border);
+  --color-line-strong: var(--border-strong);
+  --color-line-input: var(--border-input);
+  --color-divider: var(--divider);
+  --color-success: var(--success);
+  --color-success-light: var(--success-light);
+  --color-warning: var(--warning);
+  --color-error: var(--error);
+  --color-info: var(--info);
+  --color-data-acertos: var(--data-acertos);
+  --color-data-erros: var(--data-erros);
+  --color-data-desempenho: var(--data-desempenho);
+  --color-data-metas: var(--data-metas);
+  --color-data-info: var(--data-info);
+}
+
 @theme {
   --font-sans: "Manrope", Arial, sans-serif;
   --font-display: "Manrope", Arial, sans-serif;
@@ -9,27 +49,82 @@
 
 @layer base {
   :root {
-    /* TEMA ÚNICO NEXO — ARDÓSIA + ÂMBAR */
-    --background: #0F172A;          /* ardósia: base principal (fundo, sidebar, navegação) */
-    --surface: #1E293B;              /* ardósia: superfície secundária (cards estruturais) */
-    --surface-secondary: #253349;    /* ardósia: superfícies elevadas */
+    /* ======================================================================
+       NEXO — PALETA SEMÂNTICA OFICIAL (TEMA ÚNICO ESCURO: ARDÓSIA + ÂMBAR)
+       Fonte central de todas as cores da plataforma. Componentes devem
+       referenciar estas variáveis (ou as utilidades Tailwind geradas delas,
+       ex.: bg-surface, text-muted, border-line) em vez de HEX literais.
+       ====================================================================== */
 
-    --primary: #F59E0B;             /* âmbar: destaque principal (botões, links, ativos) */
-    --primary-hover: #D97706;        /* âmbar escuro (hover) */
-    --primary-foreground: #0F172A; /* texto sobre âmbar (contraste) */
+    /* A. Fundos e superfícies */
+    --background: #0F172A;            /* fundo principal da aplicação */
+    --background-deep: #11151F;       /* camada mais profunda (hero, barras, header) */
+    --surface: #1E293B;               /* superfície padrão dos cards */
+    --surface-elevated: #252B38;      /* modais, menus, popovers e cards da Home */
+    --surface-input: #171B25;         /* campos, áreas internas, tracks */
+    --surface-input-hover: #1B2130;   /* hover de áreas internas */
+    --surface-hover: #2D3442;         /* hover de itens e cards */
+    --surface-selected: #3A454F;      /* item selecionado / ativo */
+    --surface-deep: #0D0F12;          /* superfície imersiva (cronômetro) */
 
+    /* B. Textos */
+    --text-primary: #F1F5F9;          /* leitura principal */
+    --text-heading: #E2E8F0;          /* rótulos e títulos de seção */
+    --text-secondary: #94A3B8;        /* texto secundário */
+    --text-muted: #737D89;            /* texto auxiliar / discreto */
+    --text-disabled: #64748B;         /* texto desabilitado */
+    --text-on-brand: #11151F;         /* texto sobre botões âmbar */
+    --link: #F59E0B;                  /* links seguem a marca */
+
+    /* C. Marca e ações */
+    --primary: #F59E0B;               /* âmbar NEXO — ações primárias e identidade */
+    --primary-hover: #D97706;
+    --primary-pressed: #B45309;
+    --primary-foreground: #11151F;    /* texto sobre âmbar (contraste) */
+    --primary-soft: rgba(245, 158, 11, 0.12);   /* fundo discreto da marca */
+    --primary-border: rgba(245, 158, 11, 0.35); /* borda da marca */
+    --focus: #F59E0B;                 /* indicador de foco */
+    --focus-ring: rgba(245, 158, 11, 0.5);
+
+    /* D. Bordas e divisórias */
+    --border: #384154;                /* borda padrão */
+    --border-strong: #475569;         /* borda mais evidente / hover */
+    --border-input: #374151;          /* borda de campos */
+    --divider: #334155;               /* divisórias */
+
+    /* E. Estados semânticos */
+    --success: #249D84;               /* operações bem-sucedidas, concluído */
+    --success-strong: #1F826D;
+    --success-light: #48C3A7;
+    --success-soft: rgba(36, 157, 132, 0.15);
+    --success-border: rgba(36, 157, 132, 0.4);
+    --warning: #FBBF24;               /* atenção — distinta da marca (âmbar claro) */
+    --warning-soft: rgba(251, 191, 36, 0.15);
+    --warning-border: rgba(251, 191, 36, 0.4);
+    --danger: #DC4B4B;                /* erro / ação destrutiva */
+    --error: #DC4B4B;                 /* alias de --danger */
+    --danger-soft: rgba(220, 75, 75, 0.15);
+    --danger-border: rgba(220, 75, 75, 0.4);
+    --info: #3B82F6;                  /* informação */
+    --info-soft: rgba(59, 130, 246, 0.15);
+    --info-border: rgba(59, 130, 246, 0.4);
+    --neutral-state: #64748B;         /* estado neutro */
+
+    /* F. Dados e métricas (mesma métrica = mesma cor em todo módulo) */
+    --data-acertos: #249D84;          /* acertos / concluído — verde */
+    --data-erros: #DC4B4B;            /* erros / falha — vermelho */
+    --data-desempenho: #F59E0B;       /* desempenho / progresso — âmbar da marca */
+    --data-metas: #FBBF24;            /* metas e marcos — âmbar claro */
+    --data-info: #3B82F6;             /* métricas informativas — azul */
+    --chart-1: #8B5CF6;               /* séries categóricas de gráficos */
+    --chart-2: #06B6D4;
+    --chart-3: #EC4899;
+    --chart-4: #FF7A1A;
+
+    /* Compatibilidade com nomes legados */
     --secondary: #1C2A40;
-
-    --text-primary: #F1F5F9;        /* leitura confortável sobre ardósia */
-    --text-secondary: #94A3B8;
-
-    --border: #334155;              /* ardósia: elementos secundários */
-
-    --success: #16A37A;
-    --danger: #DC4B4B;
-    --warning: #FBBF24;             /* âmbar: destaque secundário */
-    --accent-blue: #315B8C;
-
+    --surface-secondary: #252B38;
+    --accent-blue: #3B82F6;
     --brand-amber: #F59E0B;
     --brand-amber-light: #FEF3C7;
     --brand-amber-dark: #D97706;
@@ -118,7 +213,7 @@
   /* Checkboxes e radios nativos seguem o âmbar */
   input[type="checkbox"],
   input[type="radio"] {
-    accent-color: #F59E0B;
+    accent-color: var(--primary);
   }
 
   /* Popup nativo do <select> segue o tema escuro da plataforma */
@@ -128,13 +223,13 @@
 
   select option,
   select optgroup {
-    background-color: #252B38;
-    color: #F1F5F9;
+    background-color: var(--surface-elevated);
+    color: var(--text-primary);
   }
 
   ::selection {
-    background: rgba(245, 158, 11, 0.35);
-    color: #F1F5F9;
+    background: var(--primary-border);
+    color: var(--text-primary);
   }
 }
 
@@ -160,11 +255,11 @@
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #334155;
+  background: var(--border);
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #475569;
+  background: var(--border-strong);
 }
 
 @layer base {
@@ -208,8 +303,8 @@
 
   /* Superfície de card da Home — perceptivelmente mais clara que o fundo #11151F */
   .nx-card {
-    background-color: #252b38;
-    border: 1px solid #384154;
+    background-color: var(--surface-elevated);
+    border: 1px solid var(--border);
     border-radius: 1rem;
     box-shadow:
       0 1px 2px rgba(8, 10, 16, 0.22),
@@ -223,8 +318,8 @@
       transform 200ms ease;
   }
   .nx-card-hover:hover {
-    background-color: #2d3442;
-    border-color: #4a556e;
+    background-color: var(--surface-hover);
+    border-color: var(--border-strong);
     transform: translateY(-1px);
     box-shadow:
       0 2px 4px rgba(8, 10, 16, 0.28),
@@ -233,8 +328,8 @@
 
   /* Área profunda: itens internos, inputs, tracks */
   .nx-deep {
-    background-color: #171b25;
-    border: 1px solid #384154;
+    background-color: var(--surface-input);
+    border: 1px solid var(--border);
     border-radius: 0.75rem;
   }
   .nx-deep-hover {
@@ -243,14 +338,14 @@
       background-color 200ms ease;
   }
   .nx-deep-hover:hover {
-    border-color: #4a556e;
-    background-color: #1b2130;
+    border-color: var(--border-strong);
+    background-color: var(--surface-input-hover);
   }
 
   /* Botão principal âmbar da Home */
   .nx-btn-primary {
-    background-color: #f3aa2d;
-    color: #11151f;
+    background-color: var(--primary);
+    color: var(--primary-foreground);
     border-radius: 0.75rem;
     font-weight: 700;
     transition:
@@ -258,13 +353,13 @@
       transform 150ms ease;
   }
   .nx-btn-primary:hover {
-    background-color: #d98f20;
+    background-color: var(--primary-hover);
   }
   .nx-btn-primary:active {
     transform: scale(0.98);
   }
   .nx-btn-primary:focus-visible {
-    outline: 2px solid #f3aa2d;
+    outline: 2px solid var(--focus);
     outline-offset: 2px;
   }
 }

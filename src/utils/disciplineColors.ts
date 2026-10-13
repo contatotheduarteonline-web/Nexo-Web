@@ -10,13 +10,13 @@ export const DISTINCT_DISCIPLINE_COLORS = [
   "#8B5CF6", // Roxo Violeta
   "#EC4899", // Rosa Intenso
   "#F59E0B", // Âmbar / Dourado
-  "#10B981", // Verde Menta
+  "#249D84", // Verde Menta
   "#06B6D4", // Ciano / Turquesa
   "#F59E0B", // Laranja Quente
   "#6366F1", // Índigo
   "#D946EF", // Fúcsia / Magenta
   "#14B8A6", // Verde Petróleo Claro
-  "#EF4444", // Vermelho Coral
+  "#DC4B4B", // Vermelho Coral
   "#84CC16", // Lima / Verde Claro
   "#A855F7", // Roxo Claro
   "#0284C7", // Azul Céu

@@ -40,7 +40,7 @@ const addDaysYmd = (base: string, days: number): string => {
 };
 
 const underlineInput =
-  "w-full border-0 border-b border-[#384154] bg-transparent px-1 py-1.5 text-sm text-white placeholder:text-slate-500 focus:border-[#F3AA2D] focus:outline-none rounded-none";
+  "w-full border-0 border-b border-[#384154] bg-transparent px-1 py-1.5 text-sm text-white placeholder:text-slate-500 focus:border-[#F59E0B] focus:outline-none rounded-none";
 
 interface RegistroEstudoModalProps {
   open: boolean;
@@ -294,7 +294,7 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
               type="date"
               value={customDate}
               onChange={(e) => setCustomDate(e.target.value)}
-              className="rounded-md border border-[#384154] bg-[#171B25] px-2 py-1.5 text-xs text-white focus:border-[#F3AA2D] focus:outline-none"
+              className="rounded-md border border-[#384154] bg-[#171B25] px-2 py-1.5 text-xs text-white focus:border-[#F59E0B] focus:outline-none"
             />
           )}
         </div>
@@ -414,7 +414,7 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
               {chips.map((days) => (
                 <span
                   key={days}
-                  className="flex items-center gap-1 rounded-md border border-[#F3AA2D]/30 bg-[#F3AA2D]/10 px-2 py-1 text-[11px] font-bold text-amber-300"
+                  className="flex items-center gap-1 rounded-md border border-[#F59E0B]/30 bg-[#F59E0B]/10 px-2 py-1 text-[11px] font-bold text-amber-300"
                 >
                   {days}d
                   <button
@@ -451,14 +451,14 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
                 min={0}
                 value={acertos}
                 onChange={(e) => setAcertos(Math.max(0, parseInt(e.target.value) || 0))}
-                className="w-14 border-0 border-b border-[#384154] bg-transparent py-1 text-center text-sm font-semibold text-white focus:border-[#F3AA2D] focus:outline-none"
+                className="w-14 border-0 border-b border-[#384154] bg-transparent py-1 text-center text-sm font-semibold text-white focus:border-[#F59E0B] focus:outline-none"
               />
               <input
                 type="number"
                 min={0}
                 value={erros}
                 onChange={(e) => setErros(Math.max(0, parseInt(e.target.value) || 0))}
-                className="w-14 border-0 border-b border-[#384154] bg-transparent py-1 text-center text-sm font-semibold text-white focus:border-[#F3AA2D] focus:outline-none"
+                className="w-14 border-0 border-b border-[#384154] bg-transparent py-1 text-center text-sm font-semibold text-white focus:border-[#F59E0B] focus:outline-none"
               />
             </div>
           </div>
@@ -497,21 +497,21 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
                 value={videoTitle}
                 onChange={(e) => setVideoTitle(e.target.value)}
                 placeholder="Vídeo 01"
-                className="w-full border-0 border-b border-[#384154] bg-transparent py-1 text-xs text-white placeholder:text-slate-500 focus:border-[#F3AA2D] focus:outline-none"
+                className="w-full border-0 border-b border-[#384154] bg-transparent py-1 text-xs text-white placeholder:text-slate-500 focus:border-[#F59E0B] focus:outline-none"
               />
               <input
                 type="text"
                 value={videoStart}
                 onChange={(e) => setVideoStart(e.target.value)}
                 placeholder="00:00:00"
-                className="w-full border-0 border-b border-[#384154] bg-transparent py-1 text-xs text-white placeholder:text-slate-500 focus:border-[#F3AA2D] focus:outline-none"
+                className="w-full border-0 border-b border-[#384154] bg-transparent py-1 text-xs text-white placeholder:text-slate-500 focus:border-[#F59E0B] focus:outline-none"
               />
               <input
                 type="text"
                 value={videoEnd}
                 onChange={(e) => setVideoEnd(e.target.value)}
                 placeholder="00:00:00"
-                className="w-full border-0 border-b border-[#384154] bg-transparent py-1 text-xs text-white placeholder:text-slate-500 focus:border-[#F3AA2D] focus:outline-none"
+                className="w-full border-0 border-b border-[#384154] bg-transparent py-1 text-xs text-white placeholder:text-slate-500 focus:border-[#F59E0B] focus:outline-none"
               />
             </div>
           </div>
@@ -524,7 +524,7 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
             rows={2}
             value={comments}
             onChange={(e) => setComments(e.target.value)}
-            className="mt-1 w-full resize-y border-0 border-b border-[#384154] bg-transparent px-1 py-1.5 text-sm text-white focus:border-[#F3AA2D] focus:outline-none"
+            className="mt-1 w-full resize-y border-0 border-b border-[#384154] bg-transparent px-1 py-1.5 text-sm text-white focus:border-[#F59E0B] focus:outline-none"
           />
         </div>
 

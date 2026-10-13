@@ -62,7 +62,7 @@ export const NewEditalModal: React.FC<NewEditalModalProps> = ({ isOpen, onClose 
           </div>
           <button
             onClick={onClose}
-            className="rounded-lg p-1 text-[#737D89] hover:bg-[#F8FAFC] hover:text-[#374151] dark:text-[#94A3B8] dark:hover:bg-[#1E293B] dark:hover:text-white"
+            className="rounded-lg p-1 text-[#737D89] hover:bg-[#F1F5F9] hover:text-[#374151] dark:text-[#94A3B8] dark:hover:bg-[#1E293B] dark:hover:text-white"
           >
             <X className="h-4 w-4" />
           </button>
@@ -189,7 +189,7 @@ export const NewEditalModal: React.FC<NewEditalModalProps> = ({ isOpen, onClose 
             <button
               type="button"
               onClick={onClose}
-              className="rounded-lg px-4 py-2 font-semibold text-[#737D89] hover:bg-[#F8FAFC] dark:text-[#94A3B8] dark:hover:bg-[#1E293B]"
+              className="rounded-lg px-4 py-2 font-semibold text-[#737D89] hover:bg-[#F1F5F9] dark:text-[#94A3B8] dark:hover:bg-[#1E293B]"
             >
               Cancelar
             </button>

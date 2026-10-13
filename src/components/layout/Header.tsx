@@ -58,14 +58,14 @@ export const Header: React.FC<HeaderProps> = () => {
   const totalNotifications = pendingReviewsCount + activeReminders.length;
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b border-[#E4E7EC] bg-white px-4 md:px-6 dark:border-[#334155] dark:bg-[#1E293B] transition-colors">
+    <header className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b border-[#E4E7EC] bg-white px-4 md:px-6 dark:border-[#384154] dark:bg-[#1E293B] transition-colors">
       {/* Lado Esquerdo: Somente Hamburger e Logo NEXO */}
       <div className="flex items-center gap-3">
         <button
           type="button"
           onClick={toggleSidebar}
           title="Alternar menu lateral"
-          className="flex h-9 w-9 items-center justify-center rounded-lg text-[#667085] transition-colors hover:bg-[#F7F8FA] hover:text-[#172033] dark:text-[#94A3B8] dark:hover:bg-[#161B28] dark:hover:text-white cursor-pointer"
+          className="flex h-9 w-9 items-center justify-center rounded-lg text-[#667085] transition-colors hover:bg-[#F7F8FA] hover:text-[#171B25] dark:text-[#94A3B8] dark:hover:bg-[#161B28] dark:hover:text-white cursor-pointer"
         >
           <Menu className="h-5 w-5" />
         </button>
@@ -89,7 +89,7 @@ export const Header: React.FC<HeaderProps> = () => {
               setIsProfileMenuOpen(false);
             }}
             title="Notificações"
-            className="group relative flex h-9.5 w-9.5 items-center justify-center rounded-xl border border-[#E4E7EC] bg-[#FAFAFC] text-[#667085] shadow-[0_1px_2px_rgba(0,0,0,0.04)] transition-all duration-200 hover:border-[#D0D5DD] hover:bg-white hover:text-[#172033] active:scale-95 dark:border-[#334155] dark:bg-[#1E293B] dark:text-[#94A3B8] dark:hover:border-[#334155] dark:hover:bg-[#1E293B] dark:hover:text-white cursor-pointer"
+            className="group relative flex h-9.5 w-9.5 items-center justify-center rounded-xl border border-[#E4E7EC] bg-[#FAFAFC] text-[#667085] shadow-[0_1px_2px_rgba(0,0,0,0.04)] transition-all duration-200 hover:border-[#D0D5DD] hover:bg-white hover:text-[#171B25] active:scale-95 dark:border-[#384154] dark:bg-[#1E293B] dark:text-[#94A3B8] dark:hover:border-[#384154] dark:hover:bg-[#1E293B] dark:hover:text-white cursor-pointer"
           >
             <Bell className="h-4.5 w-4.5 transition-transform duration-200 group-hover:scale-105" />
             {totalNotifications > 0 && (
@@ -121,7 +121,7 @@ export const Header: React.FC<HeaderProps> = () => {
             title={user?.name || "Perfil"}
             className="flex h-9 items-center gap-2 rounded-lg p-1 text-xs font-medium text-slate-700 transition-colors hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 cursor-pointer"
           >
-            <div className="relative flex h-8.5 w-8.5 items-center justify-center rounded-full p-[1.5px] bg-gradient-to-tr from-[#D97706] via-[#FCD34D] to-[#C2410C] shadow-xs">
+            <div className="relative flex h-8.5 w-8.5 items-center justify-center rounded-full p-[1.5px] bg-gradient-to-tr from-[#D97706] via-[#FBBF24] to-[#C2410C] shadow-xs">
               <div className="h-full w-full rounded-full overflow-hidden bg-white dark:bg-[#111520] flex items-center justify-center">
                 <img
                   src={
@@ -133,7 +133,7 @@ export const Header: React.FC<HeaderProps> = () => {
                 />
               </div>
             </div>
-            <span className="hidden sm:inline max-w-[110px] truncate text-left font-semibold text-[13px] text-[#172033] dark:text-white">
+            <span className="hidden sm:inline max-w-[110px] truncate text-left font-semibold text-[13px] text-[#171B25] dark:text-white">
               {user?.name?.split(" ")[0] || "João"}
             </span>
           </button>
@@ -158,7 +158,7 @@ export const Header: React.FC<HeaderProps> = () => {
                   </div>
 
                   <div className="flex-1 min-w-0">
-                    <p className="text-xs font-semibold text-[#172033] dark:text-white truncate">
+                    <p className="text-xs font-semibold text-[#171B25] dark:text-white truncate">
                       {user?.name || "Estudante"}
                     </p>
                     <p className="truncate text-[10px] text-[#667085] dark:text-[#94A3B8]">
@@ -176,7 +176,7 @@ export const Header: React.FC<HeaderProps> = () => {
                     setIsProfileMenuOpen(false);
                     setActiveTab("configuracoes");
                   }}
-                  className="flex w-full items-center gap-2 rounded-lg px-2.5 py-1.5 text-xs font-medium text-slate-700 hover:bg-[#F7F8FA] hover:text-[#172033] dark:text-slate-300 dark:hover:bg-[#161B28] dark:hover:text-white transition-colors cursor-pointer"
+                  className="flex w-full items-center gap-2 rounded-lg px-2.5 py-1.5 text-xs font-medium text-slate-700 hover:bg-[#F7F8FA] hover:text-[#171B25] dark:text-slate-300 dark:hover:bg-[#161B28] dark:hover:text-white transition-colors cursor-pointer"
                 >
                   <Settings className="h-3.5 w-3.5 text-slate-400" />
                   <span>Configurações</span>
@@ -184,7 +184,7 @@ export const Header: React.FC<HeaderProps> = () => {
               </div>
 
               {/* Logout Action */}
-              <div className="mt-1 border-t border-slate-100 pt-1 dark:border-[#334155]">
+              <div className="mt-1 border-t border-slate-100 pt-1 dark:border-[#384154]">
                 <button
                   type="button"
                   onClick={() => {

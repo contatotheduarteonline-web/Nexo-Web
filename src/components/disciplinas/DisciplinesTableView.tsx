@@ -87,7 +87,7 @@ export const DisciplinesTableView: React.FC<DisciplinesTableViewProps> = ({
     <div className="space-y-4">
       {/* Disciplines Data Table */}
       <div className="overflow-hidden rounded-xl border border-[#E2E8F0] bg-white shadow-[0_1px_3px_rgba(0,0,0,0.02)] dark:border-[#1E293B] dark:bg-[#252B38]">
-        <div className="border-b border-[#E2E8F0] bg-[#F8FAFC]/60 px-4 py-3 dark:border-[#1E293B] dark:bg-[#0F172A]/40">
+        <div className="border-b border-[#E2E8F0] bg-[#F1F5F9]/60 px-4 py-3 dark:border-[#1E293B] dark:bg-[#0F172A]/40">
           <h3 className="text-xs font-bold uppercase tracking-wider text-white dark:text-white">
             Quadro Comparativo de Desempenho
           </h3>
@@ -95,7 +95,7 @@ export const DisciplinesTableView: React.FC<DisciplinesTableViewProps> = ({
 
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="border-b border-[#E2E8F0] bg-[#F8FAFC]/30 text-[10px] font-bold uppercase tracking-wider text-[#737D89] dark:border-[#1E293B] dark:bg-[#0F172A]/20 dark:text-[#94A3B8]">
+            <thead className="border-b border-[#E2E8F0] bg-[#F1F5F9]/30 text-[10px] font-bold uppercase tracking-wider text-[#737D89] dark:border-[#1E293B] dark:bg-[#0F172A]/20 dark:text-[#94A3B8]">
               <tr>
                 <th className="px-4 py-2.5">Disciplina</th>
                 <th className="px-3 py-2.5 text-center">Peso</th>

@@ -297,7 +297,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
       setEditingCargoId(null);
       setEditingCargoName("");
       setNewDiscName("");
-      setNewDiscColor("#F3AA2D");
+      setNewDiscColor("#F59E0B");
       setNewTopicName("");
       setBatchTopicDiscId(null);
       setIsFullContentExpanded(false);
@@ -518,7 +518,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
           id: "disc-1",
           name: "Língua Portuguesa",
           order: 1,
-          color: "#F3AA2D",
+          color: "#F59E0B",
           weight: 3,
           topics: [
             { id: "top-1-1", title: "Compreensão e Interpretação de Texto", order: 1 },
@@ -542,7 +542,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
           id: "disc-3",
           name: "Direito Administrativo",
           order: 3,
-          color: "#10B981",
+          color: "#249D84",
           weight: 2,
           topics: [
             { id: "top-3-1", title: "Princípios Básicos da Administração Pública", order: 1 },
@@ -749,7 +749,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
   const handleAddDiscipline = () => {
     if (!newDiscName.trim() || !activeCargo) return;
 
-    const currentUsed = activeCargo.disciplines.map((d) => d.color || "#F3AA2D");
+    const currentUsed = activeCargo.disciplines.map((d) => d.color || "#F59E0B");
 
     // Regra estrita: se a cor atual já estiver em uso, calcula a próxima cor exclusiva disponível
     let assignedColor = newDiscColor;
@@ -796,7 +796,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
     );
     // Se a cor selecionada para o cadastro de nova matéria coincidir com essa cor, avança automaticamente
     const updatedUsed = (activeCargo?.disciplines || []).map((d) =>
-      d.id === discId ? newColor : d.color || "#F3AA2D"
+      d.id === discId ? newColor : d.color || "#F59E0B"
     );
     if (updatedUsed.some((c) => areColorsEqual(c, newDiscColor))) {
       setNewDiscColor(getNextAvailableDisciplineColor(updatedUsed));
@@ -1342,7 +1342,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
           <div>
             <h2 className="font-condensed text-lg sm:text-xl font-bold uppercase tracking-wide text-white dark:text-white flex items-baseline gap-1">
               <span>Seu Plano</span>
-              <span className="text-[#F3AA2D]">.</span>
+              <span className="text-[#F59E0B]">.</span>
             </h2>
             <p className="text-[11px] sm:text-xs text-white dark:text-white">
               {step === "objective" && "Etapa 1 de 6: Objetivo principal"}
@@ -1369,7 +1369,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
         {step !== "processing" && (
           <div className="w-full bg-[#171B25] dark:bg-[#171B25] h-1">
             <div
-              className="h-full bg-[#F3AA2D] transition-all duration-300"
+              className="h-full bg-[#F59E0B] transition-all duration-300"
               style={{
                 width:
                   step === "objective"
@@ -1415,18 +1415,18 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                         onClick={() => setSelectedObjective(opt.id)}
                         className={`flex w-full items-center gap-3 rounded-2xl border p-3 text-left transition cursor-pointer ${
                           isSelected
-                            ? "border-[#F3AA2D]/60 bg-[#F3AA2D]/10"
-                            : "border-[#384154] bg-[#171B25] hover:border-[#4A5470] hover:bg-[#1B2129]"
+                            ? "border-[#F59E0B]/60 bg-[#F59E0B]/10"
+                            : "border-[#384154] bg-[#171B25] hover:border-[#4A5470] hover:bg-[#171B25]"
                         }`}
                       >
                         <span
                           className={`h-9 w-1.5 shrink-0 rounded-full transition ${
-                            isSelected ? "bg-[#F3AA2D]" : "bg-[#384154]"
+                            isSelected ? "bg-[#F59E0B]" : "bg-[#384154]"
                           }`}
                         />
                         <div
                           className={`p-1.5 rounded-lg shrink-0 transition ${
-                            isSelected ? "bg-[#F3AA2D] text-[#11151F]" : "bg-[#252B38] text-white"
+                            isSelected ? "bg-[#F59E0B] text-[#11151F]" : "bg-[#252B38] text-white"
                           }`}
                         >
                           <Icon className="h-4 w-4" />
@@ -1435,13 +1435,13 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                           <div className="flex items-center gap-2">
                             <span
                               className={`text-xs block font-bold truncate ${
-                                isSelected ? "text-[#F3AA2D]" : "text-white dark:text-white"
+                                isSelected ? "text-[#F59E0B]" : "text-white dark:text-white"
                               }`}
                             >
                               {opt.title}
                             </span>
                             {opt.badge && (
-                              <span className="rounded-full bg-[#F3AA2D]/15 px-1.5 py-0.5 text-[9px] font-bold text-[#F3AA2D] shrink-0">
+                              <span className="rounded-full bg-[#F59E0B]/15 px-1.5 py-0.5 text-[9px] font-bold text-[#F59E0B] shrink-0">
                                 {opt.badge}
                               </span>
                             )}
@@ -1452,7 +1452,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                         </div>
 
                         {isSelected ? (
-                          <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#F3AA2D] text-[#11151F]">
+                          <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#F59E0B] text-[#11151F]">
                             <Check className="h-3 w-3" />
                           </div>
                         ) : (
@@ -1502,8 +1502,8 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                         }}
                         className={`rounded-full border px-3.5 py-2 text-xs font-semibold transition cursor-pointer ${
                           isSelected
-                            ? "border-[#F3AA2D] bg-[#F3AA2D] text-[#11151F]"
-                            : "border-[#384154] bg-[#171B25] text-white hover:border-[#4A5470] hover:bg-[#1B2129]"
+                            ? "border-[#F59E0B] bg-[#F59E0B] text-[#11151F]"
+                            : "border-[#384154] bg-[#171B25] text-white hover:border-[#4A5470] hover:bg-[#171B25]"
                         }`}
                       >
                         {area.title}
@@ -1541,7 +1541,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                       value={concursoSearchQuery}
                       onChange={(e) => setConcursoSearchQuery(e.target.value)}
                       placeholder={`Buscar edital de ${currentCareer.title}...`}
-                      className="w-full rounded-xl border border-[#384154] bg-[#171B25] py-2 pl-9 pr-3.5 text-xs text-white placeholder:text-white/50 focus:border-[#F3AA2D] focus:outline-hidden dark:border-[#384154] dark:bg-[#171B25] dark:text-white"
+                      className="w-full rounded-xl border border-[#384154] bg-[#171B25] py-2 pl-9 pr-3.5 text-xs text-white placeholder:text-white/50 focus:border-[#F59E0B] focus:outline-hidden dark:border-[#384154] dark:bg-[#171B25] dark:text-white"
                     />
                   </div>
 
@@ -1550,7 +1550,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                       <select
                         value={ufFilter}
                         onChange={(e) => setUfFilter(e.target.value)}
-                        className="appearance-none rounded-full border border-[#384154] bg-[#171B25] py-1.5 pl-3.5 pr-8 text-xs font-semibold text-white focus:border-[#F3AA2D] focus:outline-hidden cursor-pointer dark:border-[#384154] dark:bg-[#171B25] dark:text-white"
+                        className="appearance-none rounded-full border border-[#384154] bg-[#171B25] py-1.5 pl-3.5 pr-8 text-xs font-semibold text-white focus:border-[#F59E0B] focus:outline-hidden cursor-pointer dark:border-[#384154] dark:bg-[#171B25] dark:text-white"
                       >
                         <option value="all">Todas as UFs</option>
                         {availableUfs.map((uf) => (
@@ -1567,7 +1567,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                       onClick={handleStartImportEdital}
                       className="flex-1 min-w-[140px] inline-flex items-center justify-center gap-1.5 rounded-full border border-[#384154] bg-[#171B25] hover:bg-[#2D3442] dark:border-[#384154] dark:bg-[#171B25] dark:hover:bg-[#2D3442] px-3 py-1.5 text-xs font-semibold text-white dark:text-white transition cursor-pointer"
                     >
-                      <Upload className="h-3.5 w-3.5 text-[#F3AA2D]" />
+                      <Upload className="h-3.5 w-3.5 text-[#F59E0B]" />
                       <span>Importar edital (PDF)</span>
                     </button>
                     <button
@@ -1575,7 +1575,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                       onClick={handleSelectCustomPlan}
                       className="flex-1 min-w-[140px] inline-flex items-center justify-center gap-1.5 rounded-full border border-[#384154] bg-[#171B25] hover:bg-[#2D3442] dark:border-[#384154] dark:bg-[#171B25] dark:hover:bg-[#2D3442] px-3 py-1.5 text-xs font-semibold text-white dark:text-white transition cursor-pointer"
                     >
-                      <Plus className="h-3.5 w-3.5 text-[#F3AA2D]" />
+                      <Plus className="h-3.5 w-3.5 text-[#F59E0B]" />
                       <span>Criar plano personalizado</span>
                     </button>
                   </div>
@@ -1620,7 +1620,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                             key={ed.id}
                             className={`rounded-2xl border p-3.5 transition ${
                               isSelected
-                                ? "border-[#F3AA2D]/60 bg-[#F3AA2D]/[0.07]"
+                                ? "border-[#F59E0B]/60 bg-[#F59E0B]/[0.07]"
                                 : "border-[#384154] bg-[#171B25] hover:border-[#4A5470]"
                             }`}
                           >
@@ -1635,15 +1635,15 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                                   src={logoSrc}
                                   alt={ed.institution}
                                   className={`h-10 w-10 shrink-0 rounded-full border object-cover transition ${
-                                    isSelected ? "border-[#F3AA2D]" : "border-[#384154]"
+                                    isSelected ? "border-[#F59E0B]" : "border-[#384154]"
                                   }`}
                                 />
                               ) : (
                                 <div
                                   className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full border font-condensed text-xs font-bold transition ${
                                     isSelected
-                                      ? "border-[#F3AA2D] bg-[#F3AA2D] text-[#11151F]"
-                                      : "border-[#384154] bg-[#252B38] text-[#F3AA2D]"
+                                      ? "border-[#F59E0B] bg-[#F59E0B] text-[#11151F]"
+                                      : "border-[#384154] bg-[#252B38] text-[#F59E0B]"
                                   }`}
                                 >
                                   {initials}
@@ -1659,7 +1659,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                               </div>
 
                               {isSelected ? (
-                                <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#F3AA2D] text-[#11151F]">
+                                <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#F59E0B] text-[#11151F]">
                                   <Check className="h-3 w-3" />
                                 </div>
                               ) : (
@@ -1672,7 +1672,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                               <div className="mt-3 border-t border-[#384154] pt-3">
                                 {isLoadingCargos ? (
                                   <span className="text-[11px] text-white inline-flex items-center gap-1.5">
-                                    <Loader2 className="h-3 w-3 animate-spin text-[#F3AA2D]" />
+                                    <Loader2 className="h-3 w-3 animate-spin text-[#F59E0B]" />
                                     Carregando cargos...
                                   </span>
                                 ) : availableCatalogCargos.length === 0 ? (
@@ -1692,7 +1692,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                                           }
                                           className={`rounded-full px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-wide transition cursor-pointer ${
                                             isCargoSelected
-                                              ? "bg-[#F3AA2D] text-[#11151F]"
+                                              ? "bg-[#F59E0B] text-[#11151F]"
                                               : "bg-[#252B38] text-white hover:bg-[#2D3442]"
                                           }`}
                                         >
@@ -1773,7 +1773,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                 <button
                   type="button"
                   onClick={() => setStep("edital")}
-                  className="text-xs font-bold text-[#F3AA2D] hover:underline cursor-pointer"
+                  className="text-xs font-bold text-[#F59E0B] hover:underline cursor-pointer"
                 >
                   Alterar
                 </button>
@@ -1839,7 +1839,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                     />
                     <div
                       onClick={() => fileInputRef.current?.click()}
-                      className="flex flex-col items-center justify-center p-6 rounded-2xl border-2 border-dashed border-[#384154] hover:border-[#F3AA2D] bg-[#171B25]/50 hover:bg-[#F3AA2D]/5 dark:border-[#384154] dark:bg-[#252B38]/40 cursor-pointer transition text-center"
+                      className="flex flex-col items-center justify-center p-6 rounded-2xl border-2 border-dashed border-[#384154] hover:border-[#F59E0B] bg-[#171B25]/50 hover:bg-[#F59E0B]/5 dark:border-[#384154] dark:bg-[#252B38]/40 cursor-pointer transition text-center"
                     >
                       <Upload className="h-7 w-7 text-white mb-2" />
                       <span className="text-xs font-bold text-white dark:text-white">
@@ -1854,9 +1854,9 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
 
                 {/* Feedback de Progresso de Leitura */}
                 {isParsingPdf && importProgress && (
-                  <div className="p-3.5 rounded-xl border border-[#F3AA2D]/30 bg-[#F3AA2D]/5 space-y-2">
+                  <div className="p-3.5 rounded-xl border border-[#F59E0B]/30 bg-[#F59E0B]/5 space-y-2">
                     <div className="flex items-center justify-between text-xs">
-                      <span className="font-bold text-[#F3AA2D] flex items-center gap-2">
+                      <span className="font-bold text-[#F59E0B] flex items-center gap-2">
                         <Loader2 className="h-3.5 w-3.5 animate-spin" />
                         {importProgress.message}
                       </span>
@@ -1868,7 +1868,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                     </div>
                     <div className="w-full bg-[#384154] dark:bg-[#171B25] h-1 rounded-full overflow-hidden">
                       <div
-                        className="bg-[#F3AA2D] h-full transition-all duration-200"
+                        className="bg-[#F59E0B] h-full transition-all duration-200"
                         style={{
                           width:
                             importProgress.phase === "reading"
@@ -1934,7 +1934,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                     onChange={(e) => setPlanTitle(e.target.value)}
                     required
                     placeholder="Ex: Concurso Público da Polícia Federal – 2021"
-                    className="mt-1 w-full rounded-xl border border-[#384154] bg-[#171B25] px-3.5 py-2 text-xs font-bold text-white focus:border-[#F3AA2D] focus:bg-[#252B38] focus:outline-hidden dark:border-[#384154] dark:bg-[#171B25] dark:text-white"
+                    className="mt-1 w-full rounded-xl border border-[#384154] bg-[#171B25] px-3.5 py-2 text-xs font-bold text-white focus:border-[#F59E0B] focus:bg-[#252B38] focus:outline-hidden dark:border-[#384154] dark:bg-[#171B25] dark:text-white"
                   />
                 </div>
 
@@ -1968,7 +1968,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                     }}
                     required
                     placeholder="Ex: Agente de Polícia Federal"
-                    className="mt-1 w-full rounded-xl border border-[#384154] bg-[#171B25] px-3.5 py-2 text-xs font-bold text-white focus:border-[#F3AA2D] focus:bg-[#252B38] focus:outline-hidden dark:border-[#384154] dark:bg-[#171B25] dark:text-white"
+                    className="mt-1 w-full rounded-xl border border-[#384154] bg-[#171B25] px-3.5 py-2 text-xs font-bold text-white focus:border-[#F59E0B] focus:bg-[#252B38] focus:outline-hidden dark:border-[#384154] dark:bg-[#171B25] dark:text-white"
                   />
                 </div>
 
@@ -1982,7 +1982,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                       value={organ}
                       onChange={(e) => setOrgan(e.target.value)}
                       placeholder="Ex: Polícia Federal"
-                      className="mt-1 w-full rounded-xl border border-[#384154] bg-[#171B25] px-3.5 py-2 text-xs text-white focus:border-[#F3AA2D] focus:bg-[#252B38] focus:outline-hidden dark:border-[#384154] dark:bg-[#171B25] dark:text-white"
+                      className="mt-1 w-full rounded-xl border border-[#384154] bg-[#171B25] px-3.5 py-2 text-xs text-white focus:border-[#F59E0B] focus:bg-[#252B38] focus:outline-hidden dark:border-[#384154] dark:bg-[#171B25] dark:text-white"
                     />
                   </div>
 
@@ -1996,7 +1996,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                       onChange={(e) => setOrganAcronym(e.target.value.toUpperCase())}
                       placeholder="Ex: PF"
                       maxLength={10}
-                      className="mt-1 w-full rounded-xl border border-[#384154] bg-[#171B25] px-3.5 py-2 text-xs font-bold text-white focus:border-[#F3AA2D] focus:bg-[#252B38] focus:outline-hidden dark:border-[#384154] dark:bg-[#171B25] dark:text-white uppercase"
+                      className="mt-1 w-full rounded-xl border border-[#384154] bg-[#171B25] px-3.5 py-2 text-xs font-bold text-white focus:border-[#F59E0B] focus:bg-[#252B38] focus:outline-hidden dark:border-[#384154] dark:bg-[#171B25] dark:text-white uppercase"
                     />
                   </div>
                 </div>
@@ -2009,7 +2009,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                     <select
                       value={editalUf}
                       onChange={(e) => setEditalUf(e.target.value)}
-                      className="mt-1 w-full rounded-xl border border-[#384154] bg-[#171B25] px-3.5 py-2 text-xs font-bold text-white focus:border-[#F3AA2D] focus:bg-[#252B38] focus:outline-hidden dark:border-[#384154] dark:bg-[#171B25] dark:text-white"
+                      className="mt-1 w-full rounded-xl border border-[#384154] bg-[#171B25] px-3.5 py-2 text-xs font-bold text-white focus:border-[#F59E0B] focus:bg-[#252B38] focus:outline-hidden dark:border-[#384154] dark:bg-[#171B25] dark:text-white"
                     >
                       <option value="">Selecione a UF</option>
                       {VALID_CATALOG_UFS.map((uf) => (
@@ -2029,7 +2029,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                       value={editalBoard}
                       onChange={(e) => setEditalBoard(e.target.value)}
                       placeholder="Ex: Cebraspe, FGV, Vunesp"
-                      className="mt-1 w-full rounded-xl border border-[#384154] bg-[#171B25] px-3.5 py-2 text-xs text-white focus:border-[#F3AA2D] focus:bg-[#252B38] focus:outline-hidden dark:border-[#384154] dark:bg-[#171B25] dark:text-white"
+                      className="mt-1 w-full rounded-xl border border-[#384154] bg-[#171B25] px-3.5 py-2 text-xs text-white focus:border-[#F59E0B] focus:bg-[#252B38] focus:outline-hidden dark:border-[#384154] dark:bg-[#171B25] dark:text-white"
                     />
                   </div>
 
@@ -2046,7 +2046,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                       onChange={(e) =>
                         setEditalYear(e.target.value === "" ? "" : Number(e.target.value))
                       }
-                      className="mt-1 w-full rounded-xl border border-[#384154] bg-[#171B25] px-3.5 py-2 text-xs font-bold text-white focus:border-[#F3AA2D] focus:bg-[#252B38] focus:outline-hidden dark:border-[#384154] dark:bg-[#171B25] dark:text-white"
+                      className="mt-1 w-full rounded-xl border border-[#384154] bg-[#171B25] px-3.5 py-2 text-xs font-bold text-white focus:border-[#F59E0B] focus:bg-[#252B38] focus:outline-hidden dark:border-[#384154] dark:bg-[#171B25] dark:text-white"
                     />
                   </div>
                 </div>
@@ -2099,9 +2099,9 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                     <button
                       type="button"
                       onClick={() => imageInputRef.current?.click()}
-                      className="mt-1 flex w-full items-center justify-center gap-2 rounded-xl border-2 border-dashed border-[#384154] hover:border-[#F3AA2D] bg-[#171B25]/50 hover:bg-[#F3AA2D]/5 dark:border-[#384154] dark:bg-[#252B38]/40 px-3 py-3 text-xs font-bold text-white dark:text-white transition cursor-pointer"
+                      className="mt-1 flex w-full items-center justify-center gap-2 rounded-xl border-2 border-dashed border-[#384154] hover:border-[#F59E0B] bg-[#171B25]/50 hover:bg-[#F59E0B]/5 dark:border-[#384154] dark:bg-[#252B38]/40 px-3 py-3 text-xs font-bold text-white dark:text-white transition cursor-pointer"
                     >
-                      <Upload className="h-4 w-4 text-[#F3AA2D]" />
+                      <Upload className="h-4 w-4 text-[#F59E0B]" />
                       Selecionar imagem
                     </button>
                   )}
@@ -2120,14 +2120,14 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
               {editalFile && parsedData && (
                 <>
                   {parsedData.validation?.valid ? (
-                    <div className="flex flex-wrap items-center justify-between gap-2 p-3 rounded-xl border border-[#F3AA2D]/30 bg-[#F3AA2D]/5">
-                      <div className="flex flex-wrap items-center gap-2 text-xs font-bold text-[#F3AA2D]">
+                    <div className="flex flex-wrap items-center justify-between gap-2 p-3 rounded-xl border border-[#F59E0B]/30 bg-[#F59E0B]/5">
+                      <div className="flex flex-wrap items-center gap-2 text-xs font-bold text-[#F59E0B]">
                         <CheckCircle2 className="h-4 w-4 shrink-0" />
                         <span>
                           Conteúdo identificado no documento ({activeCargoDisciplines.length} disciplinas • {activeCargoTopicsCount} tópicos)
                         </span>
                         {parsedData.programmaticSection && (
-                          <span className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-[#F3AA2D]/15 text-[#F3AA2D]">
+                          <span className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-[#F59E0B]/15 text-[#F59E0B]">
                             Páginas {parsedData.programmaticSection.startPage} a {parsedData.programmaticSection.endPage}
                           </span>
                         )}
@@ -2187,7 +2187,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                     <div className="p-3.5 rounded-xl border border-[#384154] bg-[#252B38] dark:border-[#384154] dark:bg-[#2D3442] space-y-2.5 shadow-xs">
                       <div className="flex items-center justify-between">
                         <h4 className="text-xs font-bold text-white dark:text-white flex items-center gap-1.5">
-                          <Layers className="h-3.5 w-3.5 text-[#F3AA2D]" />
+                          <Layers className="h-3.5 w-3.5 text-[#F59E0B]" />
                           Selecionar páginas do conteúdo programático
                         </h4>
                         <span className="text-[11px] text-white dark:text-white">
@@ -2223,7 +2223,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                         <button
                           type="button"
                           onClick={handleProcessManualPages}
-                          className="px-3 py-1 text-xs font-bold text-white bg-[#F3AA2D] hover:bg-[#1f8771] rounded-lg transition cursor-pointer"
+                          className="px-3 py-1 text-xs font-bold text-white bg-[#F59E0B] hover:bg-[#1F826D] rounded-lg transition cursor-pointer"
                         >
                           Processar essas páginas
                         </button>
@@ -2250,7 +2250,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                     <button
                       type="button"
                       onClick={() => setIsAddingNewCargo(true)}
-                      className="inline-flex items-center gap-1 text-xs font-bold text-[#F3AA2D] hover:underline cursor-pointer"
+                      className="inline-flex items-center gap-1 text-xs font-bold text-[#F59E0B] hover:underline cursor-pointer"
                     >
                       <Plus className="h-3.5 w-3.5" />
                       <span>Adicionar cargo</span>
@@ -2267,13 +2267,13 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                       onChange={(e) => setNewCargoName(e.target.value)}
                       onKeyDown={(e) => e.key === "Enter" && handleAddNewCargo()}
                       placeholder="Nome do novo cargo..."
-                      className="flex-1 rounded-lg border border-[#384154] bg-[#252B38] px-2.5 py-1.5 text-xs text-white focus:border-[#F3AA2D] focus:outline-hidden dark:border-[#384154] dark:bg-[#171B25] dark:text-white"
+                      className="flex-1 rounded-lg border border-[#384154] bg-[#252B38] px-2.5 py-1.5 text-xs text-white focus:border-[#F59E0B] focus:outline-hidden dark:border-[#384154] dark:bg-[#171B25] dark:text-white"
                       autoFocus
                     />
                     <button
                       type="button"
                       onClick={handleAddNewCargo}
-                      className="rounded-lg bg-[#F3AA2D] px-3 py-1.5 text-xs font-bold text-white hover:bg-[#1f8771]"
+                      className="rounded-lg bg-[#F59E0B] px-3 py-1.5 text-xs font-bold text-white hover:bg-[#1F826D]"
                     >
                       Salvar
                     </button>
@@ -2309,7 +2309,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                           onClick={() => setActiveCargoId(cargo.id)}
                           className={`p-3 flex items-center justify-between gap-3 cursor-pointer transition ${
                             isActive
-                              ? "bg-[#F3AA2D]/5 dark:bg-[#F3AA2D]/10 ring-1 ring-inset ring-[#F3AA2D]/30"
+                              ? "bg-[#F59E0B]/5 dark:bg-[#F59E0B]/10 ring-1 ring-inset ring-[#F59E0B]/30"
                               : "hover:bg-[#2D3442] dark:hover:bg-[#2D3442]"
                           }`}
                         >
@@ -2334,13 +2334,13 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                                     if (e.key === "Enter") handleRenameCargo(cargo.id, editingCargoName);
                                     if (e.key === "Escape") setEditingCargoId(null);
                                   }}
-                                  className="flex-1 rounded-lg border border-[#F3AA2D] bg-[#252B38] px-2 py-1 text-xs text-white dark:bg-[#171B25] dark:text-white"
+                                  className="flex-1 rounded-lg border border-[#F59E0B] bg-[#252B38] px-2 py-1 text-xs text-white dark:bg-[#171B25] dark:text-white"
                                   autoFocus
                                 />
                                 <button
                                   type="button"
                                   onClick={() => handleRenameCargo(cargo.id, editingCargoName)}
-                                  className="rounded-md bg-[#F3AA2D] px-2 py-1 text-[11px] font-bold text-white"
+                                  className="rounded-md bg-[#F59E0B] px-2 py-1 text-[11px] font-bold text-white"
                                 >
                                   OK
                                 </button>
@@ -2354,12 +2354,12 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                               </div>
                             ) : (
                               <div className="flex items-center gap-2">
-                                <span className="text-[#F3AA2D] font-bold text-xs shrink-0">✓</span>
+                                <span className="text-[#F59E0B] font-bold text-xs shrink-0">✓</span>
                                 <div className="min-w-0">
                                   <span
                                     className={`font-bold text-xs block truncate ${
                                       isActive
-                                        ? "text-[#F3AA2D] dark:text-[#F3AA2D]"
+                                        ? "text-[#F59E0B] dark:text-[#F59E0B]"
                                         : "text-white dark:text-white"
                                     }`}
                                   >
@@ -2463,7 +2463,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                       <div className="absolute right-0 bottom-full mb-2 z-50 w-72 rounded-2xl border border-[#384154] bg-[#252B38] p-3 shadow-xl dark:border-[#384154] dark:bg-[#252B38] animate-in fade-in zoom-in-95">
                         <div className="flex items-center justify-between pb-2 mb-2 border-b border-[#384154] dark:border-[#384154]">
                           <span className="text-[11px] font-bold text-white dark:text-white flex items-center gap-1.5">
-                            <Palette className="h-3.5 w-3.5 text-[#F3AA2D]" />
+                            <Palette className="h-3.5 w-3.5 text-[#F59E0B]" />
                             Escolher Cor Manualmente
                           </span>
                           <button
@@ -2508,7 +2508,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                                   isTaken
                                     ? "opacity-20 cursor-not-allowed"
                                     : isSelected
-                                    ? "ring-2 ring-offset-1 ring-[#F3AA2D] scale-110 shadow-sm"
+                                    ? "ring-2 ring-offset-1 ring-[#F59E0B] scale-110 shadow-sm"
                                     : "hover:scale-110 opacity-90 cursor-pointer"
                                 }`}
                               >
@@ -2533,11 +2533,11 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                             <button
                               type="button"
                               onClick={() => {
-                                const used = activeCargoDisciplines.map((d) => d.color || "#F3AA2D");
+                                const used = activeCargoDisciplines.map((d) => d.color || "#F59E0B");
                                 setNewDiscColor(getNextAvailableDisciplineColor(used));
                                 setShowNewDiscColorPalette(false);
                               }}
-                              className="text-[10px] font-bold text-[#F3AA2D] hover:underline cursor-pointer"
+                              className="text-[10px] font-bold text-[#F59E0B] hover:underline cursor-pointer"
                             >
                               Sugerir próxima
                             </button>
@@ -2556,7 +2556,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                       )
                     )}
                     onClick={handleAddDiscipline}
-                    className="rounded-lg bg-[#F3AA2D] px-3.5 py-1.5 text-xs font-bold text-white hover:bg-[#1f8771] disabled:opacity-40 disabled:cursor-not-allowed transition cursor-pointer"
+                    className="rounded-lg bg-[#F59E0B] px-3.5 py-1.5 text-xs font-bold text-white hover:bg-[#1F826D] disabled:opacity-40 disabled:cursor-not-allowed transition cursor-pointer"
                   >
                     Adicionar
                   </button>
@@ -2579,10 +2579,10 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                       <button
                         type="button"
                         onClick={() => {
-                          const used = activeCargoDisciplines.map((d) => d.color || "#F3AA2D");
+                          const used = activeCargoDisciplines.map((d) => d.color || "#F59E0B");
                           setNewDiscColor(getNextAvailableDisciplineColor(used));
                         }}
-                        className="text-[10px] font-bold text-[#F3AA2D] dark:text-[#38c9ab] hover:underline shrink-0 ml-2 cursor-pointer"
+                        className="text-[10px] font-bold text-[#F59E0B] dark:text-[#38c9ab] hover:underline shrink-0 ml-2 cursor-pointer"
                       >
                         Trocar automática
                       </button>
@@ -2619,7 +2619,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                                 setColorPickerDisc({
                                   id: disc.id,
                                   name: disc.name,
-                                  color: disc.color || "#F3AA2D",
+                                  color: disc.color || "#F59E0B",
                                 });
                               }}
                               className="group relative flex items-center justify-center shrink-0 cursor-pointer p-0.5 rounded-full hover:bg-[#2D3442] dark:hover:bg-[#2D3442] transition"
@@ -2627,7 +2627,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                             >
                               <span
                                 className="h-3.5 w-3.5 rounded-full ring-2 ring-white dark:ring-[#252B38] group-hover:scale-125 transition-transform shadow-xs"
-                                style={{ backgroundColor: disc.color || "#F3AA2D" }}
+                                style={{ backgroundColor: disc.color || "#F59E0B" }}
                               />
                             </button>
                             <span className="font-bold text-xs text-white dark:text-white truncate">
@@ -2797,7 +2797,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                               <button
                                 type="button"
                                 onClick={() => setBatchTopicDiscId(disc.id)}
-                                className="inline-flex items-center gap-1 text-[11px] font-bold text-[#F3AA2D] hover:underline"
+                                className="inline-flex items-center gap-1 text-[11px] font-bold text-[#F59E0B] hover:underline"
                               >
                                 <Layers className="h-3 w-3" />
                                 + Adicionar em lote
@@ -2852,16 +2852,16 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                         className="w-11 h-11 rounded-xl object-cover border border-[#384154] dark:border-[#384154] shrink-0"
                       />
                     ) : (
-                      <div className="w-11 h-11 rounded-xl bg-[#F3AA2D]/15 flex items-center justify-center text-[#F3AA2D] shrink-0 font-bold">
+                      <div className="w-11 h-11 rounded-xl bg-[#F59E0B]/15 flex items-center justify-center text-[#F59E0B] shrink-0 font-bold">
                         <Building2 className="h-5 w-5" />
                       </div>
                     )}
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#F3AA2D]">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#F59E0B]">
                           {organAcronym || organ || "Certame"}
                         </span>
-                        <span className="rounded-full bg-[#F3AA2D]/15 px-2 py-0.2 text-[9px] font-bold text-[#F3AA2D]">
+                        <span className="rounded-full bg-[#F59E0B]/15 px-2 py-0.2 text-[9px] font-bold text-[#F59E0B]">
                           {currentCareer.title}
                         </span>
                       </div>
@@ -2933,7 +2933,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                   <button
                     type="button"
                     onClick={() => setIsFullContentExpanded(!isFullContentExpanded)}
-                    className="text-xs font-bold text-[#F3AA2D] hover:underline flex items-center gap-1"
+                    className="text-xs font-bold text-[#F59E0B] hover:underline flex items-center gap-1"
                   >
                     <span>{isFullContentExpanded ? "Ocultar detalhes" : "Ver conteúdo completo do plano"}</span>
                     <ChevronDown
@@ -2976,7 +2976,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
           {/* ========================================================================= */}
           {step === "processing" && (
             <div className="flex flex-col items-center justify-center p-12 text-center space-y-3">
-              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#F3AA2D]/15 text-[#F3AA2D]">
+              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#F59E0B]/15 text-[#F59E0B]">
                 <Loader2 className="h-7 w-7 animate-spin" />
               </div>
               <h3 className="text-sm font-bold text-white dark:text-white">
@@ -3048,7 +3048,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                   type="button"
                   disabled={isSaving || activeCargoDisciplines.length === 0}
                   onClick={() => handleFinalSubmitCreatePlan(false, false)}
-                  className="flex items-center gap-1.5 rounded-xl bg-[#F3AA2D] px-5 py-2 text-xs font-bold text-[#11151F] shadow-sm hover:bg-[#e09a1d] transition disabled:opacity-50"
+                  className="flex items-center gap-1.5 rounded-xl bg-[#F59E0B] px-5 py-2 text-xs font-bold text-[#11151F] shadow-sm hover:bg-[#D97706] transition disabled:opacity-50"
                 >
                   <Check className="h-4 w-4" />
                   <span>Criar Plano de Estudos</span>
@@ -3120,7 +3120,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                     setStep("review");
                   }
                 }}
-                className="flex items-center gap-1.5 rounded-xl bg-[#F3AA2D] px-5 py-2 text-xs font-bold text-[#11151F] shadow-sm hover:bg-[#e09a1d] transition disabled:opacity-40 disabled:cursor-not-allowed"
+                className="flex items-center gap-1.5 rounded-xl bg-[#F59E0B] px-5 py-2 text-xs font-bold text-[#11151F] shadow-sm hover:bg-[#D97706] transition disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 <span>Avançar</span>
                 <ChevronRight className="h-4 w-4" />
@@ -3152,7 +3152,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
           otherDisciplines={activeCargo.disciplines.map((d) => ({
             id: d.id,
             name: d.name,
-            color: d.color || "#F3AA2D",
+            color: d.color || "#F59E0B",
           }))}
           onSelectColor={(newColor) =>
             handleUpdateDisciplineColor(colorPickerDisc.id, newColor)

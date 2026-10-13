@@ -7,7 +7,7 @@ export const PASTEL_COLORS = [
   "#FDE047", // soft warm yellow
   "#C4B5FD", // soft purple
   "#6EE7B7", // soft emerald
-  "#FCD34D", // soft orange
+  "#FBBF24", // soft orange
   "#A7F3D0", // soft mint
   "#F9A8D4", // soft pink
   "#CBD5E1", // soft slate

@@ -358,7 +358,7 @@ export const EditalView: React.FC = () => {
                                       className={`h-5 w-5 rounded-md border flex items-center justify-center transition-all ${
                                         topic.isStudied
                                           ? "bg-[#F59E0B] border-[#F59E0B] text-white shadow-2xs"
-                                          : "border-[#CBD5E1] bg-white hover:border-[#F59E0B] dark:border-[#334155] dark:bg-[#0F172A]"
+                                          : "border-[#CBD5E1] bg-white hover:border-[#F59E0B] dark:border-[#384154] dark:bg-[#0F172A]"
                                       }`}
                                       title={topic.isStudied ? "Marcar como pendente" : "Marcar como estudado (+150 XP)"}
                                     >

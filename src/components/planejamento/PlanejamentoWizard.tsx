@@ -107,7 +107,7 @@ const MAX_OPTIONS = [
 const KanbanIllustration: React.FC = () => (
   <svg viewBox="0 0 340 190" className="mx-auto h-44 w-auto" fill="none">
     {/* Board */}
-    <rect x="72" y="16" width="196" height="152" rx="10" fill="#1B2129" stroke="#39414F" strokeWidth="2" />
+    <rect x="72" y="16" width="196" height="152" rx="10" fill="#171B25" stroke="#39414F" strokeWidth="2" />
     <line x1="137" y1="20" x2="137" y2="164" stroke="#39414F" strokeWidth="1.5" />
     <line x1="202" y1="20" x2="202" y2="164" stroke="#39414F" strokeWidth="1.5" />
     {/* Sticky notes */}
@@ -443,7 +443,7 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
 
   const footerBtnBase =
     "rounded-xl px-5 py-2.5 text-xs font-bold transition cursor-pointer flex items-center gap-2";
-  const btnPrimary = `${footerBtnBase} bg-[#F3AA2D] text-[#11151F] hover:bg-[#e09a1d] active:scale-95`;
+  const btnPrimary = `${footerBtnBase} bg-[#F59E0B] text-[#11151F] hover:bg-[#D97706] active:scale-95`;
   const btnSecondary = `${footerBtnBase} border border-slate-300 text-slate-600 hover:bg-slate-50 dark:border-slate-700 dark:text-white dark:hover:bg-slate-800`;
 
   // =========================================================================
@@ -471,7 +471,7 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
           <p className="mt-6 text-center text-sm text-slate-600 dark:text-slate-300">
             Como você deseja criar o seu Planejamento? De forma{" "}
             <strong className="text-slate-900 dark:text-white">manual</strong>, ou prefere a
-            ajuda do <strong className="text-[#F3AA2D]">Nexo</strong>?
+            ajuda do <strong className="text-[#F59E0B]">Nexo</strong>?
           </p>
 
           <div className="mt-6">
@@ -485,7 +485,7 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
                 setCreationMethod("automatico");
                 setStage("steps");
               }}
-              className="w-full max-w-xs rounded-xl bg-[#F3AA2D] px-6 py-3 text-sm font-bold text-[#11151F] shadow-sm hover:bg-[#e09a1d] active:scale-95 transition cursor-pointer"
+              className="w-full max-w-xs rounded-xl bg-[#F59E0B] px-6 py-3 text-sm font-bold text-[#11151F] shadow-sm hover:bg-[#D97706] active:scale-95 transition cursor-pointer"
             >
               Quero Ajuda do Nexo
             </button>
@@ -538,9 +538,9 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
                   <div
                     className={`num-condensed flex h-8 w-8 items-center justify-center rounded-full text-[11px] font-bold transition ${
                       isActive
-                        ? "bg-[#F3AA2D] text-[#11151F] shadow-sm"
+                        ? "bg-[#F59E0B] text-[#11151F] shadow-sm"
                         : isDone
-                        ? "border border-[#F3AA2D] bg-[#F3AA2D]/15 text-[#F3AA2D]"
+                        ? "border border-[#F59E0B] bg-[#F59E0B]/15 text-[#F59E0B]"
                         : "border border-slate-300 text-slate-400 dark:border-slate-600 dark:text-slate-500"
                     }`}
                   >
@@ -560,7 +560,7 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
                   <div
                     className={`mt-4 h-[2px] flex-1 rounded-full transition-colors ${
                       currentStep > s.num
-                        ? "bg-[#F3AA2D]/60"
+                        ? "bg-[#F59E0B]/60"
                         : "bg-slate-200 dark:bg-slate-700"
                     }`}
                   />
@@ -587,13 +587,13 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
               onClick={() => setPlanningMode("CYCLE")}
               className={`flex cursor-pointer flex-col items-center rounded-2xl border p-6 text-center transition-all ${
                 planningMode === "CYCLE"
-                  ? "border-[#F3AA2D] bg-[#F3AA2D]/10 ring-1 ring-[#F3AA2D]"
-                  : "border-slate-200 bg-white hover:border-slate-300 dark:border-slate-700 dark:bg-[#1B2129] dark:hover:border-slate-600"
+                  ? "border-[#F59E0B] bg-[#F59E0B]/10 ring-1 ring-[#F59E0B]"
+                  : "border-slate-200 bg-white hover:border-slate-300 dark:border-slate-700 dark:bg-[#171B25] dark:hover:border-slate-600"
               }`}
             >
               <RotateCw
                 className={`h-12 w-12 transition ${
-                  planningMode === "CYCLE" ? "text-[#F3AA2D]" : "text-slate-300 dark:text-slate-600"
+                  planningMode === "CYCLE" ? "text-[#F59E0B]" : "text-slate-300 dark:text-slate-600"
                 }`}
                 strokeWidth={1.5}
               />
@@ -612,14 +612,14 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
               onClick={() => setPlanningMode("WEEKLY")}
               className={`flex cursor-pointer flex-col items-center rounded-2xl border p-6 text-center transition-all ${
                 planningMode === "WEEKLY"
-                  ? "border-[#F3AA2D] bg-[#F3AA2D]/10 ring-1 ring-[#F3AA2D]"
-                  : "border-slate-200 bg-white hover:border-slate-300 dark:border-slate-700 dark:bg-[#1B2129] dark:hover:border-slate-600"
+                  ? "border-[#F59E0B] bg-[#F59E0B]/10 ring-1 ring-[#F59E0B]"
+                  : "border-slate-200 bg-white hover:border-slate-300 dark:border-slate-700 dark:bg-[#171B25] dark:hover:border-slate-600"
               }`}
             >
               <CalendarDays
                 className={`h-12 w-12 transition ${
                   planningMode === "WEEKLY"
-                    ? "text-[#F3AA2D]"
+                    ? "text-[#F59E0B]"
                     : "text-slate-300 dark:text-slate-600"
                 }`}
                 strokeWidth={1.5}
@@ -675,8 +675,8 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
                   }
                   className={`cursor-pointer rounded-xl border px-3 py-3 text-xs font-semibold leading-snug transition ${
                     enabled
-                      ? "border-[#F3AA2D] bg-[#F3AA2D]/15 text-slate-900 dark:text-white"
-                      : "border-slate-200 bg-white text-slate-500 hover:border-slate-300 dark:border-slate-700 dark:bg-[#1B2129] dark:text-slate-400 dark:hover:border-slate-600"
+                      ? "border-[#F59E0B] bg-[#F59E0B]/15 text-slate-900 dark:text-white"
+                      : "border-slate-200 bg-white text-slate-500 hover:border-slate-300 dark:border-slate-700 dark:bg-[#171B25] dark:text-slate-400 dark:hover:border-slate-600"
                   }`}
                 >
                   {disc.name}
@@ -731,7 +731,7 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
                 return (
                   <div
                     key={disc.id}
-                    className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-[#1B2129]"
+                    className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-[#171B25]"
                   >
                     <p className="text-sm font-bold text-slate-900 dark:text-white">
                       {disc.name}
@@ -742,7 +742,7 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
                           <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
                             Importância
                           </span>
-                          <span className="num-condensed text-sm font-bold text-[#F3AA2D]">
+                          <span className="num-condensed text-sm font-bold text-[#F59E0B]">
                             ({cfg.importance})
                           </span>
                         </div>
@@ -753,7 +753,7 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
                           step={1}
                           value={cfg.importance}
                           onChange={(e) => setSlider("importance", Number(e.target.value))}
-                          className="mt-1.5 w-full cursor-pointer accent-[#F3AA2D]"
+                          className="mt-1.5 w-full cursor-pointer accent-[#F59E0B]"
                         />
                       </div>
                       <div>
@@ -761,7 +761,7 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
                           <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
                             Conhecimento
                           </span>
-                          <span className="num-condensed text-sm font-bold text-[#F3AA2D]">
+                          <span className="num-condensed text-sm font-bold text-[#F59E0B]">
                             ({cfg.knowledgeLevel})
                           </span>
                         </div>
@@ -772,7 +772,7 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
                           step={1}
                           value={cfg.knowledgeLevel}
                           onChange={(e) => setSlider("knowledgeLevel", Number(e.target.value))}
-                          className="mt-1.5 w-full cursor-pointer accent-[#F3AA2D]"
+                          className="mt-1.5 w-full cursor-pointer accent-[#F59E0B]"
                         />
                       </div>
                     </div>
@@ -850,7 +850,7 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
                     type="checkbox"
                     checked={enabled}
                     onChange={(e) => toggleDay(day.key, e.target.checked)}
-                    className="h-4 w-4 cursor-pointer rounded accent-[#F3AA2D]"
+                    className="h-4 w-4 cursor-pointer rounded accent-[#F59E0B]"
                   />
                   <span className="w-9 text-[11px] font-bold text-slate-900 dark:text-white">
                     {day.label}
@@ -864,7 +864,7 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
                     onChange={(e) => handleTimeChange(day.key, e.target.value)}
                     onBlur={() => handleTimeBlur(day.key)}
                     disabled={!enabled}
-                    className="w-20 rounded-lg border border-slate-200 bg-white py-1 text-center font-mono text-sm font-semibold text-slate-900 focus:border-[#F3AA2D] focus:outline-none disabled:opacity-40 dark:border-slate-700 dark:bg-[#1B2129] dark:text-white"
+                    className="w-20 rounded-lg border border-slate-200 bg-white py-1 text-center font-mono text-sm font-semibold text-slate-900 focus:border-[#F59E0B] focus:outline-none disabled:opacity-40 dark:border-slate-700 dark:bg-[#171B25] dark:text-white"
                   />
                   <span className="text-[10px] text-slate-400">horas diárias</span>
                 </label>
@@ -874,9 +874,9 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
 
           {/* Weekly total */}
           <div className="mt-4 flex justify-end">
-            <div className="rounded-xl border border-[#F3AA2D] px-4 py-2 text-xs font-bold text-slate-900 dark:text-white">
+            <div className="rounded-xl border border-[#F59E0B] px-4 py-2 text-xs font-bold text-slate-900 dark:text-white">
               Total na Semana:{" "}
-              <span className="num-condensed text-[#F3AA2D]">
+              <span className="num-condensed text-[#F59E0B]">
                 {totalWeeklyHours > 0 ? `${totalWeeklyHours}h` : "0min"}
               </span>
             </div>
@@ -885,8 +885,8 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
           {/* Min / Max per discipline */}
           <div className="mt-6 border-t border-slate-100 pt-5 dark:border-slate-700">
             <p className="flex items-center gap-1.5 text-sm font-bold text-slate-900 dark:text-white">
-              Qual <span className="text-[#F3AA2D]">mínimo</span> e{" "}
-              <span className="text-[#F3AA2D]">máximo</span> de tempo que deseja estudar uma
+              Qual <span className="text-[#F59E0B]">mínimo</span> e{" "}
+              <span className="text-[#F59E0B]">máximo</span> de tempo que deseja estudar uma
               mesma disciplina?
               <HelpCircle className="h-4 w-4 text-slate-400" />
             </p>
@@ -894,7 +894,7 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
               <select
                 value={minSessionMinutes}
                 onChange={(e) => setMinSessionMinutes(Number(e.target.value))}
-                className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-900 focus:border-[#F3AA2D] focus:outline-none dark:border-slate-700 dark:bg-[#1B2129] dark:text-white"
+                className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-900 focus:border-[#F59E0B] focus:outline-none dark:border-slate-700 dark:bg-[#171B25] dark:text-white"
               >
                 {MIN_OPTIONS.map((o) => (
                   <option key={o.value} value={o.value}>
@@ -906,7 +906,7 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
               <select
                 value={maxSessionMinutes}
                 onChange={(e) => setMaxSessionMinutes(Number(e.target.value))}
-                className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-900 focus:border-[#F3AA2D] focus:outline-none dark:border-slate-700 dark:bg-[#1B2129] dark:text-white"
+                className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-900 focus:border-[#F59E0B] focus:outline-none dark:border-slate-700 dark:bg-[#171B25] dark:text-white"
               >
                 {MAX_OPTIONS.map((o) => (
                   <option key={o.value} value={o.value}>

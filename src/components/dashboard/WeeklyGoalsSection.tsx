@@ -98,14 +98,14 @@ export const WeeklyGoalsSection: React.FC<WeeklyGoalsSectionProps> = ({
                 <span className="num-condensed text-[15px] font-bold text-white">
                   {weeklyChartData.totalWeekHoursFormatted} / {weeklyGoalHours}h
                 </span>
-                <span className="num-condensed text-[12px] font-bold text-[#F3AA2D]">
+                <span className="num-condensed text-[12px] font-bold text-[#F59E0B]">
                   ({timeProgressPercent}%)
                 </span>
               </div>
             </div>
             <div className="h-2 w-full overflow-hidden rounded-full border border-[#384154] bg-[#171B25]">
               <div
-                className="h-full rounded-full bg-[#F3AA2D] transition-all duration-500"
+                className="h-full rounded-full bg-[#F59E0B] transition-all duration-500"
                 style={{ width: `${timeProgressPercent}%` }}
               />
             </div>
@@ -145,7 +145,7 @@ export const WeeklyGoalsSection: React.FC<WeeklyGoalsSectionProps> = ({
                   title={`${d.label}: ${d.formatted}`}
                   className={`w-full rounded-t-sm transition-all ${
                     d.hasStudied
-                      ? "bg-[#F3AA2D]"
+                      ? "bg-[#F59E0B]"
                       : "bg-[#384154]"
                   }`}
                   style={{ height: `${Math.max(10, d.heightPercent)}%` }}
@@ -153,7 +153,7 @@ export const WeeklyGoalsSection: React.FC<WeeklyGoalsSectionProps> = ({
                 <span
                   className={`text-[10px] font-semibold tracking-tight ${
                     d.hasStudied
-                      ? "text-[#F3AA2D]"
+                      ? "text-[#F59E0B]"
                       : "text-white"
                   }`}
                 >

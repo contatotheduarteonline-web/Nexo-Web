@@ -18,16 +18,16 @@ const StairsIllustration: React.FC = () => (
   <svg viewBox="0 0 240 150" className="mx-auto h-36 w-auto" fill="none">
     {/* Degraus de livros */}
     <rect x="8" y="112" width="74" height="28" rx="5" fill="#252B38" stroke="#384154" />
-    <rect x="8" y="112" width="74" height="6" rx="3" fill="#F3AA2D" opacity="0.45" />
+    <rect x="8" y="112" width="74" height="6" rx="3" fill="#F59E0B" opacity="0.45" />
     <rect x="76" y="82" width="74" height="28" rx="5" fill="#252B38" stroke="#384154" />
-    <rect x="76" y="82" width="74" height="6" rx="3" fill="#F3AA2D" opacity="0.7" />
+    <rect x="76" y="82" width="74" height="6" rx="3" fill="#F59E0B" opacity="0.7" />
     <rect x="144" y="52" width="74" height="28" rx="5" fill="#252B38" stroke="#384154" />
-    <rect x="144" y="52" width="74" height="6" rx="3" fill="#F3AA2D" />
+    <rect x="144" y="52" width="74" height="6" rx="3" fill="#F59E0B" />
     {/* Mastro e bandeira */}
     <rect x="203" y="24" width="3" height="30" rx="1.5" fill="#384154" />
-    <path d="M206 24 h22 l-6 7.5 6 7.5 h-22 z" fill="#F3AA2D" />
+    <path d="M206 24 h22 l-6 7.5 6 7.5 h-22 z" fill="#F59E0B" />
     {/* Figura subindo em direção à bandeira */}
-    <circle cx="128" cy="56" r="9" fill="#F3AA2D" />
+    <circle cx="128" cy="56" r="9" fill="#F59E0B" />
     <rect
       x="121"
       y="66"
@@ -53,14 +53,14 @@ export const WizardSidePanel: React.FC<WizardSidePanelProps> = ({
   benefits = DEFAULT_BENEFITS,
 }) => (
   <aside className="relative hidden overflow-hidden rounded-2xl border border-[#384154] bg-[#171B25] p-5 lg:flex lg:flex-col">
-    <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-[#F3AA2D]/10 blur-xl" />
+    <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-[#F59E0B]/10 blur-xl" />
     <h4 className="font-condensed text-base font-bold uppercase leading-snug text-white">
       {title}
     </h4>
     <ul className="mt-4 space-y-2.5">
       {benefits.map((b) => (
         <li key={b} className="flex items-center gap-2.5">
-          <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#F3AA2D] text-[#11151F]">
+          <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#F59E0B] text-[#11151F]">
             <Check className="h-3 w-3" />
           </span>
           <span className="text-xs font-semibold text-white">{b}</span>
@@ -100,7 +100,7 @@ export const WizardSelectionPanel: React.FC<WizardSelectionPanelProps> = ({
     </span>
 
     {cargo && edital ? (
-      <div className="mt-3 rounded-xl border border-[#F3AA2D]/40 bg-[#F3AA2D]/10 p-3.5">
+      <div className="mt-3 rounded-xl border border-[#F59E0B]/40 bg-[#F59E0B]/10 p-3.5">
         <div className="flex items-start justify-between gap-2">
           <span className="text-[9px] font-bold uppercase tracking-widest text-white/60">
             Cargo
@@ -113,7 +113,7 @@ export const WizardSelectionPanel: React.FC<WizardSelectionPanelProps> = ({
             <X className="h-3.5 w-3.5" />
           </button>
         </div>
-        <p className="mt-1 text-sm font-bold text-[#F3AA2D]">{cargo.name}</p>
+        <p className="mt-1 text-sm font-bold text-[#F59E0B]">{cargo.name}</p>
         <p className="text-[11px] text-white/80">{edital.institution}</p>
       </div>
     ) : (

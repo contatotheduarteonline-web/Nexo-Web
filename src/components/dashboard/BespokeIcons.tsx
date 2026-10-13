@@ -33,7 +33,7 @@ export const IconClock3D: React.FC<{ className?: string; size?: number }> = ({
       {/* Borda interna com brilho de aço */}
       <linearGradient id="clockRim" x1="16" y1="16" x2="48" y2="48" gradientUnits="userSpaceOnUse">
         <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.9" />
-        <stop offset="40%" stopColor="#FCD34D" stopOpacity="0.4" />
+        <stop offset="40%" stopColor="#FBBF24" stopOpacity="0.4" />
         <stop offset="100%" stopColor="#9A3412" stopOpacity="0.8" />
       </linearGradient>
       {/* Mostrador principal profundo */}
@@ -60,7 +60,7 @@ export const IconClock3D: React.FC<{ className?: string; size?: number }> = ({
 
     {/* Coroa do relógio (botão superior) */}
     <rect x="29" y="4" width="6" height="5" rx="1.5" fill="#C2410C" />
-    <rect x="30" y="5" width="4" height="3" rx="1" fill="#FCD34D" />
+    <rect x="30" y="5" width="4" height="3" rx="1" fill="#FBBF24" />
 
     {/* Caixa e Bezel de Metal */}
     <circle cx="32" cy="32" r="24" fill="url(#clockBezel)" />
@@ -91,7 +91,7 @@ export const IconClock3D: React.FC<{ className?: string; size?: number }> = ({
     <path d="M32 34 L32 17" stroke="#D97706" strokeWidth="0.9" strokeLinecap="round" />
 
     {/* Ponto pivô central metálico */}
-    <circle cx="32" cy="32" r="2.8" fill="#FCD34D" stroke="#7C2D12" strokeWidth="1" />
+    <circle cx="32" cy="32" r="2.8" fill="#FBBF24" stroke="#7C2D12" strokeWidth="1" />
     <circle cx="32" cy="32" r="1" fill="#FFFFFF" />
 
     {/* Brilho de vidro curvo (Glare 3D) */}
@@ -126,14 +126,14 @@ export const IconClipboard3D: React.FC<{ className?: string; size?: number }> = 
       </linearGradient>
       <linearGradient id="paperGrad" x1="18" y1="14" x2="42" y2="52" gradientUnits="userSpaceOnUse">
         <stop offset="0%" stopColor="#FFFFFF" />
-        <stop offset="80%" stopColor="#F8FAFC" />
+        <stop offset="80%" stopColor="#F1F5F9" />
         <stop offset="100%" stopColor="#E2E8F0" />
       </linearGradient>
       <linearGradient id="clipMetal" x1="24" y1="6" x2="36" y2="16" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stopColor="#F8FAFC" />
+        <stop offset="0%" stopColor="#F1F5F9" />
         <stop offset="40%" stopColor="#CBD5E1" />
         <stop offset="70%" stopColor="#64748B" />
-        <stop offset="100%" stopColor="#334155" />
+        <stop offset="100%" stopColor="#384154" />
       </linearGradient>
       <linearGradient id="penBody" x1="42" y1="26" x2="56" y2="40" gradientUnits="userSpaceOnUse">
         <stop offset="0%" stopColor="#F59E0B" />
@@ -163,7 +163,7 @@ export const IconClipboard3D: React.FC<{ className?: string; size?: number }> = 
     <line x1="20" y1="39" x2="30" y2="39" stroke="#CBD5E1" strokeWidth="1.5" strokeLinecap="round" />
 
     {/* Checkmark verde de questão respondida */}
-    <circle cx="21" cy="44" r="2.5" fill="#10B981" />
+    <circle cx="21" cy="44" r="2.5" fill="#249D84" />
     <path d="M19.8 44 L20.7 44.9 L22.3 43.3" stroke="#FFFFFF" strokeWidth="0.8" strokeLinecap="round" strokeLinejoin="round" />
 
     {/* Clipe metálico de fixação */}
@@ -178,9 +178,9 @@ export const IconClipboard3D: React.FC<{ className?: string; size?: number }> = 
       {/* Corpo da caneta */}
       <rect x="43" y="22" width="4.5" height="22" rx="2" fill="url(#penBody)" stroke="#FED7AA" strokeWidth="0.5" />
       {/* Anel cromado central */}
-      <rect x="43" y="30" width="4.5" height="1.8" fill="#F8FAFC" />
+      <rect x="43" y="30" width="4.5" height="1.8" fill="#F1F5F9" />
       {/* Clipe da caneta */}
-      <rect x="41.5" y="24" width="1.5" height="8" rx="0.5" fill="#F8FAFC" />
+      <rect x="41.5" y="24" width="1.5" height="8" rx="0.5" fill="#F1F5F9" />
       {/* Ponta metálica */}
       <path d="M43 44 L45.25 49 L47.5 44 Z" fill="url(#penTip)" />
       <circle cx="45.25" cy="49" r="0.6" fill="#1E293B" />
@@ -225,12 +225,12 @@ export const IconTarget3D: React.FC<{ className?: string; size?: number }> = ({
       {/* Centro / Bullseye Rubi */}
       <radialGradient id="targetBullseye" cx="35%" cy="35%" r="65%">
         <stop offset="0%" stopColor="#F87171" />
-        <stop offset="45%" stopColor="#EF4444" />
+        <stop offset="45%" stopColor="#DC4B4B" />
         <stop offset="100%" stopColor="#991B1B" />
       </radialGradient>
       {/* Gradiente da haste do dardo */}
       <linearGradient id="dartShaft" x1="32" y1="10" x2="46" y2="24" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stopColor="#FCD34D" />
+        <stop offset="0%" stopColor="#FBBF24" />
         <stop offset="50%" stopColor="#D97706" />
         <stop offset="100%" stopColor="#9A3412" />
       </linearGradient>
@@ -272,8 +272,8 @@ export const IconTarget3D: React.FC<{ className?: string; size?: number }> = ({
       <line x1="32" y1="32" x2="34" y2="30" stroke="#FFFFFF" strokeWidth="2.5" strokeLinecap="round" />
 
       {/* Barrilete / Grip do dardo */}
-      <circle cx="38" cy="26" r="2.2" fill="#F8FAFC" stroke="#94A3B8" strokeWidth="0.5" />
-      <circle cx="43" cy="21" r="2.2" fill="#F8FAFC" stroke="#94A3B8" strokeWidth="0.5" />
+      <circle cx="38" cy="26" r="2.2" fill="#F1F5F9" stroke="#94A3B8" strokeWidth="0.5" />
+      <circle cx="43" cy="21" r="2.2" fill="#F1F5F9" stroke="#94A3B8" strokeWidth="0.5" />
 
       {/* Aletas da cauda do dardo (4 pontas 3D) */}
       <path d="M48 16 L54 10 L52 16 L56 18 Z" fill="url(#dartFlights)" />
@@ -301,7 +301,7 @@ export const IconTimeline3D: React.FC<{ className?: string; size?: number }> = (
   >
     <defs>
       <linearGradient id="bar1" x1="14" y1="46" x2="22" y2="34" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stopColor="#FCD34D" />
+        <stop offset="0%" stopColor="#FBBF24" />
         <stop offset="100%" stopColor="#FBBF24" />
       </linearGradient>
       <linearGradient id="bar2" x1="26" y1="46" x2="34" y2="24" gradientUnits="userSpaceOnUse">
@@ -333,7 +333,7 @@ export const IconTimeline3D: React.FC<{ className?: string; size?: number }> = (
 
     {/* Pilar 2 (Intermediário) */}
     <rect x="27" y="26" width="8" height="24" rx="2.5" fill="url(#bar2)" />
-    <path d="M27 28 L31 25 L35 28 L31 30 Z" fill="#FCD34D" />
+    <path d="M27 28 L31 25 L35 28 L31 30 Z" fill="#FBBF24" />
 
     {/* Pilar 3 (Conquista / Topo) */}
     <rect x="39" y="16" width="8" height="34" rx="2.5" fill="url(#bar3)" />
@@ -522,7 +522,7 @@ export const IconGlobeGeography3D: React.FC<{ className?: string; size?: number 
     {/* Rosa dos Ventos / Bússola sobreposta no canto inferior direito */}
     <g transform="translate(38, 34) scale(0.42)">
       <circle cx="20" cy="20" r="18" fill="#0F172A" stroke="url(#brassSupport)" strokeWidth="3" />
-      <polygon points="20,5 24,18 20,15 16,18" fill="#EF4444" />
+      <polygon points="20,5 24,18 20,15 16,18" fill="#DC4B4B" />
       <polygon points="20,35 24,22 20,25 16,22" fill="#E2E8F0" />
       <polygon points="35,20 22,24 25,20 22,16" fill="#CBD5E1" />
       <polygon points="5,20 18,24 15,20 18,16" fill="#CBD5E1" />
@@ -604,7 +604,7 @@ export const IconReviewPreciousRing: React.FC<{
             <stop offset="100%" stopColor="#78350F" />
           </linearGradient>
           <radialGradient id="ringCoreGlow" cx="40%" cy="40%" r="60%">
-            <stop offset="0%" stopColor="#34D399" />
+            <stop offset="0%" stopColor="#48C3A7" />
             <stop offset="60%" stopColor="#059669" />
             <stop offset="100%" stopColor="#064E3B" />
           </radialGradient>
@@ -627,10 +627,10 @@ export const IconReviewPreciousRing: React.FC<{
         />
 
         {/* LEDs embutidos nos 4 quadrantes */}
-        <circle cx="32" cy="8" r="1.8" fill="#10B981" stroke="#FFFFFF" strokeWidth="0.6" className="animate-pulse" />
-        <circle cx="56" cy="32" r="1.8" fill="#10B981" stroke="#FFFFFF" strokeWidth="0.6" />
-        <circle cx="32" cy="56" r="1.8" fill="#10B981" stroke="#FFFFFF" strokeWidth="0.6" />
-        <circle cx="8" cy="32" r="1.8" fill="#10B981" stroke="#FFFFFF" strokeWidth="0.6" />
+        <circle cx="32" cy="8" r="1.8" fill="#249D84" stroke="#FFFFFF" strokeWidth="0.6" className="animate-pulse" />
+        <circle cx="56" cy="32" r="1.8" fill="#249D84" stroke="#FFFFFF" strokeWidth="0.6" />
+        <circle cx="32" cy="56" r="1.8" fill="#249D84" stroke="#FFFFFF" strokeWidth="0.6" />
+        <circle cx="8" cy="32" r="1.8" fill="#249D84" stroke="#FFFFFF" strokeWidth="0.6" />
 
         {/* Núcleo esmeralda vítreo */}
         <circle cx="32" cy="32" r="15" fill="url(#ringCoreGlow)" />

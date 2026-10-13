@@ -13,10 +13,10 @@ interface AddDisciplineModalProps {
 const PRESET_COLORS = [
   "#249D84",
   "#3B82F6",
-  "#10B981",
+  "#249D84",
   "#8B5CF6",
   "#F59E0B",
-  "#EF4444",
+  "#DC4B4B",
   "#06B6D4",
   "#EC4899",
   "#6366F1",

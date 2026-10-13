@@ -309,7 +309,7 @@ export const FirstAccessOnboarding: React.FC = () => {
       const editalId = `edital-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`;
 
       // 3. Map user entered disciplines into real Discipline models
-      const colors = ["#3B82F6", "#10B981", "#F59E0B", "#8B5CF6", "#EC4899", "#06B6D4", "#F59E0B"];
+      const colors = ["#3B82F6", "#249D84", "#F59E0B", "#8B5CF6", "#EC4899", "#06B6D4", "#F59E0B"];
       const newDisciplines: Discipline[] = (draft.disciplines || []).map((disc, idx) => ({
         id: `disc-${editalId}-${idx + 1}-${Math.random().toString(36).substr(2, 6)}`,
         editalId: editalId,

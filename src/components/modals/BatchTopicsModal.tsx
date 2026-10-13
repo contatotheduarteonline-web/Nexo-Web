@@ -131,7 +131,7 @@ export const BatchTopicsModal: React.FC<BatchTopicsModalProps> = ({
             type="button"
             onClick={handleConfirm}
             disabled={validTopics.length === 0}
-            className="flex items-center gap-1.5 rounded-xl bg-[#249D84] px-5 py-2.5 text-xs font-bold text-white hover:bg-[#1f8771] disabled:opacity-50 disabled:pointer-events-none transition shadow-sm cursor-pointer"
+            className="flex items-center gap-1.5 rounded-xl bg-[#249D84] px-5 py-2.5 text-xs font-bold text-white hover:bg-[#1F826D] disabled:opacity-50 disabled:pointer-events-none transition shadow-sm cursor-pointer"
           >
             <Plus className="h-4 w-4" />
             Adicionar {validTopics.length > 0 ? `${validTopics.length} Tópicos` : "Tópicos"}

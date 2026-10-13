@@ -28,7 +28,7 @@ export const NexoWatermark: React.FC = () => {
               fontSize="16"
               fontWeight="800"
               letterSpacing="0.2em"
-              className="fill-[#172033] dark:fill-white"
+              className="fill-[#171B25] dark:fill-white"
             >
               NEXO
             </text>

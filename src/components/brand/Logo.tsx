@@ -30,8 +30,8 @@ export const Logo: React.FC<LogoProps> = ({
     themeMode === "dark"
       ? "text-white"
       : themeMode === "light"
-      ? "text-[#172033]"
-      : "text-[#172033] dark:text-white";
+      ? "text-[#171B25]"
+      : "text-[#171B25] dark:text-white";
 
   const subtitleSlate =
     themeMode === "dark"

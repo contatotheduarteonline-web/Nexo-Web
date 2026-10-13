@@ -90,7 +90,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       )}
 
       <aside
-        className={`fixed top-16 bottom-0 left-0 z-40 flex w-[230px] flex-col justify-between border-r border-[#E4E7EC] bg-white shadow-xl transition-transform duration-200 ease-in-out dark:border-[#334155] dark:bg-[#1E293B] select-none ${
+        className={`fixed top-16 bottom-0 left-0 z-40 flex w-[230px] flex-col justify-between border-r border-[#E4E7EC] bg-white shadow-xl transition-transform duration-200 ease-in-out dark:border-[#384154] dark:bg-[#1E293B] select-none ${
           isCollapsed ? "-translate-x-full pointer-events-none" : "translate-x-0"
         }`}
       >
@@ -123,7 +123,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       className={`relative flex h-9 w-full items-center justify-between rounded-lg px-2.5 transition-colors cursor-pointer ${
                         isSelected
                           ? "bg-[#FEF3C7] text-[#F59E0B] font-medium dark:bg-[#F59E0B]/10 dark:text-[#F59E0B]"
-                          : "text-[#667085] hover:bg-[#F7F8FA] hover:text-[#172033] dark:text-[#94A3B8] dark:hover:bg-[#161B28] dark:hover:text-white font-normal"
+                          : "text-[#667085] hover:bg-[#F7F8FA] hover:text-[#171B25] dark:text-[#94A3B8] dark:hover:bg-[#161B28] dark:hover:text-white font-normal"
                       }`}
                     >
                       <div className="flex items-center gap-2.5 min-w-0">

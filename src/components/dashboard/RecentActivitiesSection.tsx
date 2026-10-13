@@ -31,7 +31,7 @@ export const RecentActivitiesSection: React.FC<RecentActivitiesSectionProps> = (
             type="button"
             id="btn-historico-completo"
             onClick={onNavigateToHistory}
-            className="text-[13px] font-semibold text-[#F3AA2D] hover:text-[#D98F20] hover:underline flex items-center gap-1 cursor-pointer transition-colors duration-200"
+            className="text-[13px] font-semibold text-[#F59E0B] hover:text-[#D97706] hover:underline flex items-center gap-1 cursor-pointer transition-colors duration-200"
           >
             <span>Histórico</span>
             <ArrowUpRight className="h-3.5 w-3.5" />
@@ -57,7 +57,7 @@ export const RecentActivitiesSection: React.FC<RecentActivitiesSectionProps> = (
                     <span className="font-semibold text-white truncate max-w-[220px]">
                       {sess.topicName || sess.disciplineName}
                     </span>
-                    <span className="num-condensed text-[11px] font-bold text-[#F3AA2D] border border-[#F3AA2D]/25 bg-[#F3AA2D]/10 px-2 py-0.5 rounded-md">
+                    <span className="num-condensed text-[11px] font-bold text-[#F59E0B] border border-[#F59E0B]/25 bg-[#F59E0B]/10 px-2 py-0.5 rounded-md">
                       {sess.durationMinutes} min
                     </span>
                   </div>

@@ -124,7 +124,7 @@ const TIER_STYLES: Record<
     iconColor: "text-white",
     glow: "rgba(148,163,184,0.25)",
     accentRim: "border-white/50",
-    ribbonColor: "from-[#64748B] to-[#334155]",
+    ribbonColor: "from-[#64748B] to-[#384154]",
   },
   gold: {
     outerRing: "border-amber-400/80 bg-gradient-to-b from-amber-200/50 to-amber-500/20 shadow-xs",
@@ -140,7 +140,7 @@ const TIER_STYLES: Record<
     iconColor: "text-emerald-50",
     glow: "rgba(16,185,129,0.3)",
     accentRim: "border-emerald-200/50",
-    ribbonColor: "from-[#10B981] to-[#064E3B]",
+    ribbonColor: "from-[#249D84] to-[#064E3B]",
   },
   sapphire: {
     outerRing: "border-blue-400/80 bg-gradient-to-b from-blue-200/40 to-blue-500/20 shadow-xs",

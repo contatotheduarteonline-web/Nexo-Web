@@ -252,7 +252,7 @@ export const RevisoesView: React.FC = () => {
                 <select
                   value={activeEdital?.id || ""}
                   onChange={(e) => setActiveEditalId(e.target.value)}
-                  className="appearance-none rounded-lg border border-[#384154] bg-[#171B25] py-2 pl-8 pr-7 text-xs font-bold text-white shadow-xs hover:border-[#F3AA2D]/40 focus:outline-none"
+                  className="appearance-none rounded-lg border border-[#384154] bg-[#171B25] py-2 pl-8 pr-7 text-xs font-bold text-white shadow-xs hover:border-[#F59E0B]/40 focus:outline-none"
                 >
                   {editais.map((ed) => (
                     <option key={ed.id} value={ed.id}>
@@ -272,7 +272,7 @@ export const RevisoesView: React.FC = () => {
                 onClick={() => setShowFilters((prev) => !prev)}
                 className={`flex items-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-semibold shadow-xs transition ${
                   showFilters
-                    ? "border-[#F3AA2D]/40 bg-[#F3AA2D]/10 text-amber-300"
+                    ? "border-[#F59E0B]/40 bg-[#F59E0B]/10 text-amber-300"
                     : "border-[#384154] bg-[#171B25] text-slate-300 hover:bg-[#2D3442]"
                 }`}
               >
@@ -290,13 +290,13 @@ export const RevisoesView: React.FC = () => {
                       placeholder="Buscar por tópico ou disciplina..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-full rounded-lg border border-[#384154] bg-[#171B25] py-2 pl-9 pr-3 text-xs text-white placeholder:text-slate-500 focus:border-[#F3AA2D] focus:outline-none"
+                      className="w-full rounded-lg border border-[#384154] bg-[#171B25] py-2 pl-9 pr-3 text-xs text-white placeholder:text-slate-500 focus:border-[#F59E0B] focus:outline-none"
                     />
                   </div>
                   <select
                     value={selectedDiscipline}
                     onChange={(e) => setSelectedDiscipline(e.target.value)}
-                    className="mt-2 w-full rounded-lg border border-[#384154] bg-[#171B25] px-3 py-2 text-xs font-medium text-white focus:border-[#F3AA2D] focus:outline-none"
+                    className="mt-2 w-full rounded-lg border border-[#384154] bg-[#171B25] px-3 py-2 text-xs font-medium text-white focus:border-[#F59E0B] focus:outline-none"
                   >
                     <option value="all">Todas as Disciplinas</option>
                     {activeEdital?.disciplines.map((d) => (
@@ -389,7 +389,7 @@ export const RevisoesView: React.FC = () => {
                           <div key={rev.id} className="space-y-1.5">
                             {/* Linha compacta da revisão */}
                             <div className="flex items-center gap-2">
-                              <span className="rounded-lg border border-[#F3AA2D]/30 bg-[#F3AA2D]/10 px-3 py-1 text-[12px] font-semibold text-amber-300">
+                              <span className="rounded-lg border border-[#F59E0B]/30 bg-[#F59E0B]/10 px-3 py-1 text-[12px] font-semibold text-amber-300">
                                 {getIntervalLabel(rev.stage)}
                               </span>
 
@@ -475,7 +475,7 @@ export const RevisoesView: React.FC = () => {
                                         type="date"
                                         value={rescheduleDate}
                                         onChange={(e) => setRescheduleDate(e.target.value)}
-                                        className="w-full rounded-lg border border-[#384154] bg-[#171B25] px-2 py-1.5 text-xs text-white focus:border-[#F3AA2D] focus:outline-none"
+                                        className="w-full rounded-lg border border-[#384154] bg-[#171B25] px-2 py-1.5 text-xs text-white focus:border-[#F59E0B] focus:outline-none"
                                       />
                                       <button
                                         type="button"

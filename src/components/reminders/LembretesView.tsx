@@ -180,7 +180,7 @@ export const LembretesView: React.FC = () => {
       {/* Filters Bar */}
       <div className="flex flex-wrap items-center justify-end gap-2 rounded-2xl border border-[#E2E8F0] bg-white p-3 dark:border-[#1E293B] dark:bg-[#252B38]">
         {/* Status Filter */}
-        <div className="flex items-center gap-1 rounded-xl bg-[#F8FAFC] p-0.5 text-xs font-bold dark:bg-[#0F172A]">
+        <div className="flex items-center gap-1 rounded-xl bg-[#F1F5F9] p-0.5 text-xs font-bold dark:bg-[#0F172A]">
           {(["TODOS", "PENDENTES", "CONCLUIDOS"] as const).map((st) => (
             <button
               key={st}
@@ -210,7 +210,7 @@ export const LembretesView: React.FC = () => {
               key={rem.id}
               className={`flex items-center justify-between rounded-xl border p-3.5 transition ${
                 rem.completed
-                  ? "border-[#E2E8F0] bg-[#F8FAFC]/70 opacity-70 dark:border-[#1E293B] dark:bg-[#0F172A]/60"
+                  ? "border-[#E2E8F0] bg-[#F1F5F9]/70 opacity-70 dark:border-[#1E293B] dark:bg-[#0F172A]/60"
                   : "border-[#E2E8F0] bg-white hover:border-[#F59E0B] dark:border-[#1E293B] dark:bg-[#1E293B]"
               }`}
             >

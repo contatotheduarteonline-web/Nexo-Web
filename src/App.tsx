@@ -113,7 +113,7 @@ const AuthenticatedApp: React.FC = () => {
   };
 
   return (
-    <div className="flex h-screen w-full flex-col overflow-hidden bg-[#E9EAEC] font-sans text-[#172033] antialiased dark:bg-[#0F172A] dark:text-[#F1F5F9] relative">
+    <div className="flex h-screen w-full flex-col overflow-hidden bg-[#E9EAEC] font-sans text-[#171B25] antialiased dark:bg-[#0F172A] dark:text-[#F1F5F9] relative">
       <GlobalWatermark />
 
       <Header

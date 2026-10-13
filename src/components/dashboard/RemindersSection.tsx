@@ -50,7 +50,7 @@ export const RemindersSection: React.FC<RemindersSectionProps> = ({
             type="button"
             id="btn-adicionar-lembrete-toggle"
             onClick={() => setIsAddingReminder(!isAddingReminder)}
-            className="text-[13px] font-semibold text-[#F3AA2D] hover:text-[#D98F20] hover:underline flex items-center gap-1 cursor-pointer transition-colors duration-200"
+            className="text-[13px] font-semibold text-[#F59E0B] hover:text-[#D97706] hover:underline flex items-center gap-1 cursor-pointer transition-colors duration-200"
           >
             <Plus className="h-3.5 w-3.5" />
             <span>Adicionar</span>
@@ -60,7 +60,7 @@ export const RemindersSection: React.FC<RemindersSectionProps> = ({
         {isAddingReminder && (
           <form
             onSubmit={handleSubmit}
-            className="mt-3.5 rounded-xl border border-[#F3AA2D]/25 bg-[#F3AA2D]/[0.04] p-3 text-[12px]"
+            className="mt-3.5 rounded-xl border border-[#F59E0B]/25 bg-[#F59E0B]/[0.04] p-3 text-[12px]"
           >
             <input
               type="text"
@@ -68,7 +68,7 @@ export const RemindersSection: React.FC<RemindersSectionProps> = ({
               placeholder="Título do lembrete..."
               value={newReminderTitle}
               onChange={(e) => setNewReminderTitle(e.target.value)}
-              className="w-full rounded-lg border border-[#384154] bg-[#171B25] p-2 text-[12px] text-white placeholder:text-white outline-hidden focus:border-[#F3AA2D] transition-colors duration-200 mb-2"
+              className="w-full rounded-lg border border-[#384154] bg-[#171B25] p-2 text-[12px] text-white placeholder:text-white outline-hidden focus:border-[#F59E0B] transition-colors duration-200 mb-2"
             />
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-2">
@@ -76,12 +76,12 @@ export const RemindersSection: React.FC<RemindersSectionProps> = ({
                   type="date"
                   value={newReminderDate}
                   onChange={(e) => setNewReminderDate(e.target.value)}
-                  className="rounded-lg border border-[#384154] bg-[#171B25] p-1.5 text-[11px] text-white focus:border-[#F3AA2D] transition-colors duration-200"
+                  className="rounded-lg border border-[#384154] bg-[#171B25] p-1.5 text-[11px] text-white focus:border-[#F59E0B] transition-colors duration-200"
                 />
                 <select
                   value={newReminderCategory}
                   onChange={(e) => setNewReminderCategory(e.target.value as "INSCRICOES" | "PROVAS" | "PAGAMENTOS")}
-                  className="rounded-lg border border-[#384154] bg-[#171B25] p-1.5 text-[11px] text-white focus:border-[#F3AA2D] transition-colors duration-200 cursor-pointer"
+                  className="rounded-lg border border-[#384154] bg-[#171B25] p-1.5 text-[11px] text-white focus:border-[#F59E0B] transition-colors duration-200 cursor-pointer"
                 >
                   <option value="INSCRICOES">Inscrições</option>
                   <option value="PROVAS">Provas</option>
@@ -121,14 +121,14 @@ export const RemindersSection: React.FC<RemindersSectionProps> = ({
                   key={rem.id}
                   id={`reminder-item-${rem.id}`}
                   onClick={() => onToggleReminder(rem.id)}
-                  className="nx-deep nx-deep-hover flex cursor-pointer items-center justify-between p-3 text-[12px] hover:border-[#F3AA2D]/40"
+                  className="nx-deep nx-deep-hover flex cursor-pointer items-center justify-between p-3 text-[12px] hover:border-[#F59E0B]/40"
                 >
                   <div className="flex items-center gap-2.5 min-w-0 pr-2">
                     <input
                       type="checkbox"
                       checked={rem.completed}
                       onChange={() => onToggleReminder(rem.id)}
-                      className="h-4 w-4 rounded accent-[#F3AA2D] focus:ring-[#F3AA2D] shrink-0 cursor-pointer"
+                      className="h-4 w-4 rounded accent-[#F59E0B] focus:ring-[#F59E0B] shrink-0 cursor-pointer"
                     />
                     <span
                       className={`truncate text-[12px] ${

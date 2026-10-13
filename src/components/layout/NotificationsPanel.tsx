@@ -33,15 +33,15 @@ export const NotificationsPanel: React.FC<NotificationsPanelProps> = ({
       {/* Header */}
       <div className="flex items-center justify-between border-b border-[#384154] px-4 py-3">
         <div className="flex items-center gap-2.5">
-          <div className="flex h-7 w-7 items-center justify-center rounded-lg border border-[#F3AA2D]/25 bg-[#F3AA2D]/10">
-            <Bell className="h-3.5 w-3.5 text-[#F3AA2D]" />
+          <div className="flex h-7 w-7 items-center justify-center rounded-lg border border-[#F59E0B]/25 bg-[#F59E0B]/10">
+            <Bell className="h-3.5 w-3.5 text-[#F59E0B]" />
           </div>
           <span className="text-xs font-bold uppercase tracking-wider text-white">
             Notificações
           </span>
         </div>
         {total > 0 && (
-          <span className="rounded-full border border-[#F3AA2D]/30 bg-[#F3AA2D]/10 px-2.5 py-0.5 text-[10px] font-bold text-[#F3AA2D]">
+          <span className="rounded-full border border-[#F59E0B]/30 bg-[#F59E0B]/10 px-2.5 py-0.5 text-[10px] font-bold text-[#F59E0B]">
             {total} pendente{total > 1 ? "s" : ""}
           </span>
         )}
@@ -63,7 +63,7 @@ export const NotificationsPanel: React.FC<NotificationsPanelProps> = ({
           {/* Revisões */}
           {pendingReviews.length > 0 && (
             <div className="border-b border-[#384154] py-2">
-              <p className="px-4 py-1 text-[9px] font-black uppercase tracking-widest text-[#F3AA2D]">
+              <p className="px-4 py-1 text-[9px] font-black uppercase tracking-widest text-[#F59E0B]">
                 Revisões para hoje
               </p>
               {pendingReviews.slice(0, 3).map((review) => (
@@ -72,8 +72,8 @@ export const NotificationsPanel: React.FC<NotificationsPanelProps> = ({
                   onClick={() => go("revisoes")}
                   className="mx-1.5 flex cursor-pointer items-center gap-3 rounded-xl px-2.5 py-2.5 transition-colors hover:bg-[#252B38]"
                 >
-                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-[#F3AA2D]/25 bg-[#F3AA2D]/10">
-                    <Clock className="h-3.5 w-3.5 text-[#F3AA2D]" />
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-[#F59E0B]/25 bg-[#F59E0B]/10">
+                    <Clock className="h-3.5 w-3.5 text-[#F59E0B]" />
                   </div>
                   <div className="min-w-0 flex-1 text-left">
                     <p className="truncate text-xs font-semibold text-white">
@@ -97,7 +97,7 @@ export const NotificationsPanel: React.FC<NotificationsPanelProps> = ({
           {/* Lembretes */}
           {activeReminders.length > 0 && (
             <div className="py-2">
-              <p className="px-4 py-1 text-[9px] font-black uppercase tracking-widest text-[#F3AA2D]">
+              <p className="px-4 py-1 text-[9px] font-black uppercase tracking-widest text-[#F59E0B]">
                 Lembretes
               </p>
               {activeReminders.slice(0, 3).map((reminder) => (
@@ -135,14 +135,14 @@ export const NotificationsPanel: React.FC<NotificationsPanelProps> = ({
         <button
           type="button"
           onClick={() => go("revisoes")}
-          className="rounded-xl border border-[#384154] bg-[#171B25] px-3 py-2 text-[11px] font-bold text-white/70 transition hover:border-[#F3AA2D]/40 hover:text-[#F3AA2D] cursor-pointer"
+          className="rounded-xl border border-[#384154] bg-[#171B25] px-3 py-2 text-[11px] font-bold text-white/70 transition hover:border-[#F59E0B]/40 hover:text-[#F59E0B] cursor-pointer"
         >
           Ver Revisões &rarr;
         </button>
         <button
           type="button"
           onClick={() => go("lembretes")}
-          className="rounded-xl border border-[#384154] bg-[#171B25] px-3 py-2 text-[11px] font-bold text-white/70 transition hover:border-[#F3AA2D]/40 hover:text-[#F3AA2D] cursor-pointer"
+          className="rounded-xl border border-[#384154] bg-[#171B25] px-3 py-2 text-[11px] font-bold text-white/70 transition hover:border-[#F59E0B]/40 hover:text-[#F59E0B] cursor-pointer"
         >
           Ver Lembretes &rarr;
         </button>

@@ -80,7 +80,7 @@ import {
 
 // Helper function to normalize both database EditalTemplateModel and PlanTemplate formats
 function mapEditalModelToPlanTemplate(t: any): PlanTemplate {
-  const colors = ["#F59E0B", "#3B82F6", "#F59E0B", "#EF4444", "#8B5CF6", "#10B981", "#06B6D4", "#EC4899", "#6366F1", "#14B8A6", "#84CC16", "#F59E0B"];
+  const colors = ["#F59E0B", "#3B82F6", "#F59E0B", "#DC4B4B", "#8B5CF6", "#249D84", "#06B6D4", "#EC4899", "#6366F1", "#14B8A6", "#84CC16", "#F59E0B"];
   
   if (t.organ && Array.isArray(t.topics) && t.topics.length > 0 && t.topics[0].disciplineId) {
     return t as PlanTemplate;
@@ -1620,7 +1620,7 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
   const importVerticalizedData = (editalTitle: string, organ: string, banca: string, disciplinesData: any[]) => {
     const editalId = `edital-${Date.now()}`;
-    const colors = ["#F59E0B", "#3B82F6", "#10B981", "#F59E0B", "#EF4444", "#8B5CF6", "#06B6D4", "#EC4899"];
+    const colors = ["#F59E0B", "#3B82F6", "#249D84", "#F59E0B", "#DC4B4B", "#8B5CF6", "#06B6D4", "#EC4899"];
     const icons = ["BookOpen", "Scale", "Building2", "ShieldAlert", "FileText", "Laptop", "Calculator", "Sparkles"];
 
     const builtDisciplines: Discipline[] = [];
@@ -2132,7 +2132,7 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       const userEditalId = `edital-cat-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`;
       const discIdMap = new Map<string, string>();
       const PRESET_COLORS = [
-        "#249D84", "#3B82F6", "#10B981", "#8B5CF6", "#F59E0B",
+        "#249D84", "#3B82F6", "#249D84", "#8B5CF6", "#F59E0B",
         "#EC4899", "#06B6D4", "#6366F1", "#14B8A6", "#F59E0B"
       ];
 

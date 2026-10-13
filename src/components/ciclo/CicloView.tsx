@@ -128,7 +128,7 @@ export const CicloView: React.FC = () => {
         <div className="flex flex-wrap items-center gap-2">
           <button
             onClick={() => setIsEditingCycle(!isEditingCycle)}
-            className="flex items-center gap-1.5 rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-3.5 py-2 text-xs font-bold text-[#374151] hover:bg-[#E2E8F0] dark:border-[#1E293B] dark:bg-[#1E293B] dark:text-white"
+            className="flex items-center gap-1.5 rounded-xl border border-[#E2E8F0] bg-[#F1F5F9] px-3.5 py-2 text-xs font-bold text-[#374151] hover:bg-[#E2E8F0] dark:border-[#1E293B] dark:bg-[#1E293B] dark:text-white"
           >
             <Sliders className="h-3.5 w-3.5" />
             <span>{isEditingCycle ? "Concluir Ajustes" : "Personalizar Blocos"}</span>
@@ -200,7 +200,7 @@ export const CicloView: React.FC = () => {
 
               <button
                 onClick={advanceCycleStep}
-                className="flex items-center gap-1.5 rounded-xl border border-[#E2E8F0] bg-white px-4 py-3 text-xs font-bold text-[#374151] hover:bg-[#F8FAFC] dark:border-[#1E293B] dark:bg-[#1E293B] dark:text-white"
+                className="flex items-center gap-1.5 rounded-xl border border-[#E2E8F0] bg-white px-4 py-3 text-xs font-bold text-[#374151] hover:bg-[#F1F5F9] dark:border-[#1E293B] dark:bg-[#1E293B] dark:text-white"
               >
                 <CheckCircle2 className="h-4 w-4 text-[#F59E0B]" />
                 <span>Concluir & Avançar</span>
@@ -209,7 +209,7 @@ export const CicloView: React.FC = () => {
               <button
                 onClick={advanceCycleStep}
                 title="Pular para o próximo bloco"
-                className="rounded-xl border border-[#E2E8F0] bg-white p-3 text-[#737D89] hover:bg-[#F8FAFC] dark:border-[#1E293B] dark:bg-[#1E293B] dark:text-[#94A3B8]"
+                className="rounded-xl border border-[#E2E8F0] bg-white p-3 text-[#737D89] hover:bg-[#F1F5F9] dark:border-[#1E293B] dark:bg-[#1E293B] dark:text-[#94A3B8]"
               >
                 <ArrowRight className="h-4 w-4" />
               </button>
@@ -268,7 +268,7 @@ export const CicloView: React.FC = () => {
                       className={`flex h-6 w-6 items-center justify-center rounded-full text-xs font-black ${
                         isCurrent
                           ? "bg-[#F59E0B] text-white"
-                          : "bg-[#F8FAFC] text-[#737D89] dark:bg-[#0F172A] dark:text-[#94A3B8]"
+                          : "bg-[#F1F5F9] text-[#737D89] dark:bg-[#0F172A] dark:text-[#94A3B8]"
                       }`}
                     >
                       {idx + 1}
