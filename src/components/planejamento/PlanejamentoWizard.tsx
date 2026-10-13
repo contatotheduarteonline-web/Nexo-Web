@@ -266,11 +266,12 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
     const totalWeeklyMinutes = totalWeeklyHours * 60;
     if (calculatedScores.length === 0 || totalWeeklyMinutes === 0) return [];
 
+    const minSessionLimit = minSessionMinutes || 30;
     let distributedSum = 0;
     const items = calculatedScores.map((item) => {
       const weightPercentage = Math.round((item.score / totalScore) * 100);
       let totalMinutes = Math.round((item.score / totalScore) * totalWeeklyMinutes);
-      totalMinutes = Math.max(30, totalMinutes);
+      totalMinutes = Math.max(minSessionLimit, totalMinutes);
       distributedSum += totalMinutes;
       return { ...item, weightPercentage, totalMinutes };
     });
@@ -281,9 +282,18 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
     }
 
     return items.map((item) => {
-      const idealBlock = Math.max(minSessionMinutes || 30, maxSessionMinutes || 90);
-      const blockCount = Math.max(1, Math.round(item.totalMinutes / idealBlock));
-      const minutesPerBlock = Math.round(item.totalMinutes / blockCount);
+      const minSessionLimit = minSessionMinutes || 30;
+      const maxSessionLimit = Math.max(minSessionLimit, maxSessionMinutes || 90);
+      // Never split into more blocks than fit at the minimum session size
+      const maxBlocks = Math.max(1, Math.floor(item.totalMinutes / minSessionLimit));
+      const blockCount = Math.min(
+        maxBlocks,
+        Math.max(1, Math.round(item.totalMinutes / maxSessionLimit))
+      );
+      const minutesPerBlock = Math.min(
+        maxSessionLimit,
+        Math.max(minSessionLimit, Math.round(item.totalMinutes / blockCount))
+      );
       return { ...item, blockCount, minutesPerBlock };
     });
   }, [calculatedScores, totalScore, totalWeeklyHours, minSessionMinutes, maxSessionMinutes]);
@@ -301,8 +311,11 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
   const generatedCycle = useMemo(() => {
     if (calculatedDistribution.length === 0) return [];
 
+    // Higher-weight disciplines come first in the cycle
     const pools: Array<{ disciplineId: string; minutes: number; remaining: number }> =
-      calculatedDistribution.map((d) => ({
+      [...calculatedDistribution]
+        .sort((a, b) => b.weightPercentage - a.weightPercentage)
+        .map((d) => ({
         disciplineId: d.discipline.id,
         minutes: d.minutesPerBlock,
         remaining: d.blockCount,
@@ -342,6 +355,7 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
     if (calculatedDistribution.length === 0 || generatedCycle.length === 0) return [];
 
     const days = ["seg", "ter", "qua", "qui", "sex", "sab", "dom"] as const;
+    const minSessionLimit = minSessionMinutes || 30;
     const blocks: WeeklyScheduleBlock[] = [];
     let cycleIdx = 0;
 
@@ -350,10 +364,11 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
       let dayMinutesLeft = dayHours * 60;
       let dayOrder = 1;
 
-      while (dayMinutesLeft >= 20 && generatedCycle.length > 0) {
+      // A block is only placed if it still respects the minimum session time
+      while (dayMinutesLeft >= minSessionLimit && generatedCycle.length > 0) {
         const step = generatedCycle[cycleIdx % generatedCycle.length];
         const blockDuration = Math.min(step.targetMinutes, dayMinutesLeft);
-        if (blockDuration < 20) break;
+        if (blockDuration < minSessionLimit) break;
 
         blocks.push({
           id: `wb-auto-${day}-${dayOrder}-${Date.now()}`,
@@ -370,7 +385,7 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
     });
 
     return blocks;
-  }, [generatedCycle, dailyAvailability]);
+  }, [generatedCycle, dailyAvailability, minSessionMinutes]);
 
   const handleSaveAndApply = () => {
     if (!activePlan) return;
