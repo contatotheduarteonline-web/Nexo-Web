@@ -97,9 +97,9 @@ export const PlanosView: React.FC<PlanosViewProps> = ({ onOpenNewTopicModal }) =
       {/* Delete Confirmation Modal */}
       {planToDelete && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-xs">
-          <div className="relative w-full max-w-md overflow-hidden rounded-2xl border border-zinc-200 bg-white p-6 shadow-2xl dark:border-zinc-800 dark:bg-[#252B38] space-y-4">
+          <div className="relative w-full max-w-md overflow-hidden rounded-2xl border border-zinc-200 bg-white p-6 shadow-2xl dark:border-zinc-800 dark:bg-[#1D2B40] space-y-4">
             <div className="flex flex-col items-center text-center">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-red-50 text-red-600 dark:bg-red-950/40 dark:text-red-400">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#3B2029] text-[#F16D75] dark:bg-[#F16D75]/40 dark:text-[#F16D75]">
                 <AlertTriangle className="h-6 w-6" />
               </div>
               <h3 className="mt-3 text-sm font-bold text-white dark:text-white">
@@ -123,7 +123,7 @@ export const PlanosView: React.FC<PlanosViewProps> = ({ onOpenNewTopicModal }) =
                 type="button"
                 onClick={handleConfirmDelete}
                 disabled={isDeleting}
-                className="rounded-xl bg-red-600 px-4 py-2 text-xs font-bold text-white hover:bg-red-700 shadow-xs transition"
+                className="rounded-xl bg-[#F16D75] px-4 py-2 text-xs font-bold text-white hover:bg-[#F16D75] shadow-xs transition"
               >
                 {isDeleting ? "Excluindo..." : "Confirmar Exclusão"}
               </button>

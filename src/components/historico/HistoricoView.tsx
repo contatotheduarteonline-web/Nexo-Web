@@ -292,7 +292,7 @@ export const HistoricoView: React.FC = () => {
   return (
     <div className="mx-auto max-w-6xl space-y-6 pb-12" ref={menuContainerRef}>
       {/* 1. NOVO CABEÇALHO LIMPO (mesmo padrão do Registro de Estudos) */}
-      <div className="border-b border-slate-200 pb-3 dark:border-slate-800">
+      <div className="border-b border-slate-200 pb-3 dark:border-[#263447]">
         <h1 className="text-xl font-bold tracking-tight text-white dark:text-white">
           Histórico de Estudos
         </h1>
@@ -301,7 +301,7 @@ export const HistoricoView: React.FC = () => {
       {/* 2. RESUMO SUPERIOR (compacto e elegante) */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         {/* SESSÕES */}
-        <div className="rounded-xl border border-slate-200 bg-white p-3.5 sm:p-4 shadow-xs dark:border-slate-800 dark:bg-[#252B38]">
+        <div className="rounded-xl border border-slate-200 bg-white p-3.5 sm:p-4 shadow-xs dark:border-[#263447] dark:bg-[#1D2B40]">
           <div className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-white">
             Sessões
           </div>
@@ -311,17 +311,17 @@ export const HistoricoView: React.FC = () => {
         </div>
 
         {/* TEMPO LÍQUIDO */}
-        <div className="rounded-xl border border-slate-200 bg-white p-3.5 sm:p-4 shadow-xs dark:border-slate-800 dark:bg-[#252B38]">
+        <div className="rounded-xl border border-slate-200 bg-white p-3.5 sm:p-4 shadow-xs dark:border-[#263447] dark:bg-[#1D2B40]">
           <div className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-white">
             Tempo Líquido
           </div>
-          <div className="mt-1 font-mono text-2xl font-bold text-[#F59E0B] dark:text-[#FBBF24]">
+          <div className="mt-1 font-mono text-2xl font-bold text-[#F4B544] dark:text-[#F4B544]">
             {totalFilteredHoursFormatted}
           </div>
         </div>
 
         {/* QUESTÕES */}
-        <div className="rounded-xl border border-slate-200 bg-white p-3.5 sm:p-4 shadow-xs dark:border-slate-800 dark:bg-[#252B38]">
+        <div className="rounded-xl border border-slate-200 bg-white p-3.5 sm:p-4 shadow-xs dark:border-[#263447] dark:bg-[#1D2B40]">
           <div className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-white">
             Questões
           </div>
@@ -331,18 +331,18 @@ export const HistoricoView: React.FC = () => {
         </div>
 
         {/* APROVEITAMENTO */}
-        <div className="rounded-xl border border-slate-200 bg-white p-3.5 sm:p-4 shadow-xs dark:border-slate-800 dark:bg-[#252B38]">
+        <div className="rounded-xl border border-slate-200 bg-white p-3.5 sm:p-4 shadow-xs dark:border-[#263447] dark:bg-[#1D2B40]">
           <div className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-white">
             Aproveitamento
           </div>
-          <div className="mt-1 font-mono text-2xl font-bold text-emerald-600 dark:text-emerald-400">
+          <div className="mt-1 font-mono text-2xl font-bold text-[#2BBF8A] dark:text-[#2BBF8A]">
             {averageAccuracy}%
           </div>
         </div>
       </div>
 
       {/* 3. ÁREA DE FILTROS COMPACTA E MODERNA */}
-      <div className="rounded-xl border border-slate-200 bg-white p-3.5 sm:p-4 shadow-xs dark:border-slate-800 dark:bg-[#252B38] space-y-3">
+      <div className="rounded-xl border border-slate-200 bg-white p-3.5 sm:p-4 shadow-xs dark:border-[#263447] dark:bg-[#1D2B40] space-y-3">
         {/* Linha superior: Busca, Modalidade e Disciplina */}
         <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-12">
           {/* Busca */}
@@ -354,7 +354,7 @@ export const HistoricoView: React.FC = () => {
               placeholder="Buscar por disciplina, assunto ou anotação..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full rounded-lg border border-slate-200 bg-slate-50 py-2 pl-8 pr-8 text-xs text-white placeholder:text-white focus:border-[#F59E0B] focus:ring-1 focus:ring-[#F59E0B] dark:border-slate-800 dark:bg-[#0F172A] dark:text-white"
+              className="w-full rounded-lg border border-slate-200 bg-slate-50 py-2 pl-8 pr-8 text-xs text-white placeholder:text-white focus:border-[#7DA2FF] focus:ring-1 focus:ring-[#7DA2FF] dark:border-[#263447] dark:bg-[#0B1120] dark:text-white"
             />
             {searchQuery && (
               <button
@@ -373,7 +373,7 @@ export const HistoricoView: React.FC = () => {
               id="history-discipline-filter"
               value={selectedDiscipline}
               onChange={(e) => setSelectedDiscipline(e.target.value)}
-              className="w-full appearance-none rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 pr-8 text-xs font-semibold text-white transition focus:border-[#F59E0B] focus:ring-1 focus:ring-[#F59E0B] dark:border-slate-800 dark:bg-[#0F172A] dark:text-white cursor-pointer truncate"
+              className="w-full appearance-none rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 pr-8 text-xs font-semibold text-white transition focus:border-[#7DA2FF] focus:ring-1 focus:ring-[#7DA2FF] dark:border-[#263447] dark:bg-[#0B1120] dark:text-white cursor-pointer truncate"
             >
               <option value="all">Todas as disciplinas</option>
               {availableDisciplines.map((d) => (
@@ -391,7 +391,7 @@ export const HistoricoView: React.FC = () => {
               id="history-modality-filter"
               value={selectedModality}
               onChange={(e) => setSelectedModality(e.target.value)}
-              className="w-full appearance-none rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 pr-8 text-xs font-semibold text-white transition focus:border-[#F59E0B] focus:ring-1 focus:ring-[#F59E0B] dark:border-slate-800 dark:bg-[#0F172A] dark:text-white cursor-pointer"
+              className="w-full appearance-none rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 pr-8 text-xs font-semibold text-white transition focus:border-[#7DA2FF] focus:ring-1 focus:ring-[#7DA2FF] dark:border-[#263447] dark:bg-[#0B1120] dark:text-white cursor-pointer"
             >
               <option value="all">Todas as modalidades</option>
               {modalities.map((m) => (
@@ -405,7 +405,7 @@ export const HistoricoView: React.FC = () => {
         </div>
 
         {/* Linha inferior: Filtro de Período (Pills compactas) e Limpar Filtros */}
-        <div className="flex flex-wrap items-center justify-between gap-2 border-t border-slate-100 pt-2.5 dark:border-slate-800/80">
+        <div className="flex flex-wrap items-center justify-between gap-2 border-t border-slate-100 pt-2.5 dark:border-[#263447]/80">
           <div className="flex flex-wrap items-center gap-1.5">
             <span className="mr-1 text-[11px] font-bold uppercase tracking-wider text-white">
               Período:
@@ -427,8 +427,8 @@ export const HistoricoView: React.FC = () => {
                   onClick={() => setPeriodFilter(p.key)}
                   className={`rounded-lg px-2.5 py-1 text-xs font-semibold transition cursor-pointer ${
                     isSelected
-                      ? "bg-[#F59E0B] text-white shadow-xs"
-                      : "bg-slate-100 text-white hover:bg-slate-200 dark:bg-[#0F172A] dark:text-white dark:hover:bg-slate-800"
+                      ? "bg-[#527DFF] text-white shadow-xs"
+                      : "bg-slate-100 text-white hover:bg-slate-200 dark:bg-[#0B1120] dark:text-white dark:hover:bg-[#172235]"
                   }`}
                 >
                   {p.label}
@@ -441,7 +441,7 @@ export const HistoricoView: React.FC = () => {
             <button
               type="button"
               onClick={clearFilters}
-              className="text-xs font-semibold text-[#F59E0B] hover:underline dark:text-[#FBBF24] cursor-pointer"
+              className="text-xs font-semibold text-[#F4B544] hover:underline dark:text-[#F4B544] cursor-pointer"
             >
               Limpar filtros
             </button>
@@ -456,14 +456,14 @@ export const HistoricoView: React.FC = () => {
               type="date"
               value={customStartDate}
               onChange={(e) => setCustomStartDate(e.target.value)}
-              className="rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-medium text-white dark:border-slate-800 dark:bg-[#0F172A] dark:text-white"
+              className="rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-medium text-white dark:border-[#263447] dark:bg-[#0B1120] dark:text-white"
             />
             <span className="text-xs text-white">Até:</span>
             <input
               type="date"
               value={customEndDate}
               onChange={(e) => setCustomEndDate(e.target.value)}
-              className="rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-medium text-white dark:border-slate-800 dark:bg-[#0F172A] dark:text-white"
+              className="rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-medium text-white dark:border-[#263447] dark:bg-[#0B1120] dark:text-white"
             />
           </div>
         )}
@@ -472,7 +472,7 @@ export const HistoricoView: React.FC = () => {
       {/* 4. LISTA DE REGISTROS MODERNOS (Substitui completamente a tabela tradicional) */}
       {studySessions.length === 0 ? (
         /* ESTADO VAZIO LIMPO (quando não há nenhum estudo registrado) */
-        <div className="rounded-2xl border border-slate-200 bg-white p-12 text-center shadow-xs dark:border-slate-800 dark:bg-[#252B38]">
+        <div className="rounded-2xl border border-slate-200 bg-white p-12 text-center shadow-xs dark:border-[#263447] dark:bg-[#1D2B40]">
           <h2 className="text-base font-bold text-white dark:text-white">
             Nenhum estudo registrado
           </h2>
@@ -483,7 +483,7 @@ export const HistoricoView: React.FC = () => {
             <button
               type="button"
               onClick={() => setActiveTab("cronometro")}
-              className="inline-flex items-center gap-2 rounded-xl bg-[#F59E0B] px-5 py-2.5 text-xs font-bold text-white shadow-sm shadow-amber-500/20 transition hover:bg-[#D97706] active:scale-98 cursor-pointer"
+              className="inline-flex items-center gap-2 rounded-xl bg-[#527DFF] px-5 py-2.5 text-xs font-bold text-white shadow-sm shadow-amber-500/20 transition hover:bg-[#416CEB] active:scale-98 cursor-pointer"
             >
               <Plus className="h-3.5 w-3.5" />
               <span>Registrar estudo</span>
@@ -492,14 +492,14 @@ export const HistoricoView: React.FC = () => {
         </div>
       ) : sortedSessions.length === 0 ? (
         /* VAZIO DEVIDO A FILTROS */
-        <div className="rounded-xl border border-slate-200 bg-white p-8 text-center shadow-xs dark:border-slate-800 dark:bg-[#252B38]">
+        <div className="rounded-xl border border-slate-200 bg-white p-8 text-center shadow-xs dark:border-[#263447] dark:bg-[#1D2B40]">
           <p className="text-xs font-medium text-white dark:text-white">
             Nenhum estudo encontrado com os filtros selecionados.
           </p>
           <button
             type="button"
             onClick={clearFilters}
-            className="mt-3 inline-flex items-center gap-1 text-xs font-bold text-[#F59E0B] hover:underline dark:text-[#FBBF24] cursor-pointer"
+            className="mt-3 inline-flex items-center gap-1 text-xs font-bold text-[#F4B544] hover:underline dark:text-[#F4B544] cursor-pointer"
           >
             Limpar filtros aplicados
           </button>
@@ -533,7 +533,7 @@ export const HistoricoView: React.FC = () => {
             return (
               <div
                 key={session.id}
-                className="group relative rounded-xl border border-slate-200 bg-white p-4 shadow-xs transition hover:border-slate-300 dark:border-slate-800 dark:bg-[#252B38] dark:hover:border-slate-700"
+                className="group relative rounded-xl border border-slate-200 bg-white p-4 shadow-xs transition hover:border-[#39475C] dark:border-[#263447] dark:bg-[#1D2B40] dark:hover:border-[#172235]"
               >
                 {/* Linha Superior: Data do Estudo & Menu 3 Pontos */}
                 <div className="flex items-start justify-between gap-2">
@@ -542,7 +542,7 @@ export const HistoricoView: React.FC = () => {
                       {formatStudyDateDisplay(session)}
                     </span>
                     <span className="text-white dark:text-white">·</span>
-                    <span className="text-xs font-bold uppercase tracking-wider text-[#F59E0B] dark:text-[#FBBF24]">
+                    <span className="text-xs font-bold uppercase tracking-wider text-[#F4B544] dark:text-[#F4B544]">
                       {session.disciplineName || "Disciplina"}
                     </span>
                   </div>
@@ -556,7 +556,7 @@ export const HistoricoView: React.FC = () => {
                         e.stopPropagation();
                         setOpenMenuSessionId(isMenuOpen ? null : session.id);
                       }}
-                      className="flex h-7 w-7 items-center justify-center rounded-lg text-white transition hover:bg-slate-100 hover:text-white dark:hover:bg-slate-800 dark:hover:text-white cursor-pointer"
+                      className="flex h-7 w-7 items-center justify-center rounded-lg text-white transition hover:bg-slate-100 hover:text-white dark:hover:bg-[#172235] dark:hover:text-white cursor-pointer"
                       title="Opções do registro"
                     >
                       <MoreVertical className="h-4 w-4" />
@@ -564,14 +564,14 @@ export const HistoricoView: React.FC = () => {
 
                     {/* Dropdown discreto de ações */}
                     {isMenuOpen && (
-                      <div className="absolute right-0 top-8 z-20 w-44 rounded-xl border border-slate-200 bg-white py-1 shadow-lg dark:border-slate-800 dark:bg-[#252B38]">
+                      <div className="absolute right-0 top-8 z-20 w-44 rounded-xl border border-slate-200 bg-white py-1 shadow-lg dark:border-[#263447] dark:bg-[#1D2B40]">
                         <button
                           type="button"
                           onClick={(e) => {
                             e.stopPropagation();
                             handleEditSession(session);
                           }}
-                          className="flex w-full items-center gap-2 px-3 py-2 text-left text-xs font-semibold text-white hover:bg-slate-100 dark:text-white dark:hover:bg-slate-800 cursor-pointer transition"
+                          className="flex w-full items-center gap-2 px-3 py-2 text-left text-xs font-semibold text-white hover:bg-slate-100 dark:text-white dark:hover:bg-[#172235] cursor-pointer transition"
                         >
                           <Pencil className="h-3.5 w-3.5" />
                           <span>Editar registro</span>
@@ -583,7 +583,7 @@ export const HistoricoView: React.FC = () => {
                             setOpenMenuSessionId(null);
                             setSessionToDelete(session);
                           }}
-                          className="flex w-full items-center gap-2 px-3 py-2 text-left text-xs font-semibold text-rose-600 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-950/40 cursor-pointer transition"
+                          className="flex w-full items-center gap-2 px-3 py-2 text-left text-xs font-semibold text-[#F16D75] hover:bg-[#3B2029] dark:text-[#F16D75] dark:hover:bg-[#F16D75]/40 cursor-pointer transition"
                         >
                           <Trash2 className="h-3.5 w-3.5" />
                           <span>Excluir registro</span>
@@ -601,7 +601,7 @@ export const HistoricoView: React.FC = () => {
                 {/* Badges / Chips Discretos de Métricas e Indicadores */}
                 <div className="mt-3 flex flex-wrap items-center gap-2 text-xs">
                   {/* Modalidade */}
-                  <span className="inline-flex items-center rounded-md bg-slate-100 px-2 py-0.5 text-xs font-semibold text-white dark:bg-[#0F172A] dark:text-white border border-slate-200/80 dark:border-slate-800">
+                  <span className="inline-flex items-center rounded-md bg-slate-100 px-2 py-0.5 text-xs font-semibold text-white dark:bg-[#0B1120] dark:text-white border border-slate-200/80 dark:border-[#263447]">
                     {session.modality}
                   </span>
 
@@ -618,7 +618,7 @@ export const HistoricoView: React.FC = () => {
                       <span>
                         {session.questionsCorrect}/{session.questionsDone}
                       </span>
-                      <span className="font-semibold text-emerald-600 dark:text-emerald-400">
+                      <span className="font-semibold text-[#2BBF8A] dark:text-[#2BBF8A]">
                         · {accuracy}%
                       </span>
                     </span>
@@ -626,7 +626,7 @@ export const HistoricoView: React.FC = () => {
 
                   {/* Teoria finalizada */}
                   {session.theoryCompleted && (
-                    <span className="inline-flex items-center gap-1 rounded-md bg-emerald-50 px-2 py-0.5 text-xs font-bold text-emerald-700 border border-emerald-200/70 dark:bg-emerald-950/40 dark:text-emerald-400 dark:border-emerald-800/60">
+                    <span className="inline-flex items-center gap-1 rounded-md bg-[#15382F] px-2 py-0.5 text-xs font-bold text-[#2BBF8A] border border-[#2BBF8A]/70 dark:bg-[#2BBF8A]/40 dark:text-[#2BBF8A] dark:border-[#2BBF8A]/60">
                       <Check className="h-3 w-3 stroke-[3]" />
                       Teoria finalizada
                     </span>
@@ -634,7 +634,7 @@ export const HistoricoView: React.FC = () => {
 
                   {/* Revisões Programadas */}
                   {totalReviews > 0 && (
-                    <span className="inline-flex items-center gap-1 rounded-md bg-amber-50 px-2 py-0.5 text-xs font-semibold text-[#F59E0B] border border-amber-200/70 dark:bg-amber-950/30 dark:text-[#FBBF24] dark:border-amber-900/50">
+                    <span className="inline-flex items-center gap-1 rounded-md bg-[#342B1C] px-2 py-0.5 text-xs font-semibold text-[#F4B544] border border-[#F4B544]/70 dark:bg-[#F4B544]/30 dark:text-[#F4B544] dark:border-[#F4B544]/50">
                       <RotateCw className="h-3 w-3" />
                       {completedReviews > 0
                         ? `${completedReviews}/${totalReviews} revisões`
@@ -647,7 +647,7 @@ export const HistoricoView: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => setExpandedSessionId(isExpanded ? null : session.id)}
-                      className="inline-flex items-center gap-1 rounded-md bg-slate-100 px-2 py-0.5 text-xs font-medium text-white hover:bg-slate-200 dark:bg-slate-800 dark:text-white dark:hover:bg-slate-700 transition cursor-pointer"
+                      className="inline-flex items-center gap-1 rounded-md bg-slate-100 px-2 py-0.5 text-xs font-medium text-white hover:bg-slate-200 dark:bg-[#172235] dark:text-white dark:hover:bg-[#172235] transition cursor-pointer"
                     >
                       <FileText className="h-3 w-3" />
                       <span>Anotação</span>
@@ -657,7 +657,7 @@ export const HistoricoView: React.FC = () => {
 
                 {/* Detalhe Expandido de Anotações (quando acionado pelo chip) */}
                 {isExpanded && hasNotes && (
-                  <div className="mt-3 rounded-lg border border-slate-200/80 bg-slate-50/70 p-3 text-xs dark:border-slate-800 dark:bg-[#0F172A]/60">
+                  <div className="mt-3 rounded-lg border border-slate-200/80 bg-slate-50/70 p-3 text-xs dark:border-[#263447] dark:bg-[#0B1120]/60">
                     <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-wider text-white">
                       <span className="flex items-center gap-1">
                         <FileText className="h-3 w-3" />
@@ -682,8 +682,8 @@ export const HistoricoView: React.FC = () => {
 
       {/* 5. MODAL COMPACTO DE CONFIRMAÇÃO DE EXCLUSÃO */}
       {sessionToDelete && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-xs p-4 animate-in fade-in duration-150">
-          <div className="w-full max-w-sm rounded-2xl border border-slate-200 bg-white p-5 shadow-xl dark:border-slate-800 dark:bg-[#252B38]">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#0B1120]/40 backdrop-blur-xs p-4 animate-in fade-in duration-150">
+          <div className="w-full max-w-sm rounded-2xl border border-slate-200 bg-white p-5 shadow-xl dark:border-[#263447] dark:bg-[#1D2B40]">
             <h3 className="text-sm font-bold text-white dark:text-white">
               Excluir este registro de estudo?
             </h3>
@@ -696,7 +696,7 @@ export const HistoricoView: React.FC = () => {
                 type="button"
                 disabled={isDeleting}
                 onClick={() => setSessionToDelete(null)}
-                className="rounded-xl border border-slate-200 px-3.5 py-2 text-xs font-semibold text-white hover:bg-slate-50 dark:border-slate-700 dark:bg-[#161C28] dark:text-white dark:hover:bg-slate-800 cursor-pointer disabled:opacity-50"
+                className="rounded-xl border border-slate-200 px-3.5 py-2 text-xs font-semibold text-white hover:bg-slate-50 dark:bg-[#172235] dark:bg-[#161C28] dark:text-white dark:hover:bg-[#172235] cursor-pointer disabled:opacity-50"
               >
                 Cancelar
               </button>
@@ -704,7 +704,7 @@ export const HistoricoView: React.FC = () => {
                 type="button"
                 disabled={isDeleting}
                 onClick={handleConfirmDelete}
-                className="flex items-center gap-1.5 rounded-xl bg-red-600 px-4 py-2 text-xs font-bold text-white shadow-xs hover:bg-red-700 active:scale-98 cursor-pointer disabled:opacity-50"
+                className="flex items-center gap-1.5 rounded-xl bg-[#F16D75] px-4 py-2 text-xs font-bold text-white shadow-xs hover:bg-[#F16D75] active:scale-98 cursor-pointer disabled:opacity-50"
               >
                 {isDeleting ? (
                   <Loader2 className="h-3.5 w-3.5 animate-spin" />

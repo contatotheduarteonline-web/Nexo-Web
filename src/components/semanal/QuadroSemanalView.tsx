@@ -31,17 +31,17 @@ export const QuadroSemanalView: React.FC = () => {
 
   if (!activePlan) {
     return (
-      <div className="rounded-2xl border border-dashed border-[#E2E8F0] bg-white p-12 text-center dark:border-[#1E293B] dark:bg-[#0F172A]">
-        <CalendarDays className="mx-auto h-12 w-12 text-[#737D89]" />
-        <h3 className="mt-3 text-base font-bold text-[#374151] dark:text-white">
+      <div className="rounded-2xl border border-dashed border-[#E2E8F0] bg-white p-12 text-center dark:border-[#263447] dark:bg-[#0B1120]">
+        <CalendarDays className="mx-auto h-12 w-12 text-[#718096]" />
+        <h3 className="mt-3 text-base font-bold text-[#93A2B7] dark:text-white">
           Nenhum Plano Ativo
         </h3>
-        <p className="mt-1 text-xs text-[#737D89] dark:text-[#94A3B8]">
+        <p className="mt-1 text-xs text-[#718096] dark:text-[#93A2B7]">
           Ative um plano de estudos para visualizar seu quadro semanal.
         </p>
         <button
           onClick={() => setActiveTab("planos")}
-          className="mt-4 rounded-xl bg-[#F59E0B] px-5 py-2.5 text-xs font-bold text-white transition hover:bg-[#D97706]"
+          className="mt-4 rounded-xl bg-[#527DFF] px-5 py-2.5 text-xs font-bold text-white transition hover:bg-[#416CEB]"
         >
           Ver Planos
         </button>
@@ -96,9 +96,9 @@ export const QuadroSemanalView: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col justify-between gap-4 rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-xs sm:flex-row sm:items-center dark:border-[#1E293B] dark:bg-[#0F172A]">
+      <div className="flex flex-col justify-between gap-4 rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-xs sm:flex-row sm:items-center dark:border-[#263447] dark:bg-[#0B1120]">
         <div>
-          <h2 className="text-xl font-bold text-[#374151] dark:text-white">
+          <h2 className="text-xl font-bold text-[#93A2B7] dark:text-white">
             Quadro Semanal
           </h2>
         </div>
@@ -106,7 +106,7 @@ export const QuadroSemanalView: React.FC = () => {
         <div className="flex flex-wrap items-center gap-2">
           <button
             onClick={() => setActiveTab("ciclo")}
-            className="flex items-center gap-1.5 rounded-xl border border-[#E2E8F0] bg-[#F1F5F9] px-3.5 py-2 text-xs font-bold text-[#374151] hover:bg-[#E2E8F0] dark:border-[#1E293B] dark:bg-[#1E293B] dark:text-white"
+            className="flex items-center gap-1.5 rounded-xl border border-[#E2E8F0] bg-[#F1F5F9] px-3.5 py-2 text-xs font-bold text-[#93A2B7] hover:bg-[#E2E8F0] dark:border-[#263447] dark:bg-[#172235] dark:text-white"
           >
             <Layers className="h-3.5 w-3.5" />
             <span>Alternar p/ Ciclo Dinâmico</span>
@@ -117,7 +117,7 @@ export const QuadroSemanalView: React.FC = () => {
               setSelectedDay("seg");
               setIsAddModalOpen(true);
             }}
-            className="flex items-center gap-1.5 rounded-xl bg-[#F59E0B] px-4 py-2 text-xs font-bold text-white shadow-xs transition hover:bg-[#D97706]"
+            className="flex items-center gap-1.5 rounded-xl bg-[#527DFF] px-4 py-2 text-xs font-bold text-white shadow-xs transition hover:bg-[#416CEB]"
           >
             <Plus className="h-4 w-4" />
             <span>Adicionar Bloco</span>
@@ -127,38 +127,38 @@ export const QuadroSemanalView: React.FC = () => {
 
       {/* Weekly Stats Bar */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <div className="rounded-xl border border-[#E2E8F0] bg-white p-3.5 text-center dark:border-[#1E293B] dark:bg-[#0F172A]">
-          <span className="text-[10px] font-bold tracking-wider text-[#737D89] uppercase">
+        <div className="rounded-xl border border-[#E2E8F0] bg-white p-3.5 text-center dark:border-[#263447] dark:bg-[#0B1120]">
+          <span className="text-[10px] font-bold tracking-wider text-[#718096] uppercase">
             Meta Semanal
           </span>
-          <p className="mt-1 text-lg font-black text-[#374151] dark:text-white">
+          <p className="mt-1 text-lg font-black text-[#93A2B7] dark:text-white">
             {activePlan.weeklyGoalHours} horas
           </p>
         </div>
 
-        <div className="rounded-xl border border-[#E2E8F0] bg-white p-3.5 text-center dark:border-[#1E293B] dark:bg-[#0F172A]">
-          <span className="text-[10px] font-bold tracking-wider text-[#737D89] uppercase">
+        <div className="rounded-xl border border-[#E2E8F0] bg-white p-3.5 text-center dark:border-[#263447] dark:bg-[#0B1120]">
+          <span className="text-[10px] font-bold tracking-wider text-[#718096] uppercase">
             Horas no Quadro
           </span>
-          <p className="mt-1 text-lg font-black text-[#F59E0B] dark:text-[#FBBF24]">
+          <p className="mt-1 text-lg font-black text-[#F4B544] dark:text-[#F4B544]">
             {(weeklySchedule.reduce((acc, b) => acc + b.targetMinutes, 0) / 60).toFixed(1)} horas
           </p>
         </div>
 
-        <div className="rounded-xl border border-[#E2E8F0] bg-white p-3.5 text-center dark:border-[#1E293B] dark:bg-[#0F172A]">
-          <span className="text-[10px] font-bold tracking-wider text-[#737D89] uppercase">
+        <div className="rounded-xl border border-[#E2E8F0] bg-white p-3.5 text-center dark:border-[#263447] dark:bg-[#0B1120]">
+          <span className="text-[10px] font-bold tracking-wider text-[#718096] uppercase">
             Total de Blocos
           </span>
-          <p className="mt-1 text-lg font-black text-[#374151] dark:text-white">
+          <p className="mt-1 text-lg font-black text-[#93A2B7] dark:text-white">
             {weeklySchedule.length} sessões
           </p>
         </div>
 
-        <div className="rounded-xl border border-[#E2E8F0] bg-white p-3.5 text-center dark:border-[#1E293B] dark:bg-[#0F172A]">
-          <span className="text-[10px] font-bold tracking-wider text-[#737D89] uppercase">
+        <div className="rounded-xl border border-[#E2E8F0] bg-white p-3.5 text-center dark:border-[#263447] dark:bg-[#0B1120]">
+          <span className="text-[10px] font-bold tracking-wider text-[#718096] uppercase">
             Estudado nesta semana
           </span>
-          <p className="mt-1 text-lg font-black text-[#F59E0B]">
+          <p className="mt-1 text-lg font-black text-[#F4B544]">
             {metrics.hoursThisWeek}h
           </p>
         </div>
@@ -175,27 +175,27 @@ export const QuadroSemanalView: React.FC = () => {
           return (
             <div
               key={key}
-              className="flex min-h-[380px] flex-col justify-between rounded-2xl border border-[#E2E8F0] bg-white p-3.5 shadow-xs dark:border-[#1E293B] dark:bg-[#0F172A]"
+              className="flex min-h-[380px] flex-col justify-between rounded-2xl border border-[#E2E8F0] bg-white p-3.5 shadow-xs dark:border-[#263447] dark:bg-[#0B1120]"
             >
               <div>
                 {/* Column Header */}
-                <div className="border-b border-[#E2E8F0] pb-2.5 dark:border-[#1E293B]">
+                <div className="border-b border-[#E2E8F0] pb-2.5 dark:border-[#263447]">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-black text-[#374151] dark:text-white">
+                    <span className="text-xs font-black text-[#93A2B7] dark:text-white">
                       {shortLabel}
                     </span>
-                    <span className="rounded-md bg-[#F1F5F9] px-1.5 py-0.5 text-[10px] font-bold text-[#737D89] dark:bg-[#1E293B] dark:text-[#94A3B8]">
+                    <span className="rounded-md bg-[#F1F5F9] px-1.5 py-0.5 text-[10px] font-bold text-[#718096] dark:bg-[#172235] dark:text-[#93A2B7]">
                       {scheduledHours}h / {plannedDailyHours}h
                     </span>
                   </div>
-                  <p className="mt-0.5 text-[10px] text-[#737D89]">{label}</p>
+                  <p className="mt-0.5 text-[10px] text-[#718096]">{label}</p>
                 </div>
 
                 {/* Day Blocks List */}
                 <div className="mt-3 space-y-2">
                   {dayBlocks.length === 0 ? (
-                    <div className="rounded-xl border border-dashed border-[#E2E8F0] p-4 text-center dark:border-[#1E293B]">
-                      <span className="text-[11px] text-[#737D89]">Nenhum bloco</span>
+                    <div className="rounded-xl border border-dashed border-[#E2E8F0] p-4 text-center dark:border-[#263447]">
+                      <span className="text-[11px] text-[#718096]">Nenhum bloco</span>
                     </div>
                   ) : (
                     dayBlocks.map((block) => {
@@ -205,7 +205,7 @@ export const QuadroSemanalView: React.FC = () => {
                       return (
                         <div
                           key={block.id}
-                          className="group relative rounded-xl border border-[#E2E8F0] bg-[#F1F5F9] p-2.5 transition-all duration-200 hover:border-[#F59E0B] hover:bg-white hover:shadow-xs dark:border-[#1E293B] dark:bg-[#1E293B]/60 dark:hover:bg-[#1E293B]"
+                          className="group relative rounded-xl border border-[#E2E8F0] bg-[#F1F5F9] p-2.5 transition-all duration-200 hover:border-[#F4B544] hover:bg-white hover:shadow-xs dark:border-[#263447] dark:bg-[#172235]/60 dark:hover:bg-[#172235]"
                         >
                           <div className="flex items-start justify-between gap-1">
                             <div className="flex items-center gap-1.5">
@@ -213,24 +213,24 @@ export const QuadroSemanalView: React.FC = () => {
                                 className="h-2.5 w-2.5 shrink-0 rounded-full"
                                 style={{ backgroundColor: disc.color }}
                               />
-                              <h5 className="text-[11px] font-bold text-[#374151] line-clamp-1 dark:text-white">
+                              <h5 className="text-[11px] font-bold text-[#93A2B7] line-clamp-1 dark:text-white">
                                 {disc.name}
                               </h5>
                             </div>
 
                             <button
                               onClick={() => handleRemoveBlock(block.id)}
-                              className="opacity-0 transition-opacity group-hover:opacity-100 text-[#737D89] hover:text-red-500"
+                              className="opacity-0 transition-opacity group-hover:opacity-100 text-[#718096] hover:text-[#F16D75]"
                             >
                               <Trash2 className="h-3 w-3" />
                             </button>
                           </div>
 
-                          <div className="mt-2 flex items-center justify-between text-[10px] text-[#737D89] dark:text-[#94A3B8]">
+                          <div className="mt-2 flex items-center justify-between text-[10px] text-[#718096] dark:text-[#93A2B7]">
                             <span>{block.targetMinutes} min</span>
                             <button
                               onClick={() => launchStudySessionForTopic(disc.id)}
-                              className="flex items-center gap-1 font-bold text-[#F59E0B] hover:underline dark:text-[#FBBF24]"
+                              className="flex items-center gap-1 font-bold text-[#F4B544] hover:underline dark:text-[#F4B544]"
                             >
                               <Play className="h-2.5 w-2.5 fill-[#F59E0B] dark:fill-[#FBBF24]" />
                               <span>Estudar</span>
@@ -249,7 +249,7 @@ export const QuadroSemanalView: React.FC = () => {
                   setSelectedDay(key);
                   setIsAddModalOpen(true);
                 }}
-                className="mt-3 flex w-full items-center justify-center gap-1 rounded-xl border border-dashed border-[#E2E8F0] py-1.5 text-[11px] font-bold text-[#737D89] hover:border-[#F59E0B] hover:bg-amber-50 hover:text-[#F59E0B] dark:border-[#1E293B] dark:hover:bg-amber-950/20 dark:hover:text-[#FBBF24]"
+                className="mt-3 flex w-full items-center justify-center gap-1 rounded-xl border border-dashed border-[#E2E8F0] py-1.5 text-[11px] font-bold text-[#718096] hover:border-[#725629] hover:bg-[#342B1C] hover:text-[#F4B544] dark:border-[#263447] dark:hover:bg-[#F4B544]/20 dark:hover:text-[#F4B544]"
               >
                 <Plus className="h-3 w-3" />
                 <span>Adicionar</span>
@@ -261,15 +261,15 @@ export const QuadroSemanalView: React.FC = () => {
 
       {/* Add Block Modal */}
       {isAddModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 p-4 backdrop-blur-xs">
-          <div className="w-full max-w-md rounded-2xl border border-[#E2E8F0] bg-white p-6 shadow-2xl dark:border-[#1E293B] dark:bg-[#0F172A]">
-            <div className="flex items-center justify-between border-b border-[#E2E8F0] pb-3 dark:border-[#1E293B]">
-              <h3 className="text-base font-bold text-[#374151] dark:text-white">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#0B1120]/60 p-4 backdrop-blur-xs">
+          <div className="w-full max-w-md rounded-2xl border border-[#E2E8F0] bg-white p-6 shadow-2xl dark:border-[#263447] dark:bg-[#0B1120]">
+            <div className="flex items-center justify-between border-b border-[#E2E8F0] pb-3 dark:border-[#263447]">
+              <h3 className="text-base font-bold text-[#93A2B7] dark:text-white">
                 Adicionar Bloco de Estudo
               </h3>
               <button
                 onClick={() => setIsAddModalOpen(false)}
-                className="rounded-lg p-1 text-[#737D89] hover:bg-[#F1F5F9] dark:hover:bg-[#1E293B]"
+                className="rounded-lg p-1 text-[#718096] hover:bg-[#F1F5F9] dark:hover:bg-[#172235]"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -277,13 +277,13 @@ export const QuadroSemanalView: React.FC = () => {
 
             <form onSubmit={handleAddBlock} className="mt-4 space-y-4">
               <div>
-                <label className="text-xs font-bold text-[#374151] dark:text-white">
+                <label className="text-xs font-bold text-[#93A2B7] dark:text-white">
                   Dia da Semana
                 </label>
                 <select
                   value={selectedDay}
                   onChange={(e) => setSelectedDay(e.target.value as any)}
-                  className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-[#F1F5F9] p-2.5 text-xs text-[#374151] focus:border-[#F59E0B] focus:bg-white focus:outline-hidden dark:border-[#1E293B] dark:bg-[#1E293B] dark:text-white"
+                  className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-[#F1F5F9] p-2.5 text-xs text-[#93A2B7] focus:border-[#7DA2FF] focus:bg-white focus:outline-hidden dark:border-[#263447] dark:bg-[#172235] dark:text-white"
                 >
                   {days.map((d) => (
                     <option key={d.key} value={d.key}>
@@ -294,14 +294,14 @@ export const QuadroSemanalView: React.FC = () => {
               </div>
 
               <div>
-                <label className="text-xs font-bold text-[#374151] dark:text-white">
+                <label className="text-xs font-bold text-[#93A2B7] dark:text-white">
                   Disciplina
                 </label>
                 <select
                   required
                   value={selectedDisciplineId}
                   onChange={(e) => setSelectedDisciplineId(e.target.value)}
-                  className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-[#F1F5F9] p-2.5 text-xs text-[#374151] focus:border-[#F59E0B] focus:bg-white focus:outline-hidden dark:border-[#1E293B] dark:bg-[#1E293B] dark:text-white"
+                  className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-[#F1F5F9] p-2.5 text-xs text-[#93A2B7] focus:border-[#7DA2FF] focus:bg-white focus:outline-hidden dark:border-[#263447] dark:bg-[#172235] dark:text-white"
                 >
                   <option value="">Selecione a disciplina...</option>
                   {activeEdital?.disciplines.map((d) => (
@@ -313,13 +313,13 @@ export const QuadroSemanalView: React.FC = () => {
               </div>
 
               <div>
-                <label className="text-xs font-bold text-[#374151] dark:text-white">
+                <label className="text-xs font-bold text-[#93A2B7] dark:text-white">
                   Duração da Sessão
                 </label>
                 <select
                   value={blockDurationMinutes}
                   onChange={(e) => setBlockDurationMinutes(Number(e.target.value))}
-                  className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-[#F1F5F9] p-2.5 text-xs text-[#374151] focus:border-[#F59E0B] focus:bg-white focus:outline-hidden dark:border-[#1E293B] dark:bg-[#1E293B] dark:text-white"
+                  className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-[#F1F5F9] p-2.5 text-xs text-[#93A2B7] focus:border-[#7DA2FF] focus:bg-white focus:outline-hidden dark:border-[#263447] dark:bg-[#172235] dark:text-white"
                 >
                   <option value={30}>30 minutos</option>
                   <option value={45}>45 minutos</option>
@@ -334,14 +334,14 @@ export const QuadroSemanalView: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setIsAddModalOpen(false)}
-                  className="rounded-xl px-4 py-2 text-xs font-semibold text-[#737D89] hover:bg-[#F1F5F9]"
+                  className="rounded-xl px-4 py-2 text-xs font-semibold text-[#718096] hover:bg-[#F1F5F9]"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
                   disabled={!selectedDisciplineId}
-                  className="rounded-xl bg-[#F59E0B] px-5 py-2 text-xs font-bold text-white shadow-xs transition hover:bg-[#D97706] disabled:opacity-40"
+                  className="rounded-xl bg-[#527DFF] px-5 py-2 text-xs font-bold text-white shadow-xs transition hover:bg-[#416CEB] disabled:opacity-40"
                 >
                   Adicionar ao Quadro
                 </button>

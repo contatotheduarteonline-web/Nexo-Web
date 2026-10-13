@@ -61,20 +61,20 @@ export const LembretesView: React.FC = () => {
   const getCategoryColor = (cat: string) => {
     switch (cat) {
       case "INSCRICOES":
-        return "bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950/40 dark:text-blue-300 dark:border-blue-900";
+        return "bg-[#192D46] text-[#58A6FF] border-[#305C88] dark:bg-[#58A6FF]/40 dark:text-[#58A6FF] dark:border-[#305C88]";
       case "PROVAS":
-        return "bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-900";
+        return "bg-[#342B1C] text-[#F4B544] border-[#725629] dark:bg-[#F4B544]/40 dark:text-[#F4B544] dark:border-[#725629]";
       case "PAGAMENTOS":
-        return "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-900";
+        return "bg-[#15382F] text-[#2BBF8A] border-[#24634F] dark:bg-[#2BBF8A]/40 dark:text-[#2BBF8A] dark:border-[#24634F]";
       default:
-        return "bg-slate-50 text-white border-slate-200 dark:bg-slate-800 dark:text-white dark:border-slate-700";
+        return "bg-slate-50 text-white border-slate-200 dark:bg-[#172235] dark:text-white dark:bg-[#172235]";
     }
   };
 
   return (
     <div className="space-y-4 pb-16">
       {/* Top Header */}
-      <div className="flex flex-col justify-between gap-3 border-b border-[#E2E8F0] pb-3 sm:flex-row sm:items-center dark:border-[#1E293B]">
+      <div className="flex flex-col justify-between gap-3 border-b border-[#E2E8F0] pb-3 sm:flex-row sm:items-center dark:border-[#263447]">
         <div>
           <h1 className="text-lg font-bold text-white dark:text-white">
             Lembretes
@@ -83,7 +83,7 @@ export const LembretesView: React.FC = () => {
 
         <button
           onClick={() => setIsAdding(true)}
-          className="flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#F59E0B] to-[#FBBF24] hover:from-[#D97706] hover:to-[#F59E0B] px-4 py-2 text-xs font-bold text-white shadow-md shadow-amber-500/20 transition active:scale-98 cursor-pointer"
+          className="flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#F4B544] to-[#F4B544] hover:from-[#D97706] hover:to-[#F4B544] px-4 py-2 text-xs font-bold text-white shadow-md shadow-amber-500/20 transition active:scale-98 cursor-pointer"
         >
           <Plus className="h-4 w-4" />
           Novo Lembrete
@@ -92,16 +92,16 @@ export const LembretesView: React.FC = () => {
 
       {/* KPI Cards */}
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-        <div className="rounded-xl border border-[#E2E8F0] bg-white p-4 shadow-[0_1px_3px_rgba(0,0,0,0.02)] dark:border-[#1E293B] dark:bg-[#252B38]">
+        <div className="rounded-xl border border-[#E2E8F0] bg-white p-4 shadow-[0_1px_3px_rgba(0,0,0,0.02)] dark:border-[#263447] dark:bg-[#1D2B40]">
           <div className="text-[10px] font-bold text-white uppercase dark:text-white">Total de Lembretes</div>
           <div className="mt-1 text-2xl font-extrabold text-white dark:text-white">{stats.total}</div>
         </div>
-        <div className="rounded-xl border border-[#E2E8F0] bg-white p-4 shadow-[0_1px_3px_rgba(0,0,0,0.02)] dark:border-[#1E293B] dark:bg-[#252B38]">
-          <div className="text-[10px] font-bold text-[#F59E0B] uppercase dark:text-[#FBBF24]">Pendentes</div>
+        <div className="rounded-xl border border-[#E2E8F0] bg-white p-4 shadow-[0_1px_3px_rgba(0,0,0,0.02)] dark:border-[#263447] dark:bg-[#1D2B40]">
+          <div className="text-[10px] font-bold text-[#F4B544] uppercase dark:text-[#F4B544]">Pendentes</div>
           <div className="mt-1 text-2xl font-extrabold text-white dark:text-white">{stats.pending}</div>
         </div>
-        <div className="rounded-xl border border-[#E2E8F0] bg-white p-4 shadow-[0_1px_3px_rgba(0,0,0,0.02)] dark:border-[#1E293B] dark:bg-[#252B38]">
-          <div className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase">Concluídos</div>
+        <div className="rounded-xl border border-[#E2E8F0] bg-white p-4 shadow-[0_1px_3px_rgba(0,0,0,0.02)] dark:border-[#263447] dark:bg-[#1D2B40]">
+          <div className="text-[10px] font-bold text-[#2BBF8A] dark:text-[#2BBF8A] uppercase">Concluídos</div>
           <div className="mt-1 text-2xl font-extrabold text-white dark:text-white">{stats.completed}</div>
         </div>
       </div>
@@ -110,16 +110,16 @@ export const LembretesView: React.FC = () => {
       {isAdding && (
         <form
           onSubmit={handleCreate}
-          className="rounded-2xl border border-amber-500/40 bg-amber-50/60 p-4.5 shadow-sm dark:border-amber-500/30 dark:bg-amber-950/20"
+          className="rounded-2xl border border-[#F4B544]/40 bg-[#F4B544]/60 p-4.5 shadow-sm dark:border-[#F4B544]/30 dark:bg-[#F4B544]/20"
         >
-          <h3 className="text-xs font-bold text-[#F59E0B] uppercase dark:text-[#FBBF24]">
+          <h3 className="text-xs font-bold text-[#F4B544] uppercase dark:text-[#F4B544]">
             Cadastrar Novo Lembrete
           </h3>
 
           <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-3">
             <div className="sm:col-span-3">
               <label className="text-xs font-semibold text-white dark:text-white">
-                Título do lembrete <span className="text-red-500">*</span>
+                Título do lembrete <span className="text-[#F16D75]">*</span>
               </label>
               <input
                 type="text"
@@ -127,7 +127,7 @@ export const LembretesView: React.FC = () => {
                 placeholder="Ex: Último dia para pagamento da taxa de inscrição..."
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-white p-2.5 text-xs text-[#374151] focus:border-[#F59E0B] focus:outline-none dark:border-[#1E293B] dark:bg-[#0F172A] dark:text-white"
+                className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-white p-2.5 text-xs text-[#93A2B7] focus:border-[#7DA2FF] focus:outline-none dark:border-[#263447] dark:bg-[#0B1120] dark:text-white"
               />
             </div>
 
@@ -138,7 +138,7 @@ export const LembretesView: React.FC = () => {
               <select
                 value={category}
                 onChange={(e: any) => setCategory(e.target.value)}
-                className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-white p-2.5 text-xs text-[#374151] focus:border-[#F59E0B] focus:outline-none dark:border-[#1E293B] dark:bg-[#0F172A] dark:text-white"
+                className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-white p-2.5 text-xs text-[#93A2B7] focus:border-[#7DA2FF] focus:outline-none dark:border-[#263447] dark:bg-[#0B1120] dark:text-white"
               >
                 <option value="INSCRICOES">Inscrições</option>
                 <option value="PROVAS">Provas</option>
@@ -154,7 +154,7 @@ export const LembretesView: React.FC = () => {
                 type="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-white p-2.5 text-xs text-[#374151] focus:border-[#F59E0B] focus:outline-none dark:border-[#1E293B] dark:bg-[#0F172A] dark:text-white"
+                className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-white p-2.5 text-xs text-[#93A2B7] focus:border-[#7DA2FF] focus:outline-none dark:border-[#263447] dark:bg-[#0B1120] dark:text-white"
               />
             </div>
 
@@ -162,13 +162,13 @@ export const LembretesView: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setIsAdding(false)}
-                className="rounded-xl px-3 py-2 text-xs font-semibold text-white hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
+                className="rounded-xl px-3 py-2 text-xs font-semibold text-white hover:bg-slate-100 dark:hover:bg-[#172235] cursor-pointer"
               >
                 Cancelar
               </button>
               <button
                 type="submit"
-                className="rounded-xl bg-gradient-to-r from-[#F59E0B] to-[#FBBF24] hover:from-[#D97706] hover:to-[#F59E0B] px-4 py-2 text-xs font-bold text-white shadow-md shadow-amber-500/20 cursor-pointer"
+                className="rounded-xl bg-gradient-to-r from-[#F4B544] to-[#F4B544] hover:from-[#D97706] hover:to-[#F4B544] px-4 py-2 text-xs font-bold text-white shadow-md shadow-amber-500/20 cursor-pointer"
               >
                 Salvar Lembrete
               </button>
@@ -178,16 +178,16 @@ export const LembretesView: React.FC = () => {
       )}
 
       {/* Filters Bar */}
-      <div className="flex flex-wrap items-center justify-end gap-2 rounded-2xl border border-[#E2E8F0] bg-white p-3 dark:border-[#1E293B] dark:bg-[#252B38]">
+      <div className="flex flex-wrap items-center justify-end gap-2 rounded-2xl border border-[#E2E8F0] bg-white p-3 dark:border-[#263447] dark:bg-[#1D2B40]">
         {/* Status Filter */}
-        <div className="flex items-center gap-1 rounded-xl bg-[#F1F5F9] p-0.5 text-xs font-bold dark:bg-[#0F172A]">
+        <div className="flex items-center gap-1 rounded-xl bg-[#F1F5F9] p-0.5 text-xs font-bold dark:bg-[#0B1120]">
           {(["TODOS", "PENDENTES", "CONCLUIDOS"] as const).map((st) => (
             <button
               key={st}
               onClick={() => setFilterStatus(st)}
               className={`rounded-lg px-2.5 py-1 transition ${
                 filterStatus === st
-                  ? "bg-white text-[#F59E0B] shadow-xs dark:bg-[#1E293B] dark:text-[#FBBF24]"
+                  ? "bg-white text-[#F4B544] shadow-xs dark:bg-[#172235] dark:text-[#F4B544]"
                   : "text-white dark:text-white"
               }`}
             >
@@ -200,8 +200,8 @@ export const LembretesView: React.FC = () => {
       {/* Reminders List */}
       <div className="space-y-2">
         {filteredReminders.length === 0 ? (
-          <div className="rounded-2xl border border-[#E2E8F0] bg-white p-8 text-center text-xs text-[#737D89] dark:border-[#1E293B] dark:bg-[#252B38] dark:text-[#94A3B8]">
-            <CheckCircle2 className="mx-auto mb-2 h-8 w-8 text-[#F59E0B]" />
+          <div className="rounded-2xl border border-[#E2E8F0] bg-white p-8 text-center text-xs text-[#718096] dark:border-[#263447] dark:bg-[#1D2B40] dark:text-[#93A2B7]">
+            <CheckCircle2 className="mx-auto mb-2 h-8 w-8 text-[#F4B544]" />
             <p className="font-semibold">Nenhum lembrete encontrado para este filtro.</p>
           </div>
         ) : (
@@ -210,8 +210,8 @@ export const LembretesView: React.FC = () => {
               key={rem.id}
               className={`flex items-center justify-between rounded-xl border p-3.5 transition ${
                 rem.completed
-                  ? "border-[#E2E8F0] bg-[#F1F5F9]/70 opacity-70 dark:border-[#1E293B] dark:bg-[#0F172A]/60"
-                  : "border-[#E2E8F0] bg-white hover:border-[#F59E0B] dark:border-[#1E293B] dark:bg-[#1E293B]"
+                  ? "border-[#E2E8F0] bg-[#F1F5F9]/70 opacity-70 dark:border-[#263447] dark:bg-[#0B1120]/60"
+                  : "border-[#E2E8F0] bg-white hover:border-[#F4B544] dark:border-[#263447] dark:bg-[#172235]"
               }`}
             >
               <div className="flex items-center gap-3">
@@ -249,7 +249,7 @@ export const LembretesView: React.FC = () => {
 
                 <button
                   onClick={() => deleteReminder(rem.id)}
-                  className="rounded-lg p-1 text-white hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950/40 dark:hover:text-red-400"
+                  className="rounded-lg p-1 text-white hover:bg-[#3B2029] hover:text-[#F16D75] dark:hover:bg-[#F16D75]/40 dark:hover:text-[#F16D75]"
                   title="Excluir lembrete"
                 >
                   <Trash2 className="h-4 w-4" />

@@ -46,18 +46,18 @@ export const DisciplineCard: React.FC<DisciplineCardProps> = ({
   const formattedTime = hours > 0 ? `${hours}h${mins > 0 ? ` ${mins}m` : ""}` : `${mins}m`;
 
   return (
-    <div className="group relative flex flex-col justify-between rounded-2xl border border-zinc-200 bg-white p-5 shadow-xs transition hover:border-amber-500/60 hover:shadow-md dark:border-zinc-800 dark:bg-[#252B38]">
+    <div className="group relative flex flex-col justify-between rounded-2xl border border-zinc-200 bg-white p-5 shadow-xs transition hover:border-[#F4B544]/60 hover:shadow-md dark:border-zinc-800 dark:bg-[#1D2B40]">
       <div>
         {/* Header: Color Accent + Name + Plan Tag */}
         <div className="flex items-start justify-between gap-3">
           <div className="flex items-center gap-2.5 min-w-0">
             <span
               className="h-3 w-3 rounded-full shrink-0 shadow-xs"
-              style={{ backgroundColor: discipline.color || "#F59E0B" }}
+              style={{ backgroundColor: discipline.color || "#F4B544" }}
             />
             <h3
               onClick={() => onEdit(discipline)}
-              className="font-bold text-white hover:text-[#F59E0B] dark:text-white dark:hover:text-[#FBBF24] truncate text-sm cursor-pointer transition"
+              className="font-bold text-white hover:text-[#F4B544] dark:text-white dark:hover:text-[#F4B544] truncate text-sm cursor-pointer transition"
               title={discipline.name}
             >
               {discipline.name}
@@ -85,7 +85,7 @@ export const DisciplineCard: React.FC<DisciplineCardProps> = ({
           </div>
           <div>
             <span className="text-[10px] text-white block">Desempenho</span>
-            <span className="text-xs font-bold text-[#F59E0B] dark:text-[#FBBF24]">
+            <span className="text-xs font-bold text-[#F4B544] dark:text-[#F4B544]">
               {accuracyPct}%
             </span>
           </div>
@@ -106,7 +106,7 @@ export const DisciplineCard: React.FC<DisciplineCardProps> = ({
               className="h-full rounded-full transition-all duration-500"
               style={{
                 width: `${progressPct}%`,
-                backgroundColor: discipline.color || "#F59E0B",
+                backgroundColor: discipline.color || "#F4B544",
               }}
             />
           </div>
@@ -127,7 +127,7 @@ export const DisciplineCard: React.FC<DisciplineCardProps> = ({
         <button
           type="button"
           onClick={() => onStartStudy(discipline)}
-          className="flex items-center gap-1.5 rounded-lg bg-amber-500/10 px-3 py-1.5 text-xs font-bold text-[#F59E0B] dark:text-[#FBBF24] hover:bg-[#F59E0B] hover:text-white dark:hover:bg-[#F59E0B] dark:hover:text-white transition"
+          className="flex items-center gap-1.5 rounded-lg bg-[#527DFF]/10 px-3 py-1.5 text-xs font-bold text-[#F4B544] dark:text-[#F4B544] hover:bg-[#527DFF] hover:text-white dark:hover:bg-[#527DFF] dark:hover:text-white transition"
         >
           <Play className="h-3 w-3 fill-current" />
           <span>Iniciar Estudo</span>

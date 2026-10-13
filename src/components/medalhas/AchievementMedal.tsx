@@ -30,7 +30,7 @@ function getCategoryPalette(category: string = "progresso") {
         rimInner: "#C2410C",
         faceFrom: "#271206",
         faceTo: "#120702",
-        accent: "#FBBF24",
+        accent: "#F4B544",
         accentLight: "#FED7AA",
         glow: "rgba(234, 88, 12, 0.25)",
       };
@@ -50,7 +50,7 @@ function getCategoryPalette(category: string = "progresso") {
         rimInner: "#047857",
         faceFrom: "#062217",
         faceTo: "#02100A",
-        accent: "#48C3A7",
+        accent: "#2BBF8A",
         accentLight: "#A7F3D0",
         glow: "rgba(5, 150, 105, 0.25)",
       };
@@ -70,7 +70,7 @@ function getCategoryPalette(category: string = "progresso") {
         rimInner: "#B45309",
         faceFrom: "#251804",
         faceTo: "#120B02",
-        accent: "#FBBF24",
+        accent: "#F4B544",
         accentLight: "#FDE68A",
         glow: "rgba(217, 119, 6, 0.25)",
       };
@@ -100,7 +100,7 @@ function getCategoryPalette(category: string = "progresso") {
         rimInner: "#C2410C",
         faceFrom: "#271206",
         faceTo: "#120702",
-        accent: "#FBBF24",
+        accent: "#F4B544",
         accentLight: "#FED7AA",
         glow: "rgba(234, 88, 12, 0.25)",
       };
@@ -130,9 +130,9 @@ export const AchievementMedal: React.FC<AchievementMedalProps> = ({
   const strokeDashoffset = circumference - (clampedProgress / 100) * circumference;
 
   // Colors for inner vector artwork
-  const strokeColor = isUnlocked ? palette.accent : isInProgress ? "#94A3B8" : "#475569";
-  const fillColor = isUnlocked ? palette.accentLight : isInProgress ? "#CBD5E1" : "#384154";
-  const highlight = isUnlocked ? "#FFFFFF" : isInProgress ? "#F1F5F9" : "#64748B";
+  const strokeColor = isUnlocked ? palette.accent : isInProgress ? "#93A2B7" : "#39475C";
+  const fillColor = isUnlocked ? palette.accentLight : isInProgress ? "#C4CEDB" : "#263447";
+  const highlight = isUnlocked ? "#FFFFFF" : isInProgress ? "#F5F7FB" : "#718096";
 
   // Individual Tailored Vector Emblem
   const renderEmblem = () => {
@@ -274,7 +274,7 @@ export const AchievementMedal: React.FC<AchievementMedalProps> = ({
             <path
               d="M45 44 L48 48 L56 39"
               fill="none"
-              stroke={isUnlocked ? "#120B07" : "#0F172A"}
+              stroke={isUnlocked ? "#120B07" : "#0B1120"}
               strokeWidth="2.5"
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -291,7 +291,7 @@ export const AchievementMedal: React.FC<AchievementMedalProps> = ({
             <line x1="42" y1="48" x2="58" y2="48" stroke={strokeColor} strokeWidth="2.5" strokeLinecap="round" />
             <line x1="42" y1="58" x2="52" y2="58" stroke={strokeColor} strokeWidth="2.5" strokeLinecap="round" />
             <circle cx="56" cy="58" r="5" fill={fillColor} />
-            <path d="M54 58 L55.5 59.5 L58.5 56.5" fill="none" stroke={isUnlocked ? highlight : "#0F172A"} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M54 58 L55.5 59.5 L58.5 56.5" fill="none" stroke={isUnlocked ? highlight : "#0B1120"} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
           </g>
         );
 
@@ -519,7 +519,7 @@ export const AchievementMedal: React.FC<AchievementMedalProps> = ({
             />
             <polygon points="26,44 32,54 38,46" fill={isUnlocked ? highlight : strokeColor} />
             <circle cx="50" cy="50" r="7" fill={fillColor} />
-            <path d="M47 50 L49.5 52.5 L53.5 48" fill="none" stroke={isUnlocked ? "#041F1C" : "#0F172A"} strokeWidth="2" strokeLinecap="round" />
+            <path d="M47 50 L49.5 52.5 L53.5 48" fill="none" stroke={isUnlocked ? "#041F1C" : "#0B1120"} strokeWidth="2" strokeLinecap="round" />
           </g>
         );
 
@@ -578,7 +578,7 @@ export const AchievementMedal: React.FC<AchievementMedalProps> = ({
               y1="6"
               x2="50"
               y2="9"
-              stroke={isUnlocked ? palette.rimInner : "#384154"}
+              stroke={isUnlocked ? palette.rimInner : "#263447"}
               strokeWidth="1.5"
               strokeLinecap="round"
               transform={`rotate(${i * 22.5} 50 50)`}
@@ -590,7 +590,7 @@ export const AchievementMedal: React.FC<AchievementMedalProps> = ({
             cy="50"
             r="44"
             fill={isUnlocked ? `url(#unlockedFace-${badgeId})` : `url(#lockedFace-${badgeId})`}
-            stroke={isUnlocked ? `url(#unlockedRim-${badgeId})` : isInProgress ? "#475569" : "#384154"}
+            stroke={isUnlocked ? `url(#unlockedRim-${badgeId})` : isInProgress ? "#39475C" : "#263447"}
             strokeWidth={isUnlocked ? "3" : "2"}
           />
           {/* Inner groove */}
@@ -599,7 +599,7 @@ export const AchievementMedal: React.FC<AchievementMedalProps> = ({
             cy="50"
             r="38"
             fill="none"
-            stroke={isUnlocked ? palette.rimInner : isInProgress ? "#384154" : "#1E293B"}
+            stroke={isUnlocked ? palette.rimInner : isInProgress ? "#263447" : "#172235"}
             strokeWidth="1.5"
             strokeOpacity="0.7"
           />
@@ -614,14 +614,14 @@ export const AchievementMedal: React.FC<AchievementMedalProps> = ({
           <polygon
             points="50,6 81,19 94,50 81,81 50,94 19,81 6,50 19,19"
             fill={isUnlocked ? `url(#unlockedFace-${badgeId})` : `url(#lockedFace-${badgeId})`}
-            stroke={isUnlocked ? `url(#unlockedRim-${badgeId})` : isInProgress ? "#475569" : "#384154"}
+            stroke={isUnlocked ? `url(#unlockedRim-${badgeId})` : isInProgress ? "#39475C" : "#263447"}
             strokeWidth={isUnlocked ? "3" : "2"}
             strokeLinejoin="round"
           />
           <polygon
             points="50,12 77,23 88,50 77,77 50,88 23,77 12,50 23,23"
             fill="none"
-            stroke={isUnlocked ? palette.rimInner : isInProgress ? "#384154" : "#1E293B"}
+            stroke={isUnlocked ? palette.rimInner : isInProgress ? "#263447" : "#172235"}
             strokeWidth="1.5"
             strokeLinejoin="round"
             strokeOpacity="0.7"
@@ -635,16 +635,16 @@ export const AchievementMedal: React.FC<AchievementMedalProps> = ({
       return (
         <g>
           {/* Caliper ticks */}
-          <line x1="50" y1="4" x2="50" y2="10" stroke={isUnlocked ? palette.accent : "#475569"} strokeWidth="2.5" strokeLinecap="round" />
-          <line x1="50" y1="90" x2="50" y2="96" stroke={isUnlocked ? palette.accent : "#475569"} strokeWidth="2.5" strokeLinecap="round" />
-          <line x1="4" y1="50" x2="10" y2="50" stroke={isUnlocked ? palette.accent : "#475569"} strokeWidth="2.5" strokeLinecap="round" />
-          <line x1="90" y1="50" x2="96" y2="50" stroke={isUnlocked ? palette.accent : "#475569"} strokeWidth="2.5" strokeLinecap="round" />
+          <line x1="50" y1="4" x2="50" y2="10" stroke={isUnlocked ? palette.accent : "#39475C"} strokeWidth="2.5" strokeLinecap="round" />
+          <line x1="50" y1="90" x2="50" y2="96" stroke={isUnlocked ? palette.accent : "#39475C"} strokeWidth="2.5" strokeLinecap="round" />
+          <line x1="4" y1="50" x2="10" y2="50" stroke={isUnlocked ? palette.accent : "#39475C"} strokeWidth="2.5" strokeLinecap="round" />
+          <line x1="90" y1="50" x2="96" y2="50" stroke={isUnlocked ? palette.accent : "#39475C"} strokeWidth="2.5" strokeLinecap="round" />
           <circle
             cx="50"
             cy="50"
             r="43"
             fill={isUnlocked ? `url(#unlockedFace-${badgeId})` : `url(#lockedFace-${badgeId})`}
-            stroke={isUnlocked ? `url(#unlockedRim-${badgeId})` : isInProgress ? "#475569" : "#384154"}
+            stroke={isUnlocked ? `url(#unlockedRim-${badgeId})` : isInProgress ? "#39475C" : "#263447"}
             strokeWidth={isUnlocked ? "3" : "2"}
           />
           <circle
@@ -652,7 +652,7 @@ export const AchievementMedal: React.FC<AchievementMedalProps> = ({
             cy="50"
             r="38"
             fill="none"
-            stroke={isUnlocked ? palette.rimInner : isInProgress ? "#384154" : "#1E293B"}
+            stroke={isUnlocked ? palette.rimInner : isInProgress ? "#263447" : "#172235"}
             strokeWidth="1.5"
             strokeDasharray="4 6"
             strokeOpacity="0.8"
@@ -668,14 +668,14 @@ export const AchievementMedal: React.FC<AchievementMedalProps> = ({
           <polygon
             points="50,6 88,28 88,72 50,94 12,72 12,28"
             fill={isUnlocked ? `url(#unlockedFace-${badgeId})` : `url(#lockedFace-${badgeId})`}
-            stroke={isUnlocked ? `url(#unlockedRim-${badgeId})` : isInProgress ? "#475569" : "#384154"}
+            stroke={isUnlocked ? `url(#unlockedRim-${badgeId})` : isInProgress ? "#39475C" : "#263447"}
             strokeWidth={isUnlocked ? "3" : "2"}
             strokeLinejoin="round"
           />
           <polygon
             points="50,13 82,31 82,69 50,87 18,69 18,31"
             fill="none"
-            stroke={isUnlocked ? palette.rimInner : isInProgress ? "#384154" : "#1E293B"}
+            stroke={isUnlocked ? palette.rimInner : isInProgress ? "#263447" : "#172235"}
             strokeWidth="1.5"
             strokeLinejoin="round"
             strokeOpacity="0.7"
@@ -689,13 +689,13 @@ export const AchievementMedal: React.FC<AchievementMedalProps> = ({
       return (
         <g>
           {/* Top crown */}
-          <rect x="46" y="2" width="8" height="5" rx="1.5" fill={isUnlocked ? palette.rimOuter : "#475569"} />
+          <rect x="46" y="2" width="8" height="5" rx="1.5" fill={isUnlocked ? palette.rimOuter : "#39475C"} />
           <circle
             cx="50"
             cy="50"
             r="43"
             fill={isUnlocked ? `url(#unlockedFace-${badgeId})` : `url(#lockedFace-${badgeId})`}
-            stroke={isUnlocked ? `url(#unlockedRim-${badgeId})` : isInProgress ? "#475569" : "#384154"}
+            stroke={isUnlocked ? `url(#unlockedRim-${badgeId})` : isInProgress ? "#39475C" : "#263447"}
             strokeWidth={isUnlocked ? "3" : "2"}
           />
           {/* 12 hour notches around bezel */}
@@ -706,7 +706,7 @@ export const AchievementMedal: React.FC<AchievementMedalProps> = ({
               y1="9"
               x2="50"
               y2="12"
-              stroke={isUnlocked ? palette.accent : "#475569"}
+              stroke={isUnlocked ? palette.accent : "#39475C"}
               strokeWidth="1.5"
               strokeLinecap="round"
               transform={`rotate(${i * 30} 50 50)`}
@@ -717,7 +717,7 @@ export const AchievementMedal: React.FC<AchievementMedalProps> = ({
             cy="50"
             r="37"
             fill="none"
-            stroke={isUnlocked ? palette.rimInner : isInProgress ? "#384154" : "#1E293B"}
+            stroke={isUnlocked ? palette.rimInner : isInProgress ? "#263447" : "#172235"}
             strokeWidth="1.5"
             strokeOpacity="0.7"
           />
@@ -735,7 +735,7 @@ export const AchievementMedal: React.FC<AchievementMedalProps> = ({
             rx="46"
             ry="46"
             fill="none"
-            stroke={isUnlocked ? palette.rimInner : "#384154"}
+            stroke={isUnlocked ? palette.rimInner : "#263447"}
             strokeWidth="1"
             strokeDasharray="6 6"
           />
@@ -744,7 +744,7 @@ export const AchievementMedal: React.FC<AchievementMedalProps> = ({
             cy="50"
             r="43"
             fill={isUnlocked ? `url(#unlockedFace-${badgeId})` : `url(#lockedFace-${badgeId})`}
-            stroke={isUnlocked ? `url(#unlockedRim-${badgeId})` : isInProgress ? "#475569" : "#384154"}
+            stroke={isUnlocked ? `url(#unlockedRim-${badgeId})` : isInProgress ? "#39475C" : "#263447"}
             strokeWidth={isUnlocked ? "3" : "2"}
           />
           <circle
@@ -752,7 +752,7 @@ export const AchievementMedal: React.FC<AchievementMedalProps> = ({
             cy="50"
             r="38"
             fill="none"
-            stroke={isUnlocked ? palette.rimInner : isInProgress ? "#384154" : "#1E293B"}
+            stroke={isUnlocked ? palette.rimInner : isInProgress ? "#263447" : "#172235"}
             strokeWidth="1.5"
             strokeOpacity="0.7"
           />
@@ -767,14 +767,14 @@ export const AchievementMedal: React.FC<AchievementMedalProps> = ({
           <polygon
             points="50,6 88,20 80,74 50,94 20,74 12,20"
             fill={isUnlocked ? `url(#unlockedFace-${badgeId})` : `url(#lockedFace-${badgeId})`}
-            stroke={isUnlocked ? `url(#unlockedRim-${badgeId})` : isInProgress ? "#475569" : "#384154"}
+            stroke={isUnlocked ? `url(#unlockedRim-${badgeId})` : isInProgress ? "#39475C" : "#263447"}
             strokeWidth={isUnlocked ? "3" : "2"}
             strokeLinejoin="round"
           />
           <polygon
             points="50,13 81,25 74,70 50,87 26,70 19,25"
             fill="none"
-            stroke={isUnlocked ? palette.rimInner : isInProgress ? "#384154" : "#1E293B"}
+            stroke={isUnlocked ? palette.rimInner : isInProgress ? "#263447" : "#172235"}
             strokeWidth="1.5"
             strokeLinejoin="round"
             strokeOpacity="0.7"
@@ -791,7 +791,7 @@ export const AchievementMedal: React.FC<AchievementMedalProps> = ({
           cy="50"
           r="44"
           fill={isUnlocked ? `url(#unlockedFace-${badgeId})` : `url(#lockedFace-${badgeId})`}
-          stroke={isUnlocked ? `url(#unlockedRim-${badgeId})` : isInProgress ? "#475569" : "#384154"}
+          stroke={isUnlocked ? `url(#unlockedRim-${badgeId})` : isInProgress ? "#39475C" : "#263447"}
           strokeWidth={isUnlocked ? "3" : "2"}
         />
         <circle
@@ -799,7 +799,7 @@ export const AchievementMedal: React.FC<AchievementMedalProps> = ({
           cy="50"
           r="38"
           fill="none"
-          stroke={isUnlocked ? palette.rimInner : isInProgress ? "#384154" : "#1E293B"}
+          stroke={isUnlocked ? palette.rimInner : isInProgress ? "#263447" : "#172235"}
           strokeWidth="1.5"
           strokeOpacity="0.7"
         />
@@ -832,14 +832,14 @@ export const AchievementMedal: React.FC<AchievementMedalProps> = ({
 
           {/* Locked Face Neutral Brushed Metallic Finish */}
           <radialGradient id={`lockedFace-${badgeId}`} cx="38%" cy="32%" r="68%">
-            <stop offset="0%" stopColor="#1E293B" />
+            <stop offset="0%" stopColor="#172235" />
             <stop offset="60%" stopColor="#141D2B" />
             <stop offset="100%" stopColor="#0B0F17" />
           </radialGradient>
 
           {/* In-Progress Track Ring Gradient */}
           <linearGradient id={`progressRim-${badgeId}`} x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#FBBF24" />
+            <stop offset="0%" stopColor="#F4B544" />
             <stop offset="100%" stopColor="#FFB300" />
           </linearGradient>
 
@@ -871,7 +871,7 @@ export const AchievementMedal: React.FC<AchievementMedalProps> = ({
             cy="50"
             r={radius}
             fill="none"
-            stroke="#384154"
+            stroke="#263447"
             strokeWidth="3"
           />
         )}
@@ -913,7 +913,7 @@ export const AchievementMedal: React.FC<AchievementMedalProps> = ({
       {/* Checkmark Status Badge in Corner for Unlocked Medals */}
       {isUnlocked && showCheckBadge && (
         <div
-          className="absolute rounded-full flex items-center justify-center font-bold text-white shadow-xs bg-emerald-500 ring-2 ring-white dark:ring-[#0F172A]"
+          className="absolute rounded-full flex items-center justify-center font-bold text-white shadow-xs bg-[#2BBF8A] ring-2 ring-white dark:ring-[#0B1120]"
           style={{
             bottom: checkOffset,
             right: checkOffset,

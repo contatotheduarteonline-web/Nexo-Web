@@ -46,3 +46,10 @@
 - `src/lib/storage.ts` — Supabase storage with local fallback.
 - `src/context/AuthContext.tsx` — client-side auth context.
 - `src/context/StudyContext.tsx` — main study data context (large, ~3000 lines).
+
+## Color System (official palette)
+- **Source of truth**: `src/index.css` `:root` — semantic tokens (surfaces, texts, brand blue, amber accent, states, data/chart colors).
+- Identity: dark theme only (`html class="dark"`). Blue `#527DFF` = interactive actions/links/selected; amber `#F4B544` = brand accent, metas, attention; success `#2BBF8A`; error `#F16D75`; info `#58A6FF`.
+- Tailwind utilities generated via `@theme inline` (bg-surface, bg-brand, text-muted, border-line, bg-success…). Prefer tokens or `dark:`-paired semantic classes; do NOT add new raw HEX to components.
+- Soft/border pairs for states: `--*-soft` / `--*-border` (e.g. #15382F/#24634F).
+- `src/lib/designSystem.ts` (NEXO_COLORS/DS) is legacy/unused — do not extend it.

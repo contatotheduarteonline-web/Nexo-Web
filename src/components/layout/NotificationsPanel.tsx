@@ -29,19 +29,19 @@ export const NotificationsPanel: React.FC<NotificationsPanelProps> = ({
   };
 
   return (
-    <div className="absolute right-0 top-full mt-2 w-[360px] overflow-hidden rounded-2xl border border-[#384154] bg-[#11151F] shadow-xl z-50">
+    <div className="absolute right-0 top-full mt-2 w-[360px] overflow-hidden rounded-2xl border border-[#263447] bg-[#101827] shadow-xl z-50">
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-[#384154] px-4 py-3">
+      <div className="flex items-center justify-between border-b border-[#263447] px-4 py-3">
         <div className="flex items-center gap-2.5">
-          <div className="flex h-7 w-7 items-center justify-center rounded-lg border border-[#F59E0B]/25 bg-[#F59E0B]/10">
-            <Bell className="h-3.5 w-3.5 text-[#F59E0B]" />
+          <div className="flex h-7 w-7 items-center justify-center rounded-lg border border-[#F4B544]/25 bg-[#527DFF]/10">
+            <Bell className="h-3.5 w-3.5 text-[#F4B544]" />
           </div>
           <span className="text-xs font-bold uppercase tracking-wider text-white">
             Notificações
           </span>
         </div>
         {total > 0 && (
-          <span className="rounded-full border border-[#F59E0B]/30 bg-[#F59E0B]/10 px-2.5 py-0.5 text-[10px] font-bold text-[#F59E0B]">
+          <span className="rounded-full border border-[#F4B544]/30 bg-[#527DFF]/10 px-2.5 py-0.5 text-[10px] font-bold text-[#F4B544]">
             {total} pendente{total > 1 ? "s" : ""}
           </span>
         )}
@@ -50,8 +50,8 @@ export const NotificationsPanel: React.FC<NotificationsPanelProps> = ({
       {/* Body */}
       {total === 0 ? (
         <div className="px-6 py-8 text-center">
-          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full border border-emerald-500/25 bg-emerald-500/10">
-            <CheckCircle2 className="h-6 w-6 text-emerald-400" />
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full border border-[#2BBF8A]/25 bg-[#2BBF8A]/10">
+            <CheckCircle2 className="h-6 w-6 text-[#2BBF8A]" />
           </div>
           <p className="mt-3 text-sm font-bold text-white">Tudo em dia</p>
           <p className="mt-1 text-[11px] text-white/50">
@@ -62,18 +62,18 @@ export const NotificationsPanel: React.FC<NotificationsPanelProps> = ({
         <div className="max-h-80 overflow-y-auto">
           {/* Revisões */}
           {pendingReviews.length > 0 && (
-            <div className="border-b border-[#384154] py-2">
-              <p className="px-4 py-1 text-[9px] font-black uppercase tracking-widest text-[#F59E0B]">
+            <div className="border-b border-[#263447] py-2">
+              <p className="px-4 py-1 text-[9px] font-black uppercase tracking-widest text-[#F4B544]">
                 Revisões para hoje
               </p>
               {pendingReviews.slice(0, 3).map((review) => (
                 <div
                   key={review.id}
                   onClick={() => go("revisoes")}
-                  className="mx-1.5 flex cursor-pointer items-center gap-3 rounded-xl px-2.5 py-2.5 transition-colors hover:bg-[#252B38]"
+                  className="mx-1.5 flex cursor-pointer items-center gap-3 rounded-xl px-2.5 py-2.5 transition-colors hover:bg-[#1D2B40]"
                 >
-                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-[#F59E0B]/25 bg-[#F59E0B]/10">
-                    <Clock className="h-3.5 w-3.5 text-[#F59E0B]" />
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-[#F4B544]/25 bg-[#527DFF]/10">
+                    <Clock className="h-3.5 w-3.5 text-[#F4B544]" />
                   </div>
                   <div className="min-w-0 flex-1 text-left">
                     <p className="truncate text-xs font-semibold text-white">
@@ -97,16 +97,16 @@ export const NotificationsPanel: React.FC<NotificationsPanelProps> = ({
           {/* Lembretes */}
           {activeReminders.length > 0 && (
             <div className="py-2">
-              <p className="px-4 py-1 text-[9px] font-black uppercase tracking-widest text-[#F59E0B]">
+              <p className="px-4 py-1 text-[9px] font-black uppercase tracking-widest text-[#F4B544]">
                 Lembretes
               </p>
               {activeReminders.slice(0, 3).map((reminder) => (
                 <div
                   key={reminder.id}
                   onClick={() => go("lembretes")}
-                  className="mx-1.5 flex cursor-pointer items-center gap-3 rounded-xl px-2.5 py-2.5 transition-colors hover:bg-[#252B38]"
+                  className="mx-1.5 flex cursor-pointer items-center gap-3 rounded-xl px-2.5 py-2.5 transition-colors hover:bg-[#1D2B40]"
                 >
-                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-[#384154] bg-[#171B25]">
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-[#263447] bg-[#111B2D]">
                     <Calendar className="h-3.5 w-3.5 text-white/70" />
                   </div>
                   <div className="min-w-0 flex-1 text-left">
@@ -131,18 +131,18 @@ export const NotificationsPanel: React.FC<NotificationsPanelProps> = ({
       )}
 
       {/* Footer */}
-      <div className="grid grid-cols-2 gap-2 border-t border-[#384154] p-3">
+      <div className="grid grid-cols-2 gap-2 border-t border-[#263447] p-3">
         <button
           type="button"
           onClick={() => go("revisoes")}
-          className="rounded-xl border border-[#384154] bg-[#171B25] px-3 py-2 text-[11px] font-bold text-white/70 transition hover:border-[#F59E0B]/40 hover:text-[#F59E0B] cursor-pointer"
+          className="rounded-xl border border-[#263447] bg-[#111B2D] px-3 py-2 text-[11px] font-bold text-white/70 transition hover:border-[#F4B544]/40 hover:text-[#F4B544] cursor-pointer"
         >
           Ver Revisões &rarr;
         </button>
         <button
           type="button"
           onClick={() => go("lembretes")}
-          className="rounded-xl border border-[#384154] bg-[#171B25] px-3 py-2 text-[11px] font-bold text-white/70 transition hover:border-[#F59E0B]/40 hover:text-[#F59E0B] cursor-pointer"
+          className="rounded-xl border border-[#263447] bg-[#111B2D] px-3 py-2 text-[11px] font-bold text-white/70 transition hover:border-[#F4B544]/40 hover:text-[#F4B544] cursor-pointer"
         >
           Ver Lembretes &rarr;
         </button>

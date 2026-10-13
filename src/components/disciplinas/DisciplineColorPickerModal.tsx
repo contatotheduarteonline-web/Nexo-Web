@@ -32,12 +32,12 @@ export const DisciplineColorPickerModal: React.FC<DisciplineColorPickerModalProp
   onSelectColor,
   onClose,
 }) => {
-  const [selectedColor, setSelectedColor] = useState<string>(currentColor || "#249D84");
-  const [customHex, setCustomHex] = useState<string>(currentColor || "#249D84");
+  const [selectedColor, setSelectedColor] = useState<string>(currentColor || "#2BBF8A");
+  const [customHex, setCustomHex] = useState<string>(currentColor || "#2BBF8A");
 
   useEffect(() => {
     if (isOpen) {
-      const clean = normalizeHex(currentColor || "#249D84");
+      const clean = normalizeHex(currentColor || "#2BBF8A");
       setSelectedColor(clean);
       setCustomHex(clean);
     }
@@ -73,7 +73,7 @@ export const DisciplineColorPickerModal: React.FC<DisciplineColorPickerModalProp
 
   return (
     <div className="fixed inset-0 z-70 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs">
-      <div className="w-full max-w-md rounded-2xl border border-zinc-200 bg-white p-5 shadow-2xl dark:border-zinc-800 dark:bg-[#252B38] transition-all">
+      <div className="w-full max-w-md rounded-2xl border border-zinc-200 bg-white p-5 shadow-2xl dark:border-zinc-800 dark:bg-[#1D2B40] transition-all">
         {/* Cabeçalho */}
         <div className="flex items-center justify-between pb-3 border-b border-zinc-100 dark:border-zinc-800">
           <div className="flex items-center gap-2.5">
@@ -120,7 +120,7 @@ export const DisciplineColorPickerModal: React.FC<DisciplineColorPickerModalProp
           <button
             type="button"
             onClick={handleSuggestNext}
-            className="inline-flex items-center gap-1.5 text-[11px] font-bold text-[#249D84] hover:text-[#1d7e6a] bg-[#249D84]/10 hover:bg-[#249D84]/20 px-2.5 py-1.5 rounded-lg transition cursor-pointer"
+            className="inline-flex items-center gap-1.5 text-[11px] font-bold text-[#2BBF8A] hover:text-[#1d7e6a] bg-[#2BBF8A]/10 hover:bg-[#2BBF8A]/20 px-2.5 py-1.5 rounded-lg transition cursor-pointer"
             title="Calcular próxima cor única automaticamente"
           >
             <Sparkles className="h-3 w-3" />
@@ -130,8 +130,8 @@ export const DisciplineColorPickerModal: React.FC<DisciplineColorPickerModalProp
 
         {/* Alerta de conflito de cor */}
         {isDuplicate && currentConflict && (
-          <div className="mb-3 p-2.5 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 flex items-start gap-2 text-xs text-amber-800 dark:text-amber-300">
-            <AlertCircle className="h-4 w-4 shrink-0 mt-0.5 text-amber-600 dark:text-amber-400" />
+          <div className="mb-3 p-2.5 rounded-xl bg-[#342B1C] dark:bg-[#F4B544]/40 border border-[#725629] dark:border-[#725629] flex items-start gap-2 text-xs text-[#F4B544] dark:text-[#F4B544]">
+            <AlertCircle className="h-4 w-4 shrink-0 mt-0.5 text-[#F4B544] dark:text-[#F4B544]" />
             <div>
               <p className="font-bold">Cor não permitida (repetida):</p>
               <p className="text-[11px] mt-0.5">
@@ -182,7 +182,7 @@ export const DisciplineColorPickerModal: React.FC<DisciplineColorPickerModalProp
                     isTaken
                       ? "opacity-25 cursor-not-allowed grayscale-30"
                       : isCurrent
-                      ? "scale-115 ring-2 ring-offset-2 ring-[#249D84] dark:ring-offset-zinc-900 shadow-md cursor-pointer"
+                      ? "scale-115 ring-2 ring-offset-2 ring-[#2BBF8A] dark:ring-offset-zinc-900 shadow-md cursor-pointer"
                       : "hover:scale-110 cursor-pointer shadow-2xs opacity-90 hover:opacity-100"
                   }`}
                 >
@@ -236,7 +236,7 @@ export const DisciplineColorPickerModal: React.FC<DisciplineColorPickerModalProp
               type="button"
               disabled={isDuplicate}
               onClick={() => handleApply(selectedColor)}
-              className="rounded-xl bg-[#249D84] px-4 py-1.5 text-xs font-bold text-white hover:bg-[#1F826D] disabled:opacity-40 disabled:cursor-not-allowed transition shadow-sm cursor-pointer"
+              className="rounded-xl bg-[#2BBF8A] px-4 py-1.5 text-xs font-bold text-white hover:bg-[#24634F] disabled:opacity-40 disabled:cursor-not-allowed transition shadow-sm cursor-pointer"
             >
               Aplicar Cor
             </button>

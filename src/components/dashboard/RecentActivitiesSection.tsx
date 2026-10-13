@@ -17,9 +17,9 @@ export const RecentActivitiesSection: React.FC<RecentActivitiesSectionProps> = (
       className="nx-card p-5 sm:p-6 flex flex-col justify-between"
     >
       <div>
-        <div className="flex items-center justify-between pb-3.5 border-b border-[#384154]">
+        <div className="flex items-center justify-between pb-3.5 border-b border-[#263447]">
           <div className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#384154] bg-[#171B25] text-white">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#263447] bg-[#111B2D] text-white">
               <History className="h-4 w-4" />
             </div>
             <h3 className="font-condensed text-[19px] font-bold text-white">
@@ -31,7 +31,7 @@ export const RecentActivitiesSection: React.FC<RecentActivitiesSectionProps> = (
             type="button"
             id="btn-historico-completo"
             onClick={onNavigateToHistory}
-            className="text-[13px] font-semibold text-[#F59E0B] hover:text-[#D97706] hover:underline flex items-center gap-1 cursor-pointer transition-colors duration-200"
+            className="text-[13px] font-semibold text-[#F4B544] hover:text-[#D97706] hover:underline flex items-center gap-1 cursor-pointer transition-colors duration-200"
           >
             <span>Histórico</span>
             <ArrowUpRight className="h-3.5 w-3.5" />
@@ -57,7 +57,7 @@ export const RecentActivitiesSection: React.FC<RecentActivitiesSectionProps> = (
                     <span className="font-semibold text-white truncate max-w-[220px]">
                       {sess.topicName || sess.disciplineName}
                     </span>
-                    <span className="num-condensed text-[11px] font-bold text-[#F59E0B] border border-[#F59E0B]/25 bg-[#F59E0B]/10 px-2 py-0.5 rounded-md">
+                    <span className="num-condensed text-[11px] font-bold text-[#F4B544] border border-[#F4B544]/25 bg-[#527DFF]/10 px-2 py-0.5 rounded-md">
                       {sess.durationMinutes} min
                     </span>
                   </div>

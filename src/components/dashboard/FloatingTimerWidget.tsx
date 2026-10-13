@@ -26,8 +26,8 @@ export const FloatingTimerWidget: React.FC = () => {
         title="Abrir Registro de Estudos em tela cheia"
         className={`relative flex h-16 w-16 items-center justify-center rounded-2xl sm:rounded-3xl cursor-pointer select-none transition-colors duration-200 border ${
           timer.isRunning
-            ? "border-emerald-400/40 bg-[#249D84] text-white shadow-[0_10px_28px_-8px_rgba(16,185,129,0.5)]"
-            : "border-[#F59E0B]/40 bg-[#F59E0B] text-[#11151F] shadow-[0_10px_28px_-8px_rgba(243,170,45,0.5)] hover:bg-[#D97706]"
+            ? "border-[#2BBF8A]/40 bg-[#2BBF8A] text-white shadow-[0_10px_28px_-8px_rgba(16,185,129,0.5)]"
+            : "border-[#F4B544]/40 bg-[#527DFF] text-white shadow-[0_10px_28px_-8px_rgba(243,170,45,0.5)] hover:bg-[#416CEB]"
         }`}
       >
         <div className="relative flex items-center justify-center">
@@ -38,7 +38,7 @@ export const FloatingTimerWidget: React.FC = () => {
           )}
 
           {timer.elapsedSeconds > 0 && !timer.isRunning && (
-            <span className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-[#11151F] text-[#F59E0B] text-[9px] font-black shadow-md border border-[#384154]">
+            <span className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-[#101827] text-[#F4B544] text-[9px] font-black shadow-md border border-[#263447]">
               ||
             </span>
           )}

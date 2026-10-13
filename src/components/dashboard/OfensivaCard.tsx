@@ -147,16 +147,16 @@ export const OfensivaCard: React.FC<OfensivaCardProps> = ({ className = "" }) =>
       className={`nx-card nx-card-hover w-full p-5 sm:p-6 ${className}`}
     >
       {/* Topo Limpo da Ofensiva */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-4 border-b border-[#384154] gap-3">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-4 border-b border-[#263447] gap-3">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#F59E0B]/20 bg-[#F59E0B]/10 text-[#F59E0B]">
-            <Flame className="h-5 w-5 fill-[#F59E0B] text-[#F59E0B]" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#F4B544]/20 bg-[#527DFF]/10 text-[#F4B544]">
+            <Flame className="h-5 w-5 fill-[#F59E0B] text-[#F4B544]" />
           </div>
           <div className="flex items-baseline gap-2.5">
             <h2 className="font-condensed text-[19px] font-bold text-white">
               Ofensiva
             </h2>
-            <span className="num-condensed text-[26px] font-bold leading-none text-[#F59E0B]">
+            <span className="num-condensed text-[26px] font-bold leading-none text-[#F4B544]">
               {currentStreak} {currentStreak === 1 ? "dia" : "dias"}
             </span>
           </div>
@@ -185,21 +185,21 @@ export const OfensivaCard: React.FC<OfensivaCardProps> = ({ className = "" }) =>
                 id={`ofensiva-dia-${day.label.toLowerCase()}`}
                 className={`relative flex flex-col items-center justify-between rounded-xl py-3.5 px-2 sm:px-3 text-center transition-colors duration-200 ${
                   day.isStudied
-                    ? "border border-[#F59E0B]/30 bg-[#F59E0B]/[0.07]"
+                    ? "border border-[#F4B544]/30 bg-[#527DFF]/[0.07]"
                     : day.isToday
-                    ? "border-2 border-[#F59E0B] bg-[#171B25]"
+                    ? "border-2 border-[#F4B544] bg-[#111B2D]"
                     : day.isFuture
-                    ? "border border-dashed border-[#384154] bg-[#171B25]/60 opacity-60"
-                    : "border border-[#384154] bg-[#171B25]"
+                    ? "border border-dashed border-[#263447] bg-[#111B2D]/60 opacity-60"
+                    : "border border-[#263447] bg-[#111B2D]"
                 }`}
               >
                 {/* Rótulo do dia (SEG, TER, QUA...) */}
                 <span
                   className={`text-[11px] font-bold tracking-wider ${
                     day.isToday
-                      ? "text-[#F59E0B]"
+                      ? "text-[#F4B544]"
                       : day.isStudied
-                      ? "text-[#F59E0B]"
+                      ? "text-[#F4B544]"
                       : "text-white"
                   }`}
                 >
@@ -210,7 +210,7 @@ export const OfensivaCard: React.FC<OfensivaCardProps> = ({ className = "" }) =>
                 <span
                   className={`num-condensed my-1.5 text-[20px] sm:text-[22px] font-bold ${
                     day.isStudied
-                      ? "text-[#F59E0B]"
+                      ? "text-[#F4B544]"
                       : day.isToday
                       ? "text-white"
                       : day.isFuture
@@ -226,12 +226,12 @@ export const OfensivaCard: React.FC<OfensivaCardProps> = ({ className = "" }) =>
                   {day.isStudied ? (
                     <div
                       title="Estudado"
-                      className="flex h-5 w-5 items-center justify-center rounded-full bg-[#F59E0B] text-[#11151F]"
+                      className="flex h-5 w-5 items-center justify-center rounded-full bg-[#527DFF] text-white"
                     >
                       <Check className="h-3 w-3 stroke-[3]" />
                     </div>
                   ) : day.isToday ? (
-                    <span className="inline-flex items-center rounded-full border border-[#F59E0B]/25 bg-[#F59E0B]/10 px-2 py-0.5 text-[10px] font-bold text-[#F59E0B]">
+                    <span className="inline-flex items-center rounded-full border border-[#F4B544]/25 bg-[#527DFF]/10 px-2 py-0.5 text-[10px] font-bold text-[#F4B544]">
                       Hoje
                     </span>
                   ) : day.isFuture ? (

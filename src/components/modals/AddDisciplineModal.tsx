@@ -11,12 +11,12 @@ interface AddDisciplineModalProps {
 }
 
 const PRESET_COLORS = [
-  "#249D84",
-  "#3B82F6",
-  "#249D84",
+  "#2BBF8A",
+  "#58A6FF",
+  "#2BBF8A",
   "#8B5CF6",
-  "#F59E0B",
-  "#DC4B4B",
+  "#F4B544",
+  "#F16D75",
   "#06B6D4",
   "#EC4899",
   "#6366F1",
@@ -32,7 +32,7 @@ export const AddDisciplineModal: React.FC<AddDisciplineModalProps> = ({
   const { addDiscipline, addTopic } = useStudy();
 
   const [name, setName] = useState("");
-  const [color, setColor] = useState("#249D84");
+  const [color, setColor] = useState("#2BBF8A");
   const [weight, setWeight] = useState<number>(2);
   const [priority, setPriority] = useState<"alta" | "media" | "baixa">("media");
   const [initialTopicsText, setInitialTopicsText] = useState("");
@@ -110,7 +110,7 @@ export const AddDisciplineModal: React.FC<AddDisciplineModalProps> = ({
                 onChange={(e) => setName(e.target.value)}
                 required
                 placeholder="Ex: Criminologia, Direito Penal Militar..."
-                className="mt-1.5 w-full rounded-xl border border-zinc-200 bg-zinc-50 px-3.5 py-2.5 text-xs font-bold text-white focus:border-[#249D84] focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"
+                className="mt-1.5 w-full rounded-xl border border-zinc-200 bg-zinc-50 px-3.5 py-2.5 text-xs font-bold text-white focus:border-[#7DA2FF] focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"
               />
             </div>
 
@@ -128,7 +128,7 @@ export const AddDisciplineModal: React.FC<AddDisciplineModalProps> = ({
                     style={{ backgroundColor: preset }}
                     className={`h-7 w-7 rounded-full transition-transform ${
                       color === preset
-                        ? "scale-115 ring-2 ring-offset-2 ring-[#249D84] dark:ring-offset-zinc-900"
+                        ? "scale-115 ring-2 ring-offset-2 ring-[#2BBF8A] dark:ring-offset-zinc-900"
                         : "hover:scale-105 opacity-80"
                     }`}
                   />
@@ -179,7 +179,7 @@ export const AddDisciplineModal: React.FC<AddDisciplineModalProps> = ({
                 <select
                   value={priority}
                   onChange={(e) => setPriority(e.target.value as any)}
-                  className="mt-1.5 w-full rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2.5 text-xs font-bold text-white focus:border-[#249D84] focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"
+                  className="mt-1.5 w-full rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2.5 text-xs font-bold text-white focus:border-[#7DA2FF] focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"
                 >
                   <option value="alta">Alta</option>
                   <option value="media">Média</option>
@@ -201,7 +201,7 @@ export const AddDisciplineModal: React.FC<AddDisciplineModalProps> = ({
                 onChange={(e) => setInitialTopicsText(e.target.value)}
                 rows={3}
                 placeholder="Ex:&#10;Teoria Geral do Crime&#10;Tipicidade e Ilicitude&#10;Culpabilidade"
-                className="mt-1.5 w-full rounded-xl border border-zinc-200 bg-zinc-50 p-3 text-xs text-white focus:border-[#249D84] focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-white resize-none"
+                className="mt-1.5 w-full rounded-xl border border-zinc-200 bg-zinc-50 p-3 text-xs text-white focus:border-[#7DA2FF] focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-white resize-none"
               />
             </div>
 
@@ -216,7 +216,7 @@ export const AddDisciplineModal: React.FC<AddDisciplineModalProps> = ({
               </button>
               <button
                 type="submit"
-                className="rounded-xl bg-[#249D84] px-6 py-2.5 text-xs font-bold text-white hover:bg-[#1F826D] shadow-xs transition"
+                className="rounded-xl bg-[#2BBF8A] px-6 py-2.5 text-xs font-bold text-white hover:bg-[#24634F] shadow-xs transition"
               >
                 Adicionar Disciplina
               </button>

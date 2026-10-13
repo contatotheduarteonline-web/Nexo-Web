@@ -50,84 +50,89 @@
 @layer base {
   :root {
     /* ======================================================================
-       NEXO — PALETA SEMÂNTICA OFICIAL (TEMA ÚNICO ESCURO: ARDÓSIA + ÂMBAR)
+       NEXO — PALETA SEMÂNTICA OFICIAL (TEMA ÚNICO ESCURO)
+       Azul tecnológico + azul-ardósia + âmbar de destaque.
        Fonte central de todas as cores da plataforma. Componentes devem
        referenciar estas variáveis (ou as utilidades Tailwind geradas delas,
        ex.: bg-surface, text-muted, border-line) em vez de HEX literais.
        ====================================================================== */
 
     /* A. Fundos e superfícies */
-    --background: #0F172A;            /* fundo principal da aplicação */
-    --background-deep: #11151F;       /* camada mais profunda (hero, barras, header) */
-    --surface: #1E293B;               /* superfície padrão dos cards */
-    --surface-elevated: #252B38;      /* modais, menus, popovers e cards da Home */
-    --surface-input: #171B25;         /* campos, áreas internas, tracks */
-    --surface-input-hover: #1B2130;   /* hover de áreas internas */
-    --surface-hover: #2D3442;         /* hover de itens e cards */
-    --surface-selected: #3A454F;      /* item selecionado / ativo */
+    --background: #0B1120;            /* fundo principal da aplicação */
+    --background-deep: #101827;       /* fundo secundário (hero, barras, header) */
+    --surface: #172235;               /* superfície padrão dos cards */
+    --surface-elevated: #1D2B40;      /* modais, menus, popovers */
+    --surface-input: #111B2D;         /* campos, áreas internas, tracks */
+    --surface-input-hover: #182338;   /* hover de áreas internas */
+    --surface-hover: #223149;         /* hover de itens e cards */
+    --surface-selected: #1B3154;      /* item selecionado / ativo */
     --surface-deep: #0D0F12;          /* superfície imersiva (cronômetro) */
 
     /* B. Textos */
-    --text-primary: #F1F5F9;          /* leitura principal */
-    --text-heading: #E2E8F0;          /* rótulos e títulos de seção */
-    --text-secondary: #94A3B8;        /* texto secundário */
-    --text-muted: #737D89;            /* texto auxiliar / discreto */
-    --text-disabled: #64748B;         /* texto desabilitado */
-    --text-on-brand: #11151F;         /* texto sobre botões âmbar */
-    --link: #F59E0B;                  /* links seguem a marca */
+    --text-primary: #F5F7FB;          /* leitura principal */
+    --text-heading: #C4CEDB;          /* rótulos e títulos de seção */
+    --text-secondary: #C4CEDB;        /* texto secundário */
+    --text-muted: #93A2B7;            /* texto auxiliar / discreto */
+    --text-disabled: #718096;         /* texto desabilitado */
+    --text-on-brand: #FFFFFF;         /* texto sobre ações azuis */
+    --link: #527DFF;                  /* links prioritários seguem a ação */
 
     /* C. Marca e ações */
-    --primary: #F59E0B;               /* âmbar NEXO — ações primárias e identidade */
-    --primary-hover: #D97706;
-    --primary-pressed: #B45309;
-    --primary-foreground: #11151F;    /* texto sobre âmbar (contraste) */
-    --primary-soft: rgba(245, 158, 11, 0.12);   /* fundo discreto da marca */
-    --primary-border: rgba(245, 158, 11, 0.35); /* borda da marca */
-    --focus: #F59E0B;                 /* indicador de foco */
-    --focus-ring: rgba(245, 158, 11, 0.5);
+    --primary: #527DFF;               /* azul tecnológico — ações interativas */
+    --primary-hover: #416CEB;
+    --primary-pressed: #3358C8;
+    --primary-foreground: #FFFFFF;
+    --primary-soft: #1A2A4A;          /* fundo suave da ação */
+    --primary-border: #3558A0;        /* borda de destaque da ação */
+    --focus: #7DA2FF;                 /* indicador de foco */
+    --focus-ring: rgba(125, 162, 255, 0.5);
+
+    /* Âmbar da identidade NEXO — destaque, metas e atenção */
+    --brand-amber: #F4B544;
+    --brand-amber-soft: #342B1C;
+    --brand-amber-border: #725629;
+    --brand-amber-dark: #D97706;
 
     /* D. Bordas e divisórias */
-    --border: #384154;                /* borda padrão */
-    --border-strong: #475569;         /* borda mais evidente / hover */
-    --border-input: #374151;          /* borda de campos */
-    --divider: #334155;               /* divisórias */
+    --border: #263447;                /* borda padrão */
+    --border-strong: #39475C;         /* borda mais evidente / hover */
+    --border-input: #2A3A52;          /* borda de campos */
+    --divider: #1C2940;               /* divisórias */
 
     /* E. Estados semânticos */
-    --success: #249D84;               /* operações bem-sucedidas, concluído */
-    --success-strong: #1F826D;
-    --success-light: #48C3A7;
-    --success-soft: rgba(36, 157, 132, 0.15);
-    --success-border: rgba(36, 157, 132, 0.4);
-    --warning: #FBBF24;               /* atenção — distinta da marca (âmbar claro) */
-    --warning-soft: rgba(251, 191, 36, 0.15);
-    --warning-border: rgba(251, 191, 36, 0.4);
-    --danger: #DC4B4B;                /* erro / ação destrutiva */
-    --error: #DC4B4B;                 /* alias de --danger */
-    --danger-soft: rgba(220, 75, 75, 0.15);
-    --danger-border: rgba(220, 75, 75, 0.4);
-    --info: #3B82F6;                  /* informação */
-    --info-soft: rgba(59, 130, 246, 0.15);
-    --info-border: rgba(59, 130, 246, 0.4);
-    --neutral-state: #64748B;         /* estado neutro */
+    --success: #2BBF8A;               /* operações bem-sucedidas, concluído */
+    --success-soft: #15382F;
+    --success-border: #24634F;
+    --warning: #F4B544;               /* atenção — tom da marca, função distinta */
+    --warning-soft: #342B1C;
+    --warning-border: #725629;
+    --danger: #F16D75;                /* erro / ação destrutiva */
+    --error: #F16D75;                 /* alias de --danger */
+    --danger-soft: #3B2029;
+    --danger-border: #7A3541;
+    --info: #58A6FF;                  /* informação */
+    --info-soft: #192D46;
+    --info-border: #305C88;
+    --neutral-state: #93A2B7;         /* estado neutro */
+    --neutral-soft: #202B3D;
+    --neutral-border: #39475C;
 
     /* F. Dados e métricas (mesma métrica = mesma cor em todo módulo) */
-    --data-acertos: #249D84;          /* acertos / concluído — verde */
-    --data-erros: #DC4B4B;            /* erros / falha — vermelho */
-    --data-desempenho: #F59E0B;       /* desempenho / progresso — âmbar da marca */
-    --data-metas: #FBBF24;            /* metas e marcos — âmbar claro */
-    --data-info: #3B82F6;             /* métricas informativas — azul */
+    --data-acertos: #2BBF8A;          /* acertos / concluído — sucesso */
+    --data-erros: #F16D75;            /* erros / falha — erro */
+    --data-desempenho: #527DFF;       /* desempenho / progresso — família azul */
+    --data-metas: #F4B544;            /* metas e marcos — âmbar de destaque */
+    --data-info: #58A6FF;             /* métricas informativas — informação */
     --chart-1: #8B5CF6;               /* séries categóricas de gráficos */
     --chart-2: #06B6D4;
     --chart-3: #EC4899;
     --chart-4: #FF7A1A;
 
     /* Compatibilidade com nomes legados */
-    --secondary: #1C2A40;
-    --surface-secondary: #252B38;
-    --accent-blue: #3B82F6;
-    --brand-amber: #F59E0B;
+    --secondary: #101827;
+    --surface-secondary: #1D2B40;
+    --accent-blue: #58A6FF;
     --brand-amber-light: #FEF3C7;
-    --brand-amber-dark: #D97706;
   }
 
   body {
@@ -206,7 +211,7 @@
   input:focus-visible,
   select:focus-visible,
   textarea:focus-visible {
-    outline: 2px solid rgba(245, 158, 11, 0.5);
+    outline: 2px solid var(--focus-ring);
     outline-offset: 1px;
   }
 
@@ -228,7 +233,7 @@
   }
 
   ::selection {
-    background: var(--primary-border);
+    background: rgba(125, 162, 255, 0.35);
     color: var(--text-primary);
   }
 }
@@ -240,9 +245,9 @@
     box-shadow: 0 1px 2px rgba(2, 6, 23, 0.4), 0 8px 24px -16px rgba(2, 6, 23, 0.5);
   }
 
-  /* Botões âmbar recebem sombra muito sutil */
-  button[class*="bg-[#F59E0B]"] {
-    box-shadow: 0 1px 2px rgba(245, 158, 11, 0.35);
+  /* Botões de ação (fundo da cor primária) recebem sombra muito sutil */
+  button[class*="bg-[#527DFF]"] {
+    box-shadow: 0 1px 2px rgba(19, 36, 82, 0.5);
   }
 }
 

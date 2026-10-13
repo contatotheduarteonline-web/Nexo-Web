@@ -51,9 +51,9 @@ export const WeeklyGoalsSection: React.FC<WeeklyGoalsSectionProps> = ({
       title={onOpenEdit ? "Clique para editar suas metas" : undefined}
       className={`nx-card p-5 sm:p-6 ${onOpenEdit ? "cursor-pointer" : ""}`}
     >
-      <div className="flex items-center justify-between pb-4 border-b border-[#384154]">
+      <div className="flex items-center justify-between pb-4 border-b border-[#263447]">
         <div className="flex items-center gap-2.5">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#384154] bg-[#171B25] text-white">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#263447] bg-[#111B2D] text-white">
             <Target className="h-4 w-4" />
           </div>
           <h2 className="font-condensed text-[19px] font-bold text-white">
@@ -66,7 +66,7 @@ export const WeeklyGoalsSection: React.FC<WeeklyGoalsSectionProps> = ({
             type="button"
             id="btn-semana-anterior"
             onClick={(e) => { e.stopPropagation(); onPrevWeek(); }}
-            className="rounded p-0.5 hover:bg-[#2D3442] hover:text-white cursor-pointer transition-colors duration-200"
+            className="rounded p-0.5 hover:bg-[#223149] hover:text-white cursor-pointer transition-colors duration-200"
             title="Semana anterior"
           >
             <ChevronLeft className="h-3.5 w-3.5" />
@@ -79,7 +79,7 @@ export const WeeklyGoalsSection: React.FC<WeeklyGoalsSectionProps> = ({
             id="btn-proxima-semana"
             onClick={(e) => { e.stopPropagation(); onNextWeek(); }}
             disabled={weekOffset >= 0}
-            className="rounded p-0.5 hover:bg-[#2D3442] hover:text-white disabled:opacity-30 cursor-pointer transition-colors duration-200"
+            className="rounded p-0.5 hover:bg-[#223149] hover:text-white disabled:opacity-30 cursor-pointer transition-colors duration-200"
             title="Próxima semana"
           >
             <ChevronRight className="h-3.5 w-3.5" />
@@ -98,14 +98,14 @@ export const WeeklyGoalsSection: React.FC<WeeklyGoalsSectionProps> = ({
                 <span className="num-condensed text-[15px] font-bold text-white">
                   {weeklyChartData.totalWeekHoursFormatted} / {weeklyGoalHours}h
                 </span>
-                <span className="num-condensed text-[12px] font-bold text-[#F59E0B]">
+                <span className="num-condensed text-[12px] font-bold text-[#F4B544]">
                   ({timeProgressPercent}%)
                 </span>
               </div>
             </div>
-            <div className="h-2 w-full overflow-hidden rounded-full border border-[#384154] bg-[#171B25]">
+            <div className="h-2 w-full overflow-hidden rounded-full border border-[#263447] bg-[#111B2D]">
               <div
-                className="h-full rounded-full bg-[#F59E0B] transition-all duration-500"
+                className="h-full rounded-full bg-[#F4B544] transition-all duration-500"
                 style={{ width: `${timeProgressPercent}%` }}
               />
             </div>
@@ -124,7 +124,7 @@ export const WeeklyGoalsSection: React.FC<WeeklyGoalsSectionProps> = ({
                 </span>
               </div>
             </div>
-            <div className="h-2 w-full overflow-hidden rounded-full border border-[#384154] bg-[#171B25]">
+            <div className="h-2 w-full overflow-hidden rounded-full border border-[#263447] bg-[#111B2D]">
               <div
                 className="h-full rounded-full bg-[#7C8BA5] transition-all duration-500"
                 style={{ width: `${questionsProgressPercent}%` }}
@@ -145,7 +145,7 @@ export const WeeklyGoalsSection: React.FC<WeeklyGoalsSectionProps> = ({
                   title={`${d.label}: ${d.formatted}`}
                   className={`w-full rounded-t-sm transition-all ${
                     d.hasStudied
-                      ? "bg-[#F59E0B]"
+                      ? "bg-[#527DFF]"
                       : "bg-[#384154]"
                   }`}
                   style={{ height: `${Math.max(10, d.heightPercent)}%` }}
@@ -153,7 +153,7 @@ export const WeeklyGoalsSection: React.FC<WeeklyGoalsSectionProps> = ({
                 <span
                   className={`text-[10px] font-semibold tracking-tight ${
                     d.hasStudied
-                      ? "text-[#F59E0B]"
+                      ? "text-[#F4B544]"
                       : "text-white"
                   }`}
                 >

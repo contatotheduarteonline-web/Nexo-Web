@@ -40,7 +40,7 @@ const addDaysYmd = (base: string, days: number): string => {
 };
 
 const underlineInput =
-  "w-full border-0 border-b border-[#384154] bg-transparent px-1 py-1.5 text-sm text-white placeholder:text-slate-500 focus:border-[#F59E0B] focus:outline-none rounded-none";
+  "w-full border-0 border-b border-[#263447] bg-transparent px-1 py-1.5 text-sm text-white placeholder:text-[#718096] focus:border-[#7DA2FF] focus:outline-none rounded-none";
 
 interface RegistroEstudoModalProps {
   open: boolean;
@@ -262,12 +262,12 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 p-4">
-      <div className="w-full max-w-3xl max-h-[92vh] overflow-y-auto rounded-2xl border border-[#384154] bg-[#252B38] p-7 shadow-2xl">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#0B1120]/40 p-4">
+      <div className="w-full max-w-3xl max-h-[92vh] overflow-y-auto rounded-2xl border border-[#263447] bg-[#1D2B40] p-7 shadow-2xl">
         {/* Header */}
         <div className="flex items-start justify-between">
           <h2 className="text-2xl font-bold text-white">Registro de Estudo</h2>
-          <button type="button" onClick={onClose} className="p-1 text-slate-400 hover:text-white" title="Fechar">
+          <button type="button" onClick={onClose} className="p-1 text-[#93A2B7] hover:text-white" title="Fechar">
             <X className="h-6 w-6" />
           </button>
         </div>
@@ -282,8 +282,8 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
               onClick={() => setDateMode(mode)}
               className={`rounded-md px-4 py-1.5 text-[11px] font-bold uppercase tracking-wide transition ${
                 dateMode === mode
-                  ? "bg-amber-500 text-white"
-                  : "bg-[#171B25] text-slate-400 hover:bg-[#2D3442]"
+                  ? "bg-[#527DFF] text-white"
+                  : "bg-[#111B2D] text-[#93A2B7] hover:bg-[#223149]"
               }`}
             >
               {mode === "hoje" ? "Hoje" : mode === "ontem" ? "Ontem" : "Outro"}
@@ -294,7 +294,7 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
               type="date"
               value={customDate}
               onChange={(e) => setCustomDate(e.target.value)}
-              className="rounded-md border border-[#384154] bg-[#171B25] px-2 py-1.5 text-xs text-white focus:border-[#F59E0B] focus:outline-none"
+              className="rounded-md border border-[#263447] bg-[#111B2D] px-2 py-1.5 text-xs text-white focus:border-[#7DA2FF] focus:outline-none"
             />
           )}
         </div>
@@ -302,7 +302,7 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
         {/* Linha 1: Categoria / Disciplina / Tempo */}
         <div className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-[1fr_1.4fr_0.8fr]">
           <div>
-            <label className="text-[11px] font-semibold uppercase tracking-wide text-slate-400">Categoria</label>
+            <label className="text-[11px] font-semibold uppercase tracking-wide text-[#93A2B7]">Categoria</label>
             <div className="relative">
               <select
                 value={modality}
@@ -315,12 +315,12 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
                   </option>
                 ))}
               </select>
-              <ChevronDown className="pointer-events-none absolute right-1 top-1/2 h-4 w-4 -translate-y-1/2 text-amber-400" />
+              <ChevronDown className="pointer-events-none absolute right-1 top-1/2 h-4 w-4 -translate-y-1/2 text-[#F4B544]" />
             </div>
           </div>
 
           <div>
-            <label className="text-[11px] font-semibold uppercase tracking-wide text-slate-400">Disciplina</label>
+            <label className="text-[11px] font-semibold uppercase tracking-wide text-[#93A2B7]">Disciplina</label>
             <div className="relative">
               <select
                 value={disciplineId}
@@ -337,12 +337,12 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
                   </option>
                 ))}
               </select>
-              <ChevronDown className="pointer-events-none absolute right-1 top-1/2 h-4 w-4 -translate-y-1/2 text-amber-400" />
+              <ChevronDown className="pointer-events-none absolute right-1 top-1/2 h-4 w-4 -translate-y-1/2 text-[#F4B544]" />
             </div>
           </div>
 
           <div>
-            <label className="text-[11px] font-semibold uppercase tracking-wide text-slate-400">Tempo de estudo</label>
+            <label className="text-[11px] font-semibold uppercase tracking-wide text-[#93A2B7]">Tempo de estudo</label>
             <input
               type="text"
               value={timeText}
@@ -356,7 +356,7 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
         {/* Linha 2: Tópico / Material */}
         <div className="mt-4 grid grid-cols-1 gap-5 sm:grid-cols-[2fr_1fr]">
           <div>
-            <label className="text-[11px] font-semibold uppercase tracking-wide text-slate-400">Tópico</label>
+            <label className="text-[11px] font-semibold uppercase tracking-wide text-[#93A2B7]">Tópico</label>
             <div className="relative">
               <select
                 value={topicId}
@@ -370,12 +370,12 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
                   </option>
                 ))}
               </select>
-              <ChevronDown className="pointer-events-none absolute right-1 top-1/2 h-4 w-4 -translate-y-1/2 text-amber-400" />
+              <ChevronDown className="pointer-events-none absolute right-1 top-1/2 h-4 w-4 -translate-y-1/2 text-[#F4B544]" />
             </div>
           </div>
 
           <div>
-            <label className="text-[11px] font-semibold uppercase tracking-wide text-slate-400">Material</label>
+            <label className="text-[11px] font-semibold uppercase tracking-wide text-[#93A2B7]">Material</label>
             <input
               type="text"
               value={material}
@@ -388,23 +388,23 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
 
         {/* Opções de conclusão e planejamento */}
         <div className="mt-4 space-y-2">
-          <label className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wide text-slate-400">
+          <label className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wide text-[#93A2B7]">
             <input
               type="checkbox"
               checked={theoryCompleted}
               onChange={(e) => setTheoryCompleted(e.target.checked)}
-              className="h-3.5 w-3.5 rounded border-slate-600 text-amber-500 focus:ring-amber-500"
+              className="h-3.5 w-3.5 rounded border-[#39475C] text-[#F4B544] focus:ring-[#7DA2FF]"
             />
             Teoria finalizada
           </label>
 
-          <label className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wide text-slate-400">
+          <label className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wide text-[#93A2B7]">
             <input
               type="checkbox"
               checked={scheduleReviews}
               onChange={(e) => setScheduleReviews(e.target.checked)}
               disabled={!!review}
-              className="h-3.5 w-3.5 rounded border-slate-600 text-amber-500 focus:ring-amber-500 disabled:opacity-50"
+              className="h-3.5 w-3.5 rounded border-[#39475C] text-[#F4B544] focus:ring-[#7DA2FF] disabled:opacity-50"
             />
             Programar revisões
           </label>
@@ -414,13 +414,13 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
               {chips.map((days) => (
                 <span
                   key={days}
-                  className="flex items-center gap-1 rounded-md border border-[#F59E0B]/30 bg-[#F59E0B]/10 px-2 py-1 text-[11px] font-bold text-amber-300"
+                  className="flex items-center gap-1 rounded-md border border-[#F4B544]/30 bg-[#527DFF]/10 px-2 py-1 text-[11px] font-bold text-[#F4B544]"
                 >
                   {days}d
                   <button
                     type="button"
                     onClick={() => setChips(chips.filter((c) => c !== days))}
-                    className="text-amber-400 hover:text-amber-200"
+                    className="text-[#F4B544] hover:text-[#F4B544]"
                     title="Remover intervalo"
                   >
                     <X className="h-3 w-3" />
@@ -431,7 +431,7 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
                 type="button"
                 onClick={handleAddChip}
                 title="Adicionar intervalo"
-                className="flex h-6 w-6 items-center justify-center rounded-full bg-amber-500 text-white hover:bg-amber-600"
+                className="flex h-6 w-6 items-center justify-center rounded-full bg-[#527DFF] text-white hover:bg-[#416CEB]"
               >
                 <Plus className="h-3.5 w-3.5" />
               </button>
@@ -441,8 +441,8 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
 
         {/* Métricas: Questões / Páginas / Videoaulas */}
         <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-3">
-          <div className="rounded-xl border-2 border-[#384154] bg-[#171B25] p-3">
-            <p className="text-center text-[10px] font-bold uppercase tracking-wide text-slate-400">
+          <div className="rounded-xl border-2 border-[#263447] bg-[#111B2D] p-3">
+            <p className="text-center text-[10px] font-bold uppercase tracking-wide text-[#93A2B7]">
               Acertos / Erros
             </p>
             <div className="mt-2 flex items-center justify-center gap-3">
@@ -451,20 +451,20 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
                 min={0}
                 value={acertos}
                 onChange={(e) => setAcertos(Math.max(0, parseInt(e.target.value) || 0))}
-                className="w-14 border-0 border-b border-[#384154] bg-transparent py-1 text-center text-sm font-semibold text-white focus:border-[#F59E0B] focus:outline-none"
+                className="w-14 border-0 border-b border-[#263447] bg-transparent py-1 text-center text-sm font-semibold text-white focus:border-[#7DA2FF] focus:outline-none"
               />
               <input
                 type="number"
                 min={0}
                 value={erros}
                 onChange={(e) => setErros(Math.max(0, parseInt(e.target.value) || 0))}
-                className="w-14 border-0 border-b border-[#384154] bg-transparent py-1 text-center text-sm font-semibold text-white focus:border-[#F59E0B] focus:outline-none"
+                className="w-14 border-0 border-b border-[#263447] bg-transparent py-1 text-center text-sm font-semibold text-white focus:border-[#7DA2FF] focus:outline-none"
               />
             </div>
           </div>
 
-          <div className="rounded-xl border-2 border-[#384154] bg-[#171B25] p-3">
-            <p className="text-center text-[10px] font-bold uppercase tracking-wide text-slate-400">
+          <div className="rounded-xl border-2 border-[#263447] bg-[#111B2D] p-3">
+            <p className="text-center text-[10px] font-bold uppercase tracking-wide text-[#93A2B7]">
               Páginas · Início / Fim
             </p>
             <div className="mt-2 flex items-center justify-center gap-3">
@@ -474,7 +474,7 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
                 value={pagesStart}
                 onChange={(e) => setPagesStart(e.target.value)}
                 placeholder="0"
-                className="w-14 border-0 border-b border-teal-300 bg-transparent py-1 text-center text-sm font-semibold text-slate-700 placeholder:text-slate-400 focus:border-teal-500 focus:outline-none"
+                className="w-14 border-0 border-b border-[#2A3A52] bg-transparent py-1 text-center text-sm font-semibold text-[#F5F7FB] placeholder:text-[#93A2B7] focus:border-[#7DA2FF] focus:outline-none"
               />
               <input
                 type="number"
@@ -482,13 +482,13 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
                 value={pagesEnd}
                 onChange={(e) => setPagesEnd(e.target.value)}
                 placeholder="0"
-                className="w-14 border-0 border-b border-teal-300 bg-transparent py-1 text-center text-sm font-semibold text-slate-700 placeholder:text-slate-400 focus:border-teal-500 focus:outline-none"
+                className="w-14 border-0 border-b border-[#2A3A52] bg-transparent py-1 text-center text-sm font-semibold text-[#F5F7FB] placeholder:text-[#93A2B7] focus:border-[#7DA2FF] focus:outline-none"
               />
             </div>
           </div>
 
-          <div className="rounded-xl border-2 border-[#384154] bg-[#171B25] p-3">
-            <p className="text-center text-[10px] font-bold uppercase tracking-wide text-slate-400">
+          <div className="rounded-xl border-2 border-[#263447] bg-[#111B2D] p-3">
+            <p className="text-center text-[10px] font-bold uppercase tracking-wide text-[#93A2B7]">
               Videoaulas · Título / Início / Fim
             </p>
             <div className="mt-2 grid grid-cols-3 items-center gap-2">
@@ -497,21 +497,21 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
                 value={videoTitle}
                 onChange={(e) => setVideoTitle(e.target.value)}
                 placeholder="Vídeo 01"
-                className="w-full border-0 border-b border-[#384154] bg-transparent py-1 text-xs text-white placeholder:text-slate-500 focus:border-[#F59E0B] focus:outline-none"
+                className="w-full border-0 border-b border-[#263447] bg-transparent py-1 text-xs text-white placeholder:text-[#718096] focus:border-[#7DA2FF] focus:outline-none"
               />
               <input
                 type="text"
                 value={videoStart}
                 onChange={(e) => setVideoStart(e.target.value)}
                 placeholder="00:00:00"
-                className="w-full border-0 border-b border-[#384154] bg-transparent py-1 text-xs text-white placeholder:text-slate-500 focus:border-[#F59E0B] focus:outline-none"
+                className="w-full border-0 border-b border-[#263447] bg-transparent py-1 text-xs text-white placeholder:text-[#718096] focus:border-[#7DA2FF] focus:outline-none"
               />
               <input
                 type="text"
                 value={videoEnd}
                 onChange={(e) => setVideoEnd(e.target.value)}
                 placeholder="00:00:00"
-                className="w-full border-0 border-b border-[#384154] bg-transparent py-1 text-xs text-white placeholder:text-slate-500 focus:border-[#F59E0B] focus:outline-none"
+                className="w-full border-0 border-b border-[#263447] bg-transparent py-1 text-xs text-white placeholder:text-[#718096] focus:border-[#7DA2FF] focus:outline-none"
               />
             </div>
           </div>
@@ -519,27 +519,27 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
 
         {/* Comentários */}
         <div className="mt-5">
-          <label className="text-[11px] font-semibold uppercase tracking-wide text-slate-400">Comentários</label>
+          <label className="text-[11px] font-semibold uppercase tracking-wide text-[#93A2B7]">Comentários</label>
           <textarea
             rows={2}
             value={comments}
             onChange={(e) => setComments(e.target.value)}
-            className="mt-1 w-full resize-y border-0 border-b border-[#384154] bg-transparent px-1 py-1.5 text-sm text-white focus:border-[#F59E0B] focus:outline-none"
+            className="mt-1 w-full resize-y border-0 border-b border-[#263447] bg-transparent px-1 py-1.5 text-sm text-white focus:border-[#7DA2FF] focus:outline-none"
           />
         </div>
 
         {formError && (
-          <p className="mt-3 text-xs font-semibold text-red-500">{formError}</p>
+          <p className="mt-3 text-xs font-semibold text-[#F16D75]">{formError}</p>
         )}
 
         {/* Rodapé */}
         <div className="mt-6 flex items-center justify-between">
-          <label className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wide text-slate-400">
+          <label className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wide text-[#93A2B7]">
             <input
               type="checkbox"
               checked={saveAndCreateNew}
               onChange={(e) => setSaveAndCreateNew(e.target.checked)}
-              className="h-3.5 w-3.5 rounded border-slate-600 text-amber-500 focus:ring-amber-500"
+              className="h-3.5 w-3.5 rounded border-[#39475C] text-[#F4B544] focus:ring-[#7DA2FF]"
             />
             Salvar e criar novo
           </label>
@@ -548,7 +548,7 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="rounded-lg border border-[#384154] px-6 py-2 text-sm font-bold text-slate-300 hover:bg-[#2D3442]"
+              className="rounded-lg border border-[#263447] px-6 py-2 text-sm font-bold text-[#C4CEDB] hover:bg-[#223149]"
             >
               Cancelar
             </button>
@@ -556,7 +556,7 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
               type="button"
               onClick={handleSave}
               disabled={saving || !disciplineId || !topicId}
-              className="rounded-lg bg-amber-500 px-8 py-2 text-sm font-bold text-white transition enabled:hover:bg-amber-600 disabled:cursor-not-allowed disabled:bg-amber-500/40"
+              className="rounded-lg bg-[#527DFF] px-8 py-2 text-sm font-bold text-white transition enabled:hover:bg-[#416CEB] disabled:cursor-not-allowed disabled:bg-[#527DFF]/40"
             >
               Salvar
             </button>

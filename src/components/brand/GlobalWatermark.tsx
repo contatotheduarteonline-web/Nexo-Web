@@ -34,7 +34,7 @@ export const GlobalWatermark: React.FC = () => {
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="2"
-                className="text-[#171B25] dark:text-white"
+                className="text-white dark:text-white"
               />
               <path
                 d="M6 18 L12 6 L18 18"
@@ -54,33 +54,33 @@ export const GlobalWatermark: React.FC = () => {
               fontFamily="system-ui, -apple-system, sans-serif"
               fontWeight="800"
               letterSpacing="0.2em"
-              className="fill-[#171B25] dark:fill-white"
+              className="fill-[#111B2D] dark:fill-white"
             >
               NEXO
             </text>
 
             {/* Ícone de Relógio Sutil */}
             <g transform="translate(175, 30)">
-              <circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-[#171B25] dark:text-white" />
+              <circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-white dark:text-white" />
               <polyline points="8 4 8 8 11 8" fill="none" stroke="#D97706" strokeWidth="1.5" strokeLinecap="round" />
             </g>
 
             {/* Ícone de Alvo Concéntrico Sutil */}
             <g transform="translate(85, 110)">
-              <circle cx="9" cy="9" r="8" fill="none" stroke="currentColor" strokeWidth="1.4" className="text-[#171B25] dark:text-white" />
+              <circle cx="9" cy="9" r="8" fill="none" stroke="currentColor" strokeWidth="1.4" className="text-white dark:text-white" />
               <circle cx="9" cy="9" r="4.5" fill="none" stroke="#D97706" strokeWidth="1.4" />
-              <circle cx="9" cy="9" r="1.5" fill="currentColor" className="text-[#171B25] dark:text-white" />
+              <circle cx="9" cy="9" r="1.5" fill="currentColor" className="text-white dark:text-white" />
             </g>
 
             {/* Ícone de Prancheta Sutil */}
             <g transform="translate(195, 115)">
-              <rect x="0" y="0" width="14" height="18" rx="3" fill="none" stroke="currentColor" strokeWidth="1.4" className="text-[#171B25] dark:text-white" />
+              <rect x="0" y="0" width="14" height="18" rx="3" fill="none" stroke="currentColor" strokeWidth="1.4" className="text-white dark:text-white" />
               <line x1="3.5" y1="6" x2="10.5" y2="6" stroke="#D97706" strokeWidth="1.2" strokeLinecap="round" />
-              <line x1="3.5" y1="10" x2="10.5" y2="10" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" className="text-[#171B25] dark:text-white" />
+              <line x1="3.5" y1="10" x2="10.5" y2="10" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" className="text-white dark:text-white" />
             </g>
           </pattern>
         </defs>
-        <rect width="100%" height="100%" fill="url(#nexo-watermark-pattern)" className="text-[#171B25] dark:text-white" />
+        <rect width="100%" height="100%" fill="url(#nexo-watermark-pattern)" className="text-white dark:text-white" />
       </svg>
     </div>
   );

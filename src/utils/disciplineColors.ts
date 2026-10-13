@@ -5,18 +5,18 @@
 
 // Paleta curada de alta distinção e contraste (32 cores exclusivas)
 export const DISTINCT_DISCIPLINE_COLORS = [
-  "#249D84", // Nexo Verde Esmeralda / Teal
-  "#3B82F6", // Azul Vibrante
+  "#2BBF8A", // Nexo Verde Esmeralda / Teal
+  "#58A6FF", // Azul Vibrante
   "#8B5CF6", // Roxo Violeta
   "#EC4899", // Rosa Intenso
-  "#F59E0B", // Âmbar / Dourado
-  "#249D84", // Verde Menta
+  "#F4B544", // Âmbar / Dourado
+  "#2BBF8A", // Verde Menta
   "#06B6D4", // Ciano / Turquesa
-  "#F59E0B", // Laranja Quente
+  "#F4B544", // Laranja Quente
   "#6366F1", // Índigo
   "#D946EF", // Fúcsia / Magenta
   "#14B8A6", // Verde Petróleo Claro
-  "#DC4B4B", // Vermelho Coral
+  "#F16D75", // Vermelho Coral
   "#84CC16", // Lima / Verde Claro
   "#A855F7", // Roxo Claro
   "#0284C7", // Azul Céu
@@ -43,7 +43,7 @@ export const DISTINCT_DISCIPLINE_COLORS = [
  * Normaliza uma string de cor em formato hexadecimal de 6 dígitos em minúsculo
  */
 export function normalizeHex(hex: string): string {
-  if (!hex) return "#249D84";
+  if (!hex) return "#2BBF8A";
   let clean = hex.trim().toLowerCase();
   if (!clean.startsWith("#")) clean = `#${clean}`;
   if (clean.length === 4) {
@@ -106,7 +106,7 @@ export function getNextAvailableDisciplineColor(usedColors: string[]): string {
     }
   }
 
-  return "#249D84";
+  return "#2BBF8A";
 }
 
 /**

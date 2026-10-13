@@ -166,18 +166,18 @@ export const AiAssistantModal: React.FC<AiAssistantModalProps> = ({ isOpen, onCl
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs">
-      <div className="max-h-[92vh] w-full max-w-3xl overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl dark:border-slate-800 dark:bg-slate-900">
+      <div className="max-h-[92vh] w-full max-w-3xl overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl dark:border-[#263447] dark:bg-[#0B1120]">
         {/* Modal Header */}
-        <div className="flex items-center justify-between border-b border-slate-100 p-5 dark:border-slate-800">
+        <div className="flex items-center justify-between border-b border-slate-100 p-5 dark:border-[#263447]">
           <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#F59E0B] text-white shadow-sm">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#527DFF] text-white shadow-sm">
               <Sparkles className="h-5 w-5" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-slate-900 dark:text-white">
+              <h3 className="text-base font-bold text-[#0B1120] dark:text-white">
                 Inteligência Artificial do Edital
               </h3>
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-[#718096]">
                 Verticalizador automático, gerador de questões e mentor de concurso
               </p>
             </div>
@@ -185,20 +185,20 @@ export const AiAssistantModal: React.FC<AiAssistantModalProps> = ({ isOpen, onCl
 
           <button
             onClick={onClose}
-            className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700 dark:hover:bg-slate-800"
+            className="rounded-lg p-1.5 text-[#93A2B7] hover:bg-slate-100 hover:text-[#172235] dark:hover:bg-[#172235]"
           >
             <X className="h-5 w-5" />
           </button>
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex border-b border-slate-100 bg-slate-50 px-5 text-xs font-bold dark:border-slate-800 dark:bg-slate-800/50">
+        <div className="flex border-b border-slate-100 bg-slate-50 px-5 text-xs font-bold dark:border-[#263447] dark:bg-[#172235]/50">
           <button
             onClick={() => setActiveTab("verticalize")}
             className={`border-b-2 px-4 py-3 transition ${
               activeTab === "verticalize"
-                ? "border-[#F59E0B] text-[#F59E0B] dark:text-[#FBBF24]"
-                : "border-transparent text-slate-500 hover:text-slate-900 dark:text-slate-400"
+                ? "border-[#F4B544] text-[#F4B544] dark:text-[#F4B544]"
+                : "border-transparent text-[#718096] hover:text-[#0B1120] dark:text-[#93A2B7]"
             }`}
           >
             📄 Verticalizador de Edital
@@ -207,8 +207,8 @@ export const AiAssistantModal: React.FC<AiAssistantModalProps> = ({ isOpen, onCl
             onClick={() => setActiveTab("questions")}
             className={`border-b-2 px-4 py-3 transition ${
               activeTab === "questions"
-                ? "border-[#F59E0B] text-[#F59E0B] dark:text-[#FBBF24]"
-                : "border-transparent text-slate-500 hover:text-slate-900 dark:text-slate-400"
+                ? "border-[#F4B544] text-[#F4B544] dark:text-[#F4B544]"
+                : "border-transparent text-[#718096] hover:text-[#0B1120] dark:text-[#93A2B7]"
             }`}
           >
             🎯 Gerador de Questões Inéditas
@@ -218,8 +218,8 @@ export const AiAssistantModal: React.FC<AiAssistantModalProps> = ({ isOpen, onCl
         {/* Modal Body */}
         <div className="max-h-[calc(92vh-140px)] overflow-y-auto p-6 space-y-4">
           {aiError && (
-            <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-3 text-xs text-amber-800 dark:text-amber-300 flex items-start gap-2.5">
-              <AlertCircle className="h-4 w-4 shrink-0 mt-0.5 text-amber-500" />
+            <div className="rounded-xl border border-[#F4B544]/30 bg-[#527DFF]/10 p-3 text-xs text-[#F4B544] dark:text-[#F4B544] flex items-start gap-2.5">
+              <AlertCircle className="h-4 w-4 shrink-0 mt-0.5 text-[#F4B544]" />
               <div className="flex-1">
                 <p className="font-bold">{aiError}</p>
                 <p className="text-[11px] opacity-90 mt-0.5">
@@ -234,28 +234,28 @@ export const AiAssistantModal: React.FC<AiAssistantModalProps> = ({ isOpen, onCl
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-3 text-xs">
                 <div>
-                  <label className="font-semibold text-slate-700 dark:text-slate-300">Órgão / Cargo</label>
+                  <label className="font-semibold text-[#172235] dark:text-[#C4CEDB]">Órgão / Cargo</label>
                   <input
                     type="text"
                     value={organName}
                     onChange={(e) => setOrganName(e.target.value)}
-                    className="mt-1 w-full rounded-lg border border-slate-200 p-2 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                    className="mt-1 w-full rounded-lg border border-slate-200 p-2 dark:bg-[#172235] dark:bg-[#172235] dark:text-white"
                   />
                 </div>
                 <div>
-                  <label className="font-semibold text-slate-700 dark:text-slate-300">Banca Examinadora</label>
+                  <label className="font-semibold text-[#172235] dark:text-[#C4CEDB]">Banca Examinadora</label>
                   <input
                     type="text"
                     value={bancaName}
                     onChange={(e) => setBancaName(e.target.value)}
-                    className="mt-1 w-full rounded-lg border border-slate-200 p-2 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                    className="mt-1 w-full rounded-lg border border-slate-200 p-2 dark:bg-[#172235] dark:bg-[#172235] dark:text-white"
                   />
                 </div>
               </div>
 
               <div>
                 <div className="flex items-center justify-between">
-                  <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                  <label className="text-xs font-semibold text-[#172235] dark:text-[#C4CEDB]">
                     Cole o Conteúdo Programático do Edital (Texto bruto do PDF)
                   </label>
                   <button
@@ -264,7 +264,7 @@ export const AiAssistantModal: React.FC<AiAssistantModalProps> = ({ isOpen, onCl
                       setRawEditalText(`LÍNGUA PORTUGUESA: 1 Compreensão e interpretação de textos. 2 Tipologia textual. 3 Ortografia oficial. 4 Acentuação gráfica. 5 Emprego das classes de palavras. 6 Emprego do sinal indicativo de crase. 7 Sintaxe da oração e do período. 8 Pontuação. 9 Concordância nominal e verbal. 10 Regência nominal e verbal.
 DIREITO CONSTITUCIONAL: 1 Direitos e deveres fundamentais: direitos e deveres individuais e coletivos, direito à vida, à liberdade, à igualdade, à segurança e à propriedade. 2 Da Segurança Pública: artigo 144 da Constituição Federal. 3 Organização dos Poderes.`);
                     }}
-                    className="text-[11px] font-semibold text-[#F59E0B] hover:underline dark:text-[#FBBF24]"
+                    className="text-[11px] font-semibold text-[#F4B544] hover:underline dark:text-[#F4B544]"
                   >
                     Inserir Exemplo Pronto
                   </button>
@@ -274,7 +274,7 @@ DIREITO CONSTITUCIONAL: 1 Direitos e deveres fundamentais: direitos e deveres in
                   value={rawEditalText}
                   onChange={(e) => setRawEditalText(e.target.value)}
                   placeholder="Ex: NOÇÕES DE DIREITO ADMINISTRATIVO: 1 Estado, governo e administração pública. 2 Princípios fundamentais. 3 Poderes da administração pública: poder hierárquico, poder disciplinar, poder regulamentar, poder de polícia..."
-                  className="mt-1.5 w-full rounded-xl border border-slate-200 p-3 text-xs text-slate-900 focus:border-[#F59E0B] dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                  className="mt-1.5 w-full rounded-xl border border-slate-200 p-3 text-xs text-[#0B1120] focus:border-[#7DA2FF] dark:bg-[#172235] dark:bg-[#172235] dark:text-white"
                 />
               </div>
 
@@ -282,7 +282,7 @@ DIREITO CONSTITUCIONAL: 1 Direitos e deveres fundamentais: direitos e deveres in
                 <button
                   onClick={handleVerticalize}
                   disabled={isLoading}
-                  className="flex items-center gap-2 rounded-xl bg-[#F59E0B] hover:bg-[#D97706] px-5 py-2.5 text-xs font-bold text-white shadow-xs transition disabled:opacity-50"
+                  className="flex items-center gap-2 rounded-xl bg-[#527DFF] hover:bg-[#416CEB] px-5 py-2.5 text-xs font-bold text-white shadow-xs transition disabled:opacity-50"
                 >
                   <Sparkles className="h-4 w-4" />
                   {isLoading ? "Verticalizando com IA..." : "Estruturar e Verticalizar com IA"}
@@ -291,14 +291,14 @@ DIREITO CONSTITUCIONAL: 1 Direitos e deveres fundamentais: direitos e deveres in
 
               {/* Result Preview */}
               {verticalizedResult && (
-                <div className="mt-4 rounded-xl border border-amber-500/40 bg-amber-50/60 p-4 dark:border-amber-500/40 dark:bg-amber-500/10">
+                <div className="mt-4 rounded-xl border border-[#F4B544]/40 bg-[#F4B544]/60 p-4 dark:border-[#F4B544]/40 dark:bg-[#527DFF]/10">
                   <div className="flex items-center justify-between">
-                    <h4 className="text-xs font-bold text-[#F59E0B] dark:text-[#FBBF24]">
+                    <h4 className="text-xs font-bold text-[#F4B544] dark:text-[#F4B544]">
                       ✅ Edital Estruturado ({verticalizedResult.disciplines?.length || 0} Disciplinas extraídas)
                     </h4>
                     <button
                       onClick={handleApplyVerticalizedEdital}
-                      className="rounded-lg bg-[#F59E0B] hover:bg-[#D97706] px-4 py-2 text-xs font-bold text-white shadow-xs"
+                      className="rounded-lg bg-[#527DFF] hover:bg-[#416CEB] px-4 py-2 text-xs font-bold text-white shadow-xs"
                     >
                       Importar para meu Painel
                     </button>
@@ -306,12 +306,12 @@ DIREITO CONSTITUCIONAL: 1 Direitos e deveres fundamentais: direitos e deveres in
 
                   <div className="mt-3 max-h-60 space-y-3 overflow-y-auto pr-1 text-xs">
                     {verticalizedResult.disciplines?.map((disc: any, idx: number) => (
-                      <div key={idx} className="rounded-lg bg-white p-3 shadow-xs dark:bg-slate-800">
-                        <span className="font-bold text-slate-900 dark:text-white">{disc.name}</span>
-                        <ul className="mt-1 space-y-1 text-slate-600 dark:text-slate-300">
+                      <div key={idx} className="rounded-lg bg-white p-3 shadow-xs dark:bg-[#172235]">
+                        <span className="font-bold text-[#0B1120] dark:text-white">{disc.name}</span>
+                        <ul className="mt-1 space-y-1 text-[#718096] dark:text-[#C4CEDB]">
                           {disc.topics?.map((top: any, tIdx: number) => (
                             <li key={tIdx} className="flex items-center gap-2 text-[11px]">
-                              <span className="h-1.5 w-1.5 rounded-full bg-[#F59E0B]" />
+                              <span className="h-1.5 w-1.5 rounded-full bg-[#527DFF]" />
                               <span>{top.name}</span>
                             </li>
                           ))}
@@ -329,21 +329,21 @@ DIREITO CONSTITUCIONAL: 1 Direitos e deveres fundamentais: direitos e deveres in
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-3 text-xs">
                 <div>
-                  <label className="font-semibold text-slate-700 dark:text-slate-300">Disciplina</label>
+                  <label className="font-semibold text-[#172235] dark:text-[#C4CEDB]">Disciplina</label>
                   <input
                     type="text"
                     value={selectedDiscipline}
                     onChange={(e) => setSelectedDiscipline(e.target.value)}
-                    className="mt-1 w-full rounded-lg border border-slate-200 p-2 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                    className="mt-1 w-full rounded-lg border border-slate-200 p-2 dark:bg-[#172235] dark:bg-[#172235] dark:text-white"
                   />
                 </div>
                 <div>
-                  <label className="font-semibold text-slate-700 dark:text-slate-300">Tópico / Assunto</label>
+                  <label className="font-semibold text-[#172235] dark:text-[#C4CEDB]">Tópico / Assunto</label>
                   <input
                     type="text"
                     value={selectedTopic}
                     onChange={(e) => setSelectedTopic(e.target.value)}
-                    className="mt-1 w-full rounded-lg border border-slate-200 p-2 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                    className="mt-1 w-full rounded-lg border border-slate-200 p-2 dark:bg-[#172235] dark:bg-[#172235] dark:text-white"
                   />
                 </div>
               </div>
@@ -352,7 +352,7 @@ DIREITO CONSTITUCIONAL: 1 Direitos e deveres fundamentais: direitos e deveres in
                 <button
                   onClick={handleGenerateQuestions}
                   disabled={isLoading}
-                  className="flex items-center gap-2 rounded-xl bg-[#F59E0B] hover:bg-[#D97706] px-5 py-2.5 text-xs font-bold text-white shadow-xs disabled:opacity-50"
+                  className="flex items-center gap-2 rounded-xl bg-[#527DFF] hover:bg-[#416CEB] px-5 py-2.5 text-xs font-bold text-white shadow-xs disabled:opacity-50"
                 >
                   <Sparkles className="h-4 w-4" />
                   {isLoading ? "Gerando Questões..." : "Gerar Questões com IA"}
@@ -363,9 +363,9 @@ DIREITO CONSTITUCIONAL: 1 Direitos e deveres fundamentais: direitos e deveres in
               {generatedQuestions.length > 0 && (
                 <div className="mt-4 space-y-4">
                   {generatedQuestions.map((q, idx) => (
-                    <div key={idx} className="rounded-xl border border-slate-200 bg-slate-50 p-4 text-xs dark:border-slate-700 dark:bg-slate-800">
-                      <p className="font-semibold text-slate-900 dark:text-white">
-                        <span className="font-bold text-[#F59E0B] dark:text-[#FBBF24]">Questão {idx + 1}:</span> {q.statement}
+                    <div key={idx} className="rounded-xl border border-slate-200 bg-slate-50 p-4 text-xs dark:bg-[#172235] dark:bg-[#172235]">
+                      <p className="font-semibold text-[#0B1120] dark:text-white">
+                        <span className="font-bold text-[#F4B544] dark:text-[#F4B544]">Questão {idx + 1}:</span> {q.statement}
                       </p>
 
                       <div className="mt-3 space-y-1.5">
@@ -374,8 +374,8 @@ DIREITO CONSTITUCIONAL: 1 Direitos e deveres fundamentais: direitos e deveres in
                             key={oIdx}
                             className={`rounded-lg border p-2 text-[11px] ${
                               q.correctIndex === oIdx
-                                ? "border-amber-500 bg-amber-50 text-[#F59E0B] font-bold dark:bg-amber-500/20 dark:text-[#FBBF24]"
-                                : "border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900"
+                                ? "border-[#725629] bg-[#342B1C] text-[#F4B544] font-bold dark:bg-[#527DFF]/20 dark:text-[#F4B544]"
+                                : "border-slate-200 bg-white dark:bg-[#172235] dark:bg-[#0B1120]"
                             }`}
                           >
                             <strong>{String.fromCharCode(65 + oIdx)})</strong> {opt}
@@ -383,8 +383,8 @@ DIREITO CONSTITUCIONAL: 1 Direitos e deveres fundamentais: direitos e deveres in
                         ))}
                       </div>
 
-                      <div className="mt-2 rounded-md bg-amber-50 border border-amber-200 p-2 text-[11px] text-slate-800 dark:bg-amber-500/20 dark:border-amber-500/30 dark:text-[#FBBF24]">
-                        <strong className="text-[#F59E0B] dark:text-[#FBBF24]">Gabarito Comentado:</strong> {q.explanation}
+                      <div className="mt-2 rounded-md bg-[#342B1C] border border-[#725629] p-2 text-[11px] text-[#172235] dark:bg-[#527DFF]/20 dark:border-[#F4B544]/30 dark:text-[#F4B544]">
+                        <strong className="text-[#F4B544] dark:text-[#F4B544]">Gabarito Comentado:</strong> {q.explanation}
                       </div>
                     </div>
                   ))}

@@ -12,12 +12,12 @@ import {
 } from "lucide-react";
 import { ProfilePictureModal } from "../modals/ProfilePictureModal";
 
-const CARD = "rounded-2xl border border-[#384154] bg-[#171B25] p-6";
+const CARD = "rounded-2xl border border-[#263447] bg-[#111B2D] p-6";
 const CARD_TITLE = "text-sm font-black uppercase tracking-wider text-white";
 const CARD_TEXT = "text-xs text-white/60";
 const LABEL = "text-xs font-bold uppercase text-white/50";
 const INPUT =
-  "mt-1 w-full rounded-xl border border-[#384154] bg-[#252B38] py-2.5 px-3.5 text-xs text-white placeholder:text-white/30 focus:border-[#F59E0B] focus:outline-hidden transition-colors";
+  "mt-1 w-full rounded-xl border border-[#263447] bg-[#1D2B40] py-2.5 px-3.5 text-xs text-white placeholder:text-white/30 focus:border-[#7DA2FF] focus:outline-hidden transition-colors";
 
 export const ConfiguracoesView: React.FC = () => {
   const {
@@ -111,20 +111,20 @@ export const ConfiguracoesView: React.FC = () => {
   const TAB_BUTTON = (active: boolean) =>
     `flex items-center gap-2 border-b-2 px-4 py-2.5 text-xs font-bold transition whitespace-nowrap ${
       active
-        ? "border-[#F59E0B] text-[#F59E0B]"
+        ? "border-[#F4B544] text-[#F4B544]"
         : "border-transparent text-white/50 hover:text-white"
     }`;
 
   return (
     <div className="mx-auto max-w-4xl space-y-6 pb-16">
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-[#384154] pb-4">
+      <div className="flex items-center justify-between border-b border-[#263447] pb-4">
         <div>
           <h1 className="text-xl font-black text-white">Configurações</h1>
         </div>
 
         {isSavedToast && (
-          <div className="flex items-center gap-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-2 text-xs font-bold text-emerald-400">
+          <div className="flex items-center gap-1.5 rounded-xl border border-[#2BBF8A]/30 bg-[#2BBF8A]/10 px-3.5 py-2 text-xs font-bold text-[#2BBF8A]">
             <Check className="h-4 w-4" />
             Configurações salvas!
           </div>
@@ -132,7 +132,7 @@ export const ConfiguracoesView: React.FC = () => {
       </div>
 
       {/* Sub Tabs */}
-      <div className="flex border-b border-[#384154] gap-2 overflow-x-auto">
+      <div className="flex border-b border-[#263447] gap-2 overflow-x-auto">
         <button onClick={() => setActiveSubTab("perfil")} className={TAB_BUTTON(activeSubTab === "perfil")}>
           <User className="h-4 w-4" />
           <span>Perfil</span>
@@ -154,11 +154,11 @@ export const ConfiguracoesView: React.FC = () => {
         <form onSubmit={handleSaveProfile} className="space-y-6">
           {/* Avatar / Foto de Perfil Card */}
           <div className={`${CARD} relative overflow-hidden`}>
-            <div className="absolute -top-16 -right-16 h-40 w-40 rounded-full bg-[#F59E0B]/[0.06] blur-2xl" />
+            <div className="absolute -top-16 -right-16 h-40 w-40 rounded-full bg-[#527DFF]/[0.06] blur-2xl" />
 
             <div className="relative flex flex-col sm:flex-row items-center sm:items-center gap-5">
               <div className="relative group cursor-pointer shrink-0" onClick={() => setIsProfileModalOpen(true)}>
-                <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-tr from-[#F59E0B] to-[#FBBF24] text-2xl font-black text-[#11151F] shadow-md overflow-hidden ring-2 ring-[#F59E0B]/40 ring-offset-4 ring-offset-[#171B25]">
+                <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-tr from-[#F4B544] to-[#F4B544] text-2xl font-black text-white shadow-md overflow-hidden ring-2 ring-[#527DFF]/40 ring-offset-4 ring-offset-[#111B2D]">
                   {user?.avatarUrl ? (
                     <img
                       src={user.avatarUrl}
@@ -186,7 +186,7 @@ export const ConfiguracoesView: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setIsProfileModalOpen(true)}
-                    className="inline-flex items-center gap-1.5 rounded-xl bg-[#F59E0B] px-4 py-2 text-xs font-bold text-[#11151F] hover:bg-[#D97706] transition"
+                    className="inline-flex items-center gap-1.5 rounded-xl bg-[#527DFF] px-4 py-2 text-xs font-bold text-white hover:bg-[#416CEB] transition"
                   >
                     <Camera className="h-3.5 w-3.5" />
                     Alterar Foto de Perfil
@@ -217,7 +217,7 @@ export const ConfiguracoesView: React.FC = () => {
                   type="email"
                   disabled
                   value={userEmail}
-                  className="mt-1 w-full cursor-not-allowed rounded-xl border border-[#384154] bg-[#11151F] py-2.5 px-3.5 text-xs text-white/40"
+                  className="mt-1 w-full cursor-not-allowed rounded-xl border border-[#263447] bg-[#101827] py-2.5 px-3.5 text-xs text-white/40"
                 />
               </div>
             </div>
@@ -226,7 +226,7 @@ export const ConfiguracoesView: React.FC = () => {
           <div className="flex justify-end">
             <button
               type="submit"
-              className="flex items-center gap-2 rounded-xl bg-[#F59E0B] hover:bg-[#D97706] px-6 py-2.5 text-xs font-bold text-[#11151F] shadow-xs transition"
+              className="flex items-center gap-2 rounded-xl bg-[#527DFF] hover:bg-[#416CEB] px-6 py-2.5 text-xs font-bold text-white shadow-xs transition"
             >
               <Save className="h-4 w-4" />
               <span>Salvar Alterações</span>
@@ -248,14 +248,14 @@ export const ConfiguracoesView: React.FC = () => {
               {reviewIntervals.map((d) => (
                 <div
                   key={d}
-                  className="flex items-center gap-2 rounded-xl border border-[#384154] bg-[#252B38] px-3.5 py-1.5 text-xs font-bold text-white"
+                  className="flex items-center gap-2 rounded-xl border border-[#263447] bg-[#1D2B40] px-3.5 py-1.5 text-xs font-bold text-white"
                 >
-                  <span className="font-mono text-[#F59E0B]">{d}</span>
+                  <span className="font-mono text-[#F4B544]">{d}</span>
                   <span className="text-white/70">{d === 1 ? "dia (24h)" : "dias"}</span>
                   <button
                     type="button"
                     onClick={() => handleRemoveInterval(d)}
-                    className="text-white/40 hover:text-[#DC4B4B] transition"
+                    className="text-white/40 hover:text-[#F16D75] transition"
                   >
                     &times;
                   </button>
@@ -271,12 +271,12 @@ export const ConfiguracoesView: React.FC = () => {
                 placeholder="Ex: 45"
                 value={newInterval}
                 onChange={(e) => setNewInterval(e.target.value ? Number(e.target.value) : "")}
-                className="w-32 rounded-xl border border-[#384154] bg-[#252B38] py-2 px-3 text-xs font-mono text-white placeholder:text-white/30 focus:border-[#F59E0B] focus:outline-hidden transition-colors"
+                className="w-32 rounded-xl border border-[#263447] bg-[#1D2B40] py-2 px-3 text-xs font-mono text-white placeholder:text-white/30 focus:border-[#7DA2FF] focus:outline-hidden transition-colors"
               />
               <button
                 type="button"
                 onClick={handleAddInterval}
-                className="rounded-xl border border-[#384154] bg-[#252B38] px-4 py-2 text-xs font-bold text-white hover:border-[#F59E0B]/50 hover:text-[#F59E0B] transition"
+                className="rounded-xl border border-[#263447] bg-[#1D2B40] px-4 py-2 text-xs font-bold text-white hover:border-[#F4B544]/50 hover:text-[#F4B544] transition"
               >
                 + Adicionar Intervalo
               </button>
@@ -292,13 +292,13 @@ export const ConfiguracoesView: React.FC = () => {
             <h3 className={CARD_TITLE}>Alterar Senha de Acesso</h3>
 
             {securitySuccess && (
-              <div className="mt-3 rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-3 text-xs font-bold text-emerald-400">
+              <div className="mt-3 rounded-xl border border-[#2BBF8A]/30 bg-[#2BBF8A]/10 p-3 text-xs font-bold text-[#2BBF8A]">
                 {securitySuccess}
               </div>
             )}
 
             {securityError && (
-              <div className="mt-3 rounded-xl border border-[#DC4B4B]/40 bg-[#DC4B4B]/10 p-3 text-xs font-bold text-[#DC4B4B]">
+              <div className="mt-3 rounded-xl border border-[#F16D75]/40 bg-[#F16D75]/10 p-3 text-xs font-bold text-[#F16D75]">
                 {securityError}
               </div>
             )}
@@ -339,7 +339,7 @@ export const ConfiguracoesView: React.FC = () => {
 
               <button
                 type="submit"
-                className="flex items-center gap-2 rounded-xl bg-[#F59E0B] px-5 py-2.5 text-xs font-bold text-[#11151F] hover:bg-[#D97706] transition"
+                className="flex items-center gap-2 rounded-xl bg-[#527DFF] px-5 py-2.5 text-xs font-bold text-white hover:bg-[#416CEB] transition"
               >
                 <Lock className="h-3.5 w-3.5" />
                 <span>Atualizar Senha</span>

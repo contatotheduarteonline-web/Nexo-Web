@@ -28,11 +28,11 @@ export const NexoWatermark: React.FC = () => {
               fontSize="16"
               fontWeight="800"
               letterSpacing="0.2em"
-              className="fill-[#171B25] dark:fill-white"
+              className="fill-[#111B2D] dark:fill-white"
             >
               NEXO
             </text>
-            <circle cx="82" cy="37" r="2.5" fill="#F59E0B" />
+            <circle cx="82" cy="37" r="2.5" fill="#F4B544" />
 
             {/* Ícones sutis intercalados: Relógio, Alvo, Livro */}
             <g transform="translate(140, 30)" opacity="0.6">
@@ -42,7 +42,7 @@ export const NexoWatermark: React.FC = () => {
 
             <g transform="translate(80, 85)" opacity="0.6">
               <circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-white dark:text-white" />
-              <circle cx="8" cy="8" r="3.5" fill="none" stroke="#F59E0B" strokeWidth="1.5" />
+              <circle cx="8" cy="8" r="3.5" fill="none" stroke="#F4B544" strokeWidth="1.5" />
             </g>
 
             <g transform="translate(170, 95)" opacity="0.5">

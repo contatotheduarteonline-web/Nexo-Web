@@ -31,9 +31,9 @@ export const DisciplinePerformanceSection: React.FC<DisciplinePerformanceSection
       id="section-desempenho-disciplinas"
       className="nx-card p-5 sm:p-6"
     >
-      <div className="flex items-center justify-between pb-4 border-b border-[#384154]">
+      <div className="flex items-center justify-between pb-4 border-b border-[#263447]">
         <div className="flex items-center gap-2.5">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#384154] bg-[#171B25] text-white">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#263447] bg-[#111B2D] text-white">
             <Layers className="h-4 w-4" />
           </div>
           <h2 className="font-condensed text-[19px] font-bold text-white">
@@ -45,7 +45,7 @@ export const DisciplinePerformanceSection: React.FC<DisciplinePerformanceSection
           type="button"
           id="btn-ver-detalhes-disciplinas"
           onClick={onNavigateToDisciplines}
-          className="text-[13px] font-semibold text-[#F59E0B] hover:text-[#D97706] hover:underline flex items-center gap-1 cursor-pointer transition-colors duration-200"
+          className="text-[13px] font-semibold text-[#F4B544] hover:text-[#D97706] hover:underline flex items-center gap-1 cursor-pointer transition-colors duration-200"
         >
           <span>Ver todas</span>
           <ArrowUpRight className="h-3.5 w-3.5" />
@@ -60,7 +60,7 @@ export const DisciplinePerformanceSection: React.FC<DisciplinePerformanceSection
         ) : (
           <table className="w-full text-left text-[13px]">
             <thead>
-              <tr className="border-b border-[#384154] text-[11px] font-semibold uppercase tracking-[0.08em] text-white">
+              <tr className="border-b border-[#263447] text-[11px] font-semibold uppercase tracking-[0.08em] text-white">
                 <th className="pb-3 pr-4 font-semibold">Disciplina</th>
                 <th className="pb-3 px-4 font-semibold text-center">Questões</th>
                 <th className="pb-3 px-4 font-semibold text-center">Precisão</th>
@@ -74,13 +74,13 @@ export const DisciplinePerformanceSection: React.FC<DisciplinePerformanceSection
                 <tr
                   key={d.id}
                   id={`discipline-row-${d.id}`}
-                  className="transition-colors duration-200 hover:bg-[#2D3442]/50"
+                  className="transition-colors duration-200 hover:bg-[#223149]/50"
                 >
                   <td className="py-3.5 pr-4">
                     <div className="flex items-center gap-2.5">
                       <span
                         className="h-2.5 w-2.5 rounded-full shrink-0"
-                        style={{ backgroundColor: d.color || "#F59E0B" }}
+                        style={{ backgroundColor: d.color || "#F4B544" }}
                       />
                       <span className="font-semibold text-white">
                         {d.name}
@@ -103,10 +103,10 @@ export const DisciplinePerformanceSection: React.FC<DisciplinePerformanceSection
                       <span
                         className={
                           d.accuracy >= 70
-                            ? "inline-flex items-center rounded-md border border-emerald-400/25 bg-emerald-400/10 px-2 py-0.5 font-semibold text-[#48C3A7]"
+                            ? "inline-flex items-center rounded-md border border-[#2BBF8A]/25 bg-[#2BBF8A]/10 px-2 py-0.5 font-semibold text-[#2BBF8A]"
                             : d.accuracy >= 50
-                            ? "inline-flex items-center rounded-md border border-[#F59E0B]/25 bg-[#F59E0B]/10 px-2 py-0.5 font-semibold text-[#F59E0B]"
-                            : "inline-flex items-center rounded-md border border-[#DC4B4B]/25 bg-[#DC4B4B]/10 px-2 py-0.5 font-semibold text-[#DC4B4B]"
+                            ? "inline-flex items-center rounded-md border border-[#527DFF]/30 bg-[#1A2A4A] px-2 py-0.5 font-semibold text-[#7DA2FF]"
+                            : "inline-flex items-center rounded-md border border-[#F16D75]/25 bg-[#F16D75]/10 px-2 py-0.5 font-semibold text-[#F16D75]"
                         }
                       >
                         {d.accuracy}%
@@ -128,9 +128,9 @@ export const DisciplinePerformanceSection: React.FC<DisciplinePerformanceSection
                         </span>
                         <span className="num-condensed text-white font-bold">{d.topicsProgressPercent}%</span>
                       </div>
-                      <div className="h-1.5 w-full overflow-hidden rounded-full border border-[#384154] bg-[#171B25]">
+                      <div className="h-1.5 w-full overflow-hidden rounded-full border border-[#263447] bg-[#111B2D]">
                         <div
-                          className="h-full rounded-full bg-[#F59E0B] transition-all duration-500"
+                          className="h-full rounded-full bg-[#527DFF] transition-all duration-500"
                           style={{
                             width: `${d.topicsProgressPercent}%`,
                           }}
@@ -144,7 +144,7 @@ export const DisciplinePerformanceSection: React.FC<DisciplinePerformanceSection
                       type="button"
                       id={`btn-estudar-disciplina-${d.id}`}
                       onClick={() => onStartStudy(d.id, 45)}
-                      className="nx-deep nx-deep-hover inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[12px] font-semibold text-white hover:border-[#F59E0B]/50 hover:text-[#F59E0B] cursor-pointer"
+                      className="nx-deep nx-deep-hover inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[12px] font-semibold text-white hover:border-[#F4B544]/50 hover:text-[#F4B544] cursor-pointer"
                     >
                       <Play className="h-3 w-3 fill-current" />
                       <span>Estudar</span>

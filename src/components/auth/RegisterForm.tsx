@@ -7,7 +7,7 @@ interface RegisterFormProps {
 }
 
 const inputClass =
-  "h-[50px] w-full rounded-xl border border-[#2a2e35] bg-[#171B25] pl-10 pr-4 text-sm text-white placeholder:text-[#737D89]/50 transition-colors focus:border-[#F59E0B] focus:ring-1 focus:ring-[#F59E0B]/30 focus:outline-none";
+  "h-[50px] w-full rounded-xl border border-[#2a2e35] bg-[#111B2D] pl-10 pr-4 text-sm text-white placeholder:text-[#718096]/50 transition-colors focus:border-[#7DA2FF] focus:ring-1 focus:ring-[#7DA2FF]/30 focus:outline-none";
 
 /**
  * Registration form rendered in-place inside the login layout
@@ -70,15 +70,15 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onGoToLogin }) => {
   return (
     <>
       {error && (
-        <div className="mb-6 flex items-start gap-3 rounded-xl border border-amber-500/25 bg-amber-500/10 p-3.5 text-xs text-amber-200">
-          <AlertCircle className="h-4 w-4 shrink-0 text-amber-400 mt-0.5" />
-          <p className="font-medium text-amber-200 leading-relaxed">{error}</p>
+        <div className="mb-6 flex items-start gap-3 rounded-xl border border-[#F4B544]/25 bg-[#527DFF]/10 p-3.5 text-xs text-[#F4B544]">
+          <AlertCircle className="h-4 w-4 shrink-0 text-[#F4B544] mt-0.5" />
+          <p className="font-medium text-[#F4B544] leading-relaxed">{error}</p>
         </div>
       )}
 
       <form onSubmit={handleSubmit} className="space-y-4" noValidate>
         <div>
-          <label htmlFor="reg-name" className="block text-xs font-medium text-[#737D89] mb-1.5">
+          <label htmlFor="reg-name" className="block text-xs font-medium text-[#718096] mb-1.5">
             Nome Completo
           </label>
           <div className="relative">
@@ -94,12 +94,12 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onGoToLogin }) => {
               placeholder="Ex: Carlos Eduardo Silva"
               className={inputClass}
             />
-            <User className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[#737D89]/60 pointer-events-none" />
+            <User className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[#718096]/60 pointer-events-none" />
           </div>
         </div>
 
         <div>
-          <label htmlFor="reg-email" className="block text-xs font-medium text-[#737D89] mb-1.5">
+          <label htmlFor="reg-email" className="block text-xs font-medium text-[#718096] mb-1.5">
             E-mail
           </label>
           <div className="relative">
@@ -116,13 +116,13 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onGoToLogin }) => {
               placeholder="voce@exemplo.com"
               className={inputClass}
             />
-            <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[#737D89]/60 pointer-events-none" />
+            <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[#718096]/60 pointer-events-none" />
           </div>
         </div>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div>
-            <label htmlFor="reg-password" className="block text-xs font-medium text-[#737D89] mb-1.5">
+            <label htmlFor="reg-password" className="block text-xs font-medium text-[#718096] mb-1.5">
               Senha
             </label>
             <div className="relative">
@@ -139,11 +139,11 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onGoToLogin }) => {
                 placeholder="Mínimo de 8 caracteres"
                 className={`${inputClass} pr-11`}
               />
-              <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[#737D89]/60 pointer-events-none" />
+              <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[#718096]/60 pointer-events-none" />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#737D89]/60 hover:text-[#737D89] transition-colors p-1 cursor-pointer"
+                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#718096]/60 hover:text-[#718096] transition-colors p-1 cursor-pointer"
                 aria-label={showPassword ? "Ocultar senha" : "Ver senha"}
               >
                 {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -152,7 +152,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onGoToLogin }) => {
           </div>
 
           <div>
-            <label htmlFor="reg-confirm" className="block text-xs font-medium text-[#737D89] mb-1.5">
+            <label htmlFor="reg-confirm" className="block text-xs font-medium text-[#718096] mb-1.5">
               Confirmar Senha
             </label>
             <div className="relative">
@@ -169,7 +169,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onGoToLogin }) => {
                 placeholder="Repita a senha"
                 className={inputClass}
               />
-              <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[#737D89]/60 pointer-events-none" />
+              <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[#718096]/60 pointer-events-none" />
             </div>
           </div>
         </div>
@@ -178,7 +178,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onGoToLogin }) => {
           <button
             type="submit"
             disabled={isLoading}
-            className="flex h-[50px] w-full items-center justify-center gap-2 rounded-xl bg-[#F59E0B] hover:bg-[#FBBF24] text-sm font-bold text-[#0d0f12] transition-colors duration-150 active:scale-[0.99] disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
+            className="flex h-[50px] w-full items-center justify-center gap-2 rounded-xl bg-[#527DFF] hover:bg-[#FBBF24] text-sm font-bold text-[#0d0f12] transition-colors duration-150 active:scale-[0.99] disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
           >
             <span>{isLoading ? "Criando conta..." : "Criar Minha Conta"}</span>
             {!isLoading && <ArrowRight className="h-4 w-4" />}
@@ -187,12 +187,12 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onGoToLogin }) => {
       </form>
 
       {onGoToLogin && (
-        <p className="mt-8 text-center text-xs text-[#737D89]">
+        <p className="mt-8 text-center text-xs text-[#718096]">
           Já possui uma conta?{" "}
           <button
             type="button"
             onClick={onGoToLogin}
-            className="font-semibold text-[#F59E0B] hover:text-[#FBBF24] transition-colors cursor-pointer underline-offset-4 hover:underline"
+            className="font-semibold text-[#F4B544] hover:text-[#F4B544] transition-colors cursor-pointer underline-offset-4 hover:underline"
           >
             Fazer login
           </button>

@@ -128,7 +128,7 @@ export const MetasView: React.FC = () => {
   return (
     <div className="mx-auto max-w-6xl space-y-6 pb-16 font-sans">
       {/* Header */}
-      <div className="flex flex-col justify-between gap-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-xs sm:flex-row sm:items-center dark:border-slate-800 dark:bg-[#252B38]">
+      <div className="flex flex-col justify-between gap-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-xs sm:flex-row sm:items-center dark:border-[#263447] dark:bg-[#1D2B40]">
         <div>
           <h2 className="text-2xl font-black text-white dark:text-white uppercase tracking-tight">
             Metas de Estudo
@@ -137,7 +137,7 @@ export const MetasView: React.FC = () => {
 
         <div className="flex items-center gap-3">
           {isSavedToast && (
-            <div className="flex items-center gap-1.5 rounded-xl bg-emerald-50 px-3.5 py-2 text-xs font-bold text-emerald-600 dark:bg-emerald-950/50 dark:text-emerald-400 animate-in fade-in">
+            <div className="flex items-center gap-1.5 rounded-xl bg-[#15382F] px-3.5 py-2 text-xs font-bold text-[#2BBF8A] dark:bg-[#2BBF8A]/50 dark:text-[#2BBF8A] animate-in fade-in">
               <Check className="h-4 w-4" />
               Metas salvas com sucesso!
             </div>
@@ -148,12 +148,12 @@ export const MetasView: React.FC = () => {
       {/* Overview Cards (Real-time Progress) */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {/* Meta Diária */}
-        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs dark:border-slate-800 dark:bg-[#252B38]">
+        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs dark:border-[#263447] dark:bg-[#1D2B40]">
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-bold uppercase tracking-wider text-white dark:text-white">
               Meta Diária (Hoje)
             </span>
-            <div className="rounded-xl bg-emerald-50 p-2 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400">
+            <div className="rounded-xl bg-[#15382F] p-2 text-[#2BBF8A] dark:bg-[#2BBF8A]/40 dark:text-[#2BBF8A]">
               <Clock className="h-5 w-5" />
             </div>
           </div>
@@ -165,9 +165,9 @@ export const MetasView: React.FC = () => {
               / {dailyGoalHours}h planejadas
             </span>
           </div>
-          <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
+          <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-[#172235]">
             <div
-              className="h-full rounded-full bg-emerald-500 transition-all duration-500"
+              className="h-full rounded-full bg-[#2BBF8A] transition-all duration-500"
               style={{ width: `${dailyHoursPercent}%` }}
             />
           </div>
@@ -177,12 +177,12 @@ export const MetasView: React.FC = () => {
         </div>
 
         {/* Meta Semanal de Horas */}
-        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs dark:border-slate-800 dark:bg-[#252B38]">
+        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs dark:border-[#263447] dark:bg-[#1D2B40]">
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-bold uppercase tracking-wider text-white dark:text-white">
               Meta Semanal (Horas)
             </span>
-            <div className="rounded-xl bg-blue-50 p-2 text-blue-600 dark:bg-blue-950/40 dark:text-blue-400">
+            <div className="rounded-xl bg-[#192D46] p-2 text-[#58A6FF] dark:bg-[#58A6FF]/40 dark:text-[#58A6FF]">
               <Calendar className="h-5 w-5" />
             </div>
           </div>
@@ -194,9 +194,9 @@ export const MetasView: React.FC = () => {
               / {weeklyGoalHours}h semanais
             </span>
           </div>
-          <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
+          <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-[#172235]">
             <div
-              className="h-full rounded-full bg-blue-500 transition-all duration-500"
+              className="h-full rounded-full bg-[#58A6FF] transition-all duration-500"
               style={{ width: `${weeklyHoursPercent}%` }}
             />
           </div>
@@ -206,7 +206,7 @@ export const MetasView: React.FC = () => {
         </div>
 
         {/* Meta de Questões */}
-        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs dark:border-slate-800 dark:bg-[#252B38]">
+        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs dark:border-[#263447] dark:bg-[#1D2B40]">
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-bold uppercase tracking-wider text-white dark:text-white">
               Questões na Semana
@@ -223,7 +223,7 @@ export const MetasView: React.FC = () => {
               / {weeklyGoalQuestions} questões
             </span>
           </div>
-          <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
+          <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-[#172235]">
             <div
               className="h-full rounded-full bg-purple-500 transition-all duration-500"
               style={{ width: `${questionsProgressPercent}%` }}
@@ -235,12 +235,12 @@ export const MetasView: React.FC = () => {
         </div>
 
         {/* Sequência / Taxa de Acertos */}
-        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs dark:border-slate-800 dark:bg-[#252B38]">
+        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs dark:border-[#263447] dark:bg-[#1D2B40]">
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-bold uppercase tracking-wider text-white dark:text-white">
               Taxa Geral de Acertos
             </span>
-            <div className="rounded-xl bg-amber-50 p-2 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400">
+            <div className="rounded-xl bg-[#342B1C] p-2 text-[#F4B544] dark:bg-[#F4B544]/40 dark:text-[#F4B544]">
               <TrendingUp className="h-5 w-5" />
             </div>
           </div>
@@ -252,10 +252,10 @@ export const MetasView: React.FC = () => {
               (Alvo: {targetAccuracy}%)
             </span>
           </div>
-          <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
+          <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-[#172235]">
             <div
               className={`h-full rounded-full transition-all duration-500 ${
-                metrics.overallAccuracyRate >= targetAccuracy ? "bg-emerald-500" : "bg-amber-500"
+                metrics.overallAccuracyRate >= targetAccuracy ? "bg-[#2BBF8A]" : "bg-[#527DFF]"
               }`}
               style={{ width: `${Math.min(100, metrics.overallAccuracyRate)}%` }}
             />
@@ -268,9 +268,9 @@ export const MetasView: React.FC = () => {
 
       {/* Form de Configuração e Ajuste de Metas */}
       <form onSubmit={handleSaveGoals} className="space-y-6">
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs dark:border-slate-800 dark:bg-[#252B38]">
-          <div className="flex items-center gap-2 border-b border-slate-100 pb-4 dark:border-slate-800">
-            <Sliders className="h-5 w-5 text-[#F59E0B]" />
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs dark:border-[#263447] dark:bg-[#1D2B40]">
+          <div className="flex items-center gap-2 border-b border-slate-100 pb-4 dark:border-[#263447]">
+            <Sliders className="h-5 w-5 text-[#F4B544]" />
             <h3 className="text-base font-bold text-white dark:text-white">
               Configurar Objetivos & Cargas Horárias
             </h3>
@@ -290,7 +290,7 @@ export const MetasView: React.FC = () => {
                   step="0.5"
                   value={dailyGoalHours}
                   onChange={(e) => setDailyGoalHours(parseFloat(e.target.value) || 0)}
-                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-sm font-bold text-white focus:border-[#F59E0B] focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-sm font-bold text-white focus:border-[#7DA2FF] focus:outline-none dark:bg-[#172235] dark:bg-[#172235] dark:text-white"
                 />
                 <span className="text-xs font-bold text-white dark:text-white">horas/dia</span>
               </div>
@@ -312,7 +312,7 @@ export const MetasView: React.FC = () => {
                   step="10"
                   value={weeklyGoalQuestions}
                   onChange={(e) => setWeeklyGoalQuestions(parseInt(e.target.value, 10) || 0)}
-                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-sm font-bold text-white focus:border-[#F59E0B] focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-sm font-bold text-white focus:border-[#7DA2FF] focus:outline-none dark:bg-[#172235] dark:bg-[#172235] dark:text-white"
                 />
                 <span className="text-xs font-bold text-white dark:text-white">questões</span>
               </div>
@@ -334,7 +334,7 @@ export const MetasView: React.FC = () => {
                   step="1"
                   value={targetAccuracy}
                   onChange={(e) => setTargetAccuracy(parseInt(e.target.value, 10) || 80)}
-                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-sm font-bold text-white focus:border-[#F59E0B] focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-sm font-bold text-white focus:border-[#7DA2FF] focus:outline-none dark:bg-[#172235] dark:bg-[#172235] dark:text-white"
                 />
                 <span className="text-xs font-bold text-white dark:text-white">% de acertos</span>
               </div>
@@ -345,7 +345,7 @@ export const MetasView: React.FC = () => {
           </div>
 
           {/* Distribuição Semanal por Dia */}
-          <div className="mt-8 border-t border-slate-100 pt-6 dark:border-slate-800">
+          <div className="mt-8 border-t border-slate-100 pt-6 dark:border-[#263447]">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div>
                 <h4 className="text-xs font-bold uppercase tracking-wider text-white dark:text-white">
@@ -357,7 +357,7 @@ export const MetasView: React.FC = () => {
               </div>
               <div className="text-right">
                 <span className="text-xs text-white">Total da semana: </span>
-                <span className="text-sm font-black text-[#F59E0B] dark:text-[#FBBF24]">{weeklyGoalHours}h</span>
+                <span className="text-sm font-black text-[#F4B544] dark:text-[#F4B544]">{weeklyGoalHours}h</span>
               </div>
             </div>
 
@@ -375,7 +375,7 @@ export const MetasView: React.FC = () => {
                 return (
                   <div
                     key={d.key}
-                    className="flex flex-col items-center rounded-xl border border-slate-200 bg-slate-50/50 p-3 dark:border-slate-700/60 dark:bg-slate-800/40"
+                    className="flex flex-col items-center rounded-xl border border-slate-200 bg-slate-50/50 p-3 dark:bg-[#172235]/60 dark:bg-[#172235]/40"
                   >
                     <span className="text-[11px] font-bold text-white dark:text-white">
                       {d.label}
@@ -389,7 +389,7 @@ export const MetasView: React.FC = () => {
                       onChange={(e) =>
                         handleDayAvailabilityChange(dayKey, parseFloat(e.target.value) || 0)
                       }
-                      className="mt-2 w-16 text-center rounded-lg border border-slate-200 bg-white py-1.5 text-xs font-black text-slate-900 focus:border-[#F59E0B] focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                      className="mt-2 w-16 text-center rounded-lg border border-slate-200 bg-white py-1.5 text-xs font-black text-[#0B1120] focus:border-[#7DA2FF] focus:outline-none dark:bg-[#172235] dark:bg-[#172235] dark:text-white"
                     />
                     <span className="mt-1 text-[10px] text-white">horas</span>
                   </div>
@@ -399,10 +399,10 @@ export const MetasView: React.FC = () => {
           </div>
 
           {/* Submit button */}
-          <div className="mt-8 flex items-center justify-end gap-3 border-t border-slate-100 pt-5 dark:border-slate-800">
+          <div className="mt-8 flex items-center justify-end gap-3 border-t border-slate-100 pt-5 dark:border-[#263447]">
             <button
               type="submit"
-              className="flex items-center gap-2 rounded-xl bg-[#F59E0B] hover:bg-[#D97706] px-6 py-2.5 text-xs font-bold text-white shadow-xs transition active:scale-98"
+              className="flex items-center gap-2 rounded-xl bg-[#527DFF] hover:bg-[#416CEB] px-6 py-2.5 text-xs font-bold text-white shadow-xs transition active:scale-98"
             >
               <Save className="h-4 w-4" />
               <span>Salvar Metas</span>

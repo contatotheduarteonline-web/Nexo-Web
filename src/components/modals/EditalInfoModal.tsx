@@ -96,11 +96,11 @@ export const EditalInfoModal: React.FC<EditalInfoModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs">
-      <div className="flex max-h-[90vh] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-[#E2E8F0] bg-white shadow-2xl dark:border-[#1E293B] dark:bg-[#1E293B]">
+      <div className="flex max-h-[90vh] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-[#E2E8F0] bg-white shadow-2xl dark:border-[#263447] dark:bg-[#172235]">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-[#E2E8F0] bg-[#F1F5F9] px-6 py-4 dark:border-[#1E293B] dark:bg-[#1E293B]/60">
+        <div className="flex items-center justify-between border-b border-[#E2E8F0] bg-[#F1F5F9] px-6 py-4 dark:border-[#263447] dark:bg-[#172235]/60">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#EAF8F4] text-[#249D84] dark:bg-[#16362F] dark:text-[#48C3A7]">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#EAF8F4] text-[#2BBF8A] dark:bg-[#16362F] dark:text-[#2BBF8A]">
               <FileSpreadsheet className="h-5 w-5" />
             </div>
             <div>
@@ -115,7 +115,7 @@ export const EditalInfoModal: React.FC<EditalInfoModalProps> = ({
 
           <button
             onClick={onClose}
-            className="rounded-lg p-1.5 text-[#737D89] hover:bg-[#E2E8F0] hover:text-[#374151] dark:hover:bg-[#1E293B] dark:hover:text-white"
+            className="rounded-lg p-1.5 text-[#718096] hover:bg-[#E2E8F0] hover:text-[#93A2B7] dark:hover:bg-[#172235] dark:hover:text-white"
           >
             <X className="h-5 w-5" />
           </button>
@@ -126,10 +126,10 @@ export const EditalInfoModal: React.FC<EditalInfoModalProps> = ({
           {!isEditing ? (
             <div className="space-y-6">
               {/* Main Info Card */}
-              <div className="rounded-xl border border-[#E2E8F0] bg-[#F1F5F9] p-4 dark:border-[#1E293B] dark:bg-[#1E293B]/40">
+              <div className="rounded-xl border border-[#E2E8F0] bg-[#F1F5F9] p-4 dark:border-[#263447] dark:bg-[#172235]/40">
                 <div className="flex items-start justify-between">
                   <div>
-                    <span className="inline-block rounded-full bg-[#EAF8F4] px-2.5 py-0.5 text-[11px] font-bold text-[#249D84] dark:bg-[#16362F] dark:text-[#48C3A7]">
+                    <span className="inline-block rounded-full bg-[#EAF8F4] px-2.5 py-0.5 text-[11px] font-bold text-[#2BBF8A] dark:bg-[#16362F] dark:text-[#2BBF8A]">
                       {targetEdital.banca} • {targetEdital.year}
                     </span>
                     <h3 className="mt-1.5 text-lg font-extrabold text-white dark:text-white">
@@ -153,7 +153,7 @@ export const EditalInfoModal: React.FC<EditalInfoModalProps> = ({
                       setPdfUrl(targetEdital.pdfUrl || "");
                       setIsEditing(true);
                     }}
-                    className="flex items-center gap-1.5 rounded-lg border border-[#E2E8F0] bg-white px-3 py-1.5 text-xs font-bold text-[#374151] shadow-xs hover:bg-[#F1F5F9] dark:border-[#1E293B] dark:bg-[#1E293B] dark:text-white"
+                    className="flex items-center gap-1.5 rounded-lg border border-[#E2E8F0] bg-white px-3 py-1.5 text-xs font-bold text-[#93A2B7] shadow-xs hover:bg-[#F1F5F9] dark:border-[#263447] dark:bg-[#172235] dark:text-white"
                   >
                     <Edit3 className="h-3.5 w-3.5" />
                     Editar Dados
@@ -223,7 +223,7 @@ export const EditalInfoModal: React.FC<EditalInfoModalProps> = ({
                 </div>
 
                 {targetEdital.notes && (
-                  <div className="mt-3 border-t border-[#E2E8F0] pt-3 text-xs dark:border-[#1E293B]">
+                  <div className="mt-3 border-t border-[#E2E8F0] pt-3 text-xs dark:border-[#263447]">
                     <span className="block text-[10px] font-bold tracking-wider text-white uppercase">
                       Observações
                     </span>
@@ -235,15 +235,15 @@ export const EditalInfoModal: React.FC<EditalInfoModalProps> = ({
               </div>
 
               {/* PDF & Documento Original Section */}
-              <div className="rounded-xl border border-[#E2E8F0] bg-white p-4 shadow-xs dark:border-[#1E293B] dark:bg-[#1E293B]">
+              <div className="rounded-xl border border-[#E2E8F0] bg-white p-4 shadow-xs dark:border-[#263447] dark:bg-[#172235]">
                 <h4 className="text-xs font-bold tracking-wider text-white uppercase dark:text-white">
                   Arquivo Original do Edital (PDF ou Link)
                 </h4>
 
                 {targetEdital.pdfUrl || targetEdital.pdfFileName || targetEdital.linkUrl ? (
-                  <div className="mt-3 flex flex-col gap-3 rounded-lg border border-[#E2E8F0] bg-[#F1F5F9] p-3 sm:flex-row sm:items-center sm:justify-between dark:border-[#1E293B] dark:bg-[#1E293B]">
+                  <div className="mt-3 flex flex-col gap-3 rounded-lg border border-[#E2E8F0] bg-[#F1F5F9] p-3 sm:flex-row sm:items-center sm:justify-between dark:border-[#263447] dark:bg-[#172235]">
                     <div className="flex items-center gap-2.5">
-                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-red-100 text-red-600 dark:bg-red-950/40 dark:text-red-400">
+                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#3B2029] text-[#F16D75] dark:bg-[#F16D75]/40 dark:text-[#F16D75]">
                         <FileText className="h-5 w-5" />
                       </div>
                       <div>
@@ -262,7 +262,7 @@ export const EditalInfoModal: React.FC<EditalInfoModalProps> = ({
                           href={targetEdital.pdfUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center gap-1 rounded-lg bg-[#249D84] px-3 py-1.5 text-xs font-bold text-white hover:bg-[#1F826D]"
+                          className="flex items-center gap-1 rounded-lg bg-[#2BBF8A] px-3 py-1.5 text-xs font-bold text-white hover:bg-[#24634F]"
                         >
                           <ExternalLink className="h-3.5 w-3.5" />
                           Visualizar PDF
@@ -272,14 +272,14 @@ export const EditalInfoModal: React.FC<EditalInfoModalProps> = ({
                           href={targetEdital.linkUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center gap-1 rounded-lg bg-[#249D84] px-3 py-1.5 text-xs font-bold text-white hover:bg-[#1F826D]"
+                          className="flex items-center gap-1 rounded-lg bg-[#2BBF8A] px-3 py-1.5 text-xs font-bold text-white hover:bg-[#24634F]"
                         >
                           <ExternalLink className="h-3.5 w-3.5" />
                           Abrir Link
                         </a>
                       ) : null}
 
-                      <label className="flex cursor-pointer items-center gap-1 rounded-lg border border-[#E2E8F0] bg-white px-2.5 py-1.5 text-xs font-semibold text-[#374151] hover:bg-[#F1F5F9] dark:border-[#1E293B] dark:bg-[#1E293B] dark:text-white">
+                      <label className="flex cursor-pointer items-center gap-1 rounded-lg border border-[#E2E8F0] bg-white px-2.5 py-1.5 text-xs font-semibold text-[#93A2B7] hover:bg-[#F1F5F9] dark:border-[#263447] dark:bg-[#172235] dark:text-white">
                         <Upload className="h-3.5 w-3.5" />
                         Substituir
                         <input
@@ -292,11 +292,11 @@ export const EditalInfoModal: React.FC<EditalInfoModalProps> = ({
                     </div>
                   </div>
                 ) : (
-                  <div className="mt-3 rounded-lg border border-dashed border-[#E2E8F0] p-4 text-center dark:border-[#3A454F]">
+                  <div className="mt-3 rounded-lg border border-dashed border-[#E2E8F0] p-4 text-center dark:border-[#39475C]">
                     <p className="text-xs text-white dark:text-white">
                       Nenhum arquivo PDF anexado ao edital.
                     </p>
-                    <label className="mt-2 inline-flex cursor-pointer items-center gap-1.5 rounded-lg bg-[#EAF8F4] px-3 py-1.5 text-xs font-bold text-[#249D84] hover:bg-[#D7F3EC] dark:bg-[#16362F] dark:text-[#48C3A7]">
+                    <label className="mt-2 inline-flex cursor-pointer items-center gap-1.5 rounded-lg bg-[#EAF8F4] px-3 py-1.5 text-xs font-bold text-[#2BBF8A] hover:bg-[#D7F3EC] dark:bg-[#16362F] dark:text-[#2BBF8A]">
                       <Upload className="h-3.5 w-3.5" />
                       Anexar Edital em PDF
                       <input
@@ -312,7 +312,7 @@ export const EditalInfoModal: React.FC<EditalInfoModalProps> = ({
 
               {/* Estatísticas Estruturais do Edital */}
               <div className="grid grid-cols-3 gap-3">
-                <div className="rounded-xl border border-[#E2E8F0] bg-white p-3 text-center dark:border-[#1E293B] dark:bg-[#1E293B]">
+                <div className="rounded-xl border border-[#E2E8F0] bg-white p-3 text-center dark:border-[#263447] dark:bg-[#172235]">
                   <span className="text-[10px] font-bold tracking-wider text-white uppercase">
                     Disciplinas
                   </span>
@@ -321,7 +321,7 @@ export const EditalInfoModal: React.FC<EditalInfoModalProps> = ({
                   </span>
                 </div>
 
-                <div className="rounded-xl border border-[#E2E8F0] bg-white p-3 text-center dark:border-[#1E293B] dark:bg-[#1E293B]">
+                <div className="rounded-xl border border-[#E2E8F0] bg-white p-3 text-center dark:border-[#263447] dark:bg-[#172235]">
                   <span className="text-[10px] font-bold tracking-wider text-white uppercase">
                     Tópicos Totais
                   </span>
@@ -330,18 +330,18 @@ export const EditalInfoModal: React.FC<EditalInfoModalProps> = ({
                   </span>
                 </div>
 
-                <div className="rounded-xl border border-[#E2E8F0] bg-white p-3 text-center dark:border-[#1E293B] dark:bg-[#1E293B]">
+                <div className="rounded-xl border border-[#E2E8F0] bg-white p-3 text-center dark:border-[#263447] dark:bg-[#172235]">
                   <span className="text-[10px] font-bold tracking-wider text-white uppercase">
                     Concluídos
                   </span>
-                  <span className="mt-1 block text-lg font-black text-[#249D84] dark:text-[#48C3A7]">
+                  <span className="mt-1 block text-lg font-black text-[#2BBF8A] dark:text-[#2BBF8A]">
                     {targetEdital.topics.filter((t) => t.isStudied).length} / {targetEdital.topics.length}
                   </span>
                 </div>
               </div>
 
               {/* Dangerous Actions (Delete/Archive) */}
-              <div className="border-t border-[#E2E8F0] pt-4 dark:border-[#1E293B]">
+              <div className="border-t border-[#E2E8F0] pt-4 dark:border-[#263447]">
                 {!showDeleteConfirm ? (
                   <div className="flex items-center justify-between">
                     <span className="text-xs text-white dark:text-white">
@@ -349,30 +349,30 @@ export const EditalInfoModal: React.FC<EditalInfoModalProps> = ({
                     </span>
                     <button
                       onClick={() => setShowDeleteConfirm(true)}
-                      className="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30"
+                      className="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-[#F16D75] hover:bg-[#3B2029] dark:hover:bg-[#F16D75]/30"
                     >
                       <Trash2 className="h-3.5 w-3.5" />
                       Excluir este edital
                     </button>
                   </div>
                 ) : (
-                  <div className="rounded-xl border border-red-200 bg-red-50 p-3.5 dark:border-red-900/40 dark:bg-red-950/30">
-                    <p className="text-xs font-bold text-red-800 dark:text-red-300">
+                  <div className="rounded-xl border border-[#F16D75] bg-[#F16D75] p-3.5 dark:border-[#F16D75]/40 dark:bg-[#F16D75]/30">
+                    <p className="text-xs font-bold text-[#F16D75] dark:text-[#F16D75]">
                       Tem certeza que deseja excluir o edital "{targetEdital.title}"?
                     </p>
-                    <p className="mt-1 text-[11px] text-red-700 dark:text-red-400">
+                    <p className="mt-1 text-[11px] text-[#F16D75] dark:text-[#F16D75]">
                       Todas as disciplinas e tópicos cadastrados neste edital serão removidos.
                     </p>
                     <div className="mt-3 flex items-center justify-end gap-2">
                       <button
                         onClick={() => setShowDeleteConfirm(false)}
-                        className="rounded-lg border border-[#E2E8F0] bg-white px-3 py-1 text-xs font-semibold text-[#374151] hover:bg-[#F1F5F9] dark:bg-[#1E293B] dark:text-white"
+                        className="rounded-lg border border-[#E2E8F0] bg-white px-3 py-1 text-xs font-semibold text-[#93A2B7] hover:bg-[#F1F5F9] dark:bg-[#172235] dark:text-white"
                       >
                         Cancelar
                       </button>
                       <button
                         onClick={handleDelete}
-                        className="rounded-lg bg-red-600 px-3 py-1 text-xs font-bold text-white hover:bg-red-700"
+                        className="rounded-lg bg-[#F16D75] px-3 py-1 text-xs font-bold text-white hover:bg-[#F16D75]"
                       >
                         Sim, Excluir Edital
                       </button>
@@ -392,7 +392,7 @@ export const EditalInfoModal: React.FC<EditalInfoModalProps> = ({
                   type="text"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-white px-3.5 py-2 text-sm text-[#374151] focus:border-[#48C3A7] focus:outline-hidden dark:border-[#3A454F] dark:bg-[#1E293B] dark:text-white"
+                  className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-white px-3.5 py-2 text-sm text-[#93A2B7] focus:border-[#7DA2FF] focus:outline-hidden dark:border-[#39475C] dark:bg-[#172235] dark:text-white"
                   placeholder="Ex: Guarda Civil Municipal de Manaus"
                   required
                 />
@@ -407,7 +407,7 @@ export const EditalInfoModal: React.FC<EditalInfoModalProps> = ({
                     type="text"
                     value={organ}
                     onChange={(e) => setOrgan(e.target.value)}
-                    className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-white px-3.5 py-2 text-sm text-[#374151] focus:border-[#48C3A7] focus:outline-hidden dark:border-[#3A454F] dark:bg-[#1E293B] dark:text-white"
+                    className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-white px-3.5 py-2 text-sm text-[#93A2B7] focus:border-[#7DA2FF] focus:outline-hidden dark:border-[#39475C] dark:bg-[#172235] dark:text-white"
                     placeholder="Ex: Prefeitura de Manaus"
                     required
                   />
@@ -421,7 +421,7 @@ export const EditalInfoModal: React.FC<EditalInfoModalProps> = ({
                     type="text"
                     value={cargo}
                     onChange={(e) => setCargo(e.target.value)}
-                    className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-white px-3.5 py-2 text-sm text-[#374151] focus:border-[#48C3A7] focus:outline-hidden dark:border-[#3A454F] dark:bg-[#1E293B] dark:text-white"
+                    className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-white px-3.5 py-2 text-sm text-[#93A2B7] focus:border-[#7DA2FF] focus:outline-hidden dark:border-[#39475C] dark:bg-[#172235] dark:text-white"
                     placeholder="Ex: Guarda Civil Municipal"
                   />
                 </div>
@@ -436,7 +436,7 @@ export const EditalInfoModal: React.FC<EditalInfoModalProps> = ({
                     type="text"
                     value={banca}
                     onChange={(e) => setBanca(e.target.value)}
-                    className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-white px-3.5 py-2 text-sm text-[#374151] focus:border-[#48C3A7] focus:outline-hidden dark:border-[#3A454F] dark:bg-[#1E293B] dark:text-white"
+                    className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-white px-3.5 py-2 text-sm text-[#93A2B7] focus:border-[#7DA2FF] focus:outline-hidden dark:border-[#39475C] dark:bg-[#172235] dark:text-white"
                     placeholder="Ex: IBFC, Cebraspe, FGV"
                     required
                   />
@@ -450,7 +450,7 @@ export const EditalInfoModal: React.FC<EditalInfoModalProps> = ({
                     type="number"
                     value={year}
                     onChange={(e) => setYear(Number(e.target.value))}
-                    className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-white px-3.5 py-2 text-sm text-[#374151] focus:border-[#48C3A7] focus:outline-hidden dark:border-[#3A454F] dark:bg-[#1E293B] dark:text-white"
+                    className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-white px-3.5 py-2 text-sm text-[#93A2B7] focus:border-[#7DA2FF] focus:outline-hidden dark:border-[#39475C] dark:bg-[#172235] dark:text-white"
                   />
                 </div>
 
@@ -464,7 +464,7 @@ export const EditalInfoModal: React.FC<EditalInfoModalProps> = ({
                     onChange={(e) =>
                       setVacanciesCount(e.target.value === "" ? "" : Number(e.target.value))
                     }
-                    className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-white px-3.5 py-2 text-sm text-[#374151] focus:border-[#48C3A7] focus:outline-hidden dark:border-[#3A454F] dark:bg-[#1E293B] dark:text-white"
+                    className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-white px-3.5 py-2 text-sm text-[#93A2B7] focus:border-[#7DA2FF] focus:outline-hidden dark:border-[#39475C] dark:bg-[#172235] dark:text-white"
                     placeholder="Ex: 200"
                   />
                 </div>
@@ -479,7 +479,7 @@ export const EditalInfoModal: React.FC<EditalInfoModalProps> = ({
                     type="date"
                     value={publicationDate}
                     onChange={(e) => setPublicationDate(e.target.value)}
-                    className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-white px-3.5 py-2 text-sm text-[#374151] focus:border-[#48C3A7] focus:outline-hidden dark:border-[#3A454F] dark:bg-[#1E293B] dark:text-white"
+                    className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-white px-3.5 py-2 text-sm text-[#93A2B7] focus:border-[#7DA2FF] focus:outline-hidden dark:border-[#39475C] dark:bg-[#172235] dark:text-white"
                   />
                 </div>
 
@@ -491,7 +491,7 @@ export const EditalInfoModal: React.FC<EditalInfoModalProps> = ({
                     type="date"
                     value={examDate}
                     onChange={(e) => setExamDate(e.target.value)}
-                    className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-white px-3.5 py-2 text-sm text-[#374151] focus:border-[#48C3A7] focus:outline-hidden dark:border-[#3A454F] dark:bg-[#1E293B] dark:text-white"
+                    className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-white px-3.5 py-2 text-sm text-[#93A2B7] focus:border-[#7DA2FF] focus:outline-hidden dark:border-[#39475C] dark:bg-[#172235] dark:text-white"
                   />
                 </div>
               </div>
@@ -504,7 +504,7 @@ export const EditalInfoModal: React.FC<EditalInfoModalProps> = ({
                   type="url"
                   value={linkUrl}
                   onChange={(e) => setLinkUrl(e.target.value)}
-                  className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-white px-3.5 py-2 text-sm text-[#374151] focus:border-[#48C3A7] focus:outline-hidden dark:border-[#3A454F] dark:bg-[#1E293B] dark:text-white"
+                  className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-white px-3.5 py-2 text-sm text-[#93A2B7] focus:border-[#7DA2FF] focus:outline-hidden dark:border-[#39475C] dark:bg-[#172235] dark:text-white"
                   placeholder="https://exemplo.com.br/edital-oficial.pdf"
                 />
               </div>
@@ -517,7 +517,7 @@ export const EditalInfoModal: React.FC<EditalInfoModalProps> = ({
                   rows={3}
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
-                  className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-white px-3.5 py-2 text-sm text-[#374151] focus:border-[#48C3A7] focus:outline-hidden dark:border-[#3A454F] dark:bg-[#1E293B] dark:text-white"
+                  className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-white px-3.5 py-2 text-sm text-[#93A2B7] focus:border-[#7DA2FF] focus:outline-hidden dark:border-[#39475C] dark:bg-[#172235] dark:text-white"
                   placeholder="Anotações sobre pesos mínimos, critérios de desempate, redação..."
                 />
               </div>
@@ -526,13 +526,13 @@ export const EditalInfoModal: React.FC<EditalInfoModalProps> = ({
                 <button
                   type="button"
                   onClick={() => setIsEditing(false)}
-                  className="rounded-xl border border-[#E2E8F0] bg-white px-4 py-2 text-xs font-semibold text-[#374151] hover:bg-[#F1F5F9] dark:border-[#3A454F] dark:bg-[#1E293B] dark:text-white"
+                  className="rounded-xl border border-[#E2E8F0] bg-white px-4 py-2 text-xs font-semibold text-[#93A2B7] hover:bg-[#F1F5F9] dark:border-[#39475C] dark:bg-[#172235] dark:text-white"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="rounded-xl bg-[#249D84] px-5 py-2 text-xs font-bold text-white shadow-sm hover:bg-[#1F826D]"
+                  className="rounded-xl bg-[#2BBF8A] px-5 py-2 text-xs font-bold text-white shadow-sm hover:bg-[#24634F]"
                 >
                   Salvar Alterações
                 </button>

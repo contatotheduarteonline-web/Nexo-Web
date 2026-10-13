@@ -70,10 +70,10 @@ export const PlanImageUploader: React.FC<PlanImageUploaderProps> = ({
   const displayError = internalError || error;
 
   return (
-    <div className="rounded-2xl border border-[#E2E8F0] bg-[#F9FAFB] p-4 dark:border-[#1E293B] dark:bg-[#252B38]">
+    <div className="rounded-2xl border border-[#E2E8F0] bg-[#F9FAFB] p-4 dark:border-[#263447] dark:bg-[#1D2B40]">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
         {/* 96x96 Image / Icon Container */}
-        <div className="relative flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-[#E2E8F0] bg-white shadow-xs dark:border-[#1E293B] dark:bg-[#252B38]">
+        <div className="relative flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-[#E2E8F0] bg-white shadow-xs dark:border-[#263447] dark:bg-[#1D2B40]">
           {displayUrl ? (
             <img
               src={displayUrl}
@@ -81,8 +81,8 @@ export const PlanImageUploader: React.FC<PlanImageUploaderProps> = ({
               className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
             />
           ) : (
-            <div className="flex h-full w-full flex-col items-center justify-center bg-gradient-to-br from-amber-50 to-amber-100 text-[#F59E0B] dark:from-amber-500/20 dark:to-amber-600/10 dark:text-[#FBBF24]">
-              <Shield className="h-10 w-10 text-[#F59E0B] dark:text-[#FBBF24]" />
+            <div className="flex h-full w-full flex-col items-center justify-center bg-gradient-to-br from-amber-50 to-amber-100 text-[#F4B544] dark:from-amber-500/20 dark:to-amber-600/10 dark:text-[#F4B544]">
+              <Shield className="h-10 w-10 text-[#F4B544] dark:text-[#F4B544]" />
             </div>
           )}
 
@@ -103,7 +103,7 @@ export const PlanImageUploader: React.FC<PlanImageUploaderProps> = ({
               
               {/* Only show 'Definida' after write to Firestore has completed */}
               {hasSavedImage && !previewUrl && (
-                <span className="inline-flex items-center gap-0.5 rounded-md bg-emerald-50 border border-emerald-500/30 px-1.5 py-0.5 text-[9px] font-bold text-emerald-600 dark:bg-emerald-500/15 dark:text-emerald-400">
+                <span className="inline-flex items-center gap-0.5 rounded-md bg-[#15382F] border border-[#2BBF8A]/30 px-1.5 py-0.5 text-[9px] font-bold text-[#2BBF8A] dark:bg-[#2BBF8A]/15 dark:text-[#2BBF8A]">
                   <Check className="h-2.5 w-2.5" />
                   Definida
                 </span>
@@ -111,7 +111,7 @@ export const PlanImageUploader: React.FC<PlanImageUploaderProps> = ({
 
               {/* Local unsaved preview badge */}
               {previewUrl && !isRemoved && (
-                <span className="inline-flex items-center gap-1 rounded-md bg-amber-50 border border-amber-500/30 px-1.5 py-0.5 text-[9px] font-bold text-amber-700 dark:bg-amber-500/15 dark:text-amber-400">
+                <span className="inline-flex items-center gap-1 rounded-md bg-[#342B1C] border border-[#F4B544]/30 px-1.5 py-0.5 text-[9px] font-bold text-[#F4B544] dark:bg-[#527DFF]/15 dark:text-[#F4B544]">
                   <Clock className="h-2.5 w-2.5" />
                   Prévia selecionada (salve para persistir)
                 </span>
@@ -137,7 +137,7 @@ export const PlanImageUploader: React.FC<PlanImageUploaderProps> = ({
               type="button"
               onClick={handleChooseClick}
               disabled={disabled || isUploading}
-              className="flex items-center gap-1.5 rounded-xl border border-[#E2E8F0] bg-white px-3.5 py-1.5 text-xs font-bold text-[#374151] shadow-2xs transition hover:bg-[#F3F4F6] disabled:opacity-50 dark:border-[#1E293B] dark:bg-[#252B38] dark:text-white dark:hover:bg-[#1E293B] cursor-pointer"
+              className="flex items-center gap-1.5 rounded-xl border border-[#E2E8F0] bg-white px-3.5 py-1.5 text-xs font-bold text-[#93A2B7] shadow-2xs transition hover:bg-[#F3F4F6] disabled:opacity-50 dark:border-[#263447] dark:bg-[#1D2B40] dark:text-white dark:hover:bg-[#172235] cursor-pointer"
             >
               {isUploading ? (
                 <>
@@ -146,7 +146,7 @@ export const PlanImageUploader: React.FC<PlanImageUploaderProps> = ({
                 </>
               ) : (
                 <>
-                  <Upload className="h-3.5 w-3.5 text-[#F59E0B] dark:text-[#FBBF24]" />
+                  <Upload className="h-3.5 w-3.5 text-[#F4B544] dark:text-[#F4B544]" />
                   <span>{displayUrl ? "Trocar imagem" : "Escolher imagem"}</span>
                 </>
               )}
@@ -157,7 +157,7 @@ export const PlanImageUploader: React.FC<PlanImageUploaderProps> = ({
                 type="button"
                 onClick={handleRemoveClick}
                 disabled={disabled || isUploading}
-                className="flex items-center gap-1 rounded-xl px-3 py-1.5 text-xs font-semibold text-red-600 transition hover:bg-red-50 disabled:opacity-50 dark:text-red-400 dark:hover:bg-red-950/30 cursor-pointer"
+                className="flex items-center gap-1 rounded-xl px-3 py-1.5 text-xs font-semibold text-[#F16D75] transition hover:bg-[#3B2029] disabled:opacity-50 dark:text-[#F16D75] dark:hover:bg-[#F16D75]/30 cursor-pointer"
               >
                 <Trash2 className="h-3.5 w-3.5" />
                 <span>Remover</span>
@@ -169,7 +169,7 @@ export const PlanImageUploader: React.FC<PlanImageUploaderProps> = ({
 
       {/* Error Message */}
       {displayError && (
-        <div className="mt-2.5 rounded-xl bg-red-50 p-2.5 text-xs font-medium text-red-700 dark:bg-red-950/40 dark:text-red-300">
+        <div className="mt-2.5 rounded-xl bg-[#3B2029] p-2.5 text-xs font-medium text-[#F16D75] dark:bg-[#F16D75]/40 dark:text-[#F16D75]">
           {displayError}
         </div>
       )}

@@ -67,7 +67,7 @@ export const PlanCard: React.FC<PlanCardProps> = ({
   const displayImage = customImageUrl || plan.imageUrl || edital?.imageUrl;
 
   return (
-    <div className="group relative flex flex-col justify-between rounded-2xl border border-zinc-200 bg-white p-5 shadow-xs transition hover:border-[#F59E0B]/50 hover:shadow-md dark:border-zinc-800 dark:bg-[#252B38]">
+    <div className="group relative flex flex-col justify-between rounded-2xl border border-zinc-200 bg-white p-5 shadow-xs transition hover:border-[#F4B544]/50 hover:shadow-md dark:border-zinc-800 dark:bg-[#1D2B40]">
       <div>
         {/* Top bar: Image + Info + Menu */}
         <div className="flex items-start justify-between gap-3">
@@ -87,7 +87,7 @@ export const PlanCard: React.FC<PlanCardProps> = ({
                   }}
                 />
               ) : (
-                <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#F59E0B]/20 to-[#F59E0B]/5 text-[#F59E0B]">
+                <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#F4B544]/20 to-[#F4B544]/5 text-[#F4B544]">
                   <Shield className="h-7 w-7" />
                 </div>
               )}
@@ -98,13 +98,13 @@ export const PlanCard: React.FC<PlanCardProps> = ({
               <div className="flex items-center gap-2">
                 <h3
                   onClick={() => onOpenPlan(plan.id)}
-                  className="cursor-pointer font-bold text-white hover:text-[#F59E0B] dark:text-white dark:hover:text-[#FBBF24] truncate transition"
+                  className="cursor-pointer font-bold text-white hover:text-[#F4B544] dark:text-white dark:hover:text-[#F4B544] truncate transition"
                   title={plan.name}
                 >
                   {plan.name}
                 </h3>
                 {isArchived && (
-                  <span className="shrink-0 rounded-md bg-amber-500/10 px-1.5 py-0.5 text-[10px] font-bold text-amber-600 dark:text-amber-400">
+                  <span className="shrink-0 rounded-md bg-[#527DFF]/10 px-1.5 py-0.5 text-[10px] font-bold text-[#F4B544] dark:text-[#F4B544]">
                     Arquivado
                   </span>
                 )}
@@ -132,15 +132,15 @@ export const PlanCard: React.FC<PlanCardProps> = ({
                   className="fixed inset-0 z-20"
                   onClick={() => setIsMenuOpen(false)}
                 />
-                <div className="absolute right-0 z-30 mt-1 w-44 rounded-xl border border-zinc-200 bg-white py-1.5 shadow-xl dark:border-zinc-800 dark:bg-[#252B38]">
+                <div className="absolute right-0 z-30 mt-1 w-44 rounded-xl border border-zinc-200 bg-white py-1.5 shadow-xl dark:border-zinc-800 dark:bg-[#1D2B40]">
                   <button
                     onClick={() => {
                       setIsMenuOpen(false);
                       onOpenPlan(plan.id);
                     }}
-                    className="flex w-full items-center gap-2 px-3 py-2 text-xs font-semibold text-white hover:bg-amber-50 hover:text-[#F59E0B] dark:text-white dark:hover:bg-zinc-800 dark:hover:text-[#FBBF24] transition"
+                    className="flex w-full items-center gap-2 px-3 py-2 text-xs font-semibold text-white hover:bg-[#342B1C] hover:text-[#F4B544] dark:text-white dark:hover:bg-zinc-800 dark:hover:text-[#F4B544] transition"
                   >
-                    <ExternalLink className="h-3.5 w-3.5 text-[#F59E0B]" />
+                    <ExternalLink className="h-3.5 w-3.5 text-[#F4B544]" />
                     <span>Abrir Plano</span>
                   </button>
                   <button
@@ -162,12 +162,12 @@ export const PlanCard: React.FC<PlanCardProps> = ({
                   >
                     {isArchived ? (
                       <>
-                        <ArchiveRestore className="h-3.5 w-3.5 text-amber-500" />
+                        <ArchiveRestore className="h-3.5 w-3.5 text-[#F4B544]" />
                         <span>Desarquivar</span>
                       </>
                     ) : (
                       <>
-                        <Archive className="h-3.5 w-3.5 text-amber-500" />
+                        <Archive className="h-3.5 w-3.5 text-[#F4B544]" />
                         <span>Arquivar Plano</span>
                       </>
                     )}
@@ -178,7 +178,7 @@ export const PlanCard: React.FC<PlanCardProps> = ({
                       setIsMenuOpen(false);
                       onDeletePlan(plan);
                     }}
-                    className="flex w-full items-center gap-2 px-3 py-2 text-xs font-semibold text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950/40"
+                    className="flex w-full items-center gap-2 px-3 py-2 text-xs font-semibold text-[#F16D75] hover:bg-[#3B2029] dark:text-[#F16D75] dark:hover:bg-[#F16D75]/40"
                   >
                     <Trash2 className="h-3.5 w-3.5" />
                     <span>Excluir Plano</span>
@@ -211,7 +211,7 @@ export const PlanCard: React.FC<PlanCardProps> = ({
             <span className="text-[10px] font-medium text-white dark:text-white">
               Estudado
             </span>
-            <span className="text-xs font-bold text-[#F59E0B] dark:text-[#FBBF24]">
+            <span className="text-xs font-bold text-[#F4B544] dark:text-[#F4B544]">
               {formattedTime}
             </span>
           </div>
@@ -229,7 +229,7 @@ export const PlanCard: React.FC<PlanCardProps> = ({
           </div>
           <div className="h-2 w-full overflow-hidden rounded-full bg-zinc-100 dark:bg-zinc-800">
             <div
-              className="h-full rounded-full bg-gradient-to-r from-[#F59E0B] to-[#FBBF24] transition-all duration-500"
+              className="h-full rounded-full bg-gradient-to-r from-[#F4B544] to-[#F4B544] transition-all duration-500"
               style={{ width: `${progressPct}%` }}
             />
           </div>
@@ -244,7 +244,7 @@ export const PlanCard: React.FC<PlanCardProps> = ({
 
         <button
           onClick={() => onOpenPlan(plan.id)}
-          className="flex items-center gap-1.5 text-xs font-bold text-[#F59E0B] hover:text-[#D97706] dark:text-[#FBBF24] dark:hover:text-white transition cursor-pointer"
+          className="flex items-center gap-1.5 text-xs font-bold text-[#F4B544] hover:text-[#D97706] dark:text-[#F4B544] dark:hover:text-white transition cursor-pointer"
         >
           <span>Abrir plano</span>
           <ExternalLink className="h-3.5 w-3.5" />

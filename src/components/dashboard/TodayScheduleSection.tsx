@@ -32,9 +32,9 @@ export const TodayScheduleSection: React.FC<TodayScheduleSectionProps> = ({
       className="nx-card p-5 sm:p-6"
     >
       {/* Cabeçalho Limpo sem textos explicativos redundantes */}
-      <div className="flex items-center justify-between pb-4 border-b border-[#384154]">
+      <div className="flex items-center justify-between pb-4 border-b border-[#263447]">
         <div className="flex items-center gap-2.5">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#384154] bg-[#171B25] text-white">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#263447] bg-[#111B2D] text-white">
             <BookOpen className="h-4 w-4" />
           </div>
           <h2 className="font-condensed text-[19px] font-bold text-white">
@@ -46,7 +46,7 @@ export const TodayScheduleSection: React.FC<TodayScheduleSectionProps> = ({
           type="button"
           id="btn-gerenciar-planejamento"
           onClick={onNavigateToPlanning}
-          className="inline-flex items-center gap-1 text-[13px] font-semibold text-[#F59E0B] hover:text-[#D97706] hover:underline cursor-pointer transition-colors duration-200"
+          className="inline-flex items-center gap-1 text-[13px] font-semibold text-[#F4B544] hover:text-[#D97706] hover:underline cursor-pointer transition-colors duration-200"
         >
           <span>Gerenciar</span>
           <ArrowUpRight className="h-3.5 w-3.5" />
@@ -77,14 +77,14 @@ export const TodayScheduleSection: React.FC<TodayScheduleSectionProps> = ({
                 100,
                 block.targetMinutes > 0 ? Math.round((studied / block.targetMinutes) * 100) : 0
               );
-              const color = block.color || "#F59E0B";
+              const color = block.color || "#F4B544";
 
               return (
                 <div
                   key={block.id}
                   id={`planned-block-${block.id}`}
                   className={`nx-deep group relative overflow-hidden p-4 pl-5 touch-manipulation ${
-                    idx > 0 ? "nx-deep-hover cursor-pointer hover:border-[#F59E0B]/40" : ""
+                    idx > 0 ? "nx-deep-hover cursor-pointer hover:border-[#F4B544]/40" : ""
                   }`}
                   onClick={idx > 0 ? () => onStartStudy(block.disciplineId, block.targetMinutes) : undefined}
                 >
@@ -108,7 +108,7 @@ export const TodayScheduleSection: React.FC<TodayScheduleSectionProps> = ({
                   </div>
 
                   {/* Barra de progresso */}
-                  <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-[#171B25]">
+                  <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-[#111B2D]">
                     <div
                       className="h-full rounded-full transition-all duration-500"
                       style={{ width: `${progress}%`, backgroundColor: color }}
@@ -127,7 +127,7 @@ export const TodayScheduleSection: React.FC<TodayScheduleSectionProps> = ({
                       }}
                       className="nx-btn-primary inline-flex items-center justify-center gap-1.5 px-4 py-2 text-[13px] cursor-pointer touch-manipulation"
                     >
-                      <Play className="h-3.5 w-3.5 fill-[#11151F]" />
+                      <Play className="h-3.5 w-3.5 fill-[#101827]" />
                       <span>Iniciar Estudo</span>
                     </button>
                     <button
@@ -137,7 +137,7 @@ export const TodayScheduleSection: React.FC<TodayScheduleSectionProps> = ({
                         e.stopPropagation();
                         onOpenManualStudy();
                       }}
-                      className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-[#384154] bg-[#171B25] px-4 py-2 text-[13px] font-semibold text-white hover:border-[#F59E0B]/40 hover:text-[#F59E0B] cursor-pointer transition-colors duration-200 touch-manipulation"
+                      className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-[#263447] bg-[#111B2D] px-4 py-2 text-[13px] font-semibold text-white hover:border-[#F4B544]/40 hover:text-[#F4B544] cursor-pointer transition-colors duration-200 touch-manipulation"
                     >
                       <Plus className="h-3.5 w-3.5" />
                       <span>Adicionar Estudo Manualmente</span>

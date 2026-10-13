@@ -104,7 +104,7 @@ export const SimuladosView: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col justify-between gap-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-xs sm:flex-row sm:items-center dark:border-slate-800 dark:bg-[#252B38]">
+      <div className="flex flex-col justify-between gap-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-xs sm:flex-row sm:items-center dark:border-[#263447] dark:bg-[#1D2B40]">
         <div>
           <h2 className="text-2xl font-bold text-white dark:text-white">
             Simulados
@@ -113,7 +113,7 @@ export const SimuladosView: React.FC = () => {
 
         <button
           onClick={() => setIsAddOpen(true)}
-          className="flex items-center gap-1.5 rounded-xl bg-[#F59E0B] hover:bg-[#D97706] px-4 py-2 text-xs font-bold text-white shadow-xs transition active:scale-98"
+          className="flex items-center gap-1.5 rounded-xl bg-[#527DFF] hover:bg-[#416CEB] px-4 py-2 text-xs font-bold text-white shadow-xs transition active:scale-98"
         >
           <Plus className="h-3.5 w-3.5" />
           Registrar Simulado
@@ -122,7 +122,7 @@ export const SimuladosView: React.FC = () => {
 
       {/* Evolution Chart */}
       {simulados.length > 0 && (
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs dark:border-slate-800 dark:bg-[#252B38]">
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs dark:border-[#263447] dark:bg-[#1D2B40]">
           <h3 className="text-base font-bold text-white dark:text-white">
             Evolução de Aproveitamento nos Simulados (%)
           </h3>
@@ -131,20 +131,20 @@ export const SimuladosView: React.FC = () => {
           <div className="mt-6 h-64 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
-                <XAxis dataKey="name" tick={{ fontSize: 12 }} stroke="#94A3B8" />
-                <YAxis domain={[0, 100]} tick={{ fontSize: 12 }} stroke="#94A3B8" />
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#C4CEDB" />
+                <XAxis dataKey="name" tick={{ fontSize: 12 }} stroke="#93A2B7" />
+                <YAxis domain={[0, 100]} tick={{ fontSize: 12 }} stroke="#93A2B7" />
                 <Tooltip
-                  contentStyle={{ backgroundColor: "#1E293B", borderRadius: "8px", border: "none", color: "#FFF" }}
+                  contentStyle={{ backgroundColor: "#172235", borderRadius: "8px", border: "none", color: "#FFF" }}
                   formatter={(value: any) => [`${value}%`, "Aproveitamento"]}
                 />
                 <Line
                   type="monotone"
                   dataKey="aproveitamento"
-                  stroke="#F59E0B"
+                  stroke="#F4B544"
                   strokeWidth={3}
-                  dot={{ r: 5, fill: "#F59E0B" }}
-                  activeDot={{ r: 7, fill: "#FBBF24" }}
+                  dot={{ r: 5, fill: "#F4B544" }}
+                  activeDot={{ r: 7, fill: "#F4B544" }}
                 />
               </LineChart>
             </ResponsiveContainer>
@@ -154,7 +154,7 @@ export const SimuladosView: React.FC = () => {
 
       {/* Simulados Cards Grid */}
       {simulados.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-slate-200 bg-white p-12 text-center shadow-xs dark:border-slate-800 dark:bg-[#252B38]">
+        <div className="rounded-2xl border border-dashed border-slate-200 bg-white p-12 text-center shadow-xs dark:border-[#263447] dark:bg-[#1D2B40]">
           <FileCheck className="mx-auto h-12 w-12 text-white" />
           <h3 className="mt-4 text-base font-bold text-white dark:text-white">
             Nenhum Simulado Registrado
@@ -164,7 +164,7 @@ export const SimuladosView: React.FC = () => {
           </p>
           <button
             onClick={() => setIsAddOpen(true)}
-            className="mt-4 rounded-xl bg-[#F59E0B] hover:bg-[#D97706] px-4 py-2 text-xs font-bold text-white shadow-xs"
+            className="mt-4 rounded-xl bg-[#527DFF] hover:bg-[#416CEB] px-4 py-2 text-xs font-bold text-white shadow-xs"
           >
             Registrar Primeiro Simulado
           </button>
@@ -174,7 +174,7 @@ export const SimuladosView: React.FC = () => {
           {simulados.map((sim) => (
             <div
               key={sim.id}
-              className="flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-5 shadow-xs transition hover:shadow-md dark:border-slate-800 dark:bg-[#252B38]"
+              className="flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-5 shadow-xs transition hover:shadow-md dark:border-[#263447] dark:bg-[#1D2B40]"
             >
               <div>
                 <div className="flex items-center justify-between">
@@ -184,10 +184,10 @@ export const SimuladosView: React.FC = () => {
                   <span
                     className={`rounded-full px-2.5 py-0.5 text-xs font-bold ${
                       sim.overallScorePercentage >= 75
-                        ? "bg-amber-50 text-[#F59E0B] border border-amber-200 dark:bg-amber-500/15 dark:text-[#FBBF24] dark:border-amber-500/30"
+                        ? "bg-[#342B1C] text-[#F4B544] border border-[#725629] dark:bg-[#527DFF]/15 dark:text-[#F4B544] dark:border-[#F4B544]/30"
                         : sim.overallScorePercentage >= 60
-                        ? "bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300"
-                        : "bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-300"
+                        ? "bg-[#342B1C] text-[#F4B544] dark:bg-[#342B1C] dark:text-[#F4B544]"
+                        : "bg-[#3B2029] text-[#F16D75] dark:bg-[#3B2029] dark:text-[#F16D75]"
                     }`}
                   >
                     {sim.overallScorePercentage}% Acerto
@@ -202,24 +202,24 @@ export const SimuladosView: React.FC = () => {
                 </p>
 
                 {/* Score breakdown pills */}
-                <div className="mt-4 grid grid-cols-3 gap-2 rounded-xl bg-slate-50 p-3 text-center dark:bg-slate-800/60">
+                <div className="mt-4 grid grid-cols-3 gap-2 rounded-xl bg-slate-50 p-3 text-center dark:bg-[#172235]/60">
                   <div>
                     <span className="block text-[10px] text-white uppercase">Questões</span>
                     <span className="font-bold text-white dark:text-white">{sim.totalQuestions}</span>
                   </div>
                   <div>
-                    <span className="block text-[10px] text-[#F59E0B] uppercase dark:text-[#FBBF24]">Acertos</span>
-                    <span className="font-bold text-[#F59E0B] dark:text-[#FBBF24]">{sim.totalCorrect}</span>
+                    <span className="block text-[10px] text-[#F4B544] uppercase dark:text-[#F4B544]">Acertos</span>
+                    <span className="font-bold text-[#F4B544] dark:text-[#F4B544]">{sim.totalCorrect}</span>
                   </div>
                   <div>
-                    <span className="block text-[10px] text-red-500 uppercase">Erros</span>
-                    <span className="font-bold text-red-500">{sim.totalWrong}</span>
+                    <span className="block text-[10px] text-[#F16D75] uppercase">Erros</span>
+                    <span className="font-bold text-[#F16D75]">{sim.totalWrong}</span>
                   </div>
                 </div>
 
                 {/* Disciplines breakdown */}
                 {sim.resultsByDiscipline && sim.resultsByDiscipline.length > 0 && (
-                  <div className="mt-4 space-y-1.5 border-t border-slate-100 pt-3 dark:border-slate-800">
+                  <div className="mt-4 space-y-1.5 border-t border-slate-100 pt-3 dark:border-[#263447]">
                     <span className="text-[11px] font-semibold text-white uppercase">
                       Por Disciplina
                     </span>
@@ -235,8 +235,8 @@ export const SimuladosView: React.FC = () => {
                 )}
               </div>
 
-              <div className="mt-4 flex items-center justify-between border-t border-slate-100 pt-3 text-xs dark:border-slate-800">
-                <span className="font-bold text-[#F59E0B] dark:text-[#FBBF24]">
+              <div className="mt-4 flex items-center justify-between border-t border-slate-100 pt-3 text-xs dark:border-[#263447]">
+                <span className="font-bold text-[#F4B544] dark:text-[#F4B544]">
                   Líquidos: {sim.totalCorrect - sim.totalWrong} pts
                 </span>
                 <button
@@ -245,7 +245,7 @@ export const SimuladosView: React.FC = () => {
                       deleteSimulado(sim.id);
                     }
                   }}
-                  className="text-white hover:text-red-600"
+                  className="text-white hover:text-[#F16D75]"
                 >
                   <Trash2 className="h-4 w-4" />
                 </button>
@@ -258,7 +258,7 @@ export const SimuladosView: React.FC = () => {
       {/* Add Simulado Modal */}
       {isAddOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-xs">
-          <div className="max-h-[90vh] w-full max-w-xl overflow-y-auto rounded-2xl border border-slate-200 bg-white p-6 shadow-xl dark:border-slate-800 dark:bg-[#252B38]">
+          <div className="max-h-[90vh] w-full max-w-xl overflow-y-auto rounded-2xl border border-slate-200 bg-white p-6 shadow-xl dark:border-[#263447] dark:bg-[#1D2B40]">
             <h3 className="text-base font-bold text-white dark:text-white">
               Registrar Resultado de Simulado
             </h3>
@@ -275,7 +275,7 @@ export const SimuladosView: React.FC = () => {
                     placeholder="Ex: Simulado #1 - Gran / Estratégia"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
-                    className="mt-1 w-full rounded-lg border border-slate-200 p-2.5 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                    className="mt-1 w-full rounded-lg border border-slate-200 p-2.5 dark:bg-[#172235] dark:bg-[#172235] dark:text-white"
                   />
                 </div>
                 <div>
@@ -287,7 +287,7 @@ export const SimuladosView: React.FC = () => {
                     required
                     value={date}
                     onChange={(e) => setDate(e.target.value)}
-                    className="mt-1 w-full rounded-lg border border-slate-200 p-2.5 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                    className="mt-1 w-full rounded-lg border border-slate-200 p-2.5 dark:bg-[#172235] dark:bg-[#172235] dark:text-white"
                   />
                 </div>
               </div>
@@ -299,7 +299,7 @@ export const SimuladosView: React.FC = () => {
                 <select
                   value={scoringSystem}
                   onChange={(e) => setScoringSystem(e.target.value as any)}
-                  className="mt-1 w-full rounded-lg border border-slate-200 p-2.5 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                  className="mt-1 w-full rounded-lg border border-slate-200 p-2.5 dark:bg-[#172235] dark:bg-[#172235] dark:text-white"
                 >
                   <option value="standard">Múltipla Escolha (1 ponto por acerto, sem penalidade de erro)</option>
                   <option value="cebraspe_certo_errado">Certo e Errado Cebraspe (1 questão errada anula 1 certa)</option>
@@ -316,7 +316,7 @@ export const SimuladosView: React.FC = () => {
                   return (
                     <div
                       key={disc.id}
-                      className="grid grid-cols-4 items-center gap-2 rounded-xl border border-slate-100 bg-slate-50 p-2.5 dark:border-slate-800 dark:bg-slate-800/50"
+                      className="grid grid-cols-4 items-center gap-2 rounded-xl border border-slate-100 bg-slate-50 p-2.5 dark:border-[#263447] dark:bg-[#172235]/50"
                     >
                       <span className="col-span-1 truncate font-semibold text-white dark:text-white">
                         {disc.name}
@@ -328,27 +328,27 @@ export const SimuladosView: React.FC = () => {
                           min="0"
                           value={entry.total}
                           onChange={(e) => handleDisciplineScoreChange(disc.id, "total", parseInt(e.target.value) || 0)}
-                          className="w-full rounded-md border border-slate-200 p-1 text-center dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                          className="w-full rounded-md border border-slate-200 p-1 text-center dark:bg-[#172235] dark:bg-[#172235] dark:text-white"
                         />
                       </div>
                       <div>
-                        <label className="text-[10px] text-[#F59E0B] font-bold dark:text-[#FBBF24]">Acertos</label>
+                        <label className="text-[10px] text-[#F4B544] font-bold dark:text-[#F4B544]">Acertos</label>
                         <input
                           type="number"
                           min="0"
                           value={entry.correct}
                           onChange={(e) => handleDisciplineScoreChange(disc.id, "correct", parseInt(e.target.value) || 0)}
-                          className="w-full rounded-md border border-slate-200 p-1 text-center font-bold text-[#F59E0B] dark:border-slate-700 dark:bg-slate-800 dark:text-[#FBBF24]"
+                          className="w-full rounded-md border border-slate-200 p-1 text-center font-bold text-[#F4B544] dark:bg-[#172235] dark:bg-[#172235] dark:text-[#F4B544]"
                         />
                       </div>
                       <div>
-                        <label className="text-[10px] text-red-500 font-bold">Erros</label>
+                        <label className="text-[10px] text-[#F16D75] font-bold">Erros</label>
                         <input
                           type="number"
                           min="0"
                           value={entry.wrong}
                           onChange={(e) => handleDisciplineScoreChange(disc.id, "wrong", parseInt(e.target.value) || 0)}
-                          className="w-full rounded-md border border-slate-200 p-1 text-center font-bold text-red-500 dark:border-slate-700 dark:bg-slate-800"
+                          className="w-full rounded-md border border-slate-200 p-1 text-center font-bold text-[#F16D75] dark:bg-[#172235] dark:bg-[#172235]"
                         />
                       </div>
                     </div>
@@ -360,13 +360,13 @@ export const SimuladosView: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setIsAddOpen(false)}
-                  className="rounded-lg px-4 py-2 font-semibold text-white hover:bg-slate-100 dark:text-white dark:hover:bg-slate-800"
+                  className="rounded-lg px-4 py-2 font-semibold text-white hover:bg-slate-100 dark:text-white dark:hover:bg-[#172235]"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="rounded-lg bg-[#F59E0B] hover:bg-[#D97706] px-4 py-2 font-bold text-white shadow-xs"
+                  className="rounded-lg bg-[#527DFF] hover:bg-[#416CEB] px-4 py-2 font-bold text-white shadow-xs"
                 >
                   Salvar Simulado
                 </button>
