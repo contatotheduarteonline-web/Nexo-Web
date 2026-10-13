@@ -82,7 +82,7 @@ export const PlanosOverview: React.FC<PlanosOverviewProps> = ({
 
         <button
           onClick={onOpenCreateWizard}
-          className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#2BBF8A] px-4 py-2.5 text-[13px] font-semibold text-white shadow-xs transition hover:bg-[#25A87A] shrink-0 cursor-pointer"
+          className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#527DFF] px-4 py-2.5 text-[13px] font-semibold text-white shadow-xs transition hover:bg-[#416CEB] shrink-0 cursor-pointer"
         >
           <Plus className="h-4 w-4" />
           <span>Criar Novo Plano</span>

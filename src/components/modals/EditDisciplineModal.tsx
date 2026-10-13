@@ -480,7 +480,7 @@ export const EditDisciplineModal: React.FC<EditDisciplineModalProps> = ({
                   <button
                     type="button"
                     onClick={handleAddNewTopic}
-                    className="rounded-lg bg-[#2BBF8A] px-3 py-1.5 text-xs font-bold text-white hover:bg-[#24634F] transition"
+                    className="rounded-lg bg-[#527DFF] px-3 py-1.5 text-xs font-bold text-white hover:bg-[#416CEB] transition"
                   >
                     Adicionar
                   </button>
@@ -645,7 +645,7 @@ export const EditDisciplineModal: React.FC<EditDisciplineModalProps> = ({
                     );
                     return otherDisciplines.some((d) => areColorsEqual(d.color || "", color));
                   })()}
-                  className="rounded-xl bg-[#2BBF8A] px-6 py-2.5 text-xs font-bold text-white hover:bg-[#24634F] shadow-xs transition disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                  className="rounded-xl bg-[#527DFF] px-6 py-2.5 text-xs font-bold text-white hover:bg-[#416CEB] shadow-xs transition disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
                 >
                   Salvar Alterações
                 </button>

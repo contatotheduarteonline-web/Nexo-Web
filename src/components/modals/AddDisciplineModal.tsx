@@ -216,7 +216,7 @@ export const AddDisciplineModal: React.FC<AddDisciplineModalProps> = ({
               </button>
               <button
                 type="submit"
-                className="rounded-xl bg-[#2BBF8A] px-6 py-2.5 text-xs font-bold text-white hover:bg-[#24634F] shadow-xs transition"
+                className="rounded-xl bg-[#527DFF] px-6 py-2.5 text-xs font-bold text-white hover:bg-[#416CEB] shadow-xs transition"
               >
                 Adicionar Disciplina
               </button>

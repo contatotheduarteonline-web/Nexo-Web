@@ -373,7 +373,7 @@ export const EditPlanModal: React.FC<EditPlanModalProps> = ({ plan, onClose }) =
                 <button
                   type="submit"
                   disabled={isUploading}
-                  className="flex items-center gap-1.5 rounded-xl bg-[#2BBF8A] px-5 py-2 text-xs font-bold text-white shadow-xs hover:bg-[#24634F] disabled:opacity-50"
+                  className="flex items-center gap-1.5 rounded-xl bg-[#527DFF] px-5 py-2 text-xs font-bold text-white shadow-xs hover:bg-[#416CEB] disabled:opacity-50"
                 >
                   {isUploading ? (
                     <>

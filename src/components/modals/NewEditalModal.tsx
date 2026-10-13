@@ -195,7 +195,7 @@ export const NewEditalModal: React.FC<NewEditalModalProps> = ({ isOpen, onClose 
             </button>
             <button
               type="submit"
-              className="rounded-lg bg-[#2BBF8A] px-5 py-2 font-bold text-white shadow-sm transition hover:bg-[#2BBF8A]"
+              className="rounded-lg bg-[#527DFF] px-5 py-2 font-bold text-white shadow-sm transition hover:bg-[#416CEB]"
             >
               Criar plano
             </button>

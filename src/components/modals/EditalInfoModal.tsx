@@ -262,7 +262,7 @@ export const EditalInfoModal: React.FC<EditalInfoModalProps> = ({
                           href={targetEdital.pdfUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center gap-1 rounded-lg bg-[#2BBF8A] px-3 py-1.5 text-xs font-bold text-white hover:bg-[#24634F]"
+                          className="flex items-center gap-1 rounded-lg bg-[#527DFF] px-3 py-1.5 text-xs font-bold text-white hover:bg-[#416CEB]"
                         >
                           <ExternalLink className="h-3.5 w-3.5" />
                           Visualizar PDF
@@ -272,7 +272,7 @@ export const EditalInfoModal: React.FC<EditalInfoModalProps> = ({
                           href={targetEdital.linkUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center gap-1 rounded-lg bg-[#2BBF8A] px-3 py-1.5 text-xs font-bold text-white hover:bg-[#24634F]"
+                          className="flex items-center gap-1 rounded-lg bg-[#527DFF] px-3 py-1.5 text-xs font-bold text-white hover:bg-[#416CEB]"
                         >
                           <ExternalLink className="h-3.5 w-3.5" />
                           Abrir Link
@@ -532,7 +532,7 @@ export const EditalInfoModal: React.FC<EditalInfoModalProps> = ({
                 </button>
                 <button
                   type="submit"
-                  className="rounded-xl bg-[#2BBF8A] px-5 py-2 text-xs font-bold text-white shadow-sm hover:bg-[#24634F]"
+                  className="rounded-xl bg-[#527DFF] px-5 py-2 text-xs font-bold text-white shadow-sm hover:bg-[#416CEB]"
                 >
                   Salvar Alterações
                 </button>

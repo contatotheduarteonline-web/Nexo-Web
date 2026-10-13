@@ -318,7 +318,7 @@ export const HistoricoView: React.FC = () => {
           <button
             type="button"
             onClick={() => setAddModalOpen(true)}
-            className="inline-flex items-center gap-1.5 rounded-lg bg-[#2BBF8A] px-4 py-2 text-[13px] font-semibold text-white shadow-xs transition hover:bg-[#25A87A] cursor-pointer"
+            className="inline-flex items-center gap-1.5 rounded-lg bg-[#527DFF] px-4 py-2 text-[13px] font-semibold text-white shadow-xs transition hover:bg-[#416CEB] cursor-pointer"
           >
             <Plus className="h-4 w-4" />
             Adicionar Estudo
@@ -552,7 +552,7 @@ export const HistoricoView: React.FC = () => {
             <button
               type="button"
               onClick={() => setAddModalOpen(true)}
-              className="inline-flex items-center gap-2 rounded-lg bg-[#2BBF8A] px-5 py-2.5 text-[13px] font-semibold text-white transition hover:bg-[#25A87A] cursor-pointer"
+              className="inline-flex items-center gap-2 rounded-lg bg-[#527DFF] px-5 py-2.5 text-[13px] font-semibold text-white transition hover:bg-[#416CEB] cursor-pointer"
             >
               <Plus className="h-4 w-4" />
               <span>Adicionar Estudo</span>

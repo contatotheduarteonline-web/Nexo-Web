@@ -274,7 +274,7 @@ export const ProfilePictureModal: React.FC<ProfilePictureModalProps> = ({
               type="button"
               disabled={isSaving}
               onClick={handleSave}
-              className="flex items-center gap-1.5 px-5 py-2 rounded-xl text-xs font-black text-white bg-gradient-to-r from-[#2BBF8A] to-[#2EC4B6] hover:opacity-95 disabled:opacity-50 transition shadow-sm"
+              className="flex items-center gap-1.5 px-5 py-2 rounded-xl text-xs font-black text-white bg-gradient-to-r from-[#527DFF] to-[#416CEB] hover:opacity-95 disabled:opacity-50 transition shadow-sm"
             >
               {isSaving ? (
                 <span className="flex items-center gap-1.5">
