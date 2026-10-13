@@ -65,14 +65,7 @@ export const StatCardsRow: React.FC<StatCardsRowProps> = ({ children }) => {
           </span>
         </div>
 
-        {registeredSessions.length > 0 && (
-          <div className="mt-4 pt-3 border-t border-[#384154] flex items-center gap-1.5 text-[12px] text-white">
-            <span className="h-2 w-2 rounded-full shrink-0 bg-[#F3AA2D]" />
-            <span className="truncate">
-              {registeredSessions.length} {registeredSessions.length === 1 ? "sessão registrada" : "sessões registradas"}
-            </span>
-          </div>
-        )}
+
       </div>
 
       {/* 2. Desempenho */}
