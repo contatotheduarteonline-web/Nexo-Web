@@ -2860,7 +2860,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                 </div>
 
                 {/* Métricas e Detalhes */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs pt-1">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs pt-1">
                   <div>
                     <span className="text-white block text-[10px] uppercase font-bold">Órgão</span>
                     <span className="font-semibold text-white dark:text-white truncate block">
@@ -2877,12 +2877,6 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                     <span className="text-white block text-[10px] uppercase font-bold">Banca • Ano</span>
                     <span className="font-semibold text-white dark:text-white">
                       {editalBoard || "A definir"} • {editalYear || "—"}
-                    </span>
-                  </div>
-                  <div>
-                    <span className="text-white block text-[10px] uppercase font-bold">Meta Semanal</span>
-                    <span className="font-semibold text-white dark:text-white">
-                      {weeklyGoalHours}h / semana
                     </span>
                   </div>
                 </div>
