@@ -9,9 +9,16 @@ interface DashboardHeaderActionsProps {
 export const DashboardHeaderActions: React.FC<DashboardHeaderActionsProps> = ({
   onOpenManualStudy,
 }) => {
-  const { studyPlans, activePlan, setActivePlanId } = useStudy();
+  const { studyPlans, activePlan, activeEdital, setActivePlanId, getPlanImageUrl, isPlanImageLoading } = useStudy();
   const [openDropdown, setOpenDropdown] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const customImageUrl = activePlan ? getPlanImageUrl(activePlan.id) : null;
+  const hasCustom = Boolean(activePlan && (activePlan.hasCustomImage || activePlan.imageRef));
+  const isImageLoading = hasCustom && !customImageUrl && activePlan
+    ? isPlanImageLoading(activePlan.id)
+    : false;
+  const planImage = customImageUrl || activePlan?.imageUrl || activeEdital?.imageUrl;
 
   useEffect(() => {
     if (!openDropdown) return;
@@ -30,7 +37,7 @@ export const DashboardHeaderActions: React.FC<DashboardHeaderActionsProps> = ({
         type="button"
         id="btn-dashboard-adicionar-estudo"
         onClick={onOpenManualStudy}
-        className="inline-flex items-center gap-1.5 rounded-lg bg-[#2BBF8A] px-4 py-2 text-[13px] font-semibold text-white shadow-xs transition hover:bg-[#25A87A] cursor-pointer"
+        className="nx-btn-primary inline-flex items-center gap-1.5 px-4 py-2 text-[13px] cursor-pointer"
       >
         <Plus className="h-4 w-4" />
         Adicionar Estudo
@@ -44,7 +51,17 @@ export const DashboardHeaderActions: React.FC<DashboardHeaderActionsProps> = ({
           onClick={() => setOpenDropdown((prev) => !prev)}
           className="inline-flex items-center gap-2 rounded-lg border border-[#263447] bg-[#1D2B40] px-3.5 py-2 text-[13px] font-semibold text-white transition hover:bg-[#0B1120] cursor-pointer"
         >
-          <Globe className="h-4 w-4 text-[#527DFF]" />
+          {isImageLoading ? (
+            <span className="h-5 w-5 shrink-0 animate-pulse rounded-full bg-[#263447]" />
+          ) : planImage ? (
+            <img
+              src={planImage}
+              alt={activePlan?.name || "Plano"}
+              className="h-5 w-5 shrink-0 rounded-full object-cover"
+            />
+          ) : (
+            <Globe className="h-4 w-4 shrink-0 text-[#527DFF]" />
+          )}
           <span className="max-w-[160px] truncate">{activePlan?.name || "Meu Plano"}</span>
           <ChevronDown className="h-3.5 w-3.5 text-[#93A2B7]" />
         </button>
