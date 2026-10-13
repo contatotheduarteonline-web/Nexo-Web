@@ -463,12 +463,20 @@ app.post("/api/storage/plan-images/upload", ...selfRoute, async (req, res) => {
 });
 
 // Storage API Endpoint: Serve Plan Image
-app.get("/api/storage/plan-images/:userId/:planId/:filename", (req, res) => {
+// Private images: require a Firebase token (401 without one) and allow only
+// the namespace owner or an admin (403 otherwise) — knowing the URL is not
+// enough to read another user's plan image.
+app.get("/api/storage/plan-images/:userId/:planId/:filename", ...userRoute, (req, res) => {
   try {
     const { userId, planId, filename } = req.params;
     const cleanUserId = String(userId).replace(/[^a-zA-Z0-9_-]/g, "");
     const cleanPlanId = String(planId).replace(/[^a-zA-Z0-9_-]/g, "");
     const cleanFilename = path.basename(filename);
+
+    const identity = req.nexoIdentity!;
+    if (!identity.isAdmin && cleanUserId !== identity.uid) {
+      return res.status(403).json({ error: "Acesso não autorizado a esta imagem." });
+    }
 
     const targetDir = path.resolve(STORAGE_ROOT, cleanUserId, cleanPlanId);
     const filePath = path.resolve(targetDir, cleanFilename);
@@ -491,7 +499,7 @@ app.get("/api/storage/plan-images/:userId/:planId/:filename", (req, res) => {
     };
 
     res.setHeader("Content-Type", mimeMap[ext] || "application/octet-stream");
-    res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
+    res.setHeader("Cache-Control", "private, max-age=31536000, immutable");
     const stream = fs.createReadStream(filePath);
     return stream.pipe(res);
   } catch (error: any) {
@@ -1556,6 +1564,19 @@ app.get("/api/backups/daily/list", ...selfRoute, (req, res) => {
 });
 
 // GET /api/backups/daily/get/:backupId - Get single backup data for inspection or restore
+// Resolves the stored file for a backup id. The persisted id
+// (backup_<uid>_<dateKey>_<mode>_<ts>) differs from the stored file name
+// (<dateKey>_<mode>_<ts>.json), so match on both forms.
+function findBackupFile(userBackupDir: string, cleanBackupId: string): string | null {
+  const fileNamePart = cleanBackupId.replace(/^backup_[^_]+_/, "");
+  const files = fs.readdirSync(userBackupDir);
+  return (
+    files.find((f) => f === `${cleanBackupId}.json`) ||
+    files.find((f) => !f.startsWith("latest_") && f.endsWith(".json") && f.includes(fileNamePart)) ||
+    null
+  );
+}
+
 app.get("/api/backups/daily/get/:backupId", ...selfRoute, (req, res) => {
   try {
     const { backupId } = req.params;
@@ -1572,8 +1593,7 @@ app.get("/api/backups/daily/get/:backupId", ...selfRoute, (req, res) => {
       return res.status(404).json({ error: "Nenhum backup encontrado para este usuário." });
     }
 
-    const files = fs.readdirSync(userBackupDir);
-    const matchedFile = files.find((f) => f.includes(cleanBackupId) || f === `${cleanBackupId}.json`);
+    const matchedFile = findBackupFile(userBackupDir, cleanBackupId);
 
     if (!matchedFile) {
       return res.status(404).json({ error: "Ponto de backup não encontrado." });
@@ -1614,8 +1634,7 @@ app.get("/api/backups/daily/download/:backupId", ...selfRoute, (req, res) => {
       return res.status(404).json({ error: "Arquivo de backup não encontrado." });
     }
 
-    const files = fs.readdirSync(userBackupDir);
-    const matchedFile = files.find((f) => f.includes(cleanBackupId) || f === `${cleanBackupId}.json`);
+    const matchedFile = findBackupFile(userBackupDir, cleanBackupId);
 
     if (!matchedFile) {
       return res.status(404).json({ error: "Arquivo de backup não encontrado." });
@@ -1654,8 +1673,7 @@ app.delete("/api/backups/daily/:backupId", ...selfRoute, (req, res) => {
       return res.status(404).json({ error: "Diretório de backup não encontrado." });
     }
 
-    const files = fs.readdirSync(userBackupDir);
-    const matchedFile = files.find((f) => f.includes(cleanBackupId) || f === `${cleanBackupId}.json`);
+    const matchedFile = findBackupFile(userBackupDir, cleanBackupId);
 
     if (!matchedFile) {
       return res.status(404).json({ error: "Arquivo de backup não encontrado." });
