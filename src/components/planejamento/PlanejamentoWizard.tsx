@@ -288,6 +288,15 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
     });
   }, [calculatedScores, totalScore, totalWeeklyHours, minSessionMinutes, maxSessionMinutes]);
 
+  // Distribution badges sorted by percentage (highest first) for display
+  const sortedDistribution = useMemo(
+    () =>
+      [...calculatedDistribution].sort(
+        (a, b) => b.weightPercentage - a.weightPercentage
+      ),
+    [calculatedDistribution]
+  );
+
   // Generated automated cycle steps (interleaving subjects)
   const generatedCycle = useMemo(() => {
     if (calculatedDistribution.length === 0) return [];
@@ -767,7 +776,7 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
                   Defina os horários na próxima etapa para calcular.
                 </p>
               ) : (
-                calculatedDistribution.map((item, idx) => (
+                sortedDistribution.map((item, idx) => (
                   <div
                     key={item.discipline.id}
                     className="flex items-center gap-2 rounded-xl px-3 py-2.5"
