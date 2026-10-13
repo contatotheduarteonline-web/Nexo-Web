@@ -431,6 +431,8 @@ export interface StudySession {
   modality: StudyModality;
   questionsDone: number;
   questionsCorrect: number;
+  /** Erros informados diretamente pelo usuário (independente de total/acertos). */
+  questionsWrong?: number;
   notes: string;
   material?: string;
   pagesStart?: number;

@@ -83,7 +83,7 @@ export const RecentActivitiesSection: React.FC<RecentActivitiesSectionProps> = (
                   ? sess.questionsCorrect
                   : 0;
                 const errors = sess.questionsDone
-                  ? sess.questionsDone - sess.questionsCorrect
+                  ? (sess.questionsWrong ?? sess.questionsDone - sess.questionsCorrect)
                   : 0;
 
                 return (

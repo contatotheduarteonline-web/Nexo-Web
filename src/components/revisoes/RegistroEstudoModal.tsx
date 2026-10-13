@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useStudy } from "../../context/StudyContext";
 import { ScheduledReview, StudyModality, StudySession } from "../../types";
 import { getTodayLocalYmd } from "./reviewHelpers";
-import { X, CalendarCheck2, ChevronDown, Plus } from "lucide-react";
+import { X, CalendarCheck2, ChevronDown, Plus, Pause, Play, RotateCcw } from "lucide-react";
 
 /**
  * Modal compacto "Registro de Estudo" (layout claro da referência).
@@ -67,6 +67,9 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
   const {
     activeEdital,
     timer,
+    startTimer,
+    pauseTimer,
+    resetTimer,
     logStudySession,
     finishCurrentSession,
     completeScheduledReview,
@@ -87,6 +90,7 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
   const [theoryCompleted, setTheoryCompleted] = useState(false);
   const [scheduleReviews, setScheduleReviews] = useState(true);
   const [chips, setChips] = useState<number[]>(DEFAULT_CHIPS);
+  const [totalQuestoes, setTotalQuestoes] = useState(0);
   const [acertos, setAcertos] = useState(0);
   const [erros, setErros] = useState(0);
   const [pagesStart, setPagesStart] = useState("");
@@ -109,6 +113,7 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
     setTimeText("00:00:00");
     setMaterial("");
     setTheoryCompleted(false);
+    setTotalQuestoes(0);
     setAcertos(0);
     setErros(0);
     setPagesStart("");
@@ -139,6 +144,7 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
         );
       }
       if (fromTimer && timer.questionsDone > 0) {
+        setTotalQuestoes(Math.max(0, timer.questionsDone || 0));
         setAcertos(Math.max(0, timer.questionsCorrect || 0));
         setErros(Math.max(0, timer.questionsDone - (timer.questionsCorrect || 0)));
       }
@@ -173,7 +179,8 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
     }
 
     const durationMinutes = parseTimeToMinutes(timeText);
-    const qDone = Math.max(0, acertos) + Math.max(0, erros);
+    // Total é independente: usa o valor informado; sem total, assume acertos+erros.
+    const qDone = totalQuestoes > 0 ? totalQuestoes : Math.max(0, acertos) + Math.max(0, erros);
     if (durationMinutes <= 0 && qDone <= 0) {
       setFormError("Informe o tempo estudado ou registre questões.");
       return;
@@ -193,6 +200,7 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
       modality,
       questionsDone: qDone,
       questionsCorrect: Math.max(0, acertos),
+      questionsWrong: Math.max(0, erros) > 0 ? Math.max(0, erros) : undefined,
       notes: comments,
       material: material || undefined,
       pagesStart: pagesStart ? Number(pagesStart) : undefined,
@@ -226,6 +234,7 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
         durationMinutes,
         questionsDone: qDone,
         questionsCorrect: Math.max(0, acertos),
+        questionsWrong: Math.max(0, erros) > 0 ? Math.max(0, erros) : undefined,
         notes: comments,
         studyDate,
         theoryCompleted,
@@ -246,6 +255,7 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
       setTimeText("00:00:00");
       setMaterial("");
       setTheoryCompleted(false);
+      setTotalQuestoes(0);
       setAcertos(0);
       setErros(0);
       setPagesStart("");
@@ -350,6 +360,42 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
               placeholder="00:00:00"
               className={underlineInput}
             />
+            {fromTimer && (
+              <div className="mt-1 flex items-center gap-1.5">
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (timer.isRunning) {
+                      const sec = timer.elapsedSeconds;
+                      setTimeText(
+                        `${Math.floor(sec / 3600)}:${String(Math.floor((sec % 3600) / 60)).padStart(2, "0")}:${String(sec % 60).padStart(2, "0")}`
+                      );
+                      pauseTimer();
+                    } else {
+                      startTimer();
+                    }
+                  }}
+                  title={timer.isRunning ? "Pausar contagem" : "Retomar contagem"}
+                  className="flex h-6 w-6 items-center justify-center rounded-md bg-[#111B2D] text-[#93A2B7] hover:bg-[#223149] hover:text-white"
+                >
+                  {timer.isRunning ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    resetTimer();
+                    setTimeText("00:00:00");
+                  }}
+                  title="Zerar contagem"
+                  className="flex h-6 w-6 items-center justify-center rounded-md bg-[#111B2D] text-[#93A2B7] hover:bg-[#223149] hover:text-white"
+                >
+                  <RotateCcw className="h-3.5 w-3.5" />
+                </button>
+                {timer.isRunning && (
+                  <span className="text-[10px] font-semibold text-[#2BBF8A]">Contando…</span>
+                )}
+              </div>
+            )}
           </div>
         </div>
 
@@ -443,22 +489,32 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
         <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-3">
           <div className="rounded-xl border-2 border-[#263447] bg-[#111B2D] p-3">
             <p className="text-center text-[10px] font-bold uppercase tracking-wide text-[#93A2B7]">
-              Acertos / Erros
+              Questões · Total / Acertos / Erros
             </p>
-            <div className="mt-2 flex items-center justify-center gap-3">
+            <div className="mt-2 flex items-center justify-center gap-2">
+              <input
+                type="number"
+                min={0}
+                value={totalQuestoes}
+                onChange={(e) => setTotalQuestoes(Math.max(0, parseInt(e.target.value) || 0))}
+                title="Total de questões (independente)"
+                className="w-14 border-0 border-b border-[#263447] bg-transparent py-1 text-center text-sm font-semibold text-white focus:border-[#7DA2FF] focus:outline-none"
+              />
               <input
                 type="number"
                 min={0}
                 value={acertos}
                 onChange={(e) => setAcertos(Math.max(0, parseInt(e.target.value) || 0))}
-                className="w-14 border-0 border-b border-[#263447] bg-transparent py-1 text-center text-sm font-semibold text-white focus:border-[#7DA2FF] focus:outline-none"
+                title="Acertos (independente)"
+                className="w-14 border-0 border-b border-[#263447] bg-transparent py-1 text-center text-sm font-semibold text-[#2BBF8A] focus:border-[#7DA2FF] focus:outline-none"
               />
               <input
                 type="number"
                 min={0}
                 value={erros}
                 onChange={(e) => setErros(Math.max(0, parseInt(e.target.value) || 0))}
-                className="w-14 border-0 border-b border-[#263447] bg-transparent py-1 text-center text-sm font-semibold text-white focus:border-[#7DA2FF] focus:outline-none"
+                title="Erros (independente)"
+                className="w-14 border-0 border-b border-[#263447] bg-transparent py-1 text-center text-sm font-semibold text-[#F16D75] focus:border-[#7DA2FF] focus:outline-none"
               />
             </div>
           </div>

@@ -260,81 +260,36 @@ export async function deleteEditalFromFirestore(userId: string, editalId: string
   }
 }
 
-export async function purgeOrphanOrArtificialEditais(userId: string): Promise<number> {
-  if (!isAuthorizedUser(userId)) return 0;
+/**
+ * AUDITORIA NÃO DESTRUTIVA — substitui a antiga rotina de purge automático.
+ * Nenhuma exclusão é executada na inicialização: editais, planos, sessões,
+ * revisões e simulados do usuário NUNCA são apagados automaticamente.
+ * Apenas lista (console) editais possivelmente órfãos para revisão manual.
+ */
+export async function reportOrphanEditais(userId: string): Promise<void> {
+  if (!isAuthorizedUser(userId)) return;
   try {
     const [plansSnap, editaisSnap] = await Promise.all([
       getDocs(collection(db, "users", userId, "studyPlans")),
       getDocs(collection(db, "users", userId, "editais")),
     ]);
 
-    let count = 0;
-    const hasNoPlans = plansSnap.empty;
     const planEditalIds = new Set(
       plansSnap.docs.map((d) => String((d.data() as { editalId?: string }).editalId || ""))
     );
 
-    // Ids of editais removed as artificial/orphan — related study data is purged too
-    const orphanEditalIds = new Set<string>();
+    const possibleOrphans = editaisSnap.docs
+      .map((d) => d.data() as Edital)
+      .filter((e) => e.id && !planEditalIds.has(String(e.id)));
 
-    for (const docSnap of editaisSnap.docs) {
-      const item = docSnap.data() as Edital;
-      const idLower = String(item.id || "").toLowerCase();
-      const titleLower = String(item.title || "").toLowerCase();
-      const organLower = String(item.organ || "").toLowerCase();
-
-      const isArt =
-        idLower.includes("pf") ||
-        idLower.includes("demo") ||
-        idLower.includes("mock") ||
-        idLower.includes("test") ||
-        idLower.includes("manaus") ||
-        idLower.includes("artificial") ||
-        idLower.startsWith("edital-default") ||
-        titleLower.includes("polícia federal") ||
-        titleLower.includes("agente") ||
-        titleLower.includes("escrivão") ||
-        titleLower.includes("papiloscopista") ||
-        organLower.includes("polícia federal");
-
-      // Orphan edital: no study plan references it (e.g. plan was deleted but edital remained)
-      const isOrphan = !hasNoPlans && !planEditalIds.has(String(item.id));
-
-      // If artificial or if user has no study plans (meaning leftover test editais from previous sessions)
-      if (isArt || hasNoPlans || isOrphan) {
-        orphanEditalIds.add(String(item.id));
-        await deleteDoc(docSnap.ref);
-        count++;
-      }
-    }
-
-    // Purge study data tied to removed editais (sessions, reviews, simulados)
-    for (const orphanId of orphanEditalIds) {
-      await purgeDataByEditalId(userId, orphanId);
-    }
-    return count;
-  } catch (err) {
-    console.warn("[FIRESTORE] Erro ao limpar editais residuais:", err);
-    return 0;
-  }
-}
-
-/**
- * Deletes every study record (sessions, reviews, simulados) tied to an edital id.
- */
-async function purgeDataByEditalId(userId: string, editalId: string): Promise<void> {
-  const collections = ["studySessions", "scheduledReviews", "simulados"];
-  for (const coll of collections) {
-    try {
-      const snap = await getDocs(
-        query(collection(db, "users", userId, coll), where("editalId", "==", editalId))
+    if (possibleOrphans.length > 0) {
+      console.info(
+        "[FIRESTORE AUDIT] Editais possivelmente órfãos (nenhum plano ativo os referencia). Nada foi excluído — revisão manual necessária:",
+        possibleOrphans.map((e) => ({ id: e.id, title: e.title }))
       );
-      for (const d of snap.docs) {
-        await deleteDoc(d.ref);
-      }
-    } catch (err) {
-      console.warn(`[FIRESTORE] Erro ao limpar ${coll} do edital órfão:`, err);
     }
+  } catch (err) {
+    console.warn("[FIRESTORE AUDIT] Falha ao auditar editais (sem efeito nos dados):", err);
   }
 }
 

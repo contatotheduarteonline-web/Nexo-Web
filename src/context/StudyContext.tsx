@@ -60,7 +60,7 @@ import {
   saveUserSettingsToFirestore,
   subscribeUserSettingsFromFirestore,
   migrateLocalDataToFirestore,
-  purgeOrphanOrArtificialEditais,
+  reportOrphanEditais,
 } from "../lib/firestoreService";
 import {
   getPublishedEditais,
@@ -152,6 +152,8 @@ export interface FinishSessionOptions {
   durationMinutes?: number;
   questionsDone?: number;
   questionsCorrect?: number;
+  /** Erros informados diretamente (independente de total/acertos). */
+  questionsWrong?: number;
   notes?: string;
   selectedReviewDays?: number[];
   studyDate?: string; // YYYY-MM-DD
@@ -706,8 +708,8 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
     const uid = user.id;
 
-    // Purge any orphan/artificial editais from previous tests/sessions
-    purgeOrphanOrArtificialEditais(uid).catch(() => {});
+    // Auditoria apenas-leitura (sem exclusão automática de dados na inicialização)
+    reportOrphanEditais(uid).catch(() => {});
 
     // Migrate any pre-existing local data to Firestore seamlessly
     migrateLocalDataToFirestore(uid, {
@@ -1102,7 +1104,13 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   // Timer controls
   const startTimer = () => {
     console.log("[ESTUDOS] SESSÃO INICIADA");
-    setTimer((prev) => ({ ...prev, isRunning: true, startedAt: Date.now() }));
+    // Retomada: realinha startedAt ao tempo já acumulado para NÃO zerar a contagem.
+    setTimer((prev) => {
+      if (prev.isRunning) return prev;
+      const startedAt =
+        prev.elapsedSeconds > 0 ? Date.now() - prev.elapsedSeconds * 1000 : Date.now();
+      return { ...prev, isRunning: true, startedAt };
+    });
   };
 
   const pauseTimer = () => {
@@ -1161,6 +1169,7 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
     const qDone = options?.questionsDone !== undefined ? options.questionsDone : timer.questionsDone;
     const qCorrect = options?.questionsCorrect !== undefined ? options.questionsCorrect : timer.questionsCorrect;
+    const qWrong = options?.questionsWrong;
     const notesStr = options?.notes !== undefined ? options.notes : timer.notes;
     const modalityVal = options?.modality || timer.modality || "Teoria";
     const selectedDays = (options?.scheduleReviews !== false && options?.selectedReviewDays) ? options.selectedReviewDays : [];
@@ -1229,6 +1238,7 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       modality: modalityVal,
       questionsDone: qDone,
       questionsCorrect: qCorrect,
+      questionsWrong: qWrong !== undefined && qWrong > 0 ? qWrong : undefined,
       notes: notesStr,
       theoryCompleted: isTheoryCompleted,
       reviewsScheduled: createdReviews.length,

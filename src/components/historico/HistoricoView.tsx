@@ -653,7 +653,7 @@ export const HistoricoView: React.FC = () => {
                         {/* Erros */}
                         <div className="num-condensed w-9 text-center text-[13px] font-semibold text-[#F16D75]">
                           {session.questionsDone > 0
-                            ? session.questionsDone - session.questionsCorrect
+                            ? (session.questionsWrong ?? session.questionsDone - session.questionsCorrect)
                             : 0}
                         </div>
 

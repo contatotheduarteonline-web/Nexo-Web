@@ -7,3 +7,6 @@ coverage/
 .env*
 !.env.example
 .env
+
+# Backups automaticos com dados de usuario (nunca versionar)
+data/backups/
