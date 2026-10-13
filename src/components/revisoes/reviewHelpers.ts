@@ -21,8 +21,11 @@ export const getIntervalLabel = (stage: ReviewInterval | undefined): string => {
       return "30 dias";
     case "60d":
       return "60 dias";
-    default:
+    default: {
+      const custom = typeof stage === "string" ? stage.match(/^(\d+)d$/) : null;
+      if (custom) return `${custom[1]} dias`;
       return stage ? String(stage) : "Revisão";
+    }
   }
 };
 

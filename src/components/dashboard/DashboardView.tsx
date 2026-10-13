@@ -2,7 +2,7 @@ import React, { useState, useMemo } from "react";
 import { useStudy } from "../../context/StudyContext";
 import { useAuth } from "../../context/AuthContext";
 import { computeGamificationData } from "../../utils/gamificationBadges";
-import { ReviewDetailModal } from "../revisoes/ReviewDetailModal";
+import { RegistroEstudoModal } from "../revisoes/RegistroEstudoModal";
 import { FloatingTimerWidget } from "./FloatingTimerWidget";
 import { ScheduledReview } from "../../types";
 
@@ -48,6 +48,8 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy 
     toggleReminder,
     addReminder,
     setTimerConfig,
+    ignoreScheduledReview,
+    launchStudySessionForTopic,
   } = useStudy();
 
   const { user } = useAuth();
@@ -371,7 +373,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy 
 
         <ReviewsSection
           pendingReviews={pendingReviews}
+          studySessions={studySessions}
           onOpenReview={(rev) => setSelectedReviewForModal(rev)}
+          onStartReview={(rev) => launchStudySessionForTopic(rev.disciplineId, rev.topicId, "Revisão")}
+          onIgnoreReview={(rev) => ignoreScheduledReview(rev.id)}
           onNavigateToReviews={() => setActiveTab("revisoes")}
         />
       </div>
@@ -415,9 +420,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy 
         />
       </div>
 
-      {/* Review Detail Modal */}
+      {/* Modal compacto "Registro de Estudo" */}
       {selectedReviewForModal && (
-        <ReviewDetailModal
+        <RegistroEstudoModal
+          open
           review={selectedReviewForModal}
           onClose={() => setSelectedReviewForModal(null)}
         />

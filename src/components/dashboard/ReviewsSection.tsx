@@ -1,17 +1,39 @@
 import React, { useMemo } from "react";
-import { RotateCcw, ArrowUpRight, Play, CalendarDays } from "lucide-react";
-import { ScheduledReview } from "../../types";
-import { getIntervalLabel } from "../revisoes/reviewHelpers";
+import { ArrowUpRight, Play, Plus, X, MessageCircle } from "lucide-react";
+import { ScheduledReview, StudySession } from "../../types";
+import {
+  getIntervalLabel,
+  formatShortDate,
+  formatDurationClock,
+  getSessionLocalDate,
+  groupReviewsByDate,
+} from "../revisoes/reviewHelpers";
 
 interface ReviewsSectionProps {
   pendingReviews: ScheduledReview[]; // already filtered by edital, excludes ignored, sorted by dueDate
-  onOpenReview: (review: ScheduledReview) => void;
+  studySessions: StudySession[];
+  onOpenReview: (review: ScheduledReview) => void; // Registrar estudo (modal compacto)
+  onStartReview: (review: ScheduledReview) => void; // Iniciar no cronômetro
+  onIgnoreReview: (review: ScheduledReview) => void; // Ignorar
   onNavigateToReviews: () => void;
 }
 
+const modalityBadgeClasses: Record<string, string> = {
+  Teoria: "bg-violet-600 text-white",
+  "Questões": "bg-teal-600 text-white",
+  "Revisão": "bg-violet-600 text-white",
+  "Videoaula": "bg-sky-600 text-white",
+  "Lei Seca": "bg-slate-600 text-white",
+  "Simulado": "bg-rose-600 text-white",
+};
+
+/** Card REVISÕES do dashboard — layout claro da referência. */
 export const ReviewsSection: React.FC<ReviewsSectionProps> = ({
   pendingReviews,
+  studySessions,
   onOpenReview,
+  onStartReview,
+  onIgnoreReview,
   onNavigateToReviews,
 }) => {
   const todayStr = useMemo(
@@ -22,146 +44,138 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({
     []
   );
 
-  const priorityReview = pendingReviews[0] || null;
-  const others = pendingReviews.slice(1, 3);
-  const otherCount = pendingReviews.length - 1;
+  // Sessões reais por tópico, para o registro de estudo abaixo de cada revisão.
+  const sessionsByTopic = useMemo(() => {
+    const map = new Map<string, StudySession[]>();
+    studySessions.forEach((s) => {
+      if (!s.topicId) return;
+      const arr = map.get(s.topicId);
+      if (arr) arr.push(s);
+      else map.set(s.topicId, [s]);
+    });
+    map.forEach((arr) => arr.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()));
+    return map;
+  }, [studySessions]);
 
-  const statusOf = (rev: ScheduledReview) => {
-    if (rev.dueDate < todayStr) {
-      return { label: "Atrasada", classes: "bg-red-500/15 text-red-400 border-red-500/30" };
-    }
-    if (rev.dueDate === todayStr) {
-      return { label: "Hoje", classes: "bg-[#F3AA2D]/15 text-[#F3AA2D] border-[#F3AA2D]/30" };
-    }
-    return { label: "Agendada", classes: "bg-slate-500/15 text-slate-300 border-slate-500/30" };
-  };
+  const groups = useMemo(() => groupReviewsByDate(pendingReviews), [pendingReviews]);
+  const visibleGroups = groups.slice(0, 3);
+  const hiddenCount = pendingReviews.length - visibleGroups.reduce((acc, [, revs]) => acc + revs.length, 0);
 
   return (
-    <section
-      id="section-revisoes"
-      className="nx-card p-5 sm:p-6 flex flex-col"
-    >
-      <div className="flex items-center justify-between pb-4 border-b border-[#384154]">
-        <div className="flex items-center gap-2.5">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#384154] bg-[#171B25] text-white">
-            <RotateCcw className="h-4 w-4" />
-          </div>
-          <h2 className="font-condensed text-[19px] font-bold text-white">
-            REVISÕES
-          </h2>
-          {pendingReviews.length > 0 && (
-            <span className="rounded-full border border-[#F3AA2D]/25 bg-[#F3AA2D]/10 px-2 py-0.5 text-[11px] font-bold text-[#F3AA2D]">
-              {pendingReviews.length} {pendingReviews.length === 1 ? "pendente" : "pendentes"}
-            </span>
-          )}
-        </div>
-
+    <section id="section-revisoes" className="flex flex-col rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+      {/* Header */}
+      <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+        <span className="text-[12px] font-bold uppercase tracking-widest text-slate-500">Revisões</span>
         <button
           type="button"
           id="btn-abrir-modulo-revisoes"
           onClick={onNavigateToReviews}
-          className="text-[13px] font-semibold text-[#F3AA2D] hover:text-[#D98F20] hover:underline flex items-center gap-1 cursor-pointer transition-colors duration-200"
+          className="flex items-center gap-1 text-[12px] font-semibold text-slate-400 transition hover:text-teal-600"
         >
-          <span>Ver todas</span>
+          Ver todas
           <ArrowUpRight className="h-3.5 w-3.5" />
         </button>
       </div>
 
-      <div className="mt-4 flex-1 flex flex-col">
+      {/* Grupos cronológicos */}
+      <div className="mt-3 flex-1 overflow-y-auto">
         {pendingReviews.length === 0 ? (
-          /* Compact empty state */
-          <div className="nx-deep border-dashed p-5 text-center flex-1 flex flex-col items-center justify-center">
-            <p className="text-[14px] font-semibold text-white">
-              Nenhuma revisão pendente
-            </p>
-            <p className="mt-1 text-[12px] text-white/50">
-              Tudo em dia — abra o módulo para agendar ou revisar.
-            </p>
-            <button
-              type="button"
-              onClick={onNavigateToReviews}
-              className="mt-3 rounded-lg border border-[#F3AA2D]/30 bg-[#F3AA2D]/10 px-3 py-1.5 text-[11px] font-bold text-[#F3AA2D] hover:bg-[#F3AA2D]/20 transition"
-            >
-              Abrir Revisões
-            </button>
-          </div>
+          <p className="py-8 text-center text-xs text-slate-400">
+            Nenhuma revisão pendente — tudo em dia!
+          </p>
         ) : (
-          <div className="space-y-3">
-            {/* Priority review (most overdue → today → next upcoming) */}
-            {priorityReview && (
-              <div className="nx-deep nx-deep-hover flex items-center justify-between gap-3 p-3.5">
-                <div className="min-w-0 pr-2">
-                  <div className="flex flex-wrap items-center gap-1.5 mb-1">
-                    <span className="rounded-md border border-[#384154] bg-[#171B25] px-2 py-0.5 text-[10px] font-semibold text-white/80">
-                      {getIntervalLabel(priorityReview.stage)}
+          <div className="space-y-4">
+            {visibleGroups.map(([dateKey, reviews]) => (
+              <div key={dateKey}>
+                <div className="flex items-center gap-3">
+                  {dateKey === todayStr ? (
+                    <span className="text-base font-extrabold uppercase tracking-wide text-slate-700">Hoje</span>
+                  ) : (
+                    <span className="text-[13px] font-bold text-slate-700">
+                      {formatShortDate(dateKey)}
                     </span>
-                    <span
-                      className={`rounded-md border px-2 py-0.5 text-[10px] font-bold ${statusOf(priorityReview).classes}`}
-                    >
-                      {statusOf(priorityReview).label}
-                    </span>
-                  </div>
-                  <p className="text-[13px] font-semibold text-white truncate">
-                    {priorityReview.topicName}
-                  </p>
-                  <p className="text-[12px] text-white/60 truncate mt-0.5">
-                    {priorityReview.disciplineName}
-                    <span className="mx-1.5">&bull;</span>
-                    Etapa {priorityReview.stage}
-                    <span className="mx-1.5">&bull;</span>
-                    <span className="inline-flex items-center gap-1">
-                      <CalendarDays className="h-3 w-3" />
-                      {priorityReview.dueDate.split("-").reverse().join("/")}
-                    </span>
-                  </p>
+                  )}
+                  <div className="h-0.5 flex-1 rounded bg-teal-400" />
                 </div>
-                <button
-                  type="button"
-                  id={`btn-revisar-${priorityReview.id}`}
-                  onClick={() => onOpenReview(priorityReview)}
-                  className="inline-flex items-center gap-1.5 rounded-lg border border-[#F3AA2D]/25 bg-[#F3AA2D]/10 px-3 py-2 text-[12px] font-bold text-[#F3AA2D] hover:bg-[#F3AA2D]/20 shrink-0 transition"
-                >
-                  <Play className="h-3.5 w-3.5 fill-current" />
-                  Revisar
-                </button>
+
+                <div className="mt-2 space-y-2">
+                  {reviews.map((rev) => {
+                    const record = (sessionsByTopic.get(rev.topicId) || [])[0];
+                    return (
+                      <div key={rev.id} className="space-y-1.5">
+                        {/* Linha compacta: intervalo + ações + disciplina */}
+                        <div className="flex items-center gap-2">
+                          <span className="rounded-lg border border-teal-400 bg-teal-50 px-3 py-1 text-[11px] font-semibold text-slate-600">
+                            {getIntervalLabel(rev.stage)}
+                          </span>
+                          <button
+                            type="button"
+                            id={`btn-revisar-${rev.id}`}
+                            title="Iniciar revisão no cronômetro"
+                            onClick={() => onStartReview(rev)}
+                            className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-teal-500 text-white shadow-xs transition hover:bg-teal-600"
+                          >
+                            <Play className="h-2.5 w-2.5 fill-current" />
+                          </button>
+                          <button
+                            type="button"
+                            title="Registrar estudo"
+                            onClick={() => onOpenReview(rev)}
+                            className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-teal-500 text-white shadow-xs transition hover:bg-teal-600"
+                          >
+                            <Plus className="h-3 w-3" />
+                          </button>
+                          <button
+                            type="button"
+                            title="Ignorar revisão"
+                            onClick={() => onIgnoreReview(rev)}
+                            className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-red-400 text-white shadow-xs transition hover:bg-red-500"
+                          >
+                            <X className="h-3 w-3" />
+                          </button>
+                          <span className="truncate text-[11px] font-bold uppercase tracking-wide text-slate-800">
+                            {rev.disciplineName}
+                          </span>
+                        </div>
+
+                        {/* Registro de estudo real */}
+                        {record && (
+                          <div className="rounded-lg bg-slate-100 px-3 py-2">
+                            <div className="flex items-center gap-x-3 gap-y-1.5 text-[11px] text-slate-600">
+                              <span className="font-semibold">
+                                {formatShortDate(getSessionLocalDate(record))}
+                              </span>
+                              <span
+                                className={`rounded px-2 py-0.5 text-[9px] font-bold uppercase ${
+                                  modalityBadgeClasses[record.modality] || modalityBadgeClasses.Teoria
+                                }`}
+                              >
+                                {record.modality}
+                              </span>
+                              <span className="text-slate-400">{formatDurationClock(record.durationMinutes)}</span>
+                              <span className="min-w-0 flex-1 truncate" title={record.topicName}>
+                                {record.topicName || rev.topicName}
+                              </span>
+                              <span className="flex items-center" title={record.notes ? "Com comentários" : undefined}>
+                                {record.notes && <MessageCircle className="h-3.5 w-3.5 text-teal-500" />}
+                              </span>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
-            )}
+            ))}
 
-            {/* Compact list of the next pending ones */}
-            {others.map((rev) => {
-              const status = statusOf(rev);
-              return (
-                <div
-                  key={rev.id}
-                  onClick={() => onOpenReview(rev)}
-                  className="nx-deep nx-deep-hover flex items-center justify-between gap-3 p-3 cursor-pointer group"
-                >
-                  <div className="min-w-0 pr-2">
-                    <p className="text-[12px] font-semibold text-white truncate group-hover:text-[#F3AA2D] transition-colors">
-                      {rev.topicName}
-                    </p>
-                    <p className="text-[11px] text-white/50 truncate">
-                      {rev.disciplineName}
-                      <span className="mx-1.5">&bull;</span>
-                      {getIntervalLabel(rev.stage)}
-                    </p>
-                  </div>
-                  <span
-                    className={`rounded-md border px-2 py-0.5 text-[10px] font-bold shrink-0 ${status.classes}`}
-                  >
-                    {status.label}
-                  </span>
-                </div>
-              );
-            })}
-
-            {otherCount > others.length && (
+            {hiddenCount > 0 && (
               <button
                 type="button"
                 onClick={onNavigateToReviews}
-                className="w-full rounded-lg border border-dashed border-[#384154] px-3 py-2 text-[11px] font-semibold text-white/60 hover:text-[#F3AA2D] hover:border-[#F3AA2D]/40 transition"
+                className="w-full rounded-lg border border-dashed border-slate-200 px-3 py-2 text-[11px] font-semibold text-slate-500 transition hover:border-teal-300 hover:text-teal-600"
               >
-                + {otherCount - others.length} outras pendências — ver todas
+                + {hiddenCount} outras pendências — ver todas
               </button>
             )}
           </div>
