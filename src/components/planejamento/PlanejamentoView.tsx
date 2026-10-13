@@ -751,29 +751,41 @@ export const PlanejamentoViewContent: React.FC = () => {
 
                         <div className="flex-1 space-y-2">
                           {/* Revisão blocks at top */}
-                          {dayReviews.slice(0, 2).map((r) => (
-                            <button
-                              key={r.id}
-                              type="button"
-                              onClick={() => setSelectedReview(r)}
-                              title="Registrar estudo desta revisão"
-                              className="w-full cursor-pointer rounded-xl border border-[#2BBF8A]/60 bg-[#2BBF8A] p-2 text-left transition hover:shadow-md dark:border-[#2BBF8A]/60 dark:bg-[#2BBF8A]/40"
-                            >
-                              <div className="flex items-center justify-between">
-                                <span className="text-[9px] font-black uppercase text-[#2BBF8A] dark:text-[#2BBF8A]">
-                                  Revisão
-                                </span>
-                                <span className="rounded-md bg-[#2BBF8A]/80 px-1.5 py-0.5 num-condensed text-[9px] font-bold text-[#2BBF8A] dark:bg-[#2BBF8A]/60 dark:text-[#2BBF8A]">
-                                  {r.stage}
-                                </span>
-                              </div>
-                              <p className="mt-1 line-clamp-3 text-[9px] font-bold leading-tight text-[#2BBF8A] dark:text-[#2BBF8A]">
-                                {r.disciplineName}
-                              </p>
-                            </button>
-                          ))}
+                          {dayReviews.slice(0, 2).map((r) => {
+                            const reviewPalette =
+                              disciplineColorMap.get(r.disciplineId)?.palette ||
+                              DISCIPLINE_PALETTES[0];
+                            return (
+                              <button
+                                key={r.id}
+                                type="button"
+                                onClick={() => setSelectedReview(r)}
+                                title="Registrar estudo desta revisão"
+                                className={`w-full cursor-pointer rounded-xl border p-2 text-left transition hover:shadow-md ${reviewPalette.bg} ${reviewPalette.border}`}
+                              >
+                                <div className="flex items-center justify-between">
+                                  <span className={`text-[9px] font-black uppercase ${reviewPalette.text}`}>
+                                    Revisão
+                                  </span>
+                                  <span
+                                    className={`rounded-md px-1.5 py-0.5 num-condensed text-[9px] font-bold ${reviewPalette.badgeBg} ${reviewPalette.badgeText}`}
+                                  >
+                                    {r.stage}
+                                  </span>
+                                </div>
+                                <p className={`mt-1 line-clamp-3 text-[9px] font-bold leading-tight ${reviewPalette.text}`}>
+                                  {r.disciplineName}
+                                </p>
+                              </button>
+                            );
+                          })}
                           {dayReviews.length > 2 && (
-                            <p className="text-center text-[9px] font-bold text-[#2BBF8A] dark:text-[#2BBF8A]">
+                            <p
+                              className={`text-center text-[9px] font-bold ${
+                                disciplineColorMap.get(dayReviews[0]?.disciplineId)?.palette?.text ||
+                                "text-[#93A2B7]"
+                              }`}
+                            >
                               +{dayReviews.length - 2} revisões
                             </p>
                           )}
