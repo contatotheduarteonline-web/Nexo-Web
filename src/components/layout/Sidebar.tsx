@@ -9,7 +9,6 @@ import {
   History,
   TrendingUp,
   Award,
-  Target,
   Bell,
 } from "lucide-react";
 import { ActiveTab } from "../../types";
@@ -65,7 +64,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
       items: [
         { id: "estatisticas", label: "Estatísticas", icon: TrendingUp },
         { id: "simulados", label: "Simulados", icon: Award },
-        { id: "metas", label: "Metas", icon: Target },
       ],
     },
     {

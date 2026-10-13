@@ -400,6 +400,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy 
         weekOffset={weekOffset}
         onPrevWeek={() => setWeekOffset((prev) => prev - 1)}
         onNextWeek={() => setWeekOffset((prev) => Math.min(0, prev + 1))}
+        onOpenEdit={() => setActiveTab("metas")}
       />
 
       {/* ========================================================================= */}

@@ -25,6 +25,7 @@ interface WeeklyGoalsSectionProps {
   weekOffset: number;
   onPrevWeek: () => void;
   onNextWeek: () => void;
+  onOpenEdit?: () => void;
 }
 
 export const WeeklyGoalsSection: React.FC<WeeklyGoalsSectionProps> = ({
@@ -34,6 +35,7 @@ export const WeeklyGoalsSection: React.FC<WeeklyGoalsSectionProps> = ({
   weekOffset,
   onPrevWeek,
   onNextWeek,
+  onOpenEdit,
 }) => {
   const hoursNum = parseFloat(weeklyChartData.totalWeekHoursNumber) || 0;
   const timeProgressPercent = Math.min(100, Math.round((hoursNum / Math.max(1, weeklyGoalHours)) * 100));
@@ -45,7 +47,9 @@ export const WeeklyGoalsSection: React.FC<WeeklyGoalsSectionProps> = ({
   return (
     <section
       id="section-meta-semana"
-      className="nx-card p-5 sm:p-6"
+      onClick={onOpenEdit}
+      title={onOpenEdit ? "Clique para editar suas metas" : undefined}
+      className={`nx-card p-5 sm:p-6 ${onOpenEdit ? "cursor-pointer" : ""}`}
     >
       <div className="flex items-center justify-between pb-4 border-b border-[#384154]">
         <div className="flex items-center gap-2.5">
@@ -61,7 +65,7 @@ export const WeeklyGoalsSection: React.FC<WeeklyGoalsSectionProps> = ({
           <button
             type="button"
             id="btn-semana-anterior"
-            onClick={onPrevWeek}
+            onClick={(e) => { e.stopPropagation(); onPrevWeek(); }}
             className="rounded p-0.5 hover:bg-[#2D3442] hover:text-white cursor-pointer transition-colors duration-200"
             title="Semana anterior"
           >
@@ -73,7 +77,7 @@ export const WeeklyGoalsSection: React.FC<WeeklyGoalsSectionProps> = ({
           <button
             type="button"
             id="btn-proxima-semana"
-            onClick={onNextWeek}
+            onClick={(e) => { e.stopPropagation(); onNextWeek(); }}
             disabled={weekOffset >= 0}
             className="rounded p-0.5 hover:bg-[#2D3442] hover:text-white disabled:opacity-30 cursor-pointer transition-colors duration-200"
             title="Próxima semana"
