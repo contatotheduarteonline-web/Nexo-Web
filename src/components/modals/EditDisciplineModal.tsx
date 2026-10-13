@@ -475,7 +475,7 @@ export const EditDisciplineModal: React.FC<EditDisciplineModalProps> = ({
                     }}
                     placeholder="Nome do novo tópico..."
                     autoFocus
-                    className="flex-1 rounded-lg border border-zinc-200 bg-white px-3 py-1.5 text-xs text-zinc-900 focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"
+                    className="flex-1 rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-1.5 text-xs text-white focus:outline-none"
                   />
                   <button
                     type="button"
@@ -564,7 +564,7 @@ export const EditDisciplineModal: React.FC<EditDisciplineModalProps> = ({
                                 }
                               }}
                               autoFocus
-                              className="w-full rounded-lg border border-[#249D84] bg-white px-2 py-1 text-xs text-zinc-900 dark:bg-zinc-800 dark:text-white"
+                              className="w-full rounded-lg border border-[#249D84] bg-zinc-800 px-2 py-1 text-xs text-white"
                             />
                             <button
                               type="button"
