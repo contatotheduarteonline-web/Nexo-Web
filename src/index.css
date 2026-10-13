@@ -489,3 +489,144 @@
 .nx-title { font-size: 15px; font-weight: 700; line-height: 1.3; letter-spacing: 0.02em; }
 .nx-subtitle { font-size: 13px; font-weight: 500; line-height: 1.45; }
 .nx-body { font-size: 14px; font-weight: 400; line-height: 1.5; }
+
+
+/* ============================================================
+   NEXO — AJUSTES DE DENSIDADE PARA CELULAR
+   Mantém o visual desktop. No celular, compacta os cards e
+   evita que a tabela de desempenho seja cortada horizontalmente.
+   ============================================================ */
+@media (max-width: 639px) {
+  main.flex-1.overflow-y-auto {
+    padding: 12px !important;
+  }
+
+  .nx-home {
+    padding-bottom: 5.5rem !important;
+  }
+
+  .nx-home > :not([hidden]) ~ :not([hidden]) {
+    margin-top: 14px !important;
+  }
+
+  .nx-home > div:first-child h1 {
+    font-size: 26px !important;
+    line-height: 1.22 !important;
+    letter-spacing: -0.02em !important;
+  }
+
+  /* Dois cartões compactos na primeira linha; progresso usa largura total. */
+  .nx-home > .grid.gap-5 {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 12px !important;
+  }
+
+  .nx-home > .grid.gap-5 > #card-progresso-edital {
+    grid-column: 1 / -1 !important;
+  }
+
+  .nx-home > .grid {
+    gap: 14px !important;
+  }
+
+  .nx-home > .grid.gap-5 {
+    gap: 12px !important;
+  }
+
+  .nx-home .nx-card {
+    padding: 14px !important;
+    border-radius: 14px !important;
+  }
+
+  .nx-home #card-tempo-estudo,
+  .nx-home #card-desempenho {
+    min-width: 0;
+    min-height: 112px;
+  }
+
+  .nx-home #card-tempo-estudo span[class*="text-[32px]"],
+  .nx-home #card-progresso-edital span[class*="text-[32px]"] {
+    font-size: 27px !important;
+    line-height: 1.05 !important;
+  }
+
+  .nx-home #card-desempenho span[class*="text-[36px]"] {
+    font-size: 30px !important;
+    line-height: 1.05 !important;
+  }
+
+  .nx-home #card-tempo-estudo .mt-4,
+  .nx-home #card-desempenho .mt-4,
+  .nx-home #card-progresso-edital .mt-4 {
+    margin-top: 10px !important;
+  }
+
+  .nx-home #section-desempenho-disciplinas .overflow-x-auto {
+    overflow-x: hidden !important;
+  }
+
+  .nx-home #section-desempenho-disciplinas table {
+    width: 100% !important;
+    min-width: 0 !important;
+    table-layout: fixed !important;
+    font-size: 12px !important;
+  }
+
+  /* No telefone, manter Disciplina, Questões e Precisão.
+     Tempo, Progresso e Ação ficam disponíveis em telas maiores. */
+  .nx-home #section-desempenho-disciplinas th:nth-child(n+4),
+  .nx-home #section-desempenho-disciplinas td:nth-child(n+4) {
+    display: none !important;
+  }
+
+  .nx-home #section-desempenho-disciplinas th,
+  .nx-home #section-desempenho-disciplinas td {
+    padding-left: 6px !important;
+    padding-right: 6px !important;
+    overflow-wrap: anywhere;
+  }
+
+  .nx-home #section-desempenho-disciplinas th:nth-child(1),
+  .nx-home #section-desempenho-disciplinas td:nth-child(1) {
+    width: 52% !important;
+  }
+
+  .nx-home #section-desempenho-disciplinas th:nth-child(2),
+  .nx-home #section-desempenho-disciplinas td:nth-child(2) {
+    width: 21% !important;
+    text-align: center !important;
+  }
+
+  .nx-home #section-desempenho-disciplinas th:nth-child(3),
+  .nx-home #section-desempenho-disciplinas td:nth-child(3) {
+    width: 27% !important;
+    text-align: center !important;
+  }
+
+  .nx-home #section-desempenho-disciplinas td:nth-child(1) div.flex {
+    min-width: 0 !important;
+    gap: 6px !important;
+  }
+
+  .nx-home #section-desempenho-disciplinas td:nth-child(1) div.flex > span:last-child {
+    min-width: 0 !important;
+    overflow-wrap: anywhere !important;
+    white-space: normal !important;
+    line-height: 1.35 !important;
+  }
+
+  #floating-clock-btn {
+    width: 42px !important;
+    height: 42px !important;
+  }
+
+  #floating-clock-btn svg {
+    width: 20px !important;
+    height: 20px !important;
+  }
+
+  .nx-home > div.fixed.bottom-6.right-6 {
+    right: 12px !important;
+    bottom: calc(18px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+}
