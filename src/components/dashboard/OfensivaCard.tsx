@@ -154,7 +154,7 @@ export const OfensivaCard: React.FC<OfensivaCardProps> = ({ className = "" }) =>
           </div>
           <div className="flex items-baseline gap-2.5">
             <h2 className="font-condensed text-[19px] font-bold text-white">
-              Ofensiva
+              Constância
             </h2>
             <span className="num-condensed text-[26px] font-bold leading-none text-[#F4B544]">
               {currentStreak} {currentStreak === 1 ? "dia" : "dias"}
@@ -162,17 +162,8 @@ export const OfensivaCard: React.FC<OfensivaCardProps> = ({ className = "" }) =>
           </div>
         </div>
 
-        {/* Lado Direito: Recorde e Status resumido sem poluição de texto */}
-        <div className="flex items-center gap-2.5 text-[12px]">
-          <div className="nx-deep flex items-center gap-1.5 px-3 py-1.5">
-            <span className="text-white">Recorde:</span>
-            <span className="num-condensed font-bold text-white">
-              {recordStreak} {recordStreak === 1 ? "dia" : "dias"}
-            </span>
-          </div>
-
-
-        </div>
+        {/* Lado Direito: Status resumido sem poluição de texto */}
+        <div className="flex items-center gap-2.5 text-[12px]"></div>
       </div>
 
       {/* Mensagem amigável (como no exemplo de Constância) */}
