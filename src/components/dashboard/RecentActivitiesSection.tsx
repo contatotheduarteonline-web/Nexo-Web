@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { History, ArrowUpRight, Clock } from "lucide-react";
+import { ArrowUpRight, Clock } from "lucide-react";
 import { StudySession } from "../../types";
 import { useStudy } from "../../context/StudyContext";
 
@@ -51,9 +51,6 @@ export const RecentActivitiesSection: React.FC<RecentActivitiesSectionProps> = (
       <div>
         <div className="flex items-center justify-between pb-3.5 border-b border-[#263447]">
           <div className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#263447] bg-[#111B2D] text-white">
-              <History className="h-4 w-4" />
-            </div>
             <h3 className="font-condensed text-[15px] font-bold text-white">
               HISTÓRICO
             </h3>

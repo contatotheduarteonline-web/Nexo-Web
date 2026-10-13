@@ -1,5 +1,4 @@
 import React, { useMemo } from "react";
-import { Clock, CheckSquare } from "lucide-react";
 import { useStudy } from "../../context/StudyContext";
 
 interface StatCardsRowProps {
@@ -54,9 +53,6 @@ export const StatCardsRow: React.FC<StatCardsRowProps> = ({ children }) => {
           <span className="text-[12px] font-semibold text-white">
             TEMPO DE ESTUDO
           </span>
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#263447] bg-[#111B2D] text-[#F4B544]">
-            <Clock className="h-4 w-4" />
-          </div>
         </div>
 
         <div className="mt-4">
@@ -77,9 +73,6 @@ export const StatCardsRow: React.FC<StatCardsRowProps> = ({ children }) => {
           <span className="text-[12px] font-semibold text-white">
             DESEMPENHO
           </span>
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#263447] bg-[#111B2D] text-[#F4B544]">
-            <CheckSquare className="h-4 w-4" />
-          </div>
         </div>
 
         <div className="mt-4 space-y-1">

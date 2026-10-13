@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { useStudy } from "../../context/StudyContext";
-import { Flame, Check, X } from "lucide-react";
+import { Check, X } from "lucide-react";
 
 /**
  * Retorna a data local no formato YYYY-MM-DD sem distorção de timezone
@@ -149,9 +149,6 @@ export const OfensivaCard: React.FC<OfensivaCardProps> = ({ className = "" }) =>
       {/* Topo Limpo da Ofensiva */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-4 border-b border-[#263447] gap-3">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#F4B544]/20 bg-[#527DFF]/10 text-[#F4B544]">
-            <Flame className="h-5 w-5 fill-[#F59E0B] text-[#F4B544]" />
-          </div>
           <div className="flex items-baseline gap-2.5">
             <h2 className="font-condensed text-[15px] font-bold tracking-[0.08em] text-white">
               CONSTÂNCIA

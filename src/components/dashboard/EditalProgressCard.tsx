@@ -1,5 +1,5 @@
 import React from "react";
-import { ArrowUpRight, BookOpen } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 
 interface EditalProgressCardProps {
   title?: string;
@@ -29,9 +29,6 @@ export const EditalProgressCard: React.FC<EditalProgressCardProps> = ({
         <span className="text-[12px] font-semibold text-white">
           PROGRESSO NO EDITAL
         </span>
-        <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#263447] bg-[#111B2D] text-[#F4B544]">
-          <BookOpen className="h-4 w-4" />
-        </div>
       </div>
 
       <div className="mt-4">

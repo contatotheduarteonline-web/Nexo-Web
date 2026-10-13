@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { BookOpen, Clock, Play, Plus, ArrowUpRight } from "lucide-react";
+import { Clock, Play, Plus, ArrowUpRight } from "lucide-react";
 
 export interface PlannedBlockItem {
   id: string;
@@ -36,9 +36,6 @@ export const TodayScheduleSection: React.FC<TodayScheduleSectionProps> = ({
       {/* Cabeçalho Limpo sem textos explicativos redundantes */}
       <div className="flex items-center justify-between pb-4 border-b border-[#263447]">
         <div className="flex items-center gap-2.5">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#263447] bg-[#111B2D] text-white">
-            <BookOpen className="h-4 w-4" />
-          </div>
           <h2 className="font-condensed text-[15px] font-bold text-white">
             PLANEJAMENTO
           </h2>

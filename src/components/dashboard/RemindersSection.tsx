@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Calendar, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import { Reminder } from "../../types";
 
 interface RemindersSectionProps {
@@ -38,9 +38,6 @@ export const RemindersSection: React.FC<RemindersSectionProps> = ({
       <div>
         <div className="flex items-center justify-between pb-3.5 border-b border-[#263447]">
           <div className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#263447] bg-[#111B2D] text-white">
-              <Calendar className="h-4 w-4" />
-            </div>
             <h3 className="font-condensed text-[15px] font-bold text-white">
               LEMBRETES
             </h3>

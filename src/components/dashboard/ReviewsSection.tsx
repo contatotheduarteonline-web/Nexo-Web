@@ -59,7 +59,6 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({
 
   const groups = useMemo(() => groupReviewsByDate(pendingReviews), [pendingReviews]);
   const visibleGroups = groups.slice(0, 3);
-  const hiddenCount = pendingReviews.length - visibleGroups.reduce((acc, [, revs]) => acc + revs.length, 0);
 
   return (
     <section id="section-revisoes" className="nx-card p-5 flex flex-col">
@@ -169,15 +168,6 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({
               </div>
             ))}
 
-            {hiddenCount > 0 && (
-              <button
-                type="button"
-                onClick={onNavigateToReviews}
-                className="w-full rounded-lg border border-dashed border-[#263447] px-3 py-2 text-[11px] font-semibold text-[#93A2B7] transition hover:border-[#F4B544]/40 hover:text-[#F4B544]"
-              >
-                + {hiddenCount} outras pendências — ver todas
-              </button>
-            )}
           </div>
         )}
       </div>

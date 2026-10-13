@@ -1,5 +1,5 @@
 import React from "react";
-import { Layers, Play, ArrowUpRight } from "lucide-react";
+import { Play, ArrowUpRight } from "lucide-react";
 
 export interface UnifiedDisciplineStat {
   id: string;
@@ -33,9 +33,6 @@ export const DisciplinePerformanceSection: React.FC<DisciplinePerformanceSection
     >
       <div className="flex items-center justify-between pb-4 border-b border-[#263447]">
         <div className="flex items-center gap-2.5">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#263447] bg-[#111B2D] text-white">
-            <Layers className="h-4 w-4" />
-          </div>
           <h2 className="font-condensed text-[15px] font-bold text-white">
             PAINEL
           </h2>
