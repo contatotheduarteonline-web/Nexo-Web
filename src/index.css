@@ -121,6 +121,17 @@
     accent-color: #F59E0B;
   }
 
+  /* Popup nativo do <select> segue o tema escuro da plataforma */
+  select {
+    color-scheme: dark;
+  }
+
+  select option,
+  select optgroup {
+    background-color: #252B38;
+    color: #F1F5F9;
+  }
+
   ::selection {
     background: rgba(245, 158, 11, 0.35);
     color: #F1F5F9;
