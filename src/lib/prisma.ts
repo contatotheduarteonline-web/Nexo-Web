@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import dotenv from "dotenv";
 
-dotenv.config({ override: true });
+dotenv.config();
 
 const rawDbUrl = process.env.DATABASE_URL || "";
 export const isValidPostgresUrl = rawDbUrl.startsWith("postgresql://") || rawDbUrl.startsWith("postgres://");

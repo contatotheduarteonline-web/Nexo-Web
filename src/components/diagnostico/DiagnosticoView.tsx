@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useStudy } from "../../context/StudyContext";
+import { authFetch } from "../../lib/apiClient";
 import {
   Target,
   AlertTriangle,
@@ -56,7 +57,7 @@ export const DiagnosticoView: React.FC = () => {
     setIsLoadingAi(true);
     setAiError(null);
     try {
-      const response = await fetch("/api/ai/diagnostics", {
+      const response = await authFetch("/api/ai/diagnostics", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -94,7 +95,7 @@ export const DiagnosticoView: React.FC = () => {
     setUserAnswers({});
     setShowExplanations(false);
     try {
-      const response = await fetch("/api/ai/generate-questions", {
+      const response = await authFetch("/api/ai/generate-questions", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

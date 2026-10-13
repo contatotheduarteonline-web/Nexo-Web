@@ -70,6 +70,7 @@ import {
   checkForPlanEditalUpdate,
 } from "../lib/catalogEditalService";
 import { auth } from "../lib/firebase";
+import { authFetch } from "../lib/apiClient";
 import {
   fetchPlanImageFromFirestore,
   deletePlanImageFromFirestore,
@@ -400,19 +401,12 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     });
   };
 
-  // Helper to sanitize stored data and purge legacy mock seeds
+  // Parse cached arrays without discarding records based on their names or IDs.
   const sanitizeStoredArray = <T,>(jsonString: string | null): T[] => {
     if (!jsonString) return [];
     try {
       const parsed = JSON.parse(jsonString);
       if (!Array.isArray(parsed)) return [];
-      const hasLegacy = parsed.some((item: any) => {
-        const str = JSON.stringify(item);
-        return str.includes("edital-gcm-manaus") || str.includes("plan-gcm-manaus") || str.includes("Guarda Civil Municipal de Manaus");
-      });
-      if (hasLegacy) {
-        return [];
-      }
       return parsed;
     } catch {
       return [];
@@ -432,7 +426,7 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   const [activeEditalId, setActiveEditalId] = useState<string>(() => {
     try {
       const saved = localStorage.getItem(storageKeys.ACTIVE_EDITAL_ID);
-      if (saved && !saved.includes("gcm-manaus")) {
+      if (saved) {
         return saved;
       }
       return "";
@@ -601,7 +595,7 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   ): Promise<PlanTemplate | null> => {
     try {
       if (import.meta.env.DEV) {
-        const res = await fetch("/api/planos/templates", {
+        const res = await authFetch("/api/planos/templates", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(templateData),
@@ -632,33 +626,6 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     }
   };
 
-  // Automatic purge of legacy localStorage keys on startup
-  useEffect(() => {
-    try {
-      const keysToRemove: string[] = [];
-      for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        if (
-          key &&
-          (key.includes("_v1") ||
-            key.includes("_v2") ||
-            key.includes("_v3") ||
-            key.includes("_v4") ||
-            key.includes("_v5") ||
-            key.includes("_v6") ||
-            key.startsWith("pf_") ||
-            key.includes("gcm-manaus") ||
-            key.includes("manaus"))
-        ) {
-          keysToRemove.push(key);
-        }
-      }
-      keysToRemove.forEach((k) => localStorage.removeItem(k));
-    } catch (e) {
-      console.warn("Storage purge warning:", e);
-    }
-  }, []);
-
   // Switch dataset when user logs in / changes and connect Firestore real-time synchronization
   useEffect(() => {
     const keys = getStorageKeys(user?.id);
@@ -667,7 +634,7 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     setEditais(cleanEditais);
 
     const savedActiveEdital = localStorage.getItem(keys.ACTIVE_EDITAL_ID);
-    if (savedActiveEdital && !savedActiveEdital.includes("gcm-manaus") && cleanEditais.some((e) => e.id === savedActiveEdital)) {
+    if (savedActiveEdital && cleanEditais.some((e) => e.id === savedActiveEdital)) {
       setActiveEditalId(savedActiveEdital);
     } else {
       setActiveEditalId(cleanEditais[0]?.id || "");
@@ -1774,7 +1741,7 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
           // Optional dev mirror to SQLite if in development
           if (import.meta.env.DEV) {
             try {
-              fetch("/api/user-plans/sync", {
+              authFetch("/api/user-plans/sync", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -1890,7 +1857,7 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     // 8. Optional dev sync deletion to backend if in development
     if (import.meta.env.DEV) {
       try {
-        fetch(`/api/user-plans/${id}`, { method: "DELETE" }).catch(() => {});
+        authFetch(`/api/user-plans/${id}`, { method: "DELETE" }).catch(() => {});
       } catch {
         // Non-blocking
       }
@@ -2045,7 +2012,7 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     // 4. Optional backend notification to increment clone count in background
     if (import.meta.env.DEV) {
       try {
-        fetch(`/api/planos/templates/${template.id}/clone`, { method: "POST" }).catch(() => {});
+        authFetch(`/api/planos/templates/${template.id}/clone`, { method: "POST" }).catch(() => {});
       } catch {
         // Non-blocking
       }
@@ -2915,7 +2882,7 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     try {
       if (import.meta.env.DEV) {
         const currentUserId = user?.id || "guest";
-        const res = await fetch(`/api/backups/daily/list?userId=${encodeURIComponent(currentUserId)}`).catch(() => null);
+        const res = await authFetch(`/api/backups/daily/list?userId=${encodeURIComponent(currentUserId)}`).catch(() => null);
         if (res && res.ok) {
           const json = await res.json();
           if (json.success && Array.isArray(json.backups)) {
@@ -2959,7 +2926,7 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         simulados,
       };
 
-      const res = await fetch("/api/backups/daily/sync", {
+      const res = await authFetch("/api/backups/daily/sync", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -3009,7 +2976,7 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   const restoreDailyBackup = async (backupId: string): Promise<boolean> => {
     try {
       const currentUserId = user?.id || "guest";
-      const res = await fetch(`/api/backups/daily/get/${encodeURIComponent(backupId)}?userId=${encodeURIComponent(currentUserId)}`);
+      const res = await authFetch(`/api/backups/daily/get/${encodeURIComponent(backupId)}?userId=${encodeURIComponent(currentUserId)}`);
       if (res.ok) {
         const json = await res.json();
         if (json.success && json.backup?.data) {
@@ -3028,7 +2995,7 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   const deleteDailyBackup = async (backupId: string): Promise<boolean> => {
     try {
       const currentUserId = user?.id || "guest";
-      const res = await fetch(`/api/backups/daily/${encodeURIComponent(backupId)}?userId=${encodeURIComponent(currentUserId)}`, {
+      const res = await authFetch(`/api/backups/daily/${encodeURIComponent(backupId)}?userId=${encodeURIComponent(currentUserId)}`, {
         method: "DELETE",
       });
       if (res.ok) {
@@ -3042,17 +3009,27 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     }
   };
 
-  // Download a specific backup snapshot file
-  const downloadDailyBackup = (backupId: string) => {
-    const currentUserId = user?.id || "guest";
-    const downloadUrl = `/api/backups/daily/download/${encodeURIComponent(backupId)}?userId=${encodeURIComponent(currentUserId)}`;
-    const a = document.createElement("a");
-    a.href = downloadUrl;
-    a.download = `nexo_backup_${backupId}.json`;
-    a.target = "_blank";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+  // Download a specific backup snapshot file (authFetch: the endpoint requires
+  // the Firebase token — direct <a href> download cannot send headers)
+  const downloadDailyBackup = async (backupId: string) => {
+    try {
+      const currentUserId = user?.id || "guest";
+      const res = await authFetch(
+        `/api/backups/daily/download/${encodeURIComponent(backupId)}?userId=${encodeURIComponent(currentUserId)}`
+      );
+      if (!res.ok) return;
+      const blob = await res.blob();
+      const objectUrl = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = objectUrl;
+      a.download = `nexo_backup_${backupId}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(objectUrl);
+    } catch (err) {
+      console.error("[DAILY BACKUP DOWNLOAD ERROR]:", err);
+    }
   };
 
   // Initial load & automated daily backup runner effect

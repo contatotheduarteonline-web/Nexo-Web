@@ -1,4 +1,5 @@
 import { CatalogEdital, CatalogCargo, CatalogDiscipline, CatalogTopic } from "../types";
+import { authFetch } from "./apiClient";
 
 /**
  * Serviço do catálogo oficial de editais publicado no banco de dados do
@@ -36,7 +37,7 @@ export async function publishEditalToServer(
 ): Promise<void> {
   let data: any = null;
   try {
-    const res = await fetch("/api/catalog/published-editais", {
+    const res = await authFetch("/api/catalog/published-editais", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ edital, cargos }),

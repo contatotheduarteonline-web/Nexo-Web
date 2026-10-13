@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useStudy } from "../../context/StudyContext";
+import { authFetch } from "../../lib/apiClient";
 import {
   Sparkles,
   BookOpen,
@@ -51,7 +52,7 @@ export const AiAssistantModal: React.FC<AiAssistantModalProps> = ({ isOpen, onCl
     setIsLoading(true);
     setAiError(null);
     try {
-      const res = await fetch("/api/ai/verticalize-edital", {
+      const res = await authFetch("/api/ai/verticalize-edital", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -104,7 +105,7 @@ export const AiAssistantModal: React.FC<AiAssistantModalProps> = ({ isOpen, onCl
     setIsLoading(true);
     setAiError(null);
     try {
-      const res = await fetch("/api/ai/generate-questions", {
+      const res = await authFetch("/api/ai/generate-questions", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -137,7 +138,7 @@ export const AiAssistantModal: React.FC<AiAssistantModalProps> = ({ isOpen, onCl
     try {
       // Use diagnostic endpoint or ask logic
       const promptText = `Explique de forma didática, direta e focada em concursos públicos o seguinte conceito ou artigo de lei: "${conceptQuery}". Inclua mnemônicos se aplicável e como as bancas costumam cobrar (pegadinhas).`;
-      const res = await fetch("/api/ai/diagnostics", {
+      const res = await authFetch("/api/ai/diagnostics", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

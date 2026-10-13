@@ -200,33 +200,9 @@ export function subscribeEditaisFromFirestore(
       const list: Edital[] = [];
       snapshot.forEach((docSnap) => {
         const item = docSnap.data() as Edital;
-        const idLower = String(item.id || "").toLowerCase();
-        const titleLower = String(item.title || "").toLowerCase();
-        const organLower = String(item.organ || "").toLowerCase();
-        const cargoLower = String(item.cargo || "").toLowerCase();
-
-        const isArt =
-          idLower.includes("pf") ||
-          idLower.includes("demo") ||
-          idLower.includes("mock") ||
-          idLower.includes("test") ||
-          idLower.includes("manaus") ||
-          idLower.includes("artificial") ||
-          idLower.startsWith("edital-default") ||
-          titleLower.includes("polícia federal") ||
-          titleLower.includes("agente de polícia federal") ||
-          titleLower.includes("escrivão") ||
-          titleLower.includes("papiloscopista") ||
-          organLower.includes("polícia federal") ||
-          cargoLower.includes("polícia federal");
-
-        if (isArt) {
-          deleteDoc(docSnap.ref).catch((err) => {
-            console.warn("[FIRESTORE] Auto-purging artificial edital:", err);
-          });
-        } else {
-          list.push(item);
-        }
+        // Reading a collection must never delete or hide records by title/ID.
+        // Possible orphans are reported separately by reportOrphanEditais.
+        list.push(item);
       });
       // Sort by creation date descending
       list.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
@@ -864,33 +840,9 @@ export async function migrateLocalDataToFirestore(
       }
     }
 
-    // Helper to filter out test/demo/artificial/mock items
-    const isArtificial = (id?: string, name?: string, title?: string): boolean => {
-      const text = `${id || ""} ${name || ""} ${title || ""}`.toLowerCase();
-      return (
-        text.includes("gcm-manaus") ||
-        text.includes("manaus") ||
-        text.includes("mock") ||
-        text.includes("demo") ||
-        text.includes("fake") ||
-        text.includes("teste") ||
-        text.includes("artificial") ||
-        text.includes("polícia federal") ||
-        text.includes("policia federal") ||
-        text.includes("policia-federal") ||
-        text.includes("pf-") ||
-        text.includes("agente de polícia federal") ||
-        text.includes("escrivão") ||
-        text.includes("papiloscopista")
-      );
-    };
-
-    const realEditais = (data.editais || []).filter(
-      (e) => e.id && !isArtificial(e.id, e.title)
-    );
-    const realPlans = (data.studyPlans || []).filter(
-      (p) => p.id && !isArtificial(p.id, p.name)
-    );
+    // Names/IDs cannot tell whether a record is real. Preserve legacy data.
+    const realEditais = (data.editais || []).filter((e) => e.id);
+    const realPlans = (data.studyPlans || []).filter((p) => p.id);
 
     // If there are no legitimate editais or plans to migrate, do not create artificial items
     if (realEditais.length === 0 && realPlans.length === 0) {
@@ -918,28 +870,28 @@ export async function migrateLocalDataToFirestore(
     }
     if (data.studySessions && data.studySessions.length > 0) {
       for (const session of data.studySessions) {
-        if (session.id && !isArtificial(session.id)) {
+        if (session.id) {
           await saveStudySessionToFirestore(userId, session);
         }
       }
     }
     if (data.scheduledReviews && data.scheduledReviews.length > 0) {
       for (const review of data.scheduledReviews) {
-        if (review.id && !isArtificial(review.id)) {
+        if (review.id) {
           await saveScheduledReviewToFirestore(userId, review);
         }
       }
     }
     if (data.reminders && data.reminders.length > 0) {
       for (const rem of data.reminders) {
-        if (rem.id && !isArtificial(rem.id)) {
+        if (rem.id) {
           await saveReminderToFirestore(userId, rem);
         }
       }
     }
     if (data.simulados && data.simulados.length > 0) {
       for (const sim of data.simulados) {
-        if (sim.id && !isArtificial(sim.id)) {
+        if (sim.id) {
           await saveSimuladoToFirestore(userId, sim);
         }
       }

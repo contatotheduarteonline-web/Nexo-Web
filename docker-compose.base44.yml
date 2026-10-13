@@ -12,7 +12,20 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
-    restart: unless-stopped
+    restart: on-failure
+
+  prepare:
+    image: node:22-slim
+    working_dir: /app
+    volumes:
+      - .:/app
+      - app_node_modules:/app/node_modules
+    environment:
+      - DATABASE_URL=postgresql://nexo:nexodevpass@postgres:5432/nexo?sslmode=disable
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: ["sh", "-ec", "npm ci --no-audit --no-fund && npx prisma generate && npx prisma migrate deploy"]
 
   app:
     image: node:22-slim
@@ -20,26 +33,38 @@ services:
     volumes:
       - .:/app
       - app_node_modules:/app/node_modules
+      - private_data:/var/lib/nexo
     ports:
       - "3000:3000"
     environment:
       - DATABASE_URL=postgresql://nexo:nexodevpass@postgres:5432/nexo?sslmode=disable
+      - NEXO_DATA_DIR=/var/lib/nexo
       - NODE_ENV=development
       - CHOKIDAR_USEPOLLING=true
       - __VITE_ADDITIONAL_SERVER_ALLOWED_HOSTS
       - BASE44_PUBLIC_HOST_SUFFIX
+      - BASE44_PREVIEW_MODE
     env_file:
       - /run/base44/app.env
     depends_on:
       postgres:
         condition: service_healthy
-    command: >
-      sh -c "npm install &&
-             npx prisma generate &&
-             npx prisma migrate deploy &&
-             npm run dev"
-    restart: unless-stopped
+      prepare:
+        condition: service_completed_successfully
+    command: ["sh", "-ec", "exec npx tsx watch server.ts"]
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "Promise.all(['/api/health', '/'].map(async p => { const r = await fetch('http://127.0.0.1:3000' + p, { signal: AbortSignal.timeout(3000) }); if (!r.ok || (p === '/' && !(await r.text()).includes('/@vite/client'))) throw new Error(p + ' unavailable'); })).catch(e => { console.error(e.message); process.exit(1); });"
+      interval: 15s
+      timeout: 5s
+      start_period: 60s
+      retries: 3
+    restart: on-failure
 
 volumes:
   pgdata:
   app_node_modules:
+  private_data:

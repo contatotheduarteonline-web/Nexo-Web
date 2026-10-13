@@ -1,7 +1,7 @@
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
 import dotenv from "dotenv";
 
-dotenv.config({ override: true });
+dotenv.config();
 
 export interface StorageUploadResult {
   success: boolean;

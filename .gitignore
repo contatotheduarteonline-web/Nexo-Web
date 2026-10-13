@@ -8,5 +8,12 @@ coverage/
 !.env.example
 .env
 
-# Backups automaticos com dados de usuario (nunca versionar)
+# Dados privados de runtime; exemplos anonimos ficam em data/examples/.
+data/users_db.json
+data/vouchers_db.json
+data/email_config.json
+data/planos_db.json
 data/backups/
+data/storage/
+.firebase/
+*.dump

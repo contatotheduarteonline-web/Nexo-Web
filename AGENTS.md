@@ -11,8 +11,9 @@
 
 ## Dev Setup (docker-compose.base44.yml)
 - `postgres:16-alpine` — PostgreSQL with generated credentials.
-- `app` (node:22-slim) — bind-mounts source, runs `npm install && npx prisma generate && npx prisma migrate deploy && npm run dev`.
-- `npm run dev` = `tsx server.ts` (Vite middleware mode with HMR).
+- `prepare` installs the current lockfile with `npm ci`, generates Prisma and applies migrations before `app` starts. Both services mount the same checkout/dependency volume; never install concurrently.
+- `app` (node:22-slim) runs `tsx watch server.ts` with Vite middleware/HMR and a private runtime-data volume. The healthcheck verifies both API and live-source HTML.
+- `npm run dev` remains `tsx server.ts`; Compose adds the backend watcher.
 - `CHOKIDAR_USEPOLLING=true` enables file-watch polling for bind-mount compatibility.
 
 ## External Secrets (all optional — app boots without them)
@@ -21,16 +22,20 @@
 - `SMTP_HOST` / `SMTP_PORT` / `SMTP_USER` / `SMTP_PASS` — email sending. Without them, email features are disabled.
 - `RESEND_API_KEY` — alternative email provider.
 
-## Demo Accounts (seeded automatically)
-- `contato.theduarteonline@gmail.com` / `Duarte@2026` — admin
-- `joao.v.duarte@outlook.com` / `Duarte@2026` — aluno_vip
-- `aluno.policial@projetofarda.com.br` / `123456` — aluno_vip (demo)
+## Data preservation
+- Never seed personal accounts/vouchers or overwrite existing roles, status, passwords or counters during startup.
+- `NEXO_DATA_DIR` holds private runtime JSON, daily backups, template fallback and local images. In production it must be an absolute path outside the checkout on a persistent private disk. In the sandbox it is `/var/lib/nexo` backed by the `private_data` volume.
+- Preserve and verify a byte-identical private copy before removing legacy data from Git. Never print record contents or secrets; never run `down -v` or rewrite Git history.
+- See `DATA_PROTECTION.md` for migration, recovery, verification results and deployment limitations.
 
 ## Verification
 - Health check: `curl http://localhost:3000/api/health` → `{"status":"ok"}`
 - Root page: `curl http://localhost:3000/` → Vite-served React app (look for `/@vite/client` in HTML).
 - Prisma migrations: `npx prisma migrate deploy` runs on container startup.
 - Type check: `npm run lint` (tsc --noEmit).
+- Private-store checks: `node --import tsx --test src/lib/privateData.test.ts` (synthetic records only; never use real emails/passwords in tests).
+- Existing Firestore reads can be verified with the user's replayed session. Successful signup/password recovery and new study writes need an isolated test account; rendering a login form does not verify Firebase login.
+- Release blocker: Express administrative endpoints, including `/api/auth/state`, lack server-side authorization. Do not describe the branch as safe for public production solely because data is no longer tracked by Git.
 
 ## Official Edital Catalog (published editais)
 - **Source of truth**: PostgreSQL table `PublishedEdital` (model in `prisma/schema.prisma`). Each row stores the full edital snapshot (cargos + disciplines + topics) in `dataJson`.

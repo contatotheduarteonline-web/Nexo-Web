@@ -14,10 +14,14 @@ import * as pdfParseModule from "pdf-parse";
 import dotenv from "dotenv";
 import bcrypt from "bcryptjs";
 import { prisma, testDatabaseConnection, isDatabaseConnected } from "./src/lib/prisma";
+import { initializeApp as initFirebaseAdminApp, getApps as getFirebaseAdminApps, cert } from "firebase-admin/app";
+import { getAuth as getFirebaseAdminAuth } from "firebase-admin/auth";
+import type { Request, Response, NextFunction } from "express";
 import { SEED_TEMPLATES } from "./src/data/seedTemplates";
 import { processAvatarStorage, deleteAvatarFromStorage } from "./src/lib/storage";
+import { PRIVATE_DATA_ROOT, readPrivateJson, readPrivateRecords, writePrivateJson } from "./src/lib/privateData";
 
-dotenv.config({ override: true });
+dotenv.config();
 
 // Helper to safely extract text from a PDF Buffer with support for both pdf-parse class (v2+) and legacy function (v1)
 async function extractTextFromPdf(buffer: Buffer): Promise<string> {
@@ -101,13 +105,13 @@ app.use((req, res, next) => {
 });
 
 // Storage directory setup for bucket: plan-images
-const STORAGE_ROOT = path.join(process.cwd(), "data", "storage", "plan-images");
+const STORAGE_ROOT = path.join(PRIVATE_DATA_ROOT, "storage", "plan-images");
 if (!fs.existsSync(STORAGE_ROOT)) {
   fs.mkdirSync(STORAGE_ROOT, { recursive: true });
 }
 
 // Daily automated backups directory setup
-const BACKUPS_ROOT = path.join(process.cwd(), "data", "backups", "daily");
+const BACKUPS_ROOT = path.join(PRIVATE_DATA_ROOT, "backups", "daily");
 if (!fs.existsSync(BACKUPS_ROOT)) {
   fs.mkdirSync(BACKUPS_ROOT, { recursive: true });
 }
@@ -168,12 +172,203 @@ setInterval(() => {
   }
 }, 5 * 60 * 1000);
 
+// ==========================================
+// SERVER-SIDE AUTHENTICATION & AUTHORIZATION (Firebase Admin)
+// ==========================================
+// Identity is always validated server-side from a Firebase ID token sent in
+// the `Authorization: Bearer <idToken>` header. Client-supplied userId, email,
+// role or isAdmin fields are NEVER trusted for authorization decisions —
+// they are only used as claims to be checked against the verified token.
+const FIREBASE_CLIENT_CONFIG = JSON.parse(
+  fs.readFileSync(path.resolve(process.cwd(), "firebase-applet-config.json"), "utf-8")
+);
+
+let cachedFirebaseAdminAuth: ReturnType<typeof getFirebaseAdminAuth> | null = null;
+
+function getFirebaseAdminAuthClient() {
+  if (cachedFirebaseAdminAuth) return cachedFirebaseAdminAuth;
+  const appName = "nexo-server-admin";
+  const existingApp = getFirebaseAdminApps().find((a) => a.name === appName);
+  const adminApp =
+    existingApp ||
+    initFirebaseAdminApp(
+      {
+        projectId: FIREBASE_CLIENT_CONFIG.projectId,
+        // Optional explicit service account for production deployments —
+        // supplied via environment/secrets and never committed to Git.
+        // Verifying ID tokens only requires the projectId: signatures are
+        // validated against Google's published public keys.
+        ...(process.env.FIREBASE_SERVICE_ACCOUNT
+          ? { credential: cert(JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT)) }
+          : {}),
+      },
+      appName
+    );
+  cachedFirebaseAdminAuth = getFirebaseAdminAuth(adminApp);
+  return cachedFirebaseAdminAuth;
+}
+
+export interface InternalUserRecord {
+  id: string;
+  email: string;
+  role: string;
+  status: string;
+  accessExpiresAt?: Date | null;
+}
+
+interface NexoIdentity {
+  uid: string;
+  email: string | null;
+  emailVerified: boolean;
+  internalUser: InternalUserRecord | null;
+  isAdmin: boolean;
+}
+
+declare module "express-serve-static-core" {
+  interface Request {
+    nexoIdentity?: NexoIdentity;
+  }
+}
+
+// Mapping Firebase identity -> internal NEXO account, resolved server-side.
+// The Firebase UID is NOT assumed to equal the internal user id: accounts
+// created via register/admin endpoints use cuid ids, while accounts created
+// via plan sync use the Firebase UID as id. Resolution order: internal id,
+// then the verified e-mail from the token. Existing accounts, roles and
+// records are preserved — no data migration is required.
+async function resolveInternalIdentity(uid: string, email: string | null): Promise<InternalUserRecord | null> {
+  const cleanEmail = email ? email.toLowerCase().trim() : "";
+  if (isDatabaseConnected()) {
+    try {
+      let dbUser = await prisma.user.findUnique({ where: { id: uid } });
+      if (!dbUser && cleanEmail) {
+        dbUser = await prisma.user.findUnique({ where: { email: cleanEmail } });
+      }
+      if (dbUser) {
+        return {
+          id: dbUser.id,
+          email: dbUser.email,
+          role: dbUser.role,
+          status: dbUser.status,
+          accessExpiresAt: dbUser.accessExpiresAt,
+        };
+      }
+    } catch (err: any) {
+      console.warn("[AUTH] Erro ao resolver identidade no banco de dados:", err?.message || err);
+    }
+  }
+  const memoryUser =
+    (cleanEmail && memoryUsers.get(cleanEmail)) ||
+    Array.from(memoryUsers.values()).find((u) => u.id === uid);
+  if (memoryUser) {
+    return {
+      id: memoryUser.id,
+      email: memoryUser.email,
+      role: memoryUser.role,
+      status: memoryUser.status,
+      accessExpiresAt: memoryUser.accessExpiresAt || null,
+    };
+  }
+  return null;
+}
+
+// 401 when the request carries no Firebase ID token.
+async function authenticateFirebaseToken(req: Request, res: Response, next: NextFunction) {
+  const header = req.headers.authorization || "";
+  const [scheme, token] = header.split(" ");
+  if (scheme !== "Bearer" || !token) {
+    return res.status(401).json({ error: "Autenticação necessária: token Firebase ausente ou malformado." });
+  }
+  try {
+    const decoded = await getFirebaseAdminAuthClient().verifyIdToken(token);
+    const internalUser = await resolveInternalIdentity(decoded.uid, decoded.email ?? null);
+    req.nexoIdentity = {
+      uid: decoded.uid,
+      email: decoded.email ?? null,
+      emailVerified: Boolean(decoded.email_verified),
+      internalUser,
+      isAdmin: internalUser?.role === "admin",
+    };
+    return next();
+  } catch (err: any) {
+    console.warn("[AUTH] Token rejeitado pelo Firebase Admin:", err?.message || err);
+    return res.status(401).json({ error: "Token de autenticação inválido ou expirado." });
+  }
+}
+
+// 403 when the authenticated user does not hold the admin role resolved
+// server-side from the internal account store (never from client claims).
+function requireAdmin(req: Request, res: Response, next: NextFunction) {
+  if (!req.nexoIdentity) {
+    return res.status(401).json({ error: "Autenticação necessária." });
+  }
+  if (!req.nexoIdentity.isAdmin) {
+    return res.status(403).json({ error: "Acesso restrito: função disponível apenas para administradores." });
+  }
+  return next();
+}
+
+// Mirrors the login flow rules for token-authenticated users: suspended,
+// pending-approval or expired internal accounts are rejected on private
+// endpoints. Users that only exist in Firebase (no internal account yet)
+// are allowed through — accounts are created lazily by plan sync.
+function assertInternalAccountActive(identity: NexoIdentity, res: Response): boolean {
+  const user = identity.internalUser;
+  if (!user) return true;
+  if (user.status === "bloqueado" || user.status === "pendente") {
+    res.status(403).json({ error: "Acesso bloqueado pela administração." });
+    return false;
+  }
+  if (user.accessExpiresAt && new Date() > new Date(user.accessExpiresAt)) {
+    res.status(403).json({ error: "Seu período de acesso expirou. Renove seu acesso com o administrador." });
+    return false;
+  }
+  return true;
+}
+
+// Authenticated regular user for session-consuming endpoints.
+function requireActiveUser(req: Request, res: Response, next: NextFunction) {
+  if (!req.nexoIdentity) {
+    return res.status(401).json({ error: "Autenticação necessária." });
+  }
+  if (!assertInternalAccountActive(req.nexoIdentity, res)) return;
+  return next();
+}
+
+// Owner-scoped endpoints: client-sent userId/email may only reference the
+// authenticated identity itself. Any other target is rejected with 403.
+function requireSelfAccess(req: Request, res: Response, next: NextFunction) {
+  const identity = req.nexoIdentity;
+  if (!identity) {
+    return res.status(401).json({ error: "Autenticação necessária." });
+  }
+  if (!assertInternalAccountActive(identity, res)) return;
+
+  const requestedUserId = (req.body?.userId ?? req.query?.userId) as unknown;
+  if (requestedUserId !== undefined && requestedUserId !== null && String(requestedUserId) !== identity.uid) {
+    return res.status(403).json({ error: "Você só pode acessar os seus próprios registros." });
+  }
+  const requestedEmail =
+    typeof (req.body?.email ?? req.query?.email) === "string"
+      ? String(req.body?.email ?? req.query?.email).toLowerCase().trim()
+      : "";
+  if (requestedEmail && identity.email && requestedEmail !== identity.email.toLowerCase().trim()) {
+    return res.status(403).json({ error: "Você só pode acessar os seus próprios registros." });
+  }
+  return next();
+}
+
+// Composite middlewares for route registration.
+const adminRoute = [authenticateFirebaseToken, requireAdmin];
+const selfRoute = [authenticateFirebaseToken, requireSelfAccess];
+const userRoute = [authenticateFirebaseToken, requireActiveUser];
+
 // Storage API Endpoint: Serve Legacy or Cached Avatar Image
 app.get("/api/storage/avatars/:filename", (req, res) => {
   try {
     const { filename } = req.params;
     const cleanFilename = path.basename(filename);
-    const legacyPath = path.join(process.cwd(), "data", "storage", "avatars", cleanFilename);
+    const legacyPath = path.join(PRIVATE_DATA_ROOT, "storage", "avatars", cleanFilename);
 
     if (!fs.existsSync(legacyPath)) {
       return res.status(404).json({ error: "Foto de perfil não encontrada." });
@@ -199,9 +394,12 @@ app.get("/api/storage/avatars/:filename", (req, res) => {
 });
 
 // Storage API Endpoint: Upload Plan Image
-app.post("/api/storage/plan-images/upload", async (req, res) => {
+app.post("/api/storage/plan-images/upload", ...selfRoute, async (req, res) => {
   try {
-    const { userId = "user-default", planId, dataBase64, mimeType } = req.body;
+    // Ownership: the image is always stored under the authenticated owner's
+    // directory — the client-sent userId is validated but never trusted.
+    const { planId, dataBase64, mimeType } = req.body;
+    const userId = req.nexoIdentity!.uid;
 
     if (!planId) {
       return res.status(400).json({ error: "Identificador do plano é obrigatório." });
@@ -303,15 +501,17 @@ app.get("/api/storage/plan-images/:userId/:planId/:filename", (req, res) => {
 });
 
 // Storage API Endpoint: Delete Plan Image
-app.delete("/api/storage/plan-images", (req, res) => {
+app.delete("/api/storage/plan-images", ...selfRoute, (req, res) => {
   try {
-    const { image_path, userId } = req.body;
+    const { image_path } = req.body;
     if (!image_path || typeof image_path !== "string") {
       return res.status(400).json({ error: "Caminho da imagem é obrigatório." });
     }
 
-    // Basic isolation: ensure path starts with userId if userId is specified
-    if (userId && !image_path.startsWith(`${userId}/`)) {
+    // Ownership: private plan images may only be removed by their owner
+    // (paths are namespaced by the owner's Firebase UID) or by an admin.
+    const ownerPrefix = `${req.nexoIdentity!.uid}/`;
+    if (!req.nexoIdentity!.isAdmin && !image_path.startsWith(ownerPrefix)) {
       return res.status(403).json({ error: "Acesso não autorizado para excluir este arquivo." });
     }
 
@@ -380,8 +580,6 @@ app.get("/health", (_req, res) => {
 // ====================================================
 // PRISMA ORM POSTGRESQL & FILE PERSISTENCE LAYER
 // ====================================================
-const ADMIN_MASTER_EMAILS: string[] = [];
-
 function isMasterAdminEmail(email?: string | null): boolean {
   return false;
 }
@@ -438,173 +636,39 @@ interface MemoryVoucher {
   createdAt: Date;
 }
 
-const USERS_DB_FILE = path.join(process.cwd(), "data", "users_db.json");
-const VOUCHERS_DB_FILE = path.join(process.cwd(), "data", "vouchers_db.json");
+const USERS_DB_FILE = path.join(PRIVATE_DATA_ROOT, "users_db.json");
+const VOUCHERS_DB_FILE = path.join(PRIVATE_DATA_ROOT, "vouchers_db.json");
 
 const memoryUsers: Map<string, MemoryUser> = new Map();
 const memoryVouchers: Map<string, MemoryVoucher> = new Map();
 
 function saveUsersToDisk(): void {
-  try {
-    const dataDir = path.join(process.cwd(), "data");
-    if (!fs.existsSync(dataDir)) {
-      fs.mkdirSync(dataDir, { recursive: true });
-    }
-    const usersArray = Array.from(memoryUsers.values());
-    fs.writeFileSync(USERS_DB_FILE, JSON.stringify(usersArray, null, 2), "utf-8");
-  } catch (err) {
-    console.error("[STORAGE] Erro ao salvar users_db.json:", err);
-  }
+  writePrivateJson(USERS_DB_FILE, Array.from(memoryUsers.values()));
 }
 
 function saveVouchersToDisk(): void {
-  try {
-    const dataDir = path.join(process.cwd(), "data");
-    if (!fs.existsSync(dataDir)) {
-      fs.mkdirSync(dataDir, { recursive: true });
-    }
-    const vouchersArray = Array.from(memoryVouchers.values());
-    fs.writeFileSync(VOUCHERS_DB_FILE, JSON.stringify(vouchersArray, null, 2), "utf-8");
-  } catch (err) {
-    console.error("[STORAGE] Erro ao salvar vouchers_db.json:", err);
-  }
+  writePrivateJson(VOUCHERS_DB_FILE, Array.from(memoryVouchers.values()));
 }
 
-async function initResilientDataStore(): Promise<void> {
-  const dataDir = path.join(process.cwd(), "data");
-  if (!fs.existsSync(dataDir)) {
-    fs.mkdirSync(dataDir, { recursive: true });
-  }
-
-  // 1. Load users from disk if file exists
-  if (fs.existsSync(USERS_DB_FILE)) {
-    try {
-      const raw = fs.readFileSync(USERS_DB_FILE, "utf-8");
-      const list = JSON.parse(raw);
-      if (Array.isArray(list)) {
-        for (const u of list) {
-          if (u && u.email) {
-            memoryUsers.set(u.email.toLowerCase().trim(), {
-              ...u,
-              createdAt: u.createdAt ? new Date(u.createdAt) : new Date(),
-              lastLoginAt: u.lastLoginAt ? new Date(u.lastLoginAt) : undefined,
-              accessExpiresAt: u.accessExpiresAt ? new Date(u.accessExpiresAt) : undefined,
-              onboardingCompletedAt: u.onboardingCompletedAt ? new Date(u.onboardingCompletedAt) : undefined,
-            });
-          }
-        }
-      }
-    } catch (e) {
-      console.warn("[STORAGE] Erro ao carregar users_db.json:", e);
-    }
-  }
-
-  // 2. Load vouchers from disk if file exists
-  if (fs.existsSync(VOUCHERS_DB_FILE)) {
-    try {
-      const raw = fs.readFileSync(VOUCHERS_DB_FILE, "utf-8");
-      const list = JSON.parse(raw);
-      if (Array.isArray(list)) {
-        for (const v of list) {
-          if (v && v.code) {
-            memoryVouchers.set(v.code.toUpperCase().trim(), {
-              ...v,
-              createdAt: v.createdAt ? new Date(v.createdAt) : new Date(),
-              expiresAt: v.expiresAt ? new Date(v.expiresAt) : undefined,
-            });
-          }
-        }
-      }
-    } catch (e) {
-      console.warn("[STORAGE] Erro ao carregar vouchers_db.json:", e);
-    }
-  }
-
-  // 3. Ensure master admin accounts and default demo users exist
-  const defaultAdminHash = await hashPassword("Duarte@2026");
-
-  // Primary Master Email
-  if (!memoryUsers.has("contato.theduarteonline@gmail.com")) {
-    memoryUsers.set("contato.theduarteonline@gmail.com", {
-      id: "master_" + crypto.randomUUID().replace(/-/g, ""),
-      name: "João Vitor da Silva Duarte",
-      email: "contato.theduarteonline@gmail.com",
-      passwordHash: defaultAdminHash,
-      role: "admin",
-      status: "ativo",
-      notes: "Conta mestre proprietária da plataforma",
-      createdAt: new Date(),
-    });
-  } else {
-    const admin1 = memoryUsers.get("contato.theduarteonline@gmail.com")!;
-    admin1.role = "admin";
-    admin1.status = "ativo";
-  }
-
-  // Student: joao.v.duarte@outlook.com
-  if (!memoryUsers.has("joao.v.duarte@outlook.com")) {
-    const studentPass = await hashPassword("Duarte@2026");
-    memoryUsers.set("joao.v.duarte@outlook.com", {
-      id: "user-aluno-joao",
-      name: "João Duarte",
-      email: "joao.v.duarte@outlook.com",
-      passwordHash: studentPass,
-      role: "aluno_vip",
-      status: "ativo",
-      notes: "Conta de Aluno (João Duarte)",
-      createdAt: new Date(),
-    });
-  } else {
-    const studentUser = memoryUsers.get("joao.v.duarte@outlook.com")!;
-    studentUser.role = "aluno_vip";
-    studentUser.status = "ativo";
-    studentUser.name = "João Duarte";
-    studentUser.notes = "Conta de Aluno (João Duarte)";
-  }
-
-  // Demo student
-  if (!memoryUsers.has("aluno.policial@projetofarda.com.br")) {
-    const studentHash = await hashPassword("123456");
-    memoryUsers.set("aluno.policial@projetofarda.com.br", {
-      id: "user-aluno-1",
-      name: "Aluno Policial (Demonstração)",
-      email: "aluno.policial@projetofarda.com.br",
-      passwordHash: studentHash,
-      role: "aluno_vip",
-      status: "ativo",
-      notes: "Aluno liberado - Turma Especial",
-      createdAt: new Date(),
+function initResilientDataStore(): void {
+  // Preserve IDs, hashes, roles, statuses, counters and all legacy fields.
+  // No automatic account creation, password reset, privilege changes or rewrite.
+  for (const u of readPrivateRecords<MemoryUser>(USERS_DB_FILE, "email")) {
+    memoryUsers.set(u.email.toLowerCase().trim(), {
+      ...u,
+      createdAt: new Date(u.createdAt),
+      lastLoginAt: u.lastLoginAt ? new Date(u.lastLoginAt) : undefined,
+      accessExpiresAt: u.accessExpiresAt ? new Date(u.accessExpiresAt) : undefined,
+      onboardingCompletedAt: u.onboardingCompletedAt ? new Date(u.onboardingCompletedAt) : undefined,
     });
   }
-
-  // Default Vouchers
-  if (!memoryVouchers.has("FARDA2026")) {
-    memoryVouchers.set("FARDA2026", {
-      id: "voucher-default-1",
-      code: "FARDA2026",
-      role: "aluno_vip",
-      maxUses: 100,
-      usedCount: 0,
-      description: "Voucher de Liberação Direta - Turma 2026",
-      createdAt: new Date(),
+  for (const v of readPrivateRecords<MemoryVoucher>(VOUCHERS_DB_FILE, "code")) {
+    memoryVouchers.set(v.code.toUpperCase().trim(), {
+      ...v,
+      createdAt: new Date(v.createdAt),
+      expiresAt: v.expiresAt ? new Date(v.expiresAt) : undefined,
     });
   }
-
-  if (!memoryVouchers.has("ELITE-POLICIAL")) {
-    memoryVouchers.set("ELITE-POLICIAL", {
-      id: "voucher-default-2",
-      code: "ELITE-POLICIAL",
-      role: "aluno_vip",
-      maxUses: 50,
-      usedCount: 0,
-      description: "Voucher Alunos VIP Elite",
-      createdAt: new Date(),
-    });
-  }
-
-  // Save state to disk immediately
-  saveUsersToDisk();
-  saveVouchersToDisk();
 }
 initResilientDataStore();
 
@@ -612,97 +676,6 @@ initResilientDataStore();
 async function seedPrismaDefaults(): Promise<void> {
   if (!isDatabaseConnected()) return;
   try {
-    for (const masterEmail of ADMIN_MASTER_EMAILS) {
-      const adminExists = await prisma.user.findUnique({
-        where: { email: masterEmail.toLowerCase() },
-      });
-
-      if (!adminExists) {
-        const hashedAdminPass = await hashPassword("Duarte@2026");
-        await prisma.user.create({
-          data: {
-            id: "master_" + crypto.randomUUID().replace(/-/g, ""),
-            name: "João Vitor da Silva Duarte",
-            email: masterEmail.toLowerCase(),
-            passwordHash: hashedAdminPass,
-            role: "admin",
-            status: "ativo",
-            notes: "Conta mestre proprietária da plataforma",
-          },
-        });
-        console.log(`[POSTGRES DB] Administrador Master inicializado com sucesso: ${masterEmail}`);
-      } else if (adminExists.role !== "admin" || adminExists.status !== "ativo") {
-        await prisma.user.update({
-          where: { email: masterEmail.toLowerCase() },
-          data: {
-            role: "admin",
-            status: "ativo",
-          },
-        });
-      }
-    }
-
-    // Ensure joao.v.duarte@outlook.com is updated to student (aluno_vip) in PostgreSQL DB
-    const joaoStudent = await prisma.user.findUnique({
-      where: { email: "joao.v.duarte@outlook.com" },
-    });
-    if (joaoStudent && joaoStudent.role === "admin") {
-      await prisma.user.update({
-        where: { email: "joao.v.duarte@outlook.com" },
-        data: {
-          role: "aluno_vip",
-          notes: "Conta de Aluno (João Duarte)",
-        },
-      });
-    }
-
-    // Check if demo student exists
-    const demoStudent = await prisma.user.findUnique({
-      where: { email: "aluno.policial@projetofarda.com.br" },
-    });
-
-    if (!demoStudent) {
-      const hashedStudentPass = await hashPassword("123456");
-      await prisma.user.create({
-        data: {
-          id: "user-aluno-1",
-          name: "Aluno Policial (Demonstração)",
-          email: "aluno.policial@projetofarda.com.br",
-          passwordHash: hashedStudentPass,
-          role: "aluno_vip",
-          status: "ativo",
-          notes: "Aluno liberado - Turma Especial",
-        },
-      });
-    }
-
-    // Seed default vouchers if they do not exist
-    const voucher1 = await prisma.voucher.findUnique({ where: { code: "FARDA2026" } });
-    if (!voucher1) {
-      await prisma.voucher.create({
-        data: {
-          code: "FARDA2026",
-          role: "aluno_vip",
-          maxUses: 100,
-          usedCount: 0,
-          description: "Voucher de Liberação Direta - Turma 2026",
-        },
-      });
-    }
-
-    const voucher2 = await prisma.voucher.findUnique({ where: { code: "ELITE-POLICIAL" } });
-    if (!voucher2) {
-      await prisma.voucher.create({
-        data: {
-          code: "ELITE-POLICIAL",
-          role: "aluno_vip",
-          maxUses: 50,
-          usedCount: 0,
-          description: "Voucher Alunos VIP Elite",
-        },
-      });
-    }
-
     // Ensure PMRR template exists in database if connected
     const pmrrTemplate = await prisma.editalTemplate.findFirst({
       where: {
@@ -855,29 +828,17 @@ export interface EmailConfig {
   senderName?: string;
 }
 
-const EMAIL_CONFIG_PATH = path.join(process.cwd(), "data", "email_config.json");
+const EMAIL_CONFIG_PATH = path.join(PRIVATE_DATA_ROOT, "email_config.json");
 
 // In-memory secrets set by the admin UI at runtime (never persisted to disk).
 // Live only for the current process; on restart the environment variables win.
 const runtimeEmailSecrets: { smtpPass?: string; resendApiKey?: string } = {};
 
 function getEmailConfig(): EmailConfig {
-  let fileConfig: Partial<EmailConfig> = {};
-  try {
-    if (fs.existsSync(EMAIL_CONFIG_PATH)) {
-      const raw = fs.readFileSync(EMAIL_CONFIG_PATH, "utf-8");
-      fileConfig = JSON.parse(raw) || {};
-    }
-  } catch (e) {
-    console.warn("[EMAIL CONFIG] Aviso ao ler email_config.json:", e);
-  }
-
-  // Secrets (SMTP_PASS / RESEND_API_KEY) MUST come from protected environment variables
-  // first (env > in-memory admin override > file). The JSON file is versioned and must
-  // never hold credentials. Non-secret settings (host, port, user, sender) keep the
-  // admin-file priority so the admin UI continues to work as before.
-  const smtpPass = (process.env.SMTP_PASS?.trim() || runtimeEmailSecrets.smtpPass?.trim() || fileConfig.smtpPass?.trim() || "");
-  const resendApiKey = (process.env.RESEND_API_KEY?.trim() || runtimeEmailSecrets.resendApiKey?.trim() || fileConfig.resendApiKey?.trim() || "");
+  const fileConfig = readPrivateJson<Partial<EmailConfig>>(EMAIL_CONFIG_PATH, {});
+  // Protected environment wins. Credentials are never loaded from JSON.
+  const smtpPass = process.env.SMTP_PASS?.trim() || runtimeEmailSecrets.smtpPass?.trim() || "";
+  const resendApiKey = process.env.RESEND_API_KEY?.trim() || runtimeEmailSecrets.resendApiKey?.trim() || "";
   const smtpHost = (fileConfig.smtpHost?.trim() || process.env.SMTP_HOST?.trim() || "");
   const smtpPort = fileConfig.smtpPort || (process.env.SMTP_PORT ? Number(process.env.SMTP_PORT) : 587);
   const smtpUser = (fileConfig.smtpUser?.trim() || process.env.SMTP_USER?.trim() || "");
@@ -905,38 +866,19 @@ function getEmailConfig(): EmailConfig {
 
 function logEmailConfigStatus() {
   const cfg = getEmailConfig();
-  console.log("=================================================");
-  console.log("[EMAIL SERVICE] Status de Inicialização e Fallback:");
-  console.log("  - SMTP_HOST (ENV):", process.env.SMTP_HOST ? `Configurado (${process.env.SMTP_HOST})` : "Não definido");
-  console.log("  - SMTP_PORT (ENV):", process.env.SMTP_PORT || "587 (padrão)");
-  console.log("  - SMTP_USER (ENV):", process.env.SMTP_USER ? `Configurado (${process.env.SMTP_USER})` : "Não definido");
-  console.log("  - SMTP_PASS (ENV):", !!process.env.SMTP_PASS ? "Configurado (***)" : "Não definido");
-  console.log("  - RESEND_API_KEY (ENV):", !!process.env.RESEND_API_KEY ? "Configurado (***)" : "Não definido");
-  console.log("  - Provedor Efetivo:", cfg.provider);
-  console.log("  - Host SMTP Ativo:", cfg.smtpHost ? `${cfg.smtpHost}:${cfg.smtpPort}` : "Nenhum");
-  console.log("  - Usuário SMTP Ativo:", cfg.smtpUser || "Nenhum");
-  console.log("  - Senha SMTP Ativa:", !!cfg.smtpPass ? "Presente" : "Ausente");
-  console.log("  - Chave Resend Ativa:", !!cfg.resendApiKey ? "Presente" : "Ausente");
-  console.log("  - Remetente Ativo:", `"${cfg.senderName}" <${cfg.senderEmail}>`);
-  console.log("=================================================");
+  console.log("[EMAIL SERVICE]", {
+    provider: cfg.provider,
+    smtpConfigured: !!(cfg.smtpHost && cfg.smtpUser && cfg.smtpPass),
+    resendConfigured: !!cfg.resendApiKey,
+  });
 }
 
 function saveEmailConfig(cfg: EmailConfig) {
-  try {
-    const dataDir = path.join(process.cwd(), "data");
-    if (!fs.existsSync(dataDir)) {
-      fs.mkdirSync(dataDir, { recursive: true });
-    }
-    // Credentials are NEVER written to the versioned JSON file — they live only in
-    // environment variables (protected) or in the in-memory runtime override.
-    if (cfg.smtpPass) runtimeEmailSecrets.smtpPass = cfg.smtpPass;
-    if (cfg.resendApiKey) runtimeEmailSecrets.resendApiKey = cfg.resendApiKey;
-    const sanitized: EmailConfig = { ...cfg, smtpPass: "", resendApiKey: "" };
-    fs.writeFileSync(EMAIL_CONFIG_PATH, JSON.stringify(sanitized, null, 2), "utf-8");
-    logEmailConfigStatus();
-  } catch (e) {
-    console.error("Erro ao salvar email_config.json:", e);
-  }
+  const { smtpPass, resendApiKey, ...settings } = cfg;
+  writePrivateJson(EMAIL_CONFIG_PATH, settings);
+  if (smtpPass) runtimeEmailSecrets.smtpPass = smtpPass;
+  if (resendApiKey) runtimeEmailSecrets.resendApiKey = resendApiKey;
+  logEmailConfigStatus();
 }
 
 // Unified System Email Sender with robust try/catch & fallback logging
@@ -980,7 +922,7 @@ async function sendSystemEmail({
             ? smtpPass.replace(/\s+/g, "")
             : smtpPass;
 
-        console.log(`[EMAIL DISPATCHER] Enviando e-mail via SMTP (${smtpHost}:${smtpPort}) para ${to}...`);
+        console.log("[EMAIL DISPATCHER] Enviando e-mail via SMTP.");
         const transporter = nodemailer.createTransport({
           host: smtpHost,
           port: smtpPort,
@@ -993,7 +935,7 @@ async function sendSystemEmail({
             pass: normalizedPass,
           },
           tls: {
-            rejectUnauthorized: false,
+            rejectUnauthorized: true,
           },
         });
 
@@ -1005,10 +947,10 @@ async function sendSystemEmail({
           text: text || html.replace(/<[^>]*>?/gm, ""),
         });
 
-        console.log(`[EMAIL DISPATCHER] E-mail SMTP enviado com sucesso! MessageId: ${info.messageId}`);
+        console.log("[EMAIL DISPATCHER] E-mail SMTP enviado com sucesso.");
         return { success: true, provider: "smtp" };
       } catch (smtpErr: any) {
-        console.warn("[EMAIL DISPATCHER] Erro no envio via SMTP:", smtpErr?.message || smtpErr);
+        console.warn("[EMAIL DISPATCHER] Falha no envio via SMTP.");
         // If SMTP fails, fallback to Resend if available
       }
     }
@@ -1016,7 +958,7 @@ async function sendSystemEmail({
     // 2. Try Resend API if configured and key is properly formatted
     if (isPlausibleResendKey) {
       try {
-        console.log(`[EMAIL DISPATCHER] Enviando e-mail via Resend API para ${to}...`);
+        console.log("[EMAIL DISPATCHER] Enviando e-mail via Resend.");
         const resendRes = await fetch("https://api.resend.com/emails", {
           method: "POST",
           headers: {
@@ -1034,7 +976,7 @@ async function sendSystemEmail({
 
         if (resendRes.ok) {
           const resData = await resendRes.json().catch(() => ({}));
-          console.log(`[EMAIL DISPATCHER] E-mail Resend enviado com sucesso! ID:`, resData);
+          console.log("[EMAIL DISPATCHER] E-mail Resend enviado com sucesso.");
           return { success: true, provider: "resend" };
         } else {
           let errMessage = `HTTP ${resendRes.status}`;
@@ -1044,7 +986,7 @@ async function sendSystemEmail({
           } catch {
             // Ignore JSON parse error
           }
-          console.warn(`[EMAIL DISPATCHER] Resend API retorno (${resendRes.status}): ${errMessage}`);
+          console.warn(`[EMAIL DISPATCHER] Falha Resend: HTTP ${resendRes.status}.`);
           return {
             success: false,
             provider: "resend",
@@ -1052,7 +994,7 @@ async function sendSystemEmail({
           };
         }
       } catch (resendErr: any) {
-        console.warn("[EMAIL DISPATCHER] Falha na requisição Resend:", resendErr?.message || resendErr);
+        console.warn("[EMAIL DISPATCHER] Falha na requisição Resend.");
         return { success: false, provider: "resend", error: resendErr?.message || "Erro na conexão Resend" };
       }
     }
@@ -1065,7 +1007,7 @@ async function sendSystemEmail({
       error: "Nenhum servidor de e-mail ativo. Configure o SMTP ou Resend no Painel do Administrador ou via variáveis de ambiente.",
     };
   } catch (outerErr: any) {
-    console.error("[EMAIL DISPATCHER] Exceção inesperada no envio de e-mail:", outerErr?.message || outerErr);
+    console.error("[EMAIL DISPATCHER] Exceção inesperada no envio de e-mail.");
     return {
       success: false,
       error: outerErr?.message || "Erro interno no serviço de e-mail.",
@@ -1118,7 +1060,7 @@ const recoveryCodesStore = new Map<string, RecoveryCodeEntry>();
 // ==========================================
 
 // GET /api/auth/state - Get users list and vouchers with no-cache headers directly from PostgreSQL & Memory Store
-app.get("/api/auth/state", async (_req, res) => {
+app.get("/api/auth/state", ...adminRoute, async (_req, res) => {
   try {
     res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
     res.setHeader("Pragma", "no-cache");
@@ -1187,12 +1129,14 @@ app.get("/api/auth/state", async (_req, res) => {
 });
 
 // POST /api/auth/profile - Permanently update user profile (name, avatarUrl) directly in PostgreSQL & Disk
-app.post("/api/auth/profile", async (req, res) => {
+app.post("/api/auth/profile", ...selfRoute, async (req, res) => {
   try {
-    const { userId, email, name, avatarUrl } = req.body;
-    if (!userId && !email) {
-      return res.status(400).json({ error: "Identificador ou e-mail do usuário é obrigatório." });
-    }
+    // Profile updates: each user may only alter their own profile. Identity
+    // comes from the verified Firebase token — never from the request body.
+    const { name, avatarUrl } = req.body;
+    const identity = req.nexoIdentity!;
+    const userId = identity.uid;
+    const email = identity.email ?? "";
 
     let user: any = null;
     const cleanEmail = email ? String(email).toLowerCase().trim() : "";
@@ -1285,84 +1229,6 @@ app.post("/api/auth/login", authRateLimiter, async (req, res) => {
       user = memoryUsers.get(cleanEmail);
     }
 
-    // Special master admin check / auto-creation if missing
-    if (isMasterAdminEmail(cleanEmail)) {
-      if (!user) {
-        const adminHash = await hashPassword(cleanPass || "Duarte@2026");
-        const adminName = "João Vitor da Silva Duarte";
-        const adminId = "master_" + crypto.randomUUID().replace(/-/g, "");
-
-        if (isDatabaseConnected()) {
-          try {
-            const createdAdmin = await prisma.user.create({
-              data: {
-                id: adminId,
-                name: adminName,
-                email: cleanEmail,
-                passwordHash: adminHash,
-                role: "admin",
-                status: "ativo",
-                notes: "Conta mestre proprietária da plataforma",
-                lastLoginAt: new Date(),
-              },
-            });
-            user = createdAdmin;
-          } catch (createErr) {
-            console.warn("[POSTGRES] Erro ao criar master no DB, usando fallback:", createErr);
-          }
-        }
-        
-        if (!user) {
-          user = {
-            id: adminId,
-            name: adminName,
-            email: cleanEmail,
-            passwordHash: adminHash,
-            role: "admin",
-            status: "ativo",
-            notes: "Conta mestre proprietária da plataforma",
-            createdAt: new Date(),
-            lastLoginAt: new Date(),
-          };
-        }
-        memoryUsers.set(cleanEmail, user);
-        saveUsersToDisk();
-
-        return res.json({
-          success: true,
-          user: formatUserResponse(user, "email"),
-        });
-      }
-
-      // Validate master password
-      const isMasterPassValid = await verifyPassword(cleanPass, user.passwordHash);
-
-      if (!isMasterPassValid) {
-        return res.status(401).json({ error: "Senha de administrador incorreta." });
-      }
-
-      user.role = "admin";
-      user.status = "ativo";
-      user.lastLoginAt = new Date();
-
-      if (isDatabaseConnected()) {
-        try {
-          user = await prisma.user.update({
-            where: { id: user.id },
-            data: { role: "admin", status: "ativo", lastLoginAt: new Date() },
-          });
-        } catch {}
-      }
-      
-      memoryUsers.set(cleanEmail, user);
-      saveUsersToDisk();
-
-      return res.json({
-        success: true,
-        user: formatUserResponse(user, "email"),
-      });
-    }
-
     if (!user) {
       return res.status(401).json({
         error:
@@ -1421,12 +1287,16 @@ app.post("/api/auth/login", authRateLimiter, async (req, res) => {
   }
 });
 
-// POST /api/user-plans/sync - Sync study plans
-app.post("/api/user-plans/sync", async (req, res) => {
+// POST /api/user-plans/sync - Sync study plans (owner-scoped)
+app.post("/api/user-plans/sync", ...selfRoute, async (req, res) => {
   try {
-    const { userId, plan } = req.body;
-    if (!userId || !plan || !plan.id) {
-      return res.status(400).json({ error: "userId e plan são obrigatórios." });
+    const { plan } = req.body;
+    // Ownership: plans are synced under the authenticated identity. The
+    // client-sent userId is validated by requireSelfAccess but never trusted.
+    const userId = req.nexoIdentity!.uid;
+    const identityEmail = req.nexoIdentity!.email ?? "";
+    if (!plan || !plan.id) {
+      return res.status(400).json({ error: "plan é obrigatório." });
     }
 
     if (isDatabaseConnected()) {
@@ -1434,11 +1304,17 @@ app.post("/api/user-plans/sync", async (req, res) => {
         where: { id: userId },
       });
 
+      // Map to the existing account by verified e-mail when the Firebase UID
+      // does not match any internal id (preserves legacy cuid-keyed accounts).
+      if (!dbUser && identityEmail) {
+        dbUser = await prisma.user.findUnique({ where: { email: identityEmail } });
+      }
+
       if (!dbUser) {
         dbUser = await prisma.user.create({
           data: {
             id: userId,
-            email: `${userId}@projetofarda.internal`,
+            email: identityEmail || `${userId}@projetofarda.internal`,
             name: "Aluno Farda",
             role: "aluno",
             status: "ativo",
@@ -1553,37 +1429,16 @@ function computeBackupSummary(data: any): DailyBackupSummary {
   };
 }
 
-function pruneOldBackups(userDir: string, maxDays = 30) {
-  try {
-    if (!fs.existsSync(userDir)) return;
-    const files = fs.readdirSync(userDir);
-    const now = Date.now();
-    const maxAgeMs = maxDays * 24 * 60 * 60 * 1000;
-
-    files.forEach((file) => {
-      if (!file.endsWith(".json")) return;
-      const filePath = path.join(userDir, file);
-      try {
-        const stat = fs.statSync(filePath);
-        if (now - stat.mtimeMs > maxAgeMs) {
-          fs.unlinkSync(filePath);
-        }
-      } catch {}
-    });
-  } catch (err) {
-    console.warn("[BACKUP PRUNE] Erro ao limpar backups antigos:", err);
-  }
-}
-
 // POST /api/backups/daily/sync - Create or update daily backup snapshot
-app.post("/api/backups/daily/sync", async (req, res) => {
+app.post("/api/backups/daily/sync", ...selfRoute, async (req, res) => {
   try {
-    const { userId, data, isAuto = true } = req.body;
-    if (!userId || !data) {
-      return res.status(400).json({ error: "userId e data são obrigatórios." });
+    const { data, isAuto = true } = req.body;
+    // Ownership: backups are stored under the authenticated owner's
+    // directory — the client-sent userId is validated but never trusted.
+    if (!data) {
+      return res.status(400).json({ error: "data é obrigatório." });
     }
-
-    const cleanUserId = String(userId).replace(/[^a-zA-Z0-9_-]/g, "");
+    const cleanUserId = req.nexoIdentity!.uid;
     if (!cleanUserId) {
       return res.status(400).json({ error: "ID de usuário inválido." });
     }
@@ -1624,8 +1479,7 @@ app.post("/api/backups/daily/sync", async (req, res) => {
     const latestTodayFile = path.resolve(userBackupDir, `latest_${dateKey}.json`);
     fs.writeFileSync(latestTodayFile, jsonString, "utf-8");
 
-    // Clean up backups older than 30 days for this user
-    pruneOldBackups(userBackupDir, 30);
+    // Retention is handled explicitly by the operator; never delete backups automatically.
 
     const stats = fs.statSync(targetFile);
     const fileSizeKb = Math.round((stats.size / 1024) * 10) / 10;
@@ -1649,14 +1503,10 @@ app.post("/api/backups/daily/sync", async (req, res) => {
 });
 
 // GET /api/backups/daily/list - List available daily backups for user
-app.get("/api/backups/daily/list", (req, res) => {
+app.get("/api/backups/daily/list", ...selfRoute, (req, res) => {
   try {
-    const { userId } = req.query;
-    if (!userId) {
-      return res.status(400).json({ error: "userId é obrigatório." });
-    }
-
-    const cleanUserId = String(userId).replace(/[^a-zA-Z0-9_-]/g, "");
+    // Ownership: only the authenticated owner can list their own backups.
+    const cleanUserId = req.nexoIdentity!.uid;
     const userBackupDir = path.resolve(BACKUPS_ROOT, cleanUserId);
 
     if (!fs.existsSync(userBackupDir)) {
@@ -1706,16 +1556,15 @@ app.get("/api/backups/daily/list", (req, res) => {
 });
 
 // GET /api/backups/daily/get/:backupId - Get single backup data for inspection or restore
-app.get("/api/backups/daily/get/:backupId", (req, res) => {
+app.get("/api/backups/daily/get/:backupId", ...selfRoute, (req, res) => {
   try {
     const { backupId } = req.params;
-    const { userId } = req.query;
-
-    if (!backupId || !userId) {
-      return res.status(400).json({ error: "backupId e userId são obrigatórios." });
+    // Ownership: only the authenticated owner can read their own backups.
+    if (!backupId) {
+      return res.status(400).json({ error: "backupId é obrigatório." });
     }
 
-    const cleanUserId = String(userId).replace(/[^a-zA-Z0-9_-]/g, "");
+    const cleanUserId = req.nexoIdentity!.uid;
     const cleanBackupId = String(backupId).replace(/[^a-zA-Z0-9_-]/g, "");
     const userBackupDir = path.resolve(BACKUPS_ROOT, cleanUserId);
 
@@ -1749,16 +1598,15 @@ app.get("/api/backups/daily/get/:backupId", (req, res) => {
 });
 
 // GET /api/backups/daily/download/:backupId - Download specific backup file
-app.get("/api/backups/daily/download/:backupId", (req, res) => {
+app.get("/api/backups/daily/download/:backupId", ...selfRoute, (req, res) => {
   try {
     const { backupId } = req.params;
-    const { userId } = req.query;
-
-    if (!backupId || !userId) {
-      return res.status(400).json({ error: "backupId e userId são obrigatórios." });
+    // Ownership: only the authenticated owner can download their own backups.
+    if (!backupId) {
+      return res.status(400).json({ error: "backupId é obrigatório." });
     }
 
-    const cleanUserId = String(userId).replace(/[^a-zA-Z0-9_-]/g, "");
+    const cleanUserId = req.nexoIdentity!.uid;
     const cleanBackupId = String(backupId).replace(/[^a-zA-Z0-9_-]/g, "");
     const userBackupDir = path.resolve(BACKUPS_ROOT, cleanUserId);
 
@@ -1790,16 +1638,15 @@ app.get("/api/backups/daily/download/:backupId", (req, res) => {
 });
 
 // DELETE /api/backups/daily/:backupId - Delete a specific backup
-app.delete("/api/backups/daily/:backupId", (req, res) => {
+app.delete("/api/backups/daily/:backupId", ...selfRoute, (req, res) => {
   try {
     const { backupId } = req.params;
-    const { userId } = req.query;
-
-    if (!backupId || !userId) {
-      return res.status(400).json({ error: "backupId e userId são obrigatórios." });
+    // Ownership: only the authenticated owner can delete their own backups.
+    if (!backupId) {
+      return res.status(400).json({ error: "backupId é obrigatório." });
     }
 
-    const cleanUserId = String(userId).replace(/[^a-zA-Z0-9_-]/g, "");
+    const cleanUserId = req.nexoIdentity!.uid;
     const cleanBackupId = String(backupId).replace(/[^a-zA-Z0-9_-]/g, "");
     const userBackupDir = path.resolve(BACKUPS_ROOT, cleanUserId);
 
@@ -1832,12 +1679,13 @@ app.delete("/api/backups/daily/:backupId", (req, res) => {
 // ==========================================
 
 // GET /api/onboarding/state - Get user's onboarding status and progress
-app.get("/api/onboarding/state", async (req, res) => {
+app.get("/api/onboarding/state", ...selfRoute, async (req, res) => {
   try {
-    const { userId, email } = req.query;
-    if (!userId && !email) {
-      return res.status(400).json({ error: "userId ou email é obrigatório." });
-    }
+    // Ownership: onboarding state is resolved from the verified token —
+    // client-sent userId/email are validated but never trusted.
+    const identity = req.nexoIdentity!;
+    const userId = identity.uid;
+    const email = identity.email ?? "";
 
     let user: any = null;
     let hasPlans = false;
@@ -1897,12 +1745,13 @@ app.get("/api/onboarding/state", async (req, res) => {
 });
 
 // POST /api/onboarding/progress - Save partial progress
-app.post("/api/onboarding/progress", async (req, res) => {
+app.post("/api/onboarding/progress", ...selfRoute, async (req, res) => {
   try {
-    const { userId, email, step, onboardingData } = req.body;
-    if (!userId && !email) {
-      return res.status(400).json({ error: "userId ou email é obrigatório." });
-    }
+    // Ownership: resolved from the verified token, never from the request body.
+    const { step, onboardingData } = req.body;
+    const identity = req.nexoIdentity!;
+    const userId = identity.uid;
+    const email = identity.email ?? "";
 
     let user: any = null;
     const cleanEmail = email ? String(email).toLowerCase().trim() : "";
@@ -1957,12 +1806,13 @@ app.post("/api/onboarding/progress", async (req, res) => {
 });
 
 // POST /api/onboarding/complete - Create first study plan and mark onboarding completed
-app.post("/api/onboarding/complete", async (req, res) => {
+app.post("/api/onboarding/complete", ...selfRoute, async (req, res) => {
   try {
-    const { userId, email, onboardingData } = req.body;
-    if (!userId && !email) {
-      return res.status(400).json({ error: "userId ou email é obrigatório." });
-    }
+    // Ownership: resolved from the verified token, never from the request body.
+    const { onboardingData } = req.body;
+    const identity = req.nexoIdentity!;
+    const userId = identity.uid;
+    const email = identity.email ?? "";
 
     if (!onboardingData) {
       return res.status(400).json({ error: "Dados de onboarding são obrigatórios para finalizar." });
@@ -2196,12 +2046,12 @@ app.post("/api/onboarding/complete", async (req, res) => {
 });
 
 // POST /api/onboarding/reset - Reset onboarding for user
-app.post("/api/onboarding/reset", async (req, res) => {
+app.post("/api/onboarding/reset", ...selfRoute, async (req, res) => {
   try {
-    const { userId, email } = req.body;
-    if (!userId && !email) {
-      return res.status(400).json({ error: "userId ou email é obrigatório." });
-    }
+    // Ownership: resolved from the verified token, never from the request body.
+    const identity = req.nexoIdentity!;
+    const userId = identity.uid;
+    const email = identity.email ?? "";
 
     let user: any = null;
     const cleanEmail = email ? String(email).toLowerCase().trim() : "";
@@ -2677,7 +2527,7 @@ app.post("/api/auth/google-auth", authRateLimiter, async (req, res) => {
 });
 
 // Admin Management Endpoints
-app.post("/api/auth/admin/users", async (req, res) => {
+app.post("/api/auth/admin/users", ...adminRoute, async (req, res) => {
   try {
     const { name, email, role, status, password, notes, accessExpiresAt, avatarUrl } = req.body;
     if (!name || !email) {
@@ -2755,7 +2605,7 @@ app.post("/api/auth/admin/users", async (req, res) => {
   }
 });
 
-app.patch("/api/auth/admin/users/:id", async (req, res) => {
+app.patch("/api/auth/admin/users/:id", ...adminRoute, async (req, res) => {
   try {
     const { id } = req.params;
     const updates = req.body;
@@ -2942,10 +2792,10 @@ async function handleUserDelete(req: any, res: any) {
   }
 }
 
-app.delete("/api/auth/admin/users/:id", handleUserDelete);
-app.delete("/api/auth/users/:id", handleUserDelete);
+app.delete("/api/auth/admin/users/:id", ...adminRoute, handleUserDelete);
+app.delete("/api/auth/users/:id", ...adminRoute, handleUserDelete);
 
-app.post("/api/auth/admin/vouchers", async (req, res) => {
+app.post("/api/auth/admin/vouchers", ...adminRoute, async (req, res) => {
   try {
     const { code, role, maxUses, description, expiresAt } = req.body;
     if (!code) {
@@ -3018,7 +2868,7 @@ app.post("/api/auth/admin/vouchers", async (req, res) => {
   }
 });
 
-app.delete("/api/auth/admin/vouchers/:id", async (req, res) => {
+app.delete("/api/auth/admin/vouchers/:id", ...adminRoute, async (req, res) => {
   try {
     const { id } = req.params;
     if (isDatabaseConnected()) {
@@ -3045,7 +2895,7 @@ app.delete("/api/auth/admin/vouchers/:id", async (req, res) => {
 });
 
 // Admin Email Configuration Endpoints
-app.get("/api/auth/admin/email-config", (_req, res) => {
+app.get("/api/auth/admin/email-config", ...adminRoute, (_req, res) => {
   try {
     const config = getEmailConfig();
     // Return sanitized config (do not leak password in plaintext)
@@ -3068,7 +2918,7 @@ app.get("/api/auth/admin/email-config", (_req, res) => {
   }
 });
 
-app.post("/api/auth/admin/email-config", (req, res) => {
+app.post("/api/auth/admin/email-config", ...adminRoute, (req, res) => {
   try {
     const {
       provider,
@@ -3107,7 +2957,7 @@ app.post("/api/auth/admin/email-config", (req, res) => {
   }
 });
 
-app.post("/api/auth/admin/test-email", async (req, res) => {
+app.post("/api/auth/admin/test-email", ...adminRoute, async (req, res) => {
   try {
     const { targetEmail } = req.body;
     if (!targetEmail || typeof targetEmail !== "string") {
@@ -3192,7 +3042,7 @@ app.post("/api/auth/forgot-password", recoveryRateLimiter, async (req, res) => {
 
     // Security: never log the recovery code itself — only its issuance.
     console.log(
-      `[AUTH SEGURANÇA] Código de recuperação gerado para ${cleanEmail} (Válido por 15min)`
+      "[AUTH SEGURANÇA] Código de recuperação emitido (válido por 15min)."
     );
 
     // Dispatch real email via system dispatcher (SMTP or Resend)
@@ -3344,7 +3194,7 @@ app.post("/api/auth/reset-password", authRateLimiter, async (req, res) => {
 });
 
 // AI Endpoint: Verticalize raw syllabus/notice text into structured disciplines and topics
-app.post("/api/ai/verticalize-edital", aiRateLimiter, async (req, res) => {
+app.post("/api/ai/verticalize-edital", aiRateLimiter, ...userRoute, async (req, res) => {
   try {
     const { rawText, contestName, organ } = req.body;
     if (!rawText || typeof rawText !== "string") {
@@ -3456,7 +3306,7 @@ Extraia todas as disciplinas com seus respectivos tópicos e subassuntos detalha
 // ==========================================
 
 // Global Plan Templates Database Setup (Separation of Templates vs UserPlans)
-const TEMPLATES_DB_FILE = path.join(process.cwd(), "data", "planos_db.json");
+const TEMPLATES_DB_FILE = path.join(PRIVATE_DATA_ROOT, "planos_db.json");
 
 interface GlobalPlanTemplate {
   id: string;
@@ -3503,7 +3353,7 @@ interface PlanosDbStructure {
 
 function loadPlanosDb(): PlanosDbStructure {
   try {
-    const dataDir = path.join(process.cwd(), "data");
+    const dataDir = PRIVATE_DATA_ROOT;
     if (!fs.existsSync(dataDir)) {
       fs.mkdirSync(dataDir, { recursive: true });
     }
@@ -3646,7 +3496,8 @@ app.get("/api/catalog/published-editais", async (_req, res) => {
 
 // POST /api/catalog/published-editais - Publica (upsert) um edital completo no catálogo oficial
 // Body: { edital: CatalogEdital, cargos: [{ ..., disciplines: [{ ..., topics: [...] }] }] }
-app.post("/api/catalog/published-editais", async (req, res) => {
+// Publicação no catálogo oficial é uma operação administrativa.
+app.post("/api/catalog/published-editais", ...adminRoute, async (req, res) => {
   try {
     if (!isDatabaseConnected()) {
       return res.status(503).json({ error: "Banco de dados PostgreSQL não conectado." });
@@ -3818,7 +3669,7 @@ app.get("/api/catalog/templates/:idOrSlug", async (req, res) => {
 });
 
 // POST /api/admin/catalog/templates - Create a new official verified template in PostgreSQL
-app.post("/api/admin/catalog/templates", async (req, res) => {
+app.post("/api/admin/catalog/templates", ...adminRoute, async (req, res) => {
   try {
     if (!isDatabaseConnected()) {
       return res.status(503).json({ error: "Banco de dados PostgreSQL não conectado." });
@@ -3900,7 +3751,7 @@ app.post("/api/admin/catalog/templates", async (req, res) => {
 });
 
 // PUT /api/admin/catalog/templates/:id - Update an official template
-app.put("/api/admin/catalog/templates/:id", async (req, res) => {
+app.put("/api/admin/catalog/templates/:id", ...adminRoute, async (req, res) => {
   try {
     if (!isDatabaseConnected()) {
       return res.status(503).json({ error: "Banco de dados PostgreSQL não conectado." });
@@ -3985,7 +3836,7 @@ app.put("/api/admin/catalog/templates/:id", async (req, res) => {
 });
 
 // DELETE /api/admin/catalog/templates/:id - Remove an official template
-app.delete("/api/admin/catalog/templates/:id", async (req, res) => {
+app.delete("/api/admin/catalog/templates/:id", ...adminRoute, async (req, res) => {
   try {
     if (!isDatabaseConnected()) {
       return res.status(503).json({ error: "Banco de dados PostgreSQL não conectado." });
@@ -4012,7 +3863,7 @@ app.get("/api/planos/templates", (_req, res) => {
 });
 
 // POST /api/planos/templates - Save/publish a template into the global catalog
-app.post("/api/planos/templates", (req, res) => {
+app.post("/api/planos/templates", ...adminRoute, (req, res) => {
   try {
     const { title, organ, banca, cargo, year, region, category, examDate, vacanciesCount, sourceFileName, description, disciplines, topics, isOfficial } = req.body;
 
@@ -4061,7 +3912,7 @@ app.post("/api/planos/templates", (req, res) => {
 });
 
 // POST /api/planos/templates/:id/clone - Register a clone action on a template (increment clone count)
-app.post("/api/planos/templates/:id/clone", (req, res) => {
+app.post("/api/planos/templates/:id/clone", ...userRoute, (req, res) => {
   try {
     const { id } = req.params;
     const db = loadPlanosDb();
@@ -4078,7 +3929,7 @@ app.post("/api/planos/templates/:id/clone", (req, res) => {
 });
 
 // POST /api/planos/parse-file - Multi-format extractor (PDF, DOCX/DOC, XLS/XLSX, CSV, TXT)
-app.post("/api/planos/parse-file", async (req, res) => {
+app.post("/api/planos/parse-file", ...userRoute, async (req, res) => {
   try {
     const { fileName, dataBase64, mimeType } = req.body;
     if (!dataBase64) {
@@ -4187,7 +4038,7 @@ app.post("/api/planos/parse-file", async (req, res) => {
 });
 
 // POST /api/planos/generate-from-edital - AI & Heuristic Parser for Automatic Study Plan Creation
-app.post("/api/planos/generate-from-edital", async (req, res) => {
+app.post("/api/planos/generate-from-edital", ...userRoute, async (req, res) => {
   let parseHeuristically = (): any => ({
     planName: "Plano de Estudos",
     organ: "Órgão do Concurso",
@@ -4454,7 +4305,7 @@ Extraia com fidelidade:
 });
 
 // AI Endpoint: Strategic Study Coach & Diagnostic recommendations
-app.post("/api/ai/diagnostics", aiRateLimiter, async (req, res) => {
+app.post("/api/ai/diagnostics", aiRateLimiter, ...userRoute, async (req, res) => {
   try {
     const { stats, weakTopics, totalHours, accuracyRate } = req.body;
     const ai = getGeminiClient();
@@ -4539,7 +4390,7 @@ Forneça um relatório diagnóstico objetivo e prático em português com:
 });
 
 // AI Endpoint: Generate practice questions with feedback
-app.post("/api/ai/generate-questions", aiRateLimiter, async (req, res) => {
+app.post("/api/ai/generate-questions", aiRateLimiter, ...userRoute, async (req, res) => {
   const { discipline = "", topic = "", banca = "Cebraspe/FGV" } = req.body || {};
   try {
     const ai = getGeminiClient();
@@ -4685,6 +4536,9 @@ async function startServer() {
     const vite = await createViteServer({
       server: {
         middlewareMode: true,
+        fs: {
+          deny: [".env", ".env.*", "*.{crt,pem}", "**/.git/**", "**/data/**", `${PRIVATE_DATA_ROOT}/**`],
+        },
         hmr: {
           server: httpServer,
         },
