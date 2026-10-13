@@ -507,7 +507,7 @@ export const EditDisciplineModal: React.FC<EditDisciplineModalProps> = ({
                   topicList.map((item, idx) => (
                     <div
                       key={item.id}
-                      className="flex items-center justify-between gap-2 rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2 text-xs transition hover:bg-white dark:border-zinc-800 dark:bg-zinc-900 dark:hover:bg-zinc-850"
+                      className="flex items-center justify-between gap-2 rounded-xl border border-zinc-800 bg-zinc-900 px-3 py-2 text-xs transition hover:bg-zinc-800"
                     >
                       {/* Left: Reorder + Status Toggle + Topic Name */}
                       <div className="flex items-center gap-2 flex-1 min-w-0">
