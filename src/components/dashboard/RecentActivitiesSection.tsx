@@ -22,7 +22,7 @@ export const RecentActivitiesSection: React.FC<RecentActivitiesSectionProps> = (
             <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#263447] bg-[#111B2D] text-white">
               <History className="h-4 w-4" />
             </div>
-            <h3 className="font-condensed text-[19px] font-bold text-white">
+            <h3 className="font-condensed text-[15px] font-bold text-white">
               HISTÓRICO
             </h3>
           </div>

@@ -204,7 +204,7 @@ export const OfensivaCard: React.FC<OfensivaCardProps> = ({ className = "" }) =>
 
                 {/* Número do dia */}
                 <span
-                  className={`num-condensed my-1.5 text-[18px] sm:text-[19px] font-bold ${
+                  className={`num-condensed my-1.5 text-[18px] sm:text-[15px] font-bold ${
                     day.isStudied
                       ? "text-[#2BBF8A]"
                       : day.isToday

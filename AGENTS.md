@@ -53,3 +53,8 @@
 - Tailwind utilities generated via `@theme inline` (bg-surface, bg-brand, text-muted, border-line, bg-success…). Prefer tokens or `dark:`-paired semantic classes; do NOT add new raw HEX to components.
 - Soft/border pairs for states: `--*-soft` / `--*-border` (e.g. #15382F/#24634F).
 - `src/lib/designSystem.ts` (NEXO_COLORS/DS) is legacy/unused — do not extend it.
+
+## Typography (official scale)
+- Global type scale normalized in `src/index.css` (overrides Tailwind utilities platform-wide): xs 12px, sm 13px, base 14px, lg 16px, xl 18px, 2xl 22px, 3xl 26px.
+- Canonical classes for new components: `.nx-title` (15px bold, card titles), `.nx-subtitle` (13px), `.nx-body` (14px).
+- Page hero (h1) keeps its explicit `text-[32px] sm:text-[36px]` in DashboardView; stat numbers use `num-condensed` sizes — both intentional.

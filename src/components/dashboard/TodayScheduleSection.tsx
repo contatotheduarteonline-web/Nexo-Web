@@ -39,7 +39,7 @@ export const TodayScheduleSection: React.FC<TodayScheduleSectionProps> = ({
           <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#263447] bg-[#111B2D] text-white">
             <BookOpen className="h-4 w-4" />
           </div>
-          <h2 className="font-condensed text-[19px] font-bold text-white">
+          <h2 className="font-condensed text-[15px] font-bold text-white">
             PLANEJAMENTO
           </h2>
         </div>
