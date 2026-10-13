@@ -254,6 +254,20 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
   const [isSaving, setIsSaving] = useState(false);
   const [saveSuccessMessage, setSaveSuccessMessage] = useState<string | null>(null);
 
+  // Cor automática: se a cor escolhida para nova matéria conflitar com o cargo ativo,
+  // troca automaticamente para a próxima cor exclusiva disponível (sem clique do usuário)
+  useEffect(() => {
+    if (!isOpen || !activeCargoId) return;
+    const used = (cargosList.find((c) => c.id === activeCargoId)?.disciplines || []).map(
+      (d) => d.color || "#F4B544"
+    );
+    setNewDiscColor((current) =>
+      used.some((c) => areColorsEqual(c, current))
+        ? getNextAvailableDisciplineColor(used)
+        : current
+    );
+  }, [isOpen, activeCargoId, cargosList]);
+
   // Reset state on open
   useEffect(() => {
     if (isOpen) {
@@ -2550,11 +2564,6 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                   {/* Botão Adicionar Disciplina */}
                   <button
                     type="button"
-                    disabled={Boolean(
-                      activeCargoDisciplines.find((d) =>
-                        areColorsEqual(d.color || "", newDiscColor)
-                      )
-                    )}
                     onClick={handleAddDiscipline}
                     className="rounded-lg bg-[#527DFF] px-3.5 py-1.5 text-xs font-bold text-white hover:bg-[#24634F] disabled:opacity-40 disabled:cursor-not-allowed transition cursor-pointer"
                   >
@@ -2562,33 +2571,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                   </button>
                 </div>
 
-                {/* Aviso se a cor escolhida manualmente já estiver em uso */}
-                {(() => {
-                  const conflict = activeCargoDisciplines.find((d) =>
-                    areColorsEqual(d.color || "", newDiscColor)
-                  );
-                  if (!conflict) return null;
-                  return (
-                    <div className="flex items-center justify-between text-[11px] text-[#F4B544] dark:text-[#F4B544] bg-[#342B1C] dark:bg-[#F4B544]/40 px-2.5 py-1.5 rounded-lg border border-[#725629] dark:border-[#725629]">
-                      <div className="flex items-center gap-1.5 truncate">
-                        <AlertCircle className="h-3.5 w-3.5 shrink-0 text-[#F4B544] dark:text-[#F4B544]" />
-                        <span className="truncate">
-                          Cor em conflito com <strong>{conflict.name}</strong>. Matérias nunca podem repetir cor.
-                        </span>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const used = activeCargoDisciplines.map((d) => d.color || "#F4B544");
-                          setNewDiscColor(getNextAvailableDisciplineColor(used));
-                        }}
-                        className="text-[10px] font-bold text-[#F4B544] dark:text-[#38c9ab] hover:underline shrink-0 ml-2 cursor-pointer"
-                      >
-                        Trocar automática
-                      </button>
-                    </div>
-                  );
-                })()}
+
               </div>
 
               {/* Acordeão de Disciplinas e Tópicos */}
