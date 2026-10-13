@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { BookOpen, Clock, Play, Plus, ArrowUpRight } from "lucide-react";
 
 export interface PlannedBlockItem {
@@ -26,6 +26,8 @@ export const TodayScheduleSection: React.FC<TodayScheduleSectionProps> = ({
   onOpenManualStudy,
   onNavigateToPlanning,
 }) => {
+  const [expandedId, setExpandedId] = useState<string | null>(null);
+
   return (
     <section
       id="section-planejamento-hoje"
@@ -78,15 +80,16 @@ export const TodayScheduleSection: React.FC<TodayScheduleSectionProps> = ({
                 block.targetMinutes > 0 ? Math.round((studied / block.targetMinutes) * 100) : 0
               );
               const color = block.color || "#F4B544";
+              const isExpanded = expandedId === block.id;
 
               return (
                 <div
                   key={block.id}
                   id={`planned-block-${block.id}`}
-                  className={`nx-deep group relative overflow-hidden p-4 pl-5 touch-manipulation ${
-                    idx > 0 ? "nx-deep-hover cursor-pointer hover:border-[#F4B544]/40" : ""
+                  className={`nx-deep group relative overflow-hidden p-4 pl-5 touch-manipulation cursor-pointer nx-deep-hover transition-colors duration-200 ${
+                    isExpanded ? "border-[#F4B544]/40" : "hover:border-[#F4B544]/40"
                   }`}
-                  onClick={idx > 0 ? () => onStartStudy(block.disciplineId, block.targetMinutes) : undefined}
+                  onClick={() => setExpandedId(isExpanded ? null : block.id)}
                 >
                   {/* Indicador vertical da disciplina */}
                   <span
@@ -115,8 +118,12 @@ export const TodayScheduleSection: React.FC<TodayScheduleSectionProps> = ({
                     />
                   </div>
 
-                  {/* Ações: sempre acessíveis em mouse, tablet e celular. */}
-                  <div className="mt-4 flex flex-wrap items-center gap-2.5">
+                  {/* Ações: aparecem ao clicar na linha, como no exemplo. */}
+                  <div
+                    className={`flex flex-wrap items-center gap-2.5 ${
+                      isExpanded ? "mt-4" : "hidden"
+                    }`}
+                  >
 
                     <button
                       type="button"
