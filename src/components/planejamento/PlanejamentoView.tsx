@@ -1,8 +1,9 @@
 import React, { useState, useMemo, useCallback } from "react";
 import { useStudy } from "../../context/StudyContext";
+import { RegistroEstudoModal } from "../revisoes/RegistroEstudoModal";
 import { PlanejamentoWizard } from "./PlanejamentoWizard";
 import { ErrorBoundary } from "../layout/ErrorBoundary";
-import { WeeklyScheduleBlock } from "../../types";
+import { ScheduledReview, WeeklyScheduleBlock } from "../../types";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import {
   Play,
@@ -70,6 +71,9 @@ export const PlanejamentoViewContent: React.FC = () => {
   const [addDay, setAddDay] = useState<"dom" | "seg" | "ter" | "qua" | "qui" | "sex" | "sab">("seg");
   const [addDisciplineId, setAddDisciplineId] = useState<string>("");
   const [addDurationMinutes, setAddDurationMinutes] = useState<number>(60);
+
+  // Review study registration modal
+  const [selectedReview, setSelectedReview] = useState<ScheduledReview | null>(null);
 
   // Quick edit block modal state
   const [editingBlock, setEditingBlock] = useState<WeeklyScheduleBlock | null>(null);
@@ -748,9 +752,12 @@ export const PlanejamentoViewContent: React.FC = () => {
                         <div className="flex-1 space-y-2">
                           {/* Revisão blocks at top */}
                           {dayReviews.slice(0, 2).map((r) => (
-                            <div
+                            <button
                               key={r.id}
-                              className="rounded-xl border border-emerald-300/60 bg-emerald-50 p-2 dark:border-emerald-800/60 dark:bg-emerald-950/40"
+                              type="button"
+                              onClick={() => setSelectedReview(r)}
+                              title="Registrar estudo desta revisão"
+                              className="w-full cursor-pointer rounded-xl border border-emerald-300/60 bg-emerald-50 p-2 text-left transition hover:shadow-md dark:border-emerald-800/60 dark:bg-emerald-950/40"
                             >
                               <div className="flex items-center justify-between">
                                 <span className="text-[9px] font-black uppercase text-emerald-700 dark:text-emerald-300">
@@ -763,7 +770,7 @@ export const PlanejamentoViewContent: React.FC = () => {
                               <p className="mt-1 truncate text-[10px] font-bold text-emerald-900 dark:text-emerald-200">
                                 {r.disciplineName}
                               </p>
-                            </div>
+                            </button>
                           ))}
                           {dayReviews.length > 2 && (
                             <p className="text-center text-[9px] font-bold text-emerald-600 dark:text-emerald-400">
@@ -943,6 +950,15 @@ export const PlanejamentoViewContent: React.FC = () => {
             </form>
           </div>
         </div>
+      )}
+
+      {/* MODAL: REGISTRO DE ESTUDO (revisão selecionada) */}
+      {selectedReview && (
+        <RegistroEstudoModal
+          open
+          review={selectedReview}
+          onClose={() => setSelectedReview(null)}
+        />
       )}
 
       {/* ========================================================================= */}
