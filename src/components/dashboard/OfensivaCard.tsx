@@ -154,11 +154,8 @@ export const OfensivaCard: React.FC<OfensivaCardProps> = ({ className = "" }) =>
           </div>
           <div className="flex items-baseline gap-2.5">
             <h2 className="font-condensed text-[19px] font-bold text-white">
-              Constância
+              CONSTÂNCIA
             </h2>
-            <span className="num-condensed text-[26px] font-bold leading-none text-[#F4B544]">
-              {currentStreak} {currentStreak === 1 ? "dia" : "dias"}
-            </span>
           </div>
         </div>
 
