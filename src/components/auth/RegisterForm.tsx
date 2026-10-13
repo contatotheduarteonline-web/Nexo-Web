@@ -186,18 +186,6 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onGoToLogin }) => {
         </div>
       </form>
 
-      {onGoToLogin && (
-        <p className="mt-8 text-center text-xs text-[#718096]">
-          Já possui uma conta?{" "}
-          <button
-            type="button"
-            onClick={onGoToLogin}
-            className="font-semibold text-[#F4B544] hover:text-[#F4B544] transition-colors cursor-pointer underline-offset-4 hover:underline"
-          >
-            Fazer login
-          </button>
-        </p>
-      )}
     </>
   );
 };

@@ -240,16 +240,6 @@ export const CadastroView: React.FC<CadastroViewProps> = ({ onGoToLogin }) => {
             </button>
           </form>
 
-          <div className="border-t border-zinc-800/80 pt-6 text-center text-xs text-zinc-400">
-            <span>Já possui uma conta? </span>
-            <button
-              type="button"
-              onClick={onGoToLogin}
-              className="font-semibold text-[#F4B544] hover:text-[#F4B544] transition underline-offset-4 hover:underline cursor-pointer"
-            >
-              Fazer login
-            </button>
-          </div>
         </div>
       </div>
     </div>
