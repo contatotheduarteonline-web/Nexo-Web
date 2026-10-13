@@ -83,7 +83,7 @@ export const LembretesView: React.FC = () => {
 
         <button
           onClick={() => setIsAdding(true)}
-          className="flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#F4B544] to-[#F4B544] hover:from-[#D97706] hover:to-[#F4B544] px-4 py-2 text-xs font-bold text-white shadow-md shadow-amber-500/20 transition active:scale-98 cursor-pointer"
+          className="inline-flex items-center gap-1.5 rounded-lg bg-[#2BBF8A] px-4 py-2 text-[13px] font-semibold text-white shadow-xs transition hover:bg-[#25A87A] cursor-pointer"
         >
           <Plus className="h-4 w-4" />
           Novo Lembrete
