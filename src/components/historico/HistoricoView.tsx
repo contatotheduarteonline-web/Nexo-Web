@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect, useRef } from "react";
 import { useStudy } from "../../context/StudyContext";
+import { PlanLogo } from "../common/PlanLogo";
 import { StudyModality, StudySession } from "../../types";
 import { RegistroEstudoModal } from "../revisoes/RegistroEstudoModal";
 import { StudySessionEditModal } from "./StudySessionEditModal";
@@ -8,7 +9,6 @@ import {
   Trash2,
   Clock,
   Filter,
-  Globe,
   ChevronDown,
   X,
   Loader2,
@@ -93,6 +93,8 @@ export const HistoricoView: React.FC = () => {
     activePlan,
     setActivePlanId,
     deleteStudySession,
+    getPlanImageUrl,
+    isPlanImageLoading,
   } = useStudy();
 
   // Filtros
@@ -293,6 +295,13 @@ export const HistoricoView: React.FC = () => {
     }
   };
 
+  const planCustomImageUrl = activePlan ? getPlanImageUrl(activePlan.id) : null;
+  const planHasCustom = Boolean(activePlan && (activePlan.hasCustomImage || activePlan.imageRef));
+  const planIsLoading = planHasCustom && !planCustomImageUrl && activePlan
+    ? isPlanImageLoading(activePlan.id)
+    : false;
+  const planImage = planCustomImageUrl || activePlan?.imageUrl || activeEdital?.imageUrl;
+
   const selectClass =
     "w-full appearance-none rounded-lg border border-[#263447] bg-[#1D2B40] px-3 py-2 pr-8 text-[13px] font-medium text-white outline-none transition focus:border-[#527DFF] focus:ring-1 focus:ring-[#527DFF] cursor-pointer truncate";
 
@@ -322,7 +331,12 @@ export const HistoricoView: React.FC = () => {
               onClick={() => setOpenDropdown(openDropdown === "plan" ? null : "plan")}
               className={outlineBtn}
             >
-              <Globe className="h-4 w-4 text-[#527DFF]" />
+              <PlanLogo
+                imageUrl={planImage}
+                isLoading={planIsLoading}
+                alt={activePlan?.name || "Meu Plano"}
+                className="h-5 w-5"
+              />
               <span className="max-w-[160px] truncate">{activePlan?.name || "Meu Plano"}</span>
               <ChevronDown className="h-3.5 w-3.5 text-[#93A2B7]" />
             </button>

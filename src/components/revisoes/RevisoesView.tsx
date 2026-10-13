@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { useStudy } from "../../context/StudyContext";
+import { PlanLogo } from "../common/PlanLogo";
 import { ScheduledReview, StudySession } from "../../types";
 import { RegistroEstudoModal } from "./RegistroEstudoModal";
 import {
@@ -21,7 +22,6 @@ import {
   Check,
   ChevronDown,
   Filter,
-  Globe,
   CalendarClock,
   Trash2,
   MessageCircle,
@@ -260,7 +260,12 @@ export const RevisoesView: React.FC = () => {
                     </option>
                   ))}
                 </select>
-                <Globe className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#F4B544]" />
+                <PlanLogo
+                  imageUrl={activeEdital?.imageUrl}
+                  alt={activeEdital?.title || "Edital"}
+                  className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2"
+                  fallbackClassName="text-[#F4B544]"
+                />
                 <ChevronDown className="pointer-events-none absolute right-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#F4B544]" />
               </div>
             )}

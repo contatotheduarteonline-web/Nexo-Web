@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from "react";
 import { useStudy } from "../../context/StudyContext";
+import { PlanLogo } from "../common/PlanLogo";
 import { Discipline, Topic } from "../../types";
 import {
   Edit2,
@@ -9,7 +10,6 @@ import {
   Plus,
   Sparkles,
   Search,
-  Globe,
   Sliders,
   CheckCircle2,
   RotateCcw,
@@ -163,7 +163,12 @@ export const EditalView: React.FC = () => {
                   </option>
                 ))}
               </select>
-              <Globe className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#F4B544] pointer-events-none" />
+              <PlanLogo
+                imageUrl={activeEdital?.imageUrl}
+                alt={activeEdital?.title || "Edital"}
+                className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 pointer-events-none"
+                fallbackClassName="text-[#F4B544]"
+              />
               <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#F4B544] pointer-events-none" />
             </div>
           )}
