@@ -15,8 +15,8 @@ import { Header } from "./components/layout/Header";
 import { DashboardView } from "./components/dashboard/DashboardView";
 import { FloatingTimerWidget } from "./components/dashboard/FloatingTimerWidget";
 import { EditalView } from "./components/edital/EditalView";
-import { CronometroModal } from "./components/cronometro/CronometroModal";
 import { RevisoesView } from "./components/revisoes/RevisoesView";
+import { RegistroEstudoModal } from "./components/revisoes/RegistroEstudoModal";
 import { PlanosView } from "./components/planos/PlanosView";
 import { DiagnosticoView } from "./components/diagnostico/DiagnosticoView";
 import { EstatisticasView } from "./components/estatisticas/EstatisticasView";
@@ -33,10 +33,9 @@ import { GlobalWatermark } from "./components/brand/GlobalWatermark";
 import { AiAssistantModal } from "./components/ai/AiAssistantModal";
 import { NewEditalModal } from "./components/modals/NewEditalModal";
 import { NewTopicModal } from "./components/modals/NewTopicModal";
-import { ManualStudyModal } from "./components/modals/ManualStudyModal";
 
 const AuthenticatedApp: React.FC = () => {
-  const { activeTab, setActiveTab, isSidebarCollapsed, setIsSidebarCollapsed } = useStudy();
+  const { activeTab, setActiveTab, isSidebarCollapsed, setIsSidebarCollapsed, timer } = useStudy();
   const { user } = useAuth();
 
   // "Registro de Estudos" is an overlay popup on top of the last visited view.
@@ -114,7 +113,7 @@ const AuthenticatedApp: React.FC = () => {
   };
 
   return (
-    <div className="flex h-screen w-full flex-col overflow-hidden bg-[#E9EAEC] font-sans text-[#172033] antialiased dark:bg-[#0F172A] dark:text-[#F1F5F9] relative">
+    <div className="flex h-screen w-full flex-col overflow-hidden bg-[#E9EAEC] font-sans text-white antialiased dark:bg-[#0B1120] dark:text-[#F5F7FB] relative">
       <GlobalWatermark />
 
       <Header
@@ -131,7 +130,7 @@ const AuthenticatedApp: React.FC = () => {
           setIsCollapsed={setIsSidebarCollapsed}
         />
 
-        <main className="flex-1 overflow-y-auto bg-[#F4F5F7] p-4 md:p-6 lg:p-7 dark:bg-[#11151F]">
+        <main className="flex-1 overflow-y-auto bg-[#F4F5F7] p-4 md:p-6 lg:p-7 dark:bg-[#101827]">
           <div className="mx-auto max-w-7xl">{renderActiveView()}</div>
         </main>
       </div>
@@ -139,8 +138,11 @@ const AuthenticatedApp: React.FC = () => {
       {/* Mantém o relógio flutuante disponível fora da Home também. */}
       {mainTab !== "dashboard" && <FloatingTimerWidget />}
 
-      <CronometroModal
-        isOpen={activeTab === "cronometro"}
+      <RegistroEstudoModal
+        open={activeTab === "cronometro"}
+        fromTimer
+        preselectedDisciplineId={timer.disciplineId || undefined}
+        preselectedTopicId={timer.topicId || undefined}
         onClose={() => setActiveTab(lastMainTab)}
       />
 
@@ -160,8 +162,8 @@ const AuthenticatedApp: React.FC = () => {
         onClose={() => setIsNewTopicOpen(false)}
       />
 
-      <ManualStudyModal
-        isOpen={isManualStudyOpen}
+      <RegistroEstudoModal
+        open={isManualStudyOpen}
         onClose={() => setIsManualStudyOpen(false)}
         preselectedDisciplineId={manualStudyDisciplineId}
         preselectedTopicId={manualStudyTopicId}
@@ -178,7 +180,7 @@ const RootRouter: React.FC = () => {
     return (
       <div className="flex h-screen w-full items-center justify-center bg-[#07090E] text-white">
         <div className="flex flex-col items-center gap-4">
-          <div className="h-10 w-10 animate-spin rounded-full border-4 border-amber-500 border-t-transparent"></div>
+          <div className="h-10 w-10 animate-spin rounded-full border-4 border-[#F4B544] border-t-transparent"></div>
           <p className="text-sm font-medium tracking-wide text-zinc-400">Conectando sessão segura...</p>
         </div>
       </div>

@@ -4,6 +4,8 @@
  * Designed with full client-side fallbacks for static SPA hosting.
  */
 
+import { authFetch } from "../lib/apiClient";
+
 export interface ExtractedTopic {
   name: string;
   subtopics: string[];
@@ -152,7 +154,7 @@ export async function parseFileToText(file: File): Promise<{
   try {
     const base64Data = await fileToBase64(file);
 
-    const response = await fetch("/api/planos/parse-file", {
+    const response = await authFetch("/api/planos/parse-file", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -223,7 +225,7 @@ export async function generatePlanFromEditalText(params: {
   organHint?: string;
 }): Promise<ExtractedPlanResult> {
   try {
-    const response = await fetch("/api/planos/generate-from-edital", {
+    const response = await authFetch("/api/planos/generate-from-edital", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

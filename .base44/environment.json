@@ -42,6 +42,11 @@
       "name": "RESEND_API_KEY",
       "description": "Resend API key for email delivery (alternative to SMTP). Get it from https://resend.com/api-keys. Optional.",
       "requiredAtBoot": false
+    },
+    {
+      "name": "FIREBASE_SERVICE_ACCOUNT",
+      "description": "Full Firebase service-account JSON (private key + client_email) from Firebase Console > Project settings > Service accounts. Optional — token verification works with the projectId alone; only needed for production Admin operations (e.g. token revocation checks). Never commit this file.",
+      "requiredAtBoot": false
     }
   ]
 }

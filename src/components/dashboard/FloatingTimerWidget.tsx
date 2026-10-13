@@ -7,7 +7,7 @@ import { motion } from "motion/react";
  * Botão flutuante do Registro de Estudos.
  *
  * O botão não abre mais um popup intermediário. Ao clicar no relógio,
- * o usuário entra diretamente no CronometroModal em tela cheia.
+ * abre diretamente o modal compacto "Registro de Estudo".
  * Isso evita que o conteúdo completo do registro seja renderizado
  * dentro de uma caixa estreita e cause estouro de cards/textos.
  */
@@ -24,21 +24,21 @@ export const FloatingTimerWidget: React.FC = () => {
         id="floating-clock-btn"
         aria-label="Abrir Registro de Estudos em tela cheia"
         title="Abrir Registro de Estudos em tela cheia"
-        className={`relative flex h-16 w-16 items-center justify-center rounded-2xl sm:rounded-3xl cursor-pointer select-none transition-colors duration-200 border ${
+        className={`relative flex h-12 w-12 items-center justify-center rounded-2xl cursor-pointer select-none transition-colors duration-200 border ${
           timer.isRunning
-            ? "border-emerald-400/40 bg-[#10B981] text-white shadow-[0_10px_28px_-8px_rgba(16,185,129,0.5)]"
-            : "border-[#F3AA2D]/40 bg-[#F3AA2D] text-[#11151F] shadow-[0_10px_28px_-8px_rgba(243,170,45,0.5)] hover:bg-[#D98F20]"
+            ? "border-[#527DFF]/40 bg-[#527DFF] text-white shadow-[0_10px_28px_-8px_rgba(82,125,255,0.5)]"
+            : "border-[#527DFF]/40 bg-[#527DFF] text-white shadow-[0_10px_28px_-8px_rgba(82,125,255,0.5)] hover:bg-[#416CEB]"
         }`}
       >
         <div className="relative flex items-center justify-center">
           {timer.isRunning ? (
-            <Timer className="h-8 w-8 stroke-[2.2]" />
+            <Timer className="h-6 w-6 stroke-[2.2]" />
           ) : (
-            <Clock className="h-8 w-8 stroke-[2.2]" />
+            <Clock className="h-6 w-6 stroke-[2.2]" />
           )}
 
           {timer.elapsedSeconds > 0 && !timer.isRunning && (
-            <span className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-[#11151F] text-[#F3AA2D] text-[9px] font-black shadow-md border border-[#384154]">
+            <span className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-[#101827] text-[#F4B544] text-[9px] font-black shadow-md border border-[#263447]">
               ||
             </span>
           )}

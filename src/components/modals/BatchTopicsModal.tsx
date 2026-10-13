@@ -37,7 +37,7 @@ export const BatchTopicsModal: React.FC<BatchTopicsModalProps> = ({
         {/* Header */}
         <div className="flex items-center justify-between pb-4 border-b border-zinc-100 dark:border-zinc-800">
           <div className="flex items-center gap-3">
-            <div className="rounded-xl bg-[#249D84]/10 p-2.5 text-[#249D84]">
+            <div className="rounded-xl bg-[#2BBF8A]/10 p-2.5 text-[#2BBF8A]">
               <Layers className="h-5 w-5" />
             </div>
             <div>
@@ -70,7 +70,7 @@ export const BatchTopicsModal: React.FC<BatchTopicsModalProps> = ({
               <span
                 className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold transition-all ${
                   validTopics.length > 0
-                    ? "bg-[#249D84]/15 text-[#249D84] dark:bg-[#249D84]/25"
+                    ? "bg-[#2BBF8A]/15 text-[#2BBF8A] dark:bg-[#2BBF8A]/25"
                     : "bg-zinc-100 text-white dark:bg-zinc-800 dark:text-white"
                 }`}
               >
@@ -82,7 +82,7 @@ export const BatchTopicsModal: React.FC<BatchTopicsModalProps> = ({
                 <button
                   type="button"
                   onClick={() => setText("")}
-                  className="text-xs text-white hover:text-red-500 flex items-center gap-1 transition cursor-pointer"
+                  className="text-xs text-white hover:text-[#F16D75] flex items-center gap-1 transition cursor-pointer"
                   title="Limpar texto"
                 >
                   <Trash2 className="h-3 w-3" />
@@ -105,7 +105,7 @@ export const BatchTopicsModal: React.FC<BatchTopicsModalProps> = ({
               "Exemplo:\n1. Interpretação e compreensão de textos\n2. Ortografia oficial e acentuação gráfica\n3. Emprego das classes de palavras\n4. Concordância verbal e nominal\n5. Regência verbal e nominal\n6. Crase"
             }
             rows={13}
-            className="w-full min-h-[280px] sm:min-h-[340px] rounded-xl border border-zinc-200 bg-zinc-50 p-4 text-xs sm:text-sm font-mono leading-relaxed text-zinc-900 focus:border-[#249D84] focus:bg-white focus:outline-hidden dark:border-zinc-850 dark:bg-zinc-950 dark:text-zinc-100 dark:focus:bg-zinc-900 resize-y shadow-inner"
+            className="w-full min-h-[280px] sm:min-h-[340px] rounded-xl border border-zinc-200 bg-zinc-50 p-4 text-xs sm:text-sm font-mono leading-relaxed text-zinc-900 focus:border-[#7DA2FF] focus:bg-white focus:outline-hidden dark:border-zinc-850 dark:bg-zinc-950 dark:text-zinc-100 dark:focus:bg-zinc-900 resize-y shadow-inner"
           />
 
           <div className="flex items-center justify-between text-[11px] text-white">
@@ -131,7 +131,7 @@ export const BatchTopicsModal: React.FC<BatchTopicsModalProps> = ({
             type="button"
             onClick={handleConfirm}
             disabled={validTopics.length === 0}
-            className="flex items-center gap-1.5 rounded-xl bg-[#249D84] px-5 py-2.5 text-xs font-bold text-white hover:bg-[#1f8771] disabled:opacity-50 disabled:pointer-events-none transition shadow-sm cursor-pointer"
+            className="flex items-center gap-1.5 rounded-xl bg-[#527DFF] px-5 py-2.5 text-xs font-bold text-white hover:bg-[#416CEB] disabled:opacity-50 disabled:pointer-events-none transition shadow-sm cursor-pointer"
           >
             <Plus className="h-4 w-4" />
             Adicionar {validTopics.length > 0 ? `${validTopics.length} Tópicos` : "Tópicos"}

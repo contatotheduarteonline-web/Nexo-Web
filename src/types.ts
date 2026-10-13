@@ -431,6 +431,8 @@ export interface StudySession {
   modality: StudyModality;
   questionsDone: number;
   questionsCorrect: number;
+  /** Erros informados diretamente pelo usuário (independente de total/acertos). */
+  questionsWrong?: number;
   notes: string;
   material?: string;
   pagesStart?: number;
@@ -461,7 +463,7 @@ export interface ScheduledReview {
   stage: ReviewInterval;
   intervalDays?: number;
   dueDate: string; // YYYY-MM-DD
-  status?: "Pendente" | "Concluída" | "Atrasada";
+  status?: "Pendente" | "Concluída" | "Atrasada" | "Ignorada";
   completed: boolean;
   completedAt?: string;
   notes?: string;

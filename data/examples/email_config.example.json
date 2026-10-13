@@ -1,0 +1,9 @@
+{
+  "provider": "auto",
+  "smtpHost": "",
+  "smtpPort": 587,
+  "smtpUser": "",
+  "smtpSecure": false,
+  "senderEmail": "",
+  "senderName": "NEXO"
+}

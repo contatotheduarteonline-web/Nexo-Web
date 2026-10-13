@@ -2,6 +2,46 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Utilidades Tailwind geradas a partir da paleta semântica oficial.
+   Uso: bg-surface, bg-surface-elevated, bg-surface-input, bg-brand,
+   text-heading, text-body, text-subtle, text-muted, border-line,
+   border-line-strong, bg-success, bg-error, bg-info, etc. */
+@theme inline {
+  --color-background: var(--background);
+  --color-content: var(--background-deep);
+  --color-surface: var(--surface);
+  --color-surface-elevated: var(--surface-elevated);
+  --color-surface-input: var(--surface-input);
+  --color-surface-hover: var(--surface-hover);
+  --color-surface-selected: var(--surface-selected);
+  --color-surface-deep: var(--surface-deep);
+  --color-brand: var(--primary);
+  --color-brand-hover: var(--primary-hover);
+  --color-brand-pressed: var(--primary-pressed);
+  --color-brand-soft: var(--primary-soft);
+  --color-on-brand: var(--primary-foreground);
+  --color-heading: var(--text-heading);
+  --color-body: var(--text-primary);
+  --color-subtle: var(--text-secondary);
+  --color-muted: var(--text-muted);
+  --color-disabled: var(--text-disabled);
+  --color-link: var(--link);
+  --color-line: var(--border);
+  --color-line-strong: var(--border-strong);
+  --color-line-input: var(--border-input);
+  --color-divider: var(--divider);
+  --color-success: var(--success);
+  --color-success-light: var(--success-light);
+  --color-warning: var(--warning);
+  --color-error: var(--error);
+  --color-info: var(--info);
+  --color-data-acertos: var(--data-acertos);
+  --color-data-erros: var(--data-erros);
+  --color-data-desempenho: var(--data-desempenho);
+  --color-data-metas: var(--data-metas);
+  --color-data-info: var(--data-info);
+}
+
 @theme {
   --font-sans: "Manrope", Arial, sans-serif;
   --font-display: "Manrope", Arial, sans-serif;
@@ -9,30 +49,90 @@
 
 @layer base {
   :root {
-    /* TEMA ÚNICO NEXO — ARDÓSIA + ÂMBAR */
-    --background: #0F172A;          /* ardósia: base principal (fundo, sidebar, navegação) */
-    --surface: #1E293B;              /* ardósia: superfície secundária (cards estruturais) */
-    --surface-secondary: #253349;    /* ardósia: superfícies elevadas */
+    /* ======================================================================
+       NEXO — PALETA SEMÂNTICA OFICIAL (TEMA ÚNICO ESCURO)
+       Azul tecnológico + azul-ardósia + âmbar de destaque.
+       Fonte central de todas as cores da plataforma. Componentes devem
+       referenciar estas variáveis (ou as utilidades Tailwind geradas delas,
+       ex.: bg-surface, text-muted, border-line) em vez de HEX literais.
+       ====================================================================== */
 
-    --primary: #F59E0B;             /* âmbar: destaque principal (botões, links, ativos) */
-    --primary-hover: #D97706;        /* âmbar escuro (hover) */
-    --primary-foreground: #0F172A; /* texto sobre âmbar (contraste) */
+    /* A. Fundos e superfícies */
+    --background: #0B1120;            /* fundo principal da aplicação */
+    --background-deep: #101827;       /* fundo secundário (hero, barras, header) */
+    --surface: #172235;               /* superfície padrão dos cards */
+    --surface-elevated: #1D2B40;      /* modais, menus, popovers */
+    --surface-input: #111B2D;         /* campos, áreas internas, tracks */
+    --surface-input-hover: #182338;   /* hover de áreas internas */
+    --surface-hover: #223149;         /* hover de itens e cards */
+    --surface-selected: #1B3154;      /* item selecionado / ativo */
+    --surface-deep: #0D0F12;          /* superfície imersiva (cronômetro) */
 
-    --secondary: #1C2A40;
+    /* B. Textos */
+    --text-primary: #F5F7FB;          /* leitura principal */
+    --text-heading: #C4CEDB;          /* rótulos e títulos de seção */
+    --text-secondary: #C4CEDB;        /* texto secundário */
+    --text-muted: #93A2B7;            /* texto auxiliar / discreto */
+    --text-disabled: #718096;         /* texto desabilitado */
+    --text-on-brand: #FFFFFF;         /* texto sobre ações azuis */
+    --link: #527DFF;                  /* links prioritários seguem a ação */
 
-    --text-primary: #F1F5F9;        /* leitura confortável sobre ardósia */
-    --text-secondary: #94A3B8;
+    /* C. Marca e ações */
+    --primary: #527DFF;               /* azul tecnológico — ações interativas */
+    --primary-hover: #416CEB;
+    --primary-pressed: #3358C8;
+    --primary-foreground: #FFFFFF;
+    --primary-soft: #1A2A4A;          /* fundo suave da ação */
+    --primary-border: #3558A0;        /* borda de destaque da ação */
+    --focus: #7DA2FF;                 /* indicador de foco */
+    --focus-ring: rgba(125, 162, 255, 0.5);
 
-    --border: #334155;              /* ardósia: elementos secundários */
-
-    --success: #16A37A;
-    --danger: #DC4B4B;
-    --warning: #FBBF24;             /* âmbar: destaque secundário */
-    --accent-blue: #315B8C;
-
-    --brand-amber: #F59E0B;
-    --brand-amber-light: #FEF3C7;
+    /* Âmbar da identidade NEXO — destaque, metas e atenção */
+    --brand-amber: #F4B544;
+    --brand-amber-soft: #342B1C;
+    --brand-amber-border: #725629;
     --brand-amber-dark: #D97706;
+
+    /* D. Bordas e divisórias */
+    --border: #263447;                /* borda padrão */
+    --border-strong: #39475C;         /* borda mais evidente / hover */
+    --border-input: #2A3A52;          /* borda de campos */
+    --divider: #1C2940;               /* divisórias */
+
+    /* E. Estados semânticos */
+    --success: #2BBF8A;               /* operações bem-sucedidas, concluído */
+    --success-soft: #15382F;
+    --success-border: #24634F;
+    --warning: #F4B544;               /* atenção — tom da marca, função distinta */
+    --warning-soft: #342B1C;
+    --warning-border: #725629;
+    --danger: #F16D75;                /* erro / ação destrutiva */
+    --error: #F16D75;                 /* alias de --danger */
+    --danger-soft: #3B2029;
+    --danger-border: #7A3541;
+    --info: #58A6FF;                  /* informação */
+    --info-soft: #192D46;
+    --info-border: #305C88;
+    --neutral-state: #93A2B7;         /* estado neutro */
+    --neutral-soft: #202B3D;
+    --neutral-border: #39475C;
+
+    /* F. Dados e métricas (mesma métrica = mesma cor em todo módulo) */
+    --data-acertos: #2BBF8A;          /* acertos / concluído — sucesso */
+    --data-erros: #F16D75;            /* erros / falha — erro */
+    --data-desempenho: #527DFF;       /* desempenho / progresso — família azul */
+    --data-metas: #F4B544;            /* metas e marcos — âmbar de destaque */
+    --data-info: #58A6FF;             /* métricas informativas — informação */
+    --chart-1: #8B5CF6;               /* séries categóricas de gráficos */
+    --chart-2: #06B6D4;
+    --chart-3: #EC4899;
+    --chart-4: #FF7A1A;
+
+    /* Compatibilidade com nomes legados */
+    --secondary: #101827;
+    --surface-secondary: #1D2B40;
+    --accent-blue: #58A6FF;
+    --brand-amber-light: #FEF3C7;
   }
 
   body {
@@ -111,19 +211,30 @@
   input:focus-visible,
   select:focus-visible,
   textarea:focus-visible {
-    outline: 2px solid rgba(245, 158, 11, 0.5);
+    outline: 2px solid var(--focus-ring);
     outline-offset: 1px;
   }
 
   /* Checkboxes e radios nativos seguem o âmbar */
   input[type="checkbox"],
   input[type="radio"] {
-    accent-color: #F59E0B;
+    accent-color: var(--primary);
+  }
+
+  /* Popup nativo do <select> segue o tema escuro da plataforma */
+  select {
+    color-scheme: dark;
+  }
+
+  select option,
+  select optgroup {
+    background-color: var(--surface-elevated);
+    color: var(--text-primary);
   }
 
   ::selection {
-    background: rgba(245, 158, 11, 0.35);
-    color: #F1F5F9;
+    background: rgba(125, 162, 255, 0.35);
+    color: var(--text-primary);
   }
 }
 
@@ -134,9 +245,9 @@
     box-shadow: 0 1px 2px rgba(2, 6, 23, 0.4), 0 8px 24px -16px rgba(2, 6, 23, 0.5);
   }
 
-  /* Botões âmbar recebem sombra muito sutil */
-  button[class*="bg-[#F59E0B]"] {
-    box-shadow: 0 1px 2px rgba(245, 158, 11, 0.35);
+  /* Botões de ação (fundo da cor primária) recebem sombra muito sutil */
+  button[class*="bg-[#527DFF]"] {
+    box-shadow: 0 1px 2px rgba(19, 36, 82, 0.5);
   }
 }
 
@@ -149,11 +260,11 @@
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #334155;
+  background: var(--border);
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #475569;
+  background: var(--border-strong);
 }
 
 @layer base {
@@ -197,8 +308,8 @@
 
   /* Superfície de card da Home — perceptivelmente mais clara que o fundo #11151F */
   .nx-card {
-    background-color: #252b38;
-    border: 1px solid #384154;
+    background-color: var(--surface-elevated);
+    border: 1px solid var(--border);
     border-radius: 1rem;
     box-shadow:
       0 1px 2px rgba(8, 10, 16, 0.22),
@@ -212,8 +323,8 @@
       transform 200ms ease;
   }
   .nx-card-hover:hover {
-    background-color: #2d3442;
-    border-color: #4a556e;
+    background-color: var(--surface-hover);
+    border-color: var(--border-strong);
     transform: translateY(-1px);
     box-shadow:
       0 2px 4px rgba(8, 10, 16, 0.28),
@@ -222,8 +333,8 @@
 
   /* Área profunda: itens internos, inputs, tracks */
   .nx-deep {
-    background-color: #171b25;
-    border: 1px solid #384154;
+    background-color: var(--surface-input);
+    border: 1px solid var(--border);
     border-radius: 0.75rem;
   }
   .nx-deep-hover {
@@ -232,14 +343,14 @@
       background-color 200ms ease;
   }
   .nx-deep-hover:hover {
-    border-color: #4a556e;
-    background-color: #1b2130;
+    border-color: var(--border-strong);
+    background-color: var(--surface-input-hover);
   }
 
   /* Botão principal âmbar da Home */
   .nx-btn-primary {
-    background-color: #f3aa2d;
-    color: #11151f;
+    background-color: var(--primary);
+    color: var(--primary-foreground);
     border-radius: 0.75rem;
     font-weight: 700;
     transition:
@@ -247,13 +358,13 @@
       transform 150ms ease;
   }
   .nx-btn-primary:hover {
-    background-color: #d98f20;
+    background-color: var(--primary-hover);
   }
   .nx-btn-primary:active {
     transform: scale(0.98);
   }
   .nx-btn-primary:focus-visible {
-    outline: 2px solid #f3aa2d;
+    outline: 2px solid var(--focus);
     outline-offset: 2px;
   }
 }
@@ -358,3 +469,23 @@
   overflow-wrap: anywhere !important;
   text-align: center !important;
 }
+
+/* ============================================================
+   ESCALA TIPOGRÁFICA OFICIAL NEXO (platforma inteira)
+   Normaliza as classes semânticas do Tailwind para uma escala
+   organizada: título de página 26px · título de card 15px ·
+   subtítulo 13px · corpo 14px · apoio 12-13px.
+   Regras fora de layer vencem as utilities do Tailwind v4.
+   ============================================================ */
+.text-xs { font-size: 12px; line-height: 1.4; }
+.text-sm { font-size: 13px; line-height: 1.45; }
+.text-base { font-size: 14px; line-height: 1.5; }
+.text-lg { font-size: 16px; line-height: 1.45; }
+.text-xl { font-size: 18px; line-height: 1.35; }
+.text-2xl { font-size: 22px; line-height: 1.25; }
+.text-3xl { font-size: 26px; line-height: 1.2; }
+
+/* Classes canônicas para novos componentes */
+.nx-title { font-size: 15px; font-weight: 700; line-height: 1.3; letter-spacing: 0.02em; }
+.nx-subtitle { font-size: 13px; font-weight: 500; line-height: 1.45; }
+.nx-body { font-size: 14px; font-weight: 400; line-height: 1.5; }

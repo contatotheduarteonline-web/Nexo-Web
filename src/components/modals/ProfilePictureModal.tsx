@@ -121,11 +121,11 @@ export const ProfilePictureModal: React.FC<ProfilePictureModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs animate-in fade-in duration-200">
-      <div className="relative w-full max-w-lg rounded-3xl border border-slate-200 bg-white p-6 shadow-2xl dark:border-slate-800 dark:bg-[#0F172A] space-y-6 text-slate-900 dark:text-white max-h-[90vh] overflow-y-auto">
+      <div className="relative w-full max-w-lg rounded-3xl border border-slate-200 bg-white p-6 shadow-2xl dark:border-[#263447] dark:bg-[#0B1120] space-y-6 text-[#0B1120] dark:text-white max-h-[90vh] overflow-y-auto">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-slate-100 pb-4 dark:border-slate-800">
+        <div className="flex items-center justify-between border-b border-slate-100 pb-4 dark:border-[#263447]">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#249D84]/10 text-[#249D84] dark:bg-[#249D84]/20">
+            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#2BBF8A]/10 text-[#2BBF8A] dark:bg-[#2BBF8A]/20">
               <Camera className="h-5 w-5" />
             </div>
             <div>
@@ -141,7 +141,7 @@ export const ProfilePictureModal: React.FC<ProfilePictureModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 rounded-xl text-white hover:bg-slate-100 hover:text-white dark:hover:bg-slate-800 dark:hover:text-white transition"
+            className="p-1.5 rounded-xl text-white hover:bg-slate-100 hover:text-white dark:hover:bg-[#172235] dark:hover:text-white transition"
           >
             <X className="h-4 w-4" />
           </button>
@@ -150,7 +150,7 @@ export const ProfilePictureModal: React.FC<ProfilePictureModalProps> = ({
         {/* Current / New Avatar Preview */}
         <div className="flex flex-col items-center justify-center gap-3 text-center">
           <div className="relative group">
-            <div className="relative flex h-24 w-24 sm:h-28 sm:w-28 items-center justify-center rounded-full border-4 border-[#249D84] bg-gradient-to-tr from-[#249D84] to-[#52E3D6] text-3xl sm:text-4xl font-black text-[#0A0D12] shadow-xl overflow-hidden">
+            <div className="relative flex h-24 w-24 sm:h-28 sm:w-28 items-center justify-center rounded-full border-4 border-[#2BBF8A] bg-gradient-to-tr from-[#2BBF8A] to-[#52E3D6] text-3xl sm:text-4xl font-black text-[#0A0D12] shadow-xl overflow-hidden">
               {previewUrl ? (
                 <img
                   src={previewUrl}
@@ -185,7 +185,7 @@ export const ProfilePictureModal: React.FC<ProfilePictureModalProps> = ({
         </div>
 
         {errorMessage && (
-          <div className="rounded-xl bg-red-50 p-3 text-xs font-semibold text-red-600 dark:bg-red-950/40 dark:text-red-400">
+          <div className="rounded-xl bg-[#3B2029] p-3 text-xs font-semibold text-[#F16D75] dark:bg-[#F16D75]/40 dark:text-[#F16D75]">
             {errorMessage}
           </div>
         )}
@@ -198,8 +198,8 @@ export const ProfilePictureModal: React.FC<ProfilePictureModalProps> = ({
           onClick={() => fileInputRef.current?.click()}
           className={`flex flex-col items-center justify-center p-5 rounded-2xl border-2 border-dashed cursor-pointer transition-all ${
             isDragging
-              ? "border-[#249D84] bg-[#249D84]/10"
-              : "border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-[#151D2A]/50 hover:bg-slate-100 dark:hover:bg-[#182130]"
+              ? "border-[#2BBF8A] bg-[#2BBF8A]/10"
+              : "border-slate-200 dark:border-[#263447] bg-slate-50/70 dark:bg-[#151D2A]/50 hover:bg-slate-100 dark:hover:bg-[#182130]"
           }`}
         >
           <input
@@ -209,7 +209,7 @@ export const ProfilePictureModal: React.FC<ProfilePictureModalProps> = ({
             onChange={handleFileChange}
             className="hidden"
           />
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#249D84]/10 text-[#249D84] mb-2">
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#2BBF8A]/10 text-[#2BBF8A] mb-2">
             <Upload className="h-5 w-5" />
           </div>
           <p className="text-xs font-bold text-white dark:text-white">
@@ -233,13 +233,13 @@ export const ProfilePictureModal: React.FC<ProfilePictureModalProps> = ({
                 value={customUrlInput}
                 onChange={(e) => setCustomUrlInput(e.target.value)}
                 placeholder="https://exemplo.com/minha-foto.jpg"
-                className="w-full pl-8 pr-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#151D2A] text-white dark:text-white placeholder:text-white focus:outline-hidden focus:ring-1 focus:ring-[#249D84]"
+                className="w-full pl-8 pr-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-[#263447] bg-slate-50 dark:bg-[#151D2A] text-white dark:text-white placeholder:text-white focus:outline-hidden focus:ring-1 focus:ring-[#7DA2FF]"
               />
             </div>
             <button
               type="submit"
               disabled={!customUrlInput.trim()}
-              className="px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-white dark:text-white disabled:opacity-40 transition"
+              className="px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-100 hover:bg-slate-200 dark:bg-[#172235] dark:hover:bg-[#172235] text-white dark:text-white disabled:opacity-40 transition"
             >
               Aplicar
             </button>
@@ -247,12 +247,12 @@ export const ProfilePictureModal: React.FC<ProfilePictureModalProps> = ({
         </form>
 
         {/* Footer Actions */}
-        <div className="flex items-center justify-between gap-3 pt-3 border-t border-slate-100 dark:border-slate-800">
+        <div className="flex items-center justify-between gap-3 pt-3 border-t border-slate-100 dark:border-[#263447]">
           {user?.avatarUrl ? (
             <button
               type="button"
               onClick={handleRemove}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 transition"
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold text-[#F16D75] hover:bg-[#3B2029] dark:hover:bg-[#F16D75]/30 transition"
             >
               <Trash2 className="h-3.5 w-3.5" />
               Remover Foto
@@ -266,7 +266,7 @@ export const ProfilePictureModal: React.FC<ProfilePictureModalProps> = ({
               type="button"
               disabled={isSaving}
               onClick={onClose}
-              className="px-4 py-2 rounded-xl text-xs font-bold text-white dark:text-white hover:bg-slate-100 dark:hover:bg-slate-800 disabled:opacity-50 transition"
+              className="px-4 py-2 rounded-xl text-xs font-bold text-white dark:text-white hover:bg-slate-100 dark:hover:bg-[#172235] disabled:opacity-50 transition"
             >
               Cancelar
             </button>
@@ -274,7 +274,7 @@ export const ProfilePictureModal: React.FC<ProfilePictureModalProps> = ({
               type="button"
               disabled={isSaving}
               onClick={handleSave}
-              className="flex items-center gap-1.5 px-5 py-2 rounded-xl text-xs font-black text-white bg-gradient-to-r from-[#249D84] to-[#2EC4B6] hover:opacity-95 disabled:opacity-50 transition shadow-sm"
+              className="flex items-center gap-1.5 px-5 py-2 rounded-xl text-xs font-black text-white bg-gradient-to-r from-[#527DFF] to-[#416CEB] hover:opacity-95 disabled:opacity-50 transition shadow-sm"
             >
               {isSaving ? (
                 <span className="flex items-center gap-1.5">

@@ -82,7 +82,7 @@ export const PlanosOverview: React.FC<PlanosOverviewProps> = ({
 
         <button
           onClick={onOpenCreateWizard}
-          className="flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#F59E0B] to-[#FBBF24] hover:from-[#D97706] hover:to-[#F59E0B] px-4 py-2.5 text-xs font-bold text-white shadow-md shadow-amber-500/20 active:scale-98 transition shrink-0 cursor-pointer"
+          className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#527DFF] px-4 py-2.5 text-[13px] font-semibold text-white shadow-xs transition hover:bg-[#416CEB] shrink-0 cursor-pointer"
         >
           <Plus className="h-4 w-4" />
           <span>Criar Novo Plano</span>
@@ -130,15 +130,15 @@ export const PlanosOverview: React.FC<PlanosOverviewProps> = ({
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Buscar por nome, órgão ou cargo..."
-            className="w-full rounded-xl border border-zinc-200 bg-white py-2 pl-9 pr-3.5 text-xs text-zinc-900 placeholder:text-zinc-400 focus:border-[#F59E0B] focus:outline-none dark:border-zinc-800 dark:bg-zinc-900 dark:text-white"
+            className="w-full rounded-xl border border-zinc-200 bg-white py-2 pl-9 pr-3.5 text-xs text-zinc-900 placeholder:text-zinc-400 focus:border-[#7DA2FF] focus:outline-none dark:border-zinc-800 dark:bg-zinc-900 dark:text-white"
           />
         </div>
       </div>
 
       {/* Plans Grid or Empty State */}
       {displayedPlans.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-zinc-200 bg-white p-12 text-center dark:border-zinc-800 dark:bg-[#252B38]">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-500/10 text-[#F59E0B]">
+        <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-zinc-200 bg-white p-12 text-center dark:border-zinc-800 dark:bg-[#1D2B40]">
+          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#527DFF]/10 text-[#F4B544]">
             <Layers className="h-6 w-6" />
           </div>
           <h3 className="mt-3 text-sm font-bold text-white dark:text-white">
@@ -154,7 +154,7 @@ export const PlanosOverview: React.FC<PlanosOverviewProps> = ({
           {activeFilter === "ativos" && (
             <button
               onClick={onOpenCreateWizard}
-              className="mt-4 flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#F59E0B] to-[#FBBF24] hover:from-[#D97706] hover:to-[#F59E0B] px-4 py-2.5 text-xs font-bold text-white shadow-md shadow-amber-500/20 transition cursor-pointer"
+              className="mt-4 flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#F4B544] to-[#F4B544] hover:from-[#D97706] hover:to-[#F4B544] px-4 py-2.5 text-xs font-bold text-white shadow-md shadow-amber-500/20 transition cursor-pointer"
             >
               <Plus className="h-4 w-4" />
               <span>Criar Primeiro Plano</span>
@@ -194,9 +194,9 @@ export const PlanosOverview: React.FC<PlanosOverviewProps> = ({
       {/* Delete Confirmation Modal */}
       {planToDelete && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-xs">
-          <div className="relative w-full max-w-md overflow-hidden rounded-2xl border border-zinc-200 bg-white p-6 shadow-2xl dark:border-zinc-800 dark:bg-[#252B38] space-y-4">
+          <div className="relative w-full max-w-md overflow-hidden rounded-2xl border border-zinc-200 bg-white p-6 shadow-2xl dark:border-zinc-800 dark:bg-[#1D2B40] space-y-4">
             <div className="flex flex-col items-center text-center">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-red-50 text-red-600 dark:bg-red-950/40 dark:text-red-400">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#3B2029] text-[#F16D75] dark:bg-[#F16D75]/40 dark:text-[#F16D75]">
                 <AlertTriangle className="h-6 w-6" />
               </div>
               <h3 className="mt-3 text-sm font-bold text-white dark:text-white">
@@ -220,7 +220,7 @@ export const PlanosOverview: React.FC<PlanosOverviewProps> = ({
                 type="button"
                 onClick={handleConfirmDelete}
                 disabled={isDeleting}
-                className="rounded-xl bg-red-600 px-4 py-2 text-xs font-bold text-white hover:bg-red-700 shadow-xs transition"
+                className="rounded-xl bg-[#F16D75] px-4 py-2 text-xs font-bold text-white hover:bg-[#F16D75] shadow-xs transition"
               >
                 {isDeleting ? "Excluindo..." : "Confirmar Exclusão"}
               </button>

@@ -2,7 +2,7 @@ import React, { useState, useMemo } from "react";
 import { useStudy } from "../../context/StudyContext";
 import { useAuth } from "../../context/AuthContext";
 import { computeGamificationData } from "../../utils/gamificationBadges";
-import { ReviewDetailModal } from "../revisoes/ReviewDetailModal";
+import { RegistroEstudoModal } from "../revisoes/RegistroEstudoModal";
 import { FloatingTimerWidget } from "./FloatingTimerWidget";
 import { ScheduledReview } from "../../types";
 
@@ -15,6 +15,7 @@ import { DisciplinePerformanceSection, UnifiedDisciplineStat } from "./Disciplin
 import { WeeklyGoalsSection, WeeklyChartData } from "./WeeklyGoalsSection";
 import { RecentActivitiesSection } from "./RecentActivitiesSection";
 import { RemindersSection } from "./RemindersSection";
+import { DashboardHeaderActions } from "./DashboardHeaderActions";
 
 interface DashboardViewProps {
   onOpenManualStudy: () => void;
@@ -48,6 +49,8 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy 
     toggleReminder,
     addReminder,
     setTimerConfig,
+    ignoreScheduledReview,
+    launchStudySessionForTopic,
   } = useStudy();
 
   const { user } = useAuth();
@@ -198,12 +201,14 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy 
     return list;
   }, [activePlan, activeEdital, studiedMinutesByDiscipline]);
 
-  // Today's Scheduled Reviews (Clean filtered list)
-  const todayReviews = useMemo(() => {
-    const todayStr = getTodayLocalYmd();
-    return scheduledReviews.filter(
-      (r) => (!activeEdital || r.editalId === activeEdital.id) && !r.completed && r.dueDate <= todayStr
-    );
+  // Pending scheduled reviews for the dashboard card: same source of truth as
+  // the Revisões page (excludes ignored, sorted by dueDate — overdue first).
+  const pendingReviews = useMemo(() => {
+    return scheduledReviews
+      .filter(
+        (r) => (!activeEdital || r.editalId === activeEdital.id) && !r.completed && r.status !== "Ignorada"
+      )
+      .sort((a, b) => a.dueDate.localeCompare(b.dueDate));
   }, [scheduledReviews, activeEdital]);
 
   // Unified Discipline Performance (Combines Questions, Accuracy, Time and Topic Progress)
@@ -232,7 +237,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy 
       return {
         id: disc.id,
         name: disc.name,
-        color: disc.color || "#F59E0B",
+        color: disc.color || "#F4B544",
         qDone,
         qCorrect,
         accuracy,
@@ -325,11 +330,13 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy 
       {/* ========================================================================= */}
       {/* CABEÇALHO                                                                 */}
       {/* ========================================================================= */}
-      <div className="relative pt-1 pb-1">
+      <div className="relative flex flex-col gap-4 pt-1 pb-1 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="font-condensed text-[32px] sm:text-[36px] font-bold leading-tight tracking-[0.01em]">
           <span className="text-white">{greeting}, </span>
           <span className="text-white">{userName}</span>
         </h1>
+
+        <DashboardHeaderActions onOpenManualStudy={onOpenManualStudy} />
       </div>
 
       {/* ========================================================================= */}
@@ -368,8 +375,11 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy 
         />
 
         <ReviewsSection
-          todayReviews={todayReviews}
+          pendingReviews={pendingReviews}
+          studySessions={studySessions}
           onOpenReview={(rev) => setSelectedReviewForModal(rev)}
+          onStartReview={(rev) => launchStudySessionForTopic(rev.disciplineId, rev.topicId, "Revisão")}
+          onIgnoreReview={(rev) => ignoreScheduledReview(rev.id)}
           onNavigateToReviews={() => setActiveTab("revisoes")}
         />
       </div>
@@ -393,6 +403,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy 
         weekOffset={weekOffset}
         onPrevWeek={() => setWeekOffset((prev) => prev - 1)}
         onNextWeek={() => setWeekOffset((prev) => Math.min(0, prev + 1))}
+        onOpenEdit={() => setActiveTab("metas")}
       />
 
       {/* ========================================================================= */}
@@ -413,9 +424,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy 
         />
       </div>
 
-      {/* Review Detail Modal */}
+      {/* Modal compacto "Registro de Estudo" */}
       {selectedReviewForModal && (
-        <ReviewDetailModal
+        <RegistroEstudoModal
+          open
           review={selectedReviewForModal}
           onClose={() => setSelectedReviewForModal(null)}
         />

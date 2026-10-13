@@ -119,47 +119,47 @@ const TIER_STYLES: Record<
     ribbonColor: "from-[#8C4614] to-[#5C2E0B]",
   },
   silver: {
-    outerRing: "border-slate-300/80 dark:border-slate-600/80 bg-gradient-to-b from-slate-200/50 to-slate-400/20 shadow-xs",
+    outerRing: "border-[#39475C]/80 dark:border-[#223149]/80 bg-gradient-to-b from-slate-200/50 to-slate-400/20 shadow-xs",
     innerPlate: "bg-gradient-to-b from-slate-600 to-slate-800",
     iconColor: "text-white",
     glow: "rgba(148,163,184,0.25)",
     accentRim: "border-white/50",
-    ribbonColor: "from-[#64748B] to-[#334155]",
+    ribbonColor: "from-[#64748B] to-[#384154]",
   },
   gold: {
-    outerRing: "border-amber-400/80 bg-gradient-to-b from-amber-200/50 to-amber-500/20 shadow-xs",
+    outerRing: "border-[#F4B544]/80 bg-gradient-to-b from-amber-200/50 to-amber-500/20 shadow-xs",
     innerPlate: "bg-gradient-to-b from-amber-500 to-amber-700",
-    iconColor: "text-amber-50",
+    iconColor: "text-[#F4B544]",
     glow: "rgba(245,158,11,0.3)",
-    accentRim: "border-amber-200/60",
+    accentRim: "border-[#F4B544]/60",
     ribbonColor: "from-[#D4AF37] to-[#78540B]",
   },
   emerald: {
-    outerRing: "border-emerald-400/80 bg-gradient-to-b from-emerald-200/40 to-emerald-500/20 shadow-xs",
+    outerRing: "border-[#2BBF8A]/80 bg-gradient-to-b from-emerald-200/40 to-emerald-500/20 shadow-xs",
     innerPlate: "bg-gradient-to-b from-emerald-500 to-emerald-700",
-    iconColor: "text-emerald-50",
+    iconColor: "text-[#2BBF8A]",
     glow: "rgba(16,185,129,0.3)",
-    accentRim: "border-emerald-200/50",
-    ribbonColor: "from-[#10B981] to-[#064E3B]",
+    accentRim: "border-[#2BBF8A]/50",
+    ribbonColor: "from-[#2BBF8A] to-[#064E3B]",
   },
   sapphire: {
-    outerRing: "border-blue-400/80 bg-gradient-to-b from-blue-200/40 to-blue-500/20 shadow-xs",
+    outerRing: "border-[#58A6FF]/80 bg-gradient-to-b from-blue-200/40 to-blue-500/20 shadow-xs",
     innerPlate: "bg-gradient-to-b from-blue-500 to-blue-700",
-    iconColor: "text-blue-50",
+    iconColor: "text-[#58A6FF]",
     glow: "rgba(59,130,246,0.3)",
-    accentRim: "border-blue-200/50",
-    ribbonColor: "from-[#3B82F6] to-[#1E3A8A]",
+    accentRim: "border-[#58A6FF]/50",
+    ribbonColor: "from-[#58A6FF] to-[#1E3A8A]",
   },
   ruby: {
-    outerRing: "border-rose-400/80 bg-gradient-to-b from-rose-200/40 to-rose-500/20 shadow-xs",
+    outerRing: "border-[#F16D75]/80 bg-gradient-to-b from-rose-200/40 to-rose-500/20 shadow-xs",
     innerPlate: "bg-gradient-to-b from-rose-500 to-rose-700",
-    iconColor: "text-rose-50",
+    iconColor: "text-[#F16D75]",
     glow: "rgba(244,63,94,0.3)",
-    accentRim: "border-rose-200/50",
+    accentRim: "border-[#F16D75]/50",
     ribbonColor: "from-[#F43F5E] to-[#881337]",
   },
   diamond: {
-    outerRing: "border-sky-300/90 bg-gradient-to-b from-sky-100 to-sky-400/30 shadow-xs",
+    outerRing: "border-[#58A6FF]/90 bg-gradient-to-b from-sky-100 to-sky-400/30 shadow-xs",
     innerPlate: "bg-gradient-to-b from-sky-400 to-sky-600",
     iconColor: "text-white",
     glow: "rgba(56,189,248,0.35)",
@@ -167,20 +167,20 @@ const TIER_STYLES: Record<
     ribbonColor: "from-[#38BDF8] to-[#0C4A6E]",
   },
   obsidian: {
-    outerRing: "border-slate-700 bg-gradient-to-b from-slate-700/50 to-slate-900/80 shadow-xs",
+    outerRing: "border-[#172235] bg-gradient-to-b from-slate-700/50 to-slate-900/80 shadow-xs",
     innerPlate: "bg-gradient-to-b from-slate-800 to-slate-950",
-    iconColor: "text-amber-400",
+    iconColor: "text-[#F4B544]",
     glow: "rgba(245,158,11,0.2)",
-    accentRim: "border-amber-500/30",
-    ribbonColor: "from-[#F59E0B] to-[#0F172A]",
+    accentRim: "border-[#F4B544]/30",
+    ribbonColor: "from-[#F4B544] to-[#0B1120]",
   },
   steel: {
-    outerRing: "border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-800/60 shadow-xs",
-    innerPlate: "bg-slate-200 dark:bg-slate-800",
-    iconColor: "text-slate-400",
+    outerRing: "border-slate-200 dark:border-[#263447] bg-slate-100 dark:bg-[#172235]/60 shadow-xs",
+    innerPlate: "bg-slate-200 dark:bg-[#172235]",
+    iconColor: "text-[#93A2B7]",
     glow: "transparent",
-    accentRim: "border-slate-300 dark:border-slate-700",
-    ribbonColor: "from-[#475569] to-[#1E293B]",
+    accentRim: "border-[#39475C] dark:bg-[#172235]",
+    ribbonColor: "from-[#475569] to-[#172235]",
   },
 };
 
@@ -239,12 +239,12 @@ export const MedalInsignia: React.FC<MedalInsigniaProps> = ({
         className={`relative inline-flex items-center justify-center select-none ${sizeConfig.container} ${className}`}
       >
         <div
-          className={`relative flex items-center justify-center w-full h-full rounded-xl border border-slate-200/80 bg-slate-100/90 dark:border-slate-800/80 dark:bg-[#121722] ${sizeConfig.outer}`}
+          className={`relative flex items-center justify-center w-full h-full rounded-xl border border-slate-200/80 bg-slate-100/90 dark:border-[#263447]/80 dark:bg-[#121722] ${sizeConfig.outer}`}
         >
           <div
             className={`flex items-center justify-center w-full h-full rounded-lg bg-slate-200/50 dark:bg-[#0A0E17] ${sizeConfig.inner}`}
           >
-            <Lock className={`${sizeConfig.icon} text-slate-400 dark:text-slate-500 stroke-[1.8]`} />
+            <Lock className={`${sizeConfig.icon} text-[#93A2B7] dark:text-[#718096] stroke-[1.8]`} />
           </div>
         </div>
       </div>

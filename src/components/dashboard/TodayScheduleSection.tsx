@@ -1,5 +1,5 @@
-import React from "react";
-import { BookOpen, Clock, Play, Plus, ArrowUpRight } from "lucide-react";
+import React, { useState } from "react";
+import { Clock, Play, Plus, ArrowUpRight } from "lucide-react";
 
 export interface PlannedBlockItem {
   id: string;
@@ -26,18 +26,17 @@ export const TodayScheduleSection: React.FC<TodayScheduleSectionProps> = ({
   onOpenManualStudy,
   onNavigateToPlanning,
 }) => {
+  const [expandedId, setExpandedId] = useState<string | null>(null);
+
   return (
     <section
       id="section-planejamento-hoje"
       className="nx-card p-5 sm:p-6"
     >
       {/* Cabeçalho Limpo sem textos explicativos redundantes */}
-      <div className="flex items-center justify-between pb-4 border-b border-[#384154]">
+      <div className="flex items-center justify-between pb-4 border-b border-[#263447]">
         <div className="flex items-center gap-2.5">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#384154] bg-[#171B25] text-white">
-            <BookOpen className="h-4 w-4" />
-          </div>
-          <h2 className="font-condensed text-[19px] font-bold text-white">
+          <h2 className="font-condensed text-[15px] font-bold text-white">
             PLANEJAMENTO
           </h2>
         </div>
@@ -46,7 +45,7 @@ export const TodayScheduleSection: React.FC<TodayScheduleSectionProps> = ({
           type="button"
           id="btn-gerenciar-planejamento"
           onClick={onNavigateToPlanning}
-          className="inline-flex items-center gap-1 text-[13px] font-semibold text-[#F3AA2D] hover:text-[#D98F20] hover:underline cursor-pointer transition-colors duration-200"
+          className="inline-flex items-center gap-1 text-[13px] font-semibold text-[#F4B544] hover:text-[#D97706] hover:underline cursor-pointer transition-colors duration-200"
         >
           <span>Gerenciar</span>
           <ArrowUpRight className="h-3.5 w-3.5" />
@@ -77,16 +76,17 @@ export const TodayScheduleSection: React.FC<TodayScheduleSectionProps> = ({
                 100,
                 block.targetMinutes > 0 ? Math.round((studied / block.targetMinutes) * 100) : 0
               );
-              const color = block.color || "#F3AA2D";
+              const color = block.color || "#F4B544";
+              const isExpanded = expandedId === block.id;
 
               return (
                 <div
                   key={block.id}
                   id={`planned-block-${block.id}`}
-                  className={`nx-deep group relative overflow-hidden p-4 pl-5 touch-manipulation ${
-                    idx > 0 ? "nx-deep-hover cursor-pointer hover:border-[#F3AA2D]/40" : ""
+                  className={`nx-deep group relative overflow-hidden p-4 pl-5 touch-manipulation cursor-pointer nx-deep-hover transition-colors duration-200 ${
+                    isExpanded ? "border-[#F4B544]/40" : "hover:border-[#F4B544]/40"
                   }`}
-                  onClick={idx > 0 ? () => onStartStudy(block.disciplineId, block.targetMinutes) : undefined}
+                  onClick={() => setExpandedId(isExpanded ? null : block.id)}
                 >
                   {/* Indicador vertical da disciplina */}
                   <span
@@ -108,15 +108,19 @@ export const TodayScheduleSection: React.FC<TodayScheduleSectionProps> = ({
                   </div>
 
                   {/* Barra de progresso */}
-                  <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-[#171B25]">
+                  <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-[#111B2D]">
                     <div
                       className="h-full rounded-full transition-all duration-500"
                       style={{ width: `${progress}%`, backgroundColor: color }}
                     />
                   </div>
 
-                  {/* Ações: sempre acessíveis em mouse, tablet e celular. */}
-                  <div className="mt-4 flex flex-wrap items-center gap-2.5">
+                  {/* Ações: aparecem ao clicar na linha, como no exemplo. */}
+                  <div
+                    className={`flex flex-wrap items-center gap-2.5 ${
+                      isExpanded ? "mt-4" : "hidden"
+                    }`}
+                  >
 
                     <button
                       type="button"
@@ -127,7 +131,7 @@ export const TodayScheduleSection: React.FC<TodayScheduleSectionProps> = ({
                       }}
                       className="nx-btn-primary inline-flex items-center justify-center gap-1.5 px-4 py-2 text-[13px] cursor-pointer touch-manipulation"
                     >
-                      <Play className="h-3.5 w-3.5 fill-[#11151F]" />
+                      <Play className="h-3.5 w-3.5 fill-[#101827]" />
                       <span>Iniciar Estudo</span>
                     </button>
                     <button
@@ -137,7 +141,7 @@ export const TodayScheduleSection: React.FC<TodayScheduleSectionProps> = ({
                         e.stopPropagation();
                         onOpenManualStudy();
                       }}
-                      className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-[#384154] bg-[#171B25] px-4 py-2 text-[13px] font-semibold text-white hover:border-[#F3AA2D]/40 hover:text-[#F3AA2D] cursor-pointer transition-colors duration-200 touch-manipulation"
+                      className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-[#263447] bg-[#111B2D] px-4 py-2 text-[13px] font-semibold text-white hover:border-[#F4B544]/40 hover:text-[#F4B544] cursor-pointer transition-colors duration-200 touch-manipulation"
                     >
                       <Plus className="h-3.5 w-3.5" />
                       <span>Adicionar Estudo Manualmente</span>

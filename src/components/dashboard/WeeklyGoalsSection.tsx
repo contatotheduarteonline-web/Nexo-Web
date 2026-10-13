@@ -1,5 +1,5 @@
 import React from "react";
-import { Target, ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export interface WeeklyDayData {
   label: string;
@@ -25,6 +25,7 @@ interface WeeklyGoalsSectionProps {
   weekOffset: number;
   onPrevWeek: () => void;
   onNextWeek: () => void;
+  onOpenEdit?: () => void;
 }
 
 export const WeeklyGoalsSection: React.FC<WeeklyGoalsSectionProps> = ({
@@ -34,6 +35,7 @@ export const WeeklyGoalsSection: React.FC<WeeklyGoalsSectionProps> = ({
   weekOffset,
   onPrevWeek,
   onNextWeek,
+  onOpenEdit,
 }) => {
   const hoursNum = parseFloat(weeklyChartData.totalWeekHoursNumber) || 0;
   const timeProgressPercent = Math.min(100, Math.round((hoursNum / Math.max(1, weeklyGoalHours)) * 100));
@@ -45,14 +47,13 @@ export const WeeklyGoalsSection: React.FC<WeeklyGoalsSectionProps> = ({
   return (
     <section
       id="section-meta-semana"
-      className="nx-card p-5 sm:p-6"
+      onClick={onOpenEdit}
+      title={onOpenEdit ? "Clique para editar suas metas" : undefined}
+      className={`nx-card p-5 sm:p-6 ${onOpenEdit ? "cursor-pointer" : ""}`}
     >
-      <div className="flex items-center justify-between pb-4 border-b border-[#384154]">
+      <div className="flex items-center justify-between pb-4 border-b border-[#263447]">
         <div className="flex items-center gap-2.5">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#384154] bg-[#171B25] text-white">
-            <Target className="h-4 w-4" />
-          </div>
-          <h2 className="font-condensed text-[19px] font-bold text-white">
+          <h2 className="font-condensed text-[15px] font-bold text-white">
             META DA SEMANA
           </h2>
         </div>
@@ -61,8 +62,8 @@ export const WeeklyGoalsSection: React.FC<WeeklyGoalsSectionProps> = ({
           <button
             type="button"
             id="btn-semana-anterior"
-            onClick={onPrevWeek}
-            className="rounded p-0.5 hover:bg-[#2D3442] hover:text-white cursor-pointer transition-colors duration-200"
+            onClick={(e) => { e.stopPropagation(); onPrevWeek(); }}
+            className="rounded p-0.5 hover:bg-[#223149] hover:text-white cursor-pointer transition-colors duration-200"
             title="Semana anterior"
           >
             <ChevronLeft className="h-3.5 w-3.5" />
@@ -73,9 +74,9 @@ export const WeeklyGoalsSection: React.FC<WeeklyGoalsSectionProps> = ({
           <button
             type="button"
             id="btn-proxima-semana"
-            onClick={onNextWeek}
+            onClick={(e) => { e.stopPropagation(); onNextWeek(); }}
             disabled={weekOffset >= 0}
-            className="rounded p-0.5 hover:bg-[#2D3442] hover:text-white disabled:opacity-30 cursor-pointer transition-colors duration-200"
+            className="rounded p-0.5 hover:bg-[#223149] hover:text-white disabled:opacity-30 cursor-pointer transition-colors duration-200"
             title="Próxima semana"
           >
             <ChevronRight className="h-3.5 w-3.5" />
@@ -94,14 +95,14 @@ export const WeeklyGoalsSection: React.FC<WeeklyGoalsSectionProps> = ({
                 <span className="num-condensed text-[15px] font-bold text-white">
                   {weeklyChartData.totalWeekHoursFormatted} / {weeklyGoalHours}h
                 </span>
-                <span className="num-condensed text-[12px] font-bold text-[#F3AA2D]">
+                <span className="num-condensed text-[12px] font-bold text-[#F4B544]">
                   ({timeProgressPercent}%)
                 </span>
               </div>
             </div>
-            <div className="h-2 w-full overflow-hidden rounded-full border border-[#384154] bg-[#171B25]">
+            <div className="h-2 w-full overflow-hidden rounded-full border border-[#263447] bg-[#111B2D]">
               <div
-                className="h-full rounded-full bg-[#F3AA2D] transition-all duration-500"
+                className="h-full rounded-full bg-[#F4B544] transition-all duration-500"
                 style={{ width: `${timeProgressPercent}%` }}
               />
             </div>
@@ -120,7 +121,7 @@ export const WeeklyGoalsSection: React.FC<WeeklyGoalsSectionProps> = ({
                 </span>
               </div>
             </div>
-            <div className="h-2 w-full overflow-hidden rounded-full border border-[#384154] bg-[#171B25]">
+            <div className="h-2 w-full overflow-hidden rounded-full border border-[#263447] bg-[#111B2D]">
               <div
                 className="h-full rounded-full bg-[#7C8BA5] transition-all duration-500"
                 style={{ width: `${questionsProgressPercent}%` }}
@@ -141,7 +142,7 @@ export const WeeklyGoalsSection: React.FC<WeeklyGoalsSectionProps> = ({
                   title={`${d.label}: ${d.formatted}`}
                   className={`w-full rounded-t-sm transition-all ${
                     d.hasStudied
-                      ? "bg-[#F3AA2D]"
+                      ? "bg-[#527DFF]"
                       : "bg-[#384154]"
                   }`}
                   style={{ height: `${Math.max(10, d.heightPercent)}%` }}
@@ -149,7 +150,7 @@ export const WeeklyGoalsSection: React.FC<WeeklyGoalsSectionProps> = ({
                 <span
                   className={`text-[10px] font-semibold tracking-tight ${
                     d.hasStudied
-                      ? "text-[#F3AA2D]"
+                      ? "text-[#F4B544]"
                       : "text-white"
                   }`}
                 >

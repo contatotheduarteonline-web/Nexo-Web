@@ -9,7 +9,6 @@ import {
   History,
   TrendingUp,
   Award,
-  Target,
   Bell,
 } from "lucide-react";
 import { ActiveTab } from "../../types";
@@ -65,7 +64,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
       items: [
         { id: "estatisticas", label: "Estatísticas", icon: TrendingUp },
         { id: "simulados", label: "Simulados", icon: Award },
-        { id: "metas", label: "Metas", icon: Target },
       ],
     },
     {
@@ -92,7 +90,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       )}
 
       <aside
-        className={`fixed top-16 bottom-0 left-0 z-40 flex w-[230px] flex-col justify-between border-r border-[#E4E7EC] bg-white shadow-xl transition-transform duration-200 ease-in-out dark:border-[#334155] dark:bg-[#1E293B] select-none ${
+        className={`fixed top-16 bottom-0 left-0 z-40 flex w-[230px] flex-col justify-between border-r border-[#E4E7EC] bg-white shadow-xl transition-transform duration-200 ease-in-out dark:border-[#263447] dark:bg-[#172235] select-none ${
           isCollapsed ? "-translate-x-full pointer-events-none" : "translate-x-0"
         }`}
       >
@@ -102,7 +100,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <div key={section.title} className="space-y-0.5">
               {/* Título de Seção */}
               <div className="px-2.5 pb-1 pt-1.5">
-                <span className="text-[10px] font-semibold tracking-wider text-[#667085] uppercase dark:text-[#94A3B8]">
+                <span className="text-[10px] font-semibold tracking-wider text-[#667085] uppercase dark:text-[#93A2B7]">
                   {section.title}
                 </span>
               </div>
@@ -124,8 +122,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       onClick={() => handleSelectTab(item.id)}
                       className={`relative flex h-9 w-full items-center justify-between rounded-lg px-2.5 transition-colors cursor-pointer ${
                         isSelected
-                          ? "bg-[#FEF3C7] text-[#F59E0B] font-medium dark:bg-[#F59E0B]/10 dark:text-[#F59E0B]"
-                          : "text-[#667085] hover:bg-[#F7F8FA] hover:text-[#172033] dark:text-[#94A3B8] dark:hover:bg-[#161B28] dark:hover:text-white font-normal"
+                          ? "bg-[#FEF3C7] text-[#F4B544] font-medium dark:bg-[#527DFF]/10 dark:text-[#F4B544]"
+                          : "text-[#667085] hover:bg-[#F7F8FA] hover:text-white dark:text-[#93A2B7] dark:hover:bg-[#161B28] dark:hover:text-white font-normal"
                       }`}
                     >
                       <div className="flex items-center gap-2.5 min-w-0">
@@ -133,8 +131,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                           <Icon
                             className={`h-4 w-4 ${
                               isSelected
-                                ? "text-[#F59E0B]"
-                                : "text-[#667085] dark:text-[#94A3B8]"
+                                ? "text-[#F4B544]"
+                                : "text-[#667085] dark:text-[#93A2B7]"
                             }`}
                           />
                         </div>
@@ -144,7 +142,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
                       {/* Badge de Notificação / Revisões */}
                       {item.badge !== undefined && (
-                        <span className="flex h-4 min-w-4 items-center justify-center rounded-full bg-amber-100 px-1 text-[9px] font-semibold text-[#F59E0B] dark:bg-[#F59E0B]/20 dark:text-[#FBBF24]">
+                        <span className="flex h-4 min-w-4 items-center justify-center rounded-full bg-[#342B1C] px-1 text-[9px] font-semibold text-[#F4B544] dark:bg-[#527DFF]/20 dark:text-[#F4B544]">
                           {item.badge}
                         </span>
                       )}

@@ -1,5 +1,5 @@
 import React from "react";
-import { ArrowUpRight, BookOpen } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 
 interface EditalProgressCardProps {
   title?: string;
@@ -29,9 +29,6 @@ export const EditalProgressCard: React.FC<EditalProgressCardProps> = ({
         <span className="text-[12px] font-semibold text-white">
           PROGRESSO NO EDITAL
         </span>
-        <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#384154] bg-[#171B25] text-[#F3AA2D]">
-          <BookOpen className="h-4 w-4" />
-        </div>
       </div>
 
       <div className="mt-4">
@@ -40,10 +37,10 @@ export const EditalProgressCard: React.FC<EditalProgressCardProps> = ({
         </span>
       </div>
 
-      <div className="mt-4 pt-3 border-t border-[#384154]">
-        <div className="h-1.5 w-full overflow-hidden rounded-full bg-[#171B25]">
+      <div className="mt-4 pt-3 border-t border-[#263447]">
+        <div className="h-1.5 w-full overflow-hidden rounded-full bg-[#111B2D]">
           <div
-            className="h-full rounded-full bg-[#F3AA2D] transition-all duration-500"
+            className="h-full rounded-full bg-[#527DFF] transition-all duration-500"
             style={{ width: `${clamped}%` }}
           />
         </div>
@@ -58,7 +55,7 @@ export const EditalProgressCard: React.FC<EditalProgressCardProps> = ({
             type="button"
             id="btn-ver-edital"
             onClick={onNavigateToEdital}
-            className="inline-flex shrink-0 items-center gap-1 font-semibold text-[#F3AA2D] hover:text-[#D98F20] cursor-pointer transition-colors duration-200"
+            className="inline-flex shrink-0 items-center gap-1 font-semibold text-[#F4B544] hover:text-[#D97706] cursor-pointer transition-colors duration-200"
           >
             <span>Ver edital</span>
             <ArrowUpRight className="h-3.5 w-3.5" />

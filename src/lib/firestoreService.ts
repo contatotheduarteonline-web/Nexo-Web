@@ -6,6 +6,8 @@ import {
   getDocs,
   getDoc,
   onSnapshot,
+  query,
+  where,
   writeBatch,
   Unsubscribe,
 } from "firebase/firestore";
@@ -198,33 +200,9 @@ export function subscribeEditaisFromFirestore(
       const list: Edital[] = [];
       snapshot.forEach((docSnap) => {
         const item = docSnap.data() as Edital;
-        const idLower = String(item.id || "").toLowerCase();
-        const titleLower = String(item.title || "").toLowerCase();
-        const organLower = String(item.organ || "").toLowerCase();
-        const cargoLower = String(item.cargo || "").toLowerCase();
-
-        const isArt =
-          idLower.includes("pf") ||
-          idLower.includes("demo") ||
-          idLower.includes("mock") ||
-          idLower.includes("test") ||
-          idLower.includes("manaus") ||
-          idLower.includes("artificial") ||
-          idLower.startsWith("edital-default") ||
-          titleLower.includes("polícia federal") ||
-          titleLower.includes("agente de polícia federal") ||
-          titleLower.includes("escrivão") ||
-          titleLower.includes("papiloscopista") ||
-          organLower.includes("polícia federal") ||
-          cargoLower.includes("polícia federal");
-
-        if (isArt) {
-          deleteDoc(docSnap.ref).catch((err) => {
-            console.warn("[FIRESTORE] Auto-purging artificial edital:", err);
-          });
-        } else {
-          list.push(item);
-        }
+        // Reading a collection must never delete or hide records by title/ID.
+        // Possible orphans are reported separately by reportOrphanEditais.
+        list.push(item);
       });
       // Sort by creation date descending
       list.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
@@ -258,47 +236,36 @@ export async function deleteEditalFromFirestore(userId: string, editalId: string
   }
 }
 
-export async function purgeOrphanOrArtificialEditais(userId: string): Promise<number> {
-  if (!isAuthorizedUser(userId)) return 0;
+/**
+ * AUDITORIA NÃO DESTRUTIVA — substitui a antiga rotina de purge automático.
+ * Nenhuma exclusão é executada na inicialização: editais, planos, sessões,
+ * revisões e simulados do usuário NUNCA são apagados automaticamente.
+ * Apenas lista (console) editais possivelmente órfãos para revisão manual.
+ */
+export async function reportOrphanEditais(userId: string): Promise<void> {
+  if (!isAuthorizedUser(userId)) return;
   try {
     const [plansSnap, editaisSnap] = await Promise.all([
       getDocs(collection(db, "users", userId, "studyPlans")),
       getDocs(collection(db, "users", userId, "editais")),
     ]);
 
-    let count = 0;
-    const hasNoPlans = plansSnap.empty;
+    const planEditalIds = new Set(
+      plansSnap.docs.map((d) => String((d.data() as { editalId?: string }).editalId || ""))
+    );
 
-    for (const docSnap of editaisSnap.docs) {
-      const item = docSnap.data() as Edital;
-      const idLower = String(item.id || "").toLowerCase();
-      const titleLower = String(item.title || "").toLowerCase();
-      const organLower = String(item.organ || "").toLowerCase();
+    const possibleOrphans = editaisSnap.docs
+      .map((d) => d.data() as Edital)
+      .filter((e) => e.id && !planEditalIds.has(String(e.id)));
 
-      const isArt =
-        idLower.includes("pf") ||
-        idLower.includes("demo") ||
-        idLower.includes("mock") ||
-        idLower.includes("test") ||
-        idLower.includes("manaus") ||
-        idLower.includes("artificial") ||
-        idLower.startsWith("edital-default") ||
-        titleLower.includes("polícia federal") ||
-        titleLower.includes("agente") ||
-        titleLower.includes("escrivão") ||
-        titleLower.includes("papiloscopista") ||
-        organLower.includes("polícia federal");
-
-      // If artificial or if user has no study plans (meaning leftover test editais from previous sessions)
-      if (isArt || hasNoPlans) {
-        await deleteDoc(docSnap.ref);
-        count++;
-      }
+    if (possibleOrphans.length > 0) {
+      console.info(
+        "[FIRESTORE AUDIT] Editais possivelmente órfãos (nenhum plano ativo os referencia). Nada foi excluído — revisão manual necessária:",
+        possibleOrphans.map((e) => ({ id: e.id, title: e.title }))
+      );
     }
-    return count;
   } catch (err) {
-    console.warn("[FIRESTORE] Erro ao limpar editais residuais:", err);
-    return 0;
+    console.warn("[FIRESTORE AUDIT] Falha ao auditar editais (sem efeito nos dados):", err);
   }
 }
 
@@ -873,33 +840,9 @@ export async function migrateLocalDataToFirestore(
       }
     }
 
-    // Helper to filter out test/demo/artificial/mock items
-    const isArtificial = (id?: string, name?: string, title?: string): boolean => {
-      const text = `${id || ""} ${name || ""} ${title || ""}`.toLowerCase();
-      return (
-        text.includes("gcm-manaus") ||
-        text.includes("manaus") ||
-        text.includes("mock") ||
-        text.includes("demo") ||
-        text.includes("fake") ||
-        text.includes("teste") ||
-        text.includes("artificial") ||
-        text.includes("polícia federal") ||
-        text.includes("policia federal") ||
-        text.includes("policia-federal") ||
-        text.includes("pf-") ||
-        text.includes("agente de polícia federal") ||
-        text.includes("escrivão") ||
-        text.includes("papiloscopista")
-      );
-    };
-
-    const realEditais = (data.editais || []).filter(
-      (e) => e.id && !isArtificial(e.id, e.title)
-    );
-    const realPlans = (data.studyPlans || []).filter(
-      (p) => p.id && !isArtificial(p.id, p.name)
-    );
+    // Names/IDs cannot tell whether a record is real. Preserve legacy data.
+    const realEditais = (data.editais || []).filter((e) => e.id);
+    const realPlans = (data.studyPlans || []).filter((p) => p.id);
 
     // If there are no legitimate editais or plans to migrate, do not create artificial items
     if (realEditais.length === 0 && realPlans.length === 0) {
@@ -927,28 +870,28 @@ export async function migrateLocalDataToFirestore(
     }
     if (data.studySessions && data.studySessions.length > 0) {
       for (const session of data.studySessions) {
-        if (session.id && !isArtificial(session.id)) {
+        if (session.id) {
           await saveStudySessionToFirestore(userId, session);
         }
       }
     }
     if (data.scheduledReviews && data.scheduledReviews.length > 0) {
       for (const review of data.scheduledReviews) {
-        if (review.id && !isArtificial(review.id)) {
+        if (review.id) {
           await saveScheduledReviewToFirestore(userId, review);
         }
       }
     }
     if (data.reminders && data.reminders.length > 0) {
       for (const rem of data.reminders) {
-        if (rem.id && !isArtificial(rem.id)) {
+        if (rem.id) {
           await saveReminderToFirestore(userId, rem);
         }
       }
     }
     if (data.simulados && data.simulados.length > 0) {
       for (const sim of data.simulados) {
-        if (sim.id && !isArtificial(sim.id)) {
+        if (sim.id) {
           await saveSimuladoToFirestore(userId, sim);
         }
       }

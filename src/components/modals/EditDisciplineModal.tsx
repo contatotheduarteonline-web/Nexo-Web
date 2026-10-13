@@ -56,7 +56,7 @@ export const EditDisciplineModal: React.FC<EditDisciplineModalProps> = ({
   } = useStudy();
 
   const [name, setName] = useState("");
-  const [color, setColor] = useState("#249D84");
+  const [color, setColor] = useState("#2BBF8A");
   const [weight, setWeight] = useState<number>(2);
   const [priority, setPriority] = useState<"alta" | "media" | "baixa">("media");
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
@@ -71,7 +71,7 @@ export const EditDisciplineModal: React.FC<EditDisciplineModalProps> = ({
   useEffect(() => {
     if (discipline && isOpen) {
       setName(discipline.name);
-      setColor(discipline.color || "#249D84");
+      setColor(discipline.color || "#2BBF8A");
       setWeight(discipline.weight || 2);
       setPriority((discipline.priority as any) || "media");
       setIsConfirmingDelete(false);
@@ -247,7 +247,7 @@ export const EditDisciplineModal: React.FC<EditDisciplineModalProps> = ({
         {isConfirmingDelete ? (
           <div className="p-6 space-y-4">
             <div className="flex flex-col items-center text-center">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-red-50 text-red-600 dark:bg-red-950/40 dark:text-red-400">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#3B2029] text-[#F16D75] dark:bg-[#F16D75]/40 dark:text-[#F16D75]">
                 <AlertTriangle className="h-6 w-6" />
               </div>
               <h3 className="mt-3 text-sm font-bold text-white dark:text-white">
@@ -269,7 +269,7 @@ export const EditDisciplineModal: React.FC<EditDisciplineModalProps> = ({
               <button
                 type="button"
                 onClick={handleDelete}
-                className="rounded-xl bg-red-600 px-4 py-2 text-xs font-bold text-white hover:bg-red-700 shadow-xs transition"
+                className="rounded-xl bg-[#F16D75] px-4 py-2 text-xs font-bold text-white hover:bg-[#F16D75] shadow-xs transition"
               >
                 Confirmar Exclusão
               </button>
@@ -288,7 +288,7 @@ export const EditDisciplineModal: React.FC<EditDisciplineModalProps> = ({
                 onChange={(e) => setName(e.target.value)}
                 required
                 placeholder="Ex: Direito Constitucional"
-                className="mt-1.5 w-full rounded-xl border border-zinc-200 bg-zinc-50 px-3.5 py-2.5 text-xs font-bold text-white focus:border-[#249D84] focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"
+                className="mt-1.5 w-full rounded-xl border border-zinc-200 bg-zinc-50 px-3.5 py-2.5 text-xs font-bold text-white focus:border-[#7DA2FF] focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"
               />
             </div>
 
@@ -310,10 +310,10 @@ export const EditDisciplineModal: React.FC<EditDisciplineModalProps> = ({
                           ? activeEdital
                           : editais.find((e) => e.disciplines.some((d) => d.id === discipline.id)) || activeEdital)?.disciplines || []
                       ).filter((d) => d.id !== discipline.id);
-                      const used = otherDisciplines.map((d) => d.color || "#249D84");
+                      const used = otherDisciplines.map((d) => d.color || "#2BBF8A");
                       setColor(getNextAvailableDisciplineColor(used));
                     }}
-                    className="inline-flex items-center gap-1 text-[10px] font-bold text-[#249D84] hover:underline cursor-pointer"
+                    className="inline-flex items-center gap-1 text-[10px] font-bold text-[#2BBF8A] hover:underline cursor-pointer"
                   >
                     <Sparkles className="h-3 w-3" />
                     Sugerir única
@@ -359,7 +359,7 @@ export const EditDisciplineModal: React.FC<EditDisciplineModalProps> = ({
                               isTaken
                                 ? "opacity-25 cursor-not-allowed"
                                 : isSelected
-                                ? "scale-115 ring-2 ring-offset-2 ring-[#249D84] dark:ring-offset-zinc-900 shadow-xs cursor-pointer"
+                                ? "scale-115 ring-2 ring-offset-2 ring-[#2BBF8A] dark:ring-offset-zinc-900 shadow-xs cursor-pointer"
                                 : "hover:scale-110 opacity-90 cursor-pointer"
                             }`}
                           >
@@ -385,8 +385,8 @@ export const EditDisciplineModal: React.FC<EditDisciplineModalProps> = ({
                     </div>
 
                     {colorConflict && (
-                      <div className="mt-2 flex items-center gap-2 p-2 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-[11px] text-amber-800 dark:text-amber-300">
-                        <AlertCircle className="h-4 w-4 shrink-0 text-amber-600 dark:text-amber-400" />
+                      <div className="mt-2 flex items-center gap-2 p-2 rounded-xl bg-[#342B1C] dark:bg-[#F4B544]/40 border border-[#725629] dark:border-[#725629] text-[11px] text-[#F4B544] dark:text-[#F4B544]">
+                        <AlertCircle className="h-4 w-4 shrink-0 text-[#F4B544] dark:text-[#F4B544]" />
                         <span>
                           A cor selecionada já pertence à matéria <strong>{colorConflict.name}</strong>. Matérias nunca podem repetir cor.
                         </span>
@@ -428,7 +428,7 @@ export const EditDisciplineModal: React.FC<EditDisciplineModalProps> = ({
                 <select
                   value={priority}
                   onChange={(e) => setPriority(e.target.value as any)}
-                  className="mt-1.5 w-full rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2.5 text-xs font-bold text-white focus:border-[#249D84] focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"
+                  className="mt-1.5 w-full rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2.5 text-xs font-bold text-white focus:border-[#7DA2FF] focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"
                 >
                   <option value="alta">Alta</option>
                   <option value="media">Média</option>
@@ -445,7 +445,7 @@ export const EditDisciplineModal: React.FC<EditDisciplineModalProps> = ({
                     Tópicos ({topicList.length})
                   </label>
                   {topicList.length > 0 && (
-                    <span className="text-[10px] font-semibold bg-[#249D84]/10 text-[#249D84] px-2 py-0.5 rounded-full">
+                    <span className="text-[10px] font-semibold bg-[#2BBF8A]/10 text-[#2BBF8A] px-2 py-0.5 rounded-full">
                       {completedCount} concluídos ({progressPct}%)
                     </span>
                   )}
@@ -453,7 +453,7 @@ export const EditDisciplineModal: React.FC<EditDisciplineModalProps> = ({
                 <button
                   type="button"
                   onClick={() => setIsAddingTopic(true)}
-                  className="flex items-center gap-1 text-xs font-bold text-[#249D84] hover:underline"
+                  className="flex items-center gap-1 text-xs font-bold text-[#2BBF8A] hover:underline"
                 >
                   <Plus className="h-3.5 w-3.5" />
                   <span>+ Adicionar Tópico</span>
@@ -462,7 +462,7 @@ export const EditDisciplineModal: React.FC<EditDisciplineModalProps> = ({
 
               {/* Add topic inline input */}
               {isAddingTopic && (
-                <div className="mb-3 flex items-center gap-2 rounded-xl border border-[#249D84] bg-[#249D84]/5 p-2 dark:bg-[#249D84]/10">
+                <div className="mb-3 flex items-center gap-2 rounded-xl border border-[#2BBF8A] bg-[#2BBF8A]/5 p-2 dark:bg-[#2BBF8A]/10">
                   <input
                     type="text"
                     value={newTopicInput}
@@ -475,12 +475,12 @@ export const EditDisciplineModal: React.FC<EditDisciplineModalProps> = ({
                     }}
                     placeholder="Nome do novo tópico..."
                     autoFocus
-                    className="flex-1 rounded-lg border border-zinc-200 bg-white px-3 py-1.5 text-xs text-zinc-900 focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"
+                    className="flex-1 rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-1.5 text-xs text-white focus:outline-none"
                   />
                   <button
                     type="button"
                     onClick={handleAddNewTopic}
-                    className="rounded-lg bg-[#249D84] px-3 py-1.5 text-xs font-bold text-white hover:bg-[#1F826D] transition"
+                    className="rounded-lg bg-[#527DFF] px-3 py-1.5 text-xs font-bold text-white hover:bg-[#416CEB] transition"
                   >
                     Adicionar
                   </button>
@@ -507,7 +507,7 @@ export const EditDisciplineModal: React.FC<EditDisciplineModalProps> = ({
                   topicList.map((item, idx) => (
                     <div
                       key={item.id}
-                      className="flex items-center justify-between gap-2 rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2 text-xs transition hover:bg-white dark:border-zinc-800 dark:bg-zinc-900 dark:hover:bg-zinc-850"
+                      className="flex items-center justify-between gap-2 rounded-xl border border-zinc-800 bg-zinc-900 px-3 py-2 text-xs transition hover:bg-zinc-800"
                     >
                       {/* Left: Reorder + Status Toggle + Topic Name */}
                       <div className="flex items-center gap-2 flex-1 min-w-0">
@@ -539,13 +539,13 @@ export const EditDisciplineModal: React.FC<EditDisciplineModalProps> = ({
                           onClick={() => toggleTopicStatus(item.id)}
                           className={`p-1 rounded-md transition ${
                             item.isStudied
-                              ? "text-[#249D84] hover:text-[#1F826D]"
+                              ? "text-[#2BBF8A] hover:text-[#24634F]"
                               : "text-white hover:text-white dark:hover:text-white"
                           }`}
                           title={item.isStudied ? "Marcado como concluído (clique para desmarcar)" : "Marcar como concluído"}
                         >
                           {item.isStudied ? (
-                            <CheckCircle2 className="h-4 w-4 fill-[#249D84]/15" />
+                            <CheckCircle2 className="h-4 w-4 fill-[#2BBF8A]/15" />
                           ) : (
                             <Circle className="h-4 w-4" />
                           )}
@@ -564,12 +564,12 @@ export const EditDisciplineModal: React.FC<EditDisciplineModalProps> = ({
                                 }
                               }}
                               autoFocus
-                              className="w-full rounded-lg border border-[#249D84] bg-white px-2 py-1 text-xs text-zinc-900 dark:bg-zinc-800 dark:text-white"
+                              className="w-full rounded-lg border border-[#2BBF8A] bg-zinc-800 px-2 py-1 text-xs text-white"
                             />
                             <button
                               type="button"
                               onClick={() => saveEditingTopic(item.id)}
-                              className="rounded p-1 text-[#249D84] hover:bg-[#249D84]/10"
+                              className="rounded p-1 text-[#2BBF8A] hover:bg-[#2BBF8A]/10"
                             >
                               <Check className="h-3.5 w-3.5" />
                             </button>
@@ -602,7 +602,7 @@ export const EditDisciplineModal: React.FC<EditDisciplineModalProps> = ({
                         <button
                           type="button"
                           onClick={() => handleRemoveTopic(item.id)}
-                          className="rounded p-1 text-red-500 hover:bg-red-50 hover:text-red-700 dark:hover:bg-red-950/40 transition"
+                          className="rounded p-1 text-[#F16D75] hover:bg-[#3B2029] hover:text-[#F16D75] dark:hover:bg-[#F16D75]/40 transition"
                           title="Excluir tópico"
                         >
                           <Trash2 className="h-3.5 w-3.5" />
@@ -619,7 +619,7 @@ export const EditDisciplineModal: React.FC<EditDisciplineModalProps> = ({
               <button
                 type="button"
                 onClick={() => setIsConfirmingDelete(true)}
-                className="flex items-center gap-1.5 rounded-xl border border-red-200 px-3.5 py-2.5 text-xs font-bold text-red-600 hover:bg-red-50 dark:border-red-900/50 dark:text-red-400 dark:hover:bg-red-950/40 transition"
+                className="flex items-center gap-1.5 rounded-xl border border-[#7A3541] px-3.5 py-2.5 text-xs font-bold text-[#F16D75] hover:bg-[#3B2029] dark:border-[#F16D75]/50 dark:text-[#F16D75] dark:hover:bg-[#F16D75]/40 transition"
               >
                 <Trash2 className="h-3.5 w-3.5" />
                 <span>Excluir Disciplina</span>
@@ -645,7 +645,7 @@ export const EditDisciplineModal: React.FC<EditDisciplineModalProps> = ({
                     );
                     return otherDisciplines.some((d) => areColorsEqual(d.color || "", color));
                   })()}
-                  className="rounded-xl bg-[#249D84] px-6 py-2.5 text-xs font-bold text-white hover:bg-[#1F826D] shadow-xs transition disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                  className="rounded-xl bg-[#527DFF] px-6 py-2.5 text-xs font-bold text-white hover:bg-[#416CEB] shadow-xs transition disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
                 >
                   Salvar Alterações
                 </button>

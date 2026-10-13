@@ -63,11 +63,11 @@ export const StudyStreakCard: React.FC = () => {
   const daysArray = Array.from({ length: streakData.daysInMonth }, (_, i) => i + 1);
 
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs dark:border-slate-800 dark:bg-slate-900">
+    <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs dark:border-[#263447] dark:bg-[#0B1120]">
       <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
         <div className="flex items-center gap-2.5">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-100 text-amber-600 dark:bg-amber-950/60 dark:text-amber-400">
-            <Flame className="h-5 w-5 fill-amber-500 text-amber-500" />
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#342B1C] text-[#F4B544] dark:bg-[#F4B544]/60 dark:text-[#F4B544]">
+            <Flame className="h-5 w-5 fill-amber-500 text-[#F4B544]" />
           </div>
           <div>
             <h3 className="text-sm font-bold text-white dark:text-white">
@@ -81,13 +81,13 @@ export const StudyStreakCard: React.FC = () => {
 
         {/* Quick Streak Badges */}
         <div className="flex flex-wrap items-center gap-2">
-          <div className="flex items-center gap-1.5 rounded-xl border border-amber-200 bg-amber-50/70 px-3 py-1.5 text-xs font-bold text-amber-800 dark:border-amber-900/60 dark:bg-amber-950/40 dark:text-amber-300">
-            <Flame className="h-3.5 w-3.5 fill-amber-500 text-amber-500" />
+          <div className="flex items-center gap-1.5 rounded-xl border border-[#F4B544] bg-[#F4B544]/70 px-3 py-1.5 text-xs font-bold text-[#F4B544] dark:border-[#F4B544]/60 dark:bg-[#F4B544]/40 dark:text-[#F4B544]">
+            <Flame className="h-3.5 w-3.5 fill-amber-500 text-[#F4B544]" />
             <span>{streakData.currentStreak} dias seguidos</span>
           </div>
 
-          <div className="flex items-center gap-1.5 rounded-xl border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-semibold text-white dark:border-slate-700 dark:bg-slate-800 dark:text-white">
-            <Trophy className="h-3.5 w-3.5 text-amber-500" />
+          <div className="flex items-center gap-1.5 rounded-xl border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-semibold text-white dark:bg-[#172235] dark:bg-[#172235] dark:text-white">
+            <Trophy className="h-3.5 w-3.5 text-[#F4B544]" />
             <span>Recorde: {streakData.recordStreak} dias</span>
           </div>
         </div>
@@ -102,16 +102,16 @@ export const StudyStreakCard: React.FC = () => {
             const isToday = day === streakData.todayNum;
             const isFuture = day > streakData.todayNum;
 
-            let bgColor = "bg-slate-50 border-slate-200 text-white dark:bg-slate-800/40 dark:border-slate-800";
+            let bgColor = "bg-slate-50 border-slate-200 text-white dark:bg-[#172235]/40 dark:border-[#263447]";
             if (hasStudied) {
-              bgColor = "bg-emerald-500 border-emerald-600 text-white font-bold shadow-2xs";
+              bgColor = "bg-[#2BBF8A] border-[#2BBF8A] text-white font-bold shadow-2xs";
             } else if (isToday) {
-              bgColor = "border-2 border-dashed border-[#F59E0B] bg-amber-50 text-[#F59E0B] font-bold dark:bg-amber-950/40 dark:text-amber-300";
+              bgColor = "border-2 border-dashed border-[#725629] bg-[#342B1C] text-[#F4B544] font-bold dark:bg-[#F4B544]/40 dark:text-[#F4B544]";
             } else if (isFuture) {
-              bgColor = "bg-slate-50/50 border-slate-100 text-white dark:bg-slate-900/30 dark:border-slate-800/60 dark:text-white";
+              bgColor = "bg-slate-50/50 border-slate-100 text-white dark:bg-[#0B1120]/30 dark:border-[#263447]/60 dark:text-white";
             } else {
               // Past day missed
-              bgColor = "bg-slate-100 border-slate-200 text-white dark:bg-slate-800/70 dark:border-slate-700 dark:text-white";
+              bgColor = "bg-slate-100 border-slate-200 text-white dark:bg-[#172235]/70 dark:bg-[#172235] dark:text-white";
             }
 
             return (
@@ -145,14 +145,14 @@ export const StudyStreakCard: React.FC = () => {
       </div>
 
       {/* Summary Footer */}
-      <div className="mt-4 flex flex-wrap items-center justify-between border-t border-slate-100 pt-3 text-xs text-white dark:border-slate-800 dark:text-white">
+      <div className="mt-4 flex flex-wrap items-center justify-between border-t border-slate-100 pt-3 text-xs text-white dark:border-[#263447] dark:text-white">
         <div className="flex items-center gap-4">
           <span className="flex items-center gap-1.5">
-            <span className="h-2.5 w-2.5 rounded-full bg-emerald-500" />
+            <span className="h-2.5 w-2.5 rounded-full bg-[#2BBF8A]" />
             {streakData.daysWithStudyCount} dias estudados no mês
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="h-2.5 w-2.5 rounded-full bg-slate-300 dark:bg-slate-700" />
+            <span className="h-2.5 w-2.5 rounded-full bg-[#39475C] dark:bg-[#172235]" />
             {streakData.daysWithoutStudyCount} dias sem estudo
           </span>
         </div>

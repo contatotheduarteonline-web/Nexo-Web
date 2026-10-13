@@ -1,5 +1,4 @@
 import React, { useMemo } from "react";
-import { Clock, CheckSquare } from "lucide-react";
 import { useStudy } from "../../context/StudyContext";
 
 interface StatCardsRowProps {
@@ -54,9 +53,6 @@ export const StatCardsRow: React.FC<StatCardsRowProps> = ({ children }) => {
           <span className="text-[12px] font-semibold text-white">
             TEMPO DE ESTUDO
           </span>
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#384154] bg-[#171B25] text-[#F3AA2D]">
-            <Clock className="h-4 w-4" />
-          </div>
         </div>
 
         <div className="mt-4">
@@ -65,14 +61,7 @@ export const StatCardsRow: React.FC<StatCardsRowProps> = ({ children }) => {
           </span>
         </div>
 
-        {registeredSessions.length > 0 && (
-          <div className="mt-4 pt-3 border-t border-[#384154] flex items-center gap-1.5 text-[12px] text-white">
-            <span className="h-2 w-2 rounded-full shrink-0 bg-[#F3AA2D]" />
-            <span className="truncate">
-              {registeredSessions.length} {registeredSessions.length === 1 ? "sessão registrada" : "sessões registradas"}
-            </span>
-          </div>
-        )}
+
       </div>
 
       {/* 2. Desempenho */}
@@ -84,23 +73,20 @@ export const StatCardsRow: React.FC<StatCardsRowProps> = ({ children }) => {
           <span className="text-[12px] font-semibold text-white">
             DESEMPENHO
           </span>
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#384154] bg-[#171B25] text-[#F3AA2D]">
-            <CheckSquare className="h-4 w-4" />
-          </div>
         </div>
 
         <div className="mt-4 space-y-1">
           <div className="flex items-baseline gap-1.5">
-            <span className="num-condensed text-[16px] font-bold leading-none text-[#34D399]">
+            <span className="num-condensed text-[16px] font-bold leading-none text-[#2BBF8A]">
               {totalQuestionsCorrect}
             </span>
-            <span className="text-[13px] font-medium text-[#34D399]">Acertos</span>
+            <span className="text-[13px] font-medium text-[#2BBF8A]">Acertos</span>
           </div>
           <div className="flex items-baseline gap-1.5">
-            <span className="num-condensed text-[16px] font-bold leading-none text-[#D84A4A]">
+            <span className="num-condensed text-[16px] font-bold leading-none text-[#F16D75]">
               {totalQuestionsWrong}
             </span>
-            <span className="text-[13px] font-medium text-[#D84A4A]">Erros</span>
+            <span className="text-[13px] font-medium text-[#F16D75]">Erros</span>
           </div>
         </div>
 

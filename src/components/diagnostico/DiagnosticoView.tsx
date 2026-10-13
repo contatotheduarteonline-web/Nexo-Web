@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useStudy } from "../../context/StudyContext";
+import { authFetch } from "../../lib/apiClient";
 import {
   Target,
   AlertTriangle,
@@ -56,7 +57,7 @@ export const DiagnosticoView: React.FC = () => {
     setIsLoadingAi(true);
     setAiError(null);
     try {
-      const response = await fetch("/api/ai/diagnostics", {
+      const response = await authFetch("/api/ai/diagnostics", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -94,7 +95,7 @@ export const DiagnosticoView: React.FC = () => {
     setUserAnswers({});
     setShowExplanations(false);
     try {
-      const response = await fetch("/api/ai/generate-questions", {
+      const response = await authFetch("/api/ai/generate-questions", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -123,9 +124,9 @@ export const DiagnosticoView: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col justify-between gap-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-xs sm:flex-row sm:items-center dark:border-slate-800 dark:bg-slate-900">
+      <div className="flex flex-col justify-between gap-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-xs sm:flex-row sm:items-center dark:border-[#263447] dark:bg-[#0B1120]">
         <div>
-          <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
+          <h2 className="text-2xl font-bold text-[#0B1120] dark:text-white">
             Diagnóstico Estratégico
           </h2>
         </div>
@@ -133,17 +134,17 @@ export const DiagnosticoView: React.FC = () => {
         <button
           onClick={fetchAiDiagnostics}
           disabled={isLoadingAi}
-          className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#0F172A] to-[#2B353D] border border-amber-500/40 px-4 py-2.5 text-xs font-bold text-[#FBBF24] shadow-xs transition hover:brightness-110 disabled:opacity-50 cursor-pointer"
+          className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#0B1120] to-[#2B353D] border border-[#F4B544]/40 px-4 py-2.5 text-xs font-bold text-[#F4B544] shadow-xs transition hover:brightness-110 disabled:opacity-50 cursor-pointer"
         >
-          <Sparkles className="h-4 w-4 text-[#F59E0B]" />
+          <Sparkles className="h-4 w-4 text-[#F4B544]" />
           {isLoadingAi ? "Analisando com IA..." : "Gerar Diagnóstico com IA"}
         </button>
       </div>
 
       {/* AI Error Notification */}
       {aiError && (
-        <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-4 text-xs text-amber-800 dark:text-amber-300 flex items-start gap-2.5">
-          <AlertCircle className="h-4 w-4 shrink-0 mt-0.5 text-amber-500" />
+        <div className="rounded-xl border border-[#F4B544]/30 bg-[#527DFF]/10 p-4 text-xs text-[#F4B544] dark:text-[#F4B544] flex items-start gap-2.5">
+          <AlertCircle className="h-4 w-4 shrink-0 mt-0.5 text-[#F4B544]" />
           <div>
             <p className="font-bold">{aiError}</p>
             <p className="text-[11px] opacity-90 mt-0.5">
@@ -155,41 +156,41 @@ export const DiagnosticoView: React.FC = () => {
 
       {/* AI Diagnostic Coach Box if loaded */}
       {aiAnalysis && (
-        <div className="rounded-2xl border border-amber-500/30 bg-amber-50/60 p-6 dark:border-amber-500/30 dark:bg-amber-500/10">
-          <div className="flex items-center gap-2 text-[#F59E0B] dark:text-[#FBBF24]">
+        <div className="rounded-2xl border border-[#F4B544]/30 bg-[#F4B544]/60 p-6 dark:border-[#F4B544]/30 dark:bg-[#527DFF]/10">
+          <div className="flex items-center gap-2 text-[#F4B544] dark:text-[#F4B544]">
             <BrainCircuit className="h-5 w-5" />
             <h3 className="text-base font-bold">
               Diagnóstico do Mentor Concurseiro (IA)
             </h3>
           </div>
-          <p className="mt-2 text-xs font-medium leading-relaxed text-[#374151] dark:text-slate-200">
+          <p className="mt-2 text-xs font-medium leading-relaxed text-[#93A2B7] dark:text-[#C4CEDB]">
             {aiAnalysis.summary}
           </p>
 
           <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
-            <div className="rounded-xl bg-white p-4 shadow-xs dark:bg-slate-900">
-              <h4 className="text-xs font-bold text-slate-900 uppercase dark:text-white">
+            <div className="rounded-xl bg-white p-4 shadow-xs dark:bg-[#0B1120]">
+              <h4 className="text-xs font-bold text-[#0B1120] uppercase dark:text-white">
                 🎯 Ações Prioritárias no Ciclo
               </h4>
-              <ul className="mt-2 space-y-1.5 text-xs text-slate-700 dark:text-slate-300">
+              <ul className="mt-2 space-y-1.5 text-xs text-[#172235] dark:text-[#C4CEDB]">
                 {aiAnalysis.keyActions?.map((act: string, idx: number) => (
                   <li key={idx} className="flex items-start gap-2">
-                    <span className="font-bold text-[#F59E0B] dark:text-[#FBBF24]">•</span>
+                    <span className="font-bold text-[#F4B544] dark:text-[#F4B544]">•</span>
                     <span>{act}</span>
                   </li>
                 ))}
               </ul>
             </div>
 
-            <div className="rounded-xl bg-white p-4 shadow-xs dark:bg-slate-900">
-              <h4 className="text-xs font-bold text-slate-900 uppercase dark:text-white">
+            <div className="rounded-xl bg-white p-4 shadow-xs dark:bg-[#0B1120]">
+              <h4 className="text-xs font-bold text-[#0B1120] uppercase dark:text-white">
                 💡 Recomendação Tática
               </h4>
-              <p className="mt-2 text-xs text-slate-700 dark:text-slate-300">
+              <p className="mt-2 text-xs text-[#172235] dark:text-[#C4CEDB]">
                 {aiAnalysis.studyRecommendation}
               </p>
               {aiAnalysis.revisionTip && (
-                <div className="mt-3 rounded-lg bg-amber-50 border border-amber-500/20 p-2.5 text-[11px] font-semibold text-[#F59E0B] dark:bg-amber-950/40 dark:text-[#FBBF24]">
+                <div className="mt-3 rounded-lg bg-[#342B1C] border border-[#F4B544]/20 p-2.5 text-[11px] font-semibold text-[#F4B544] dark:bg-[#F4B544]/40 dark:text-[#F4B544]">
                   🔁 {aiAnalysis.revisionTip}
                 </div>
               )}
@@ -201,11 +202,11 @@ export const DiagnosticoView: React.FC = () => {
       {/* Main Breakdown: Disciplinas Críticas & Conteúdos que Merecem Atenção */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
         {/* Disciplinas Críticas */}
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs lg:col-span-6 dark:border-slate-800 dark:bg-slate-900">
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs lg:col-span-6 dark:border-[#263447] dark:bg-[#0B1120]">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <TrendingDown className="h-5 w-5 text-red-500" />
-              <h3 className="text-base font-bold text-slate-900 dark:text-white">
+              <TrendingDown className="h-5 w-5 text-[#F16D75]" />
+              <h3 className="text-base font-bold text-[#0B1120] dark:text-white">
                 Disciplinas Abaixo da Meta (Aproveitamento &lt; 75%)
               </h3>
             </div>
@@ -213,14 +214,14 @@ export const DiagnosticoView: React.FC = () => {
 
           <div className="mt-4 space-y-3">
             {weakDisciplines.length === 0 ? (
-              <div className="rounded-xl border border-dashed border-slate-200 p-8 text-center text-xs text-slate-400">
+              <div className="rounded-xl border border-dashed border-slate-200 p-8 text-center text-xs text-[#93A2B7]">
                 🎉 Todas as disciplinas estão acima de 75% de acertos!
               </div>
             ) : (
               weakDisciplines.map((d) => (
                 <div
                   key={d.discipline.id}
-                  className="flex items-center justify-between rounded-xl border border-slate-100 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-800/50"
+                  className="flex items-center justify-between rounded-xl border border-slate-100 bg-slate-50 p-4 dark:border-[#263447] dark:bg-[#172235]/50"
                 >
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
@@ -228,22 +229,22 @@ export const DiagnosticoView: React.FC = () => {
                         className="h-3 w-3 rounded-full"
                         style={{ backgroundColor: d.discipline.color }}
                       />
-                      <h4 className="font-bold text-slate-900 dark:text-white">
+                      <h4 className="font-bold text-[#0B1120] dark:text-white">
                         {d.discipline.name}
                       </h4>
                     </div>
-                    <p className="text-xs text-slate-500">
+                    <p className="text-xs text-[#718096]">
                       {d.correctQuestions} acertos em {d.totalQuestions} questões resolvidas
                     </p>
                   </div>
 
                   <div className="flex items-center gap-3">
-                    <span className="rounded-lg bg-red-100 px-2.5 py-1 text-xs font-bold text-red-700 dark:bg-red-950 dark:text-red-300">
+                    <span className="rounded-lg bg-[#3B2029] px-2.5 py-1 text-xs font-bold text-[#F16D75] dark:bg-[#3B2029] dark:text-[#F16D75]">
                       {d.accuracyRate}% Acertos
                     </span>
                     <button
                       onClick={() => launchStudySessionForTopic(d.discipline.id, undefined, "Questões")}
-                      className="rounded-lg bg-[#F59E0B] px-3 py-1.5 text-xs font-bold text-white shadow-xs transition hover:bg-[#D97706]"
+                      className="rounded-lg bg-[#527DFF] px-3 py-1.5 text-xs font-bold text-white shadow-xs transition hover:bg-[#416CEB]"
                     >
                       Treinar
                     </button>
@@ -255,11 +256,11 @@ export const DiagnosticoView: React.FC = () => {
         </div>
 
         {/* Tópicos Específicos Críticos */}
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs lg:col-span-6 dark:border-slate-800 dark:bg-slate-900">
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs lg:col-span-6 dark:border-[#263447] dark:bg-[#0B1120]">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <AlertTriangle className="h-5 w-5 text-amber-500" />
-              <h3 className="text-base font-bold text-slate-900 dark:text-white">
+              <AlertTriangle className="h-5 w-5 text-[#F4B544]" />
+              <h3 className="text-base font-bold text-[#0B1120] dark:text-white">
                 Conteúdos que Merecem Atenção
               </h3>
             </div>
@@ -267,38 +268,38 @@ export const DiagnosticoView: React.FC = () => {
 
           <div className="mt-4 space-y-3">
             {metrics.weakTopics.length === 0 ? (
-              <div className="rounded-xl border border-dashed border-slate-200 p-8 text-center text-xs text-slate-400">
+              <div className="rounded-xl border border-dashed border-slate-200 p-8 text-center text-xs text-[#93A2B7]">
                 ✨ Nenhum tópico com baixo índice de acertos detectado.
               </div>
             ) : (
               metrics.weakTopics.map((item) => (
                 <div
                   key={item.topicId}
-                  className="flex flex-col justify-between gap-3 rounded-xl border border-amber-100 bg-amber-50/30 p-4 sm:flex-row sm:items-center dark:border-amber-900/30 dark:bg-amber-950/20"
+                  className="flex flex-col justify-between gap-3 rounded-xl border border-[#F4B544] bg-[#F4B544]/30 p-4 sm:flex-row sm:items-center dark:border-[#F4B544]/30 dark:bg-[#F4B544]/20"
                 >
                   <div className="space-y-1">
-                    <span className="text-[10px] font-bold text-amber-700 uppercase dark:text-amber-300">
+                    <span className="text-[10px] font-bold text-[#F4B544] uppercase dark:text-[#F4B544]">
                       {item.disciplineName}
                     </span>
-                    <h4 className="text-xs font-bold text-slate-900 dark:text-white">
+                    <h4 className="text-xs font-bold text-[#0B1120] dark:text-white">
                       {item.topicName}
                     </h4>
-                    <p className="text-[11px] text-slate-500">
-                      Taxa de acertos: <strong className="text-red-600">{item.accuracyRate}%</strong> ({item.questionsCorrect}/{item.questionsDone} questões)
+                    <p className="text-[11px] text-[#718096]">
+                      Taxa de acertos: <strong className="text-[#F16D75]">{item.accuracyRate}%</strong> ({item.questionsCorrect}/{item.questionsDone} questões)
                     </p>
                   </div>
 
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => generatePracticeQuiz(item.topicName, item.disciplineName)}
-                      className="flex items-center gap-1 rounded-lg border border-amber-500/40 bg-amber-50 px-2.5 py-1.5 text-xs font-bold text-[#F59E0B] hover:bg-amber-100 dark:bg-amber-950/30 dark:text-[#FBBF24]"
+                      className="flex items-center gap-1 rounded-lg border border-[#F4B544]/40 bg-[#342B1C] px-2.5 py-1.5 text-xs font-bold text-[#F4B544] hover:bg-[#342B1C] dark:bg-[#F4B544]/30 dark:text-[#F4B544]"
                     >
                       <Sparkles className="h-3 w-3" />
                       Quiz IA
                     </button>
                     <button
                       onClick={() => launchStudySessionForTopic(item.disciplineId, item.topicId, "Questões")}
-                      className="flex items-center gap-1 rounded-lg bg-[#F59E0B] px-3 py-1.5 text-xs font-bold text-white shadow-xs transition hover:bg-[#D97706]"
+                      className="flex items-center gap-1 rounded-lg bg-[#527DFF] px-3 py-1.5 text-xs font-bold text-white shadow-xs transition hover:bg-[#416CEB]"
                     >
                       <Play className="h-3 w-3 fill-white" />
                       Estudar
@@ -313,19 +314,19 @@ export const DiagnosticoView: React.FC = () => {
 
       {/* AI Practice Quiz Box if loaded */}
       {practiceQuestions.length > 0 && (
-        <div className="rounded-2xl border border-amber-500/40 bg-white p-6 shadow-xs dark:border-amber-500/30 dark:bg-slate-900">
-          <div className="flex items-center justify-between border-b border-slate-100 pb-4 dark:border-slate-800">
+        <div className="rounded-2xl border border-[#F4B544]/40 bg-white p-6 shadow-xs dark:border-[#F4B544]/30 dark:bg-[#0B1120]">
+          <div className="flex items-center justify-between border-b border-slate-100 pb-4 dark:border-[#263447]">
             <div>
-              <span className="rounded-full bg-amber-50 px-2.5 py-0.5 text-xs font-bold text-[#F59E0B] border border-amber-500/30 dark:bg-amber-950/40 dark:text-[#FBBF24]">
+              <span className="rounded-full bg-[#342B1C] px-2.5 py-0.5 text-xs font-bold text-[#F4B544] border border-[#F4B544]/30 dark:bg-[#F4B544]/40 dark:text-[#F4B544]">
                 Bateria de Fixação Inteligente
               </span>
-              <h3 className="mt-1 text-base font-bold text-slate-900 dark:text-white">
+              <h3 className="mt-1 text-base font-bold text-[#0B1120] dark:text-white">
                 Questões Inéditas: {selectedPracticeTopic}
               </h3>
             </div>
             <button
               onClick={() => setPracticeQuestions([])}
-              className="text-xs font-semibold text-slate-500 hover:text-slate-800"
+              className="text-xs font-semibold text-[#718096] hover:text-[#172235]"
             >
               Fechar Bateria
             </button>
@@ -333,9 +334,9 @@ export const DiagnosticoView: React.FC = () => {
 
           <div className="mt-6 space-y-6">
             {practiceQuestions.map((q, qIdx) => (
-              <div key={q.id || qIdx} className="rounded-xl border border-slate-100 bg-slate-50/70 p-5 dark:border-slate-800 dark:bg-slate-800/40">
-                <p className="text-xs font-semibold text-slate-800 dark:text-slate-200">
-                  <span className="font-bold text-[#F59E0B] dark:text-[#FBBF24]">Questão {qIdx + 1}:</span> {q.statement}
+              <div key={q.id || qIdx} className="rounded-xl border border-slate-100 bg-slate-50/70 p-5 dark:border-[#263447] dark:bg-[#172235]/40">
+                <p className="text-xs font-semibold text-[#172235] dark:text-[#C4CEDB]">
+                  <span className="font-bold text-[#F4B544] dark:text-[#F4B544]">Questão {qIdx + 1}:</span> {q.statement}
                 </p>
 
                 <div className="mt-3 space-y-2">
@@ -344,15 +345,15 @@ export const DiagnosticoView: React.FC = () => {
                     const isCorrect = q.correctIndex === optIdx;
                     const showResult = showExplanations;
 
-                    let btnStyle = "border-slate-200 bg-white text-slate-800 hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-800 dark:text-white";
+                    let btnStyle = "border-slate-200 bg-white text-[#172235] hover:bg-slate-100 dark:bg-[#172235] dark:bg-[#172235] dark:text-white";
                     if (isSelected) {
-                      btnStyle = "border-[#F59E0B] bg-amber-50 text-[#374151] font-semibold dark:bg-amber-950/30 dark:text-white";
+                      btnStyle = "border-[#F4B544] bg-[#F4B544] text-[#93A2B7] font-semibold dark:bg-[#F4B544]/30 dark:text-white";
                     }
                     if (showResult) {
                       if (isCorrect) {
-                        btnStyle = "border-[#F59E0B] bg-amber-50 text-[#F59E0B] font-bold dark:bg-amber-950/40 dark:text-[#FBBF24]";
+                        btnStyle = "border-[#725629] bg-[#342B1C] text-[#F4B544] font-bold dark:bg-[#F4B544]/40 dark:text-[#F4B544]";
                       } else if (isSelected && !isCorrect) {
-                        btnStyle = "border-red-500 bg-red-50 text-red-900 font-bold dark:bg-red-950 dark:text-red-200";
+                        btnStyle = "border-[#7A3541] bg-[#3B2029] text-[#F16D75] font-bold dark:bg-[#3B2029] dark:text-[#F16D75]";
                       }
                     }
 
@@ -362,7 +363,7 @@ export const DiagnosticoView: React.FC = () => {
                         onClick={() => setUserAnswers({ ...userAnswers, [qIdx]: optIdx })}
                         className={`flex w-full items-start gap-2.5 rounded-lg border p-3 text-left text-xs transition ${btnStyle}`}
                       >
-                        <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-slate-100 text-[11px] font-bold text-slate-700 dark:bg-slate-700 dark:text-slate-300">
+                        <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-slate-100 text-[11px] font-bold text-[#172235] dark:bg-[#172235] dark:text-[#C4CEDB]">
                           {String.fromCharCode(65 + optIdx)}
                         </span>
                         <span>{opt}</span>
@@ -372,8 +373,8 @@ export const DiagnosticoView: React.FC = () => {
                 </div>
 
                 {showExplanations && (
-                  <div className="mt-3 rounded-lg bg-amber-50 border border-amber-500/20 p-3 text-[11px] text-[#374151] dark:bg-amber-950/30 dark:text-[#FBBF24]">
-                    <strong className="text-[#F59E0B] dark:text-[#FBBF24]">Gabarito Comentado:</strong> {q.explanation}
+                  <div className="mt-3 rounded-lg bg-[#342B1C] border border-[#F4B544]/20 p-3 text-[11px] text-[#93A2B7] dark:bg-[#F4B544]/30 dark:text-[#F4B544]">
+                    <strong className="text-[#F4B544] dark:text-[#F4B544]">Gabarito Comentado:</strong> {q.explanation}
                   </div>
                 )}
               </div>
@@ -383,7 +384,7 @@ export const DiagnosticoView: React.FC = () => {
           <div className="mt-6 flex justify-end gap-3">
             <button
               onClick={() => setShowExplanations(!showExplanations)}
-              className="rounded-xl bg-[#F59E0B] px-5 py-2.5 text-xs font-bold text-white shadow-xs transition hover:bg-[#D97706]"
+              className="rounded-xl bg-[#527DFF] px-5 py-2.5 text-xs font-bold text-white shadow-xs transition hover:bg-[#416CEB]"
             >
               {showExplanations ? "Ocultar Gabarito" : "Verificar Respostas e Gabarito Comentado"}
             </button>

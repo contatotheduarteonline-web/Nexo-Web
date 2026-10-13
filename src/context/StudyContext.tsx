@@ -60,7 +60,7 @@ import {
   saveUserSettingsToFirestore,
   subscribeUserSettingsFromFirestore,
   migrateLocalDataToFirestore,
-  purgeOrphanOrArtificialEditais,
+  reportOrphanEditais,
 } from "../lib/firestoreService";
 import {
   getPublishedEditais,
@@ -70,6 +70,7 @@ import {
   checkForPlanEditalUpdate,
 } from "../lib/catalogEditalService";
 import { auth } from "../lib/firebase";
+import { authFetch } from "../lib/apiClient";
 import {
   fetchPlanImageFromFirestore,
   deletePlanImageFromFirestore,
@@ -80,7 +81,7 @@ import {
 
 // Helper function to normalize both database EditalTemplateModel and PlanTemplate formats
 function mapEditalModelToPlanTemplate(t: any): PlanTemplate {
-  const colors = ["#F59E0B", "#3B82F6", "#F59E0B", "#EF4444", "#8B5CF6", "#10B981", "#06B6D4", "#EC4899", "#6366F1", "#14B8A6", "#84CC16", "#F59E0B"];
+  const colors = ["#F4B544", "#58A6FF", "#F4B544", "#F16D75", "#8B5CF6", "#2BBF8A", "#06B6D4", "#EC4899", "#6366F1", "#14B8A6", "#84CC16", "#F4B544"];
   
   if (t.organ && Array.isArray(t.topics) && t.topics.length > 0 && t.topics[0].disciplineId) {
     return t as PlanTemplate;
@@ -152,6 +153,8 @@ export interface FinishSessionOptions {
   durationMinutes?: number;
   questionsDone?: number;
   questionsCorrect?: number;
+  /** Erros informados diretamente (independente de total/acertos). */
+  questionsWrong?: number;
   notes?: string;
   selectedReviewDays?: number[];
   studyDate?: string; // YYYY-MM-DD
@@ -250,6 +253,8 @@ interface StudyContextType {
   rescheduleReview: (reviewId: string, newDueDate: string, stage?: ReviewInterval) => void;
   deleteScheduledReview: (reviewId: string) => void;
   updateScheduledReview: (reviewId: string, updates: Partial<ScheduledReview>) => void;
+  ignoreScheduledReview: (reviewId: string) => void;
+  reactivateScheduledReview: (reviewId: string) => void;
   batchRescheduleOverdueReviews: (newDueDate?: string) => void;
   clearAllScheduledReviews: () => void;
   pendingReviewsToday: ScheduledReview[];
@@ -396,19 +401,12 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     });
   };
 
-  // Helper to sanitize stored data and purge legacy mock seeds
+  // Parse cached arrays without discarding records based on their names or IDs.
   const sanitizeStoredArray = <T,>(jsonString: string | null): T[] => {
     if (!jsonString) return [];
     try {
       const parsed = JSON.parse(jsonString);
       if (!Array.isArray(parsed)) return [];
-      const hasLegacy = parsed.some((item: any) => {
-        const str = JSON.stringify(item);
-        return str.includes("edital-gcm-manaus") || str.includes("plan-gcm-manaus") || str.includes("Guarda Civil Municipal de Manaus");
-      });
-      if (hasLegacy) {
-        return [];
-      }
       return parsed;
     } catch {
       return [];
@@ -428,7 +426,7 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   const [activeEditalId, setActiveEditalId] = useState<string>(() => {
     try {
       const saved = localStorage.getItem(storageKeys.ACTIVE_EDITAL_ID);
-      if (saved && !saved.includes("gcm-manaus")) {
+      if (saved) {
         return saved;
       }
       return "";
@@ -597,7 +595,7 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   ): Promise<PlanTemplate | null> => {
     try {
       if (import.meta.env.DEV) {
-        const res = await fetch("/api/planos/templates", {
+        const res = await authFetch("/api/planos/templates", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(templateData),
@@ -628,33 +626,6 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     }
   };
 
-  // Automatic purge of legacy localStorage keys on startup
-  useEffect(() => {
-    try {
-      const keysToRemove: string[] = [];
-      for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        if (
-          key &&
-          (key.includes("_v1") ||
-            key.includes("_v2") ||
-            key.includes("_v3") ||
-            key.includes("_v4") ||
-            key.includes("_v5") ||
-            key.includes("_v6") ||
-            key.startsWith("pf_") ||
-            key.includes("gcm-manaus") ||
-            key.includes("manaus"))
-        ) {
-          keysToRemove.push(key);
-        }
-      }
-      keysToRemove.forEach((k) => localStorage.removeItem(k));
-    } catch (e) {
-      console.warn("Storage purge warning:", e);
-    }
-  }, []);
-
   // Switch dataset when user logs in / changes and connect Firestore real-time synchronization
   useEffect(() => {
     const keys = getStorageKeys(user?.id);
@@ -663,7 +634,7 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     setEditais(cleanEditais);
 
     const savedActiveEdital = localStorage.getItem(keys.ACTIVE_EDITAL_ID);
-    if (savedActiveEdital && !savedActiveEdital.includes("gcm-manaus") && cleanEditais.some((e) => e.id === savedActiveEdital)) {
+    if (savedActiveEdital && cleanEditais.some((e) => e.id === savedActiveEdital)) {
       setActiveEditalId(savedActiveEdital);
     } else {
       setActiveEditalId(cleanEditais[0]?.id || "");
@@ -704,8 +675,8 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
     const uid = user.id;
 
-    // Purge any orphan/artificial editais from previous tests/sessions
-    purgeOrphanOrArtificialEditais(uid).catch(() => {});
+    // Auditoria apenas-leitura (sem exclusão automática de dados na inicialização)
+    reportOrphanEditais(uid).catch(() => {});
 
     // Migrate any pre-existing local data to Firestore seamlessly
     migrateLocalDataToFirestore(uid, {
@@ -1100,7 +1071,13 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   // Timer controls
   const startTimer = () => {
     console.log("[ESTUDOS] SESSÃO INICIADA");
-    setTimer((prev) => ({ ...prev, isRunning: true, startedAt: Date.now() }));
+    // Retomada: realinha startedAt ao tempo já acumulado para NÃO zerar a contagem.
+    setTimer((prev) => {
+      if (prev.isRunning) return prev;
+      const startedAt =
+        prev.elapsedSeconds > 0 ? Date.now() - prev.elapsedSeconds * 1000 : Date.now();
+      return { ...prev, isRunning: true, startedAt };
+    });
   };
 
   const pauseTimer = () => {
@@ -1159,6 +1136,7 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
     const qDone = options?.questionsDone !== undefined ? options.questionsDone : timer.questionsDone;
     const qCorrect = options?.questionsCorrect !== undefined ? options.questionsCorrect : timer.questionsCorrect;
+    const qWrong = options?.questionsWrong;
     const notesStr = options?.notes !== undefined ? options.notes : timer.notes;
     const modalityVal = options?.modality || timer.modality || "Teoria";
     const selectedDays = (options?.scheduleReviews !== false && options?.selectedReviewDays) ? options.selectedReviewDays : [];
@@ -1227,6 +1205,7 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       modality: modalityVal,
       questionsDone: qDone,
       questionsCorrect: qCorrect,
+      questionsWrong: qWrong !== undefined && qWrong > 0 ? qWrong : undefined,
       notes: notesStr,
       theoryCompleted: isTheoryCompleted,
       reviewsScheduled: createdReviews.length,
@@ -1618,7 +1597,7 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
   const importVerticalizedData = (editalTitle: string, organ: string, banca: string, disciplinesData: any[]) => {
     const editalId = `edital-${Date.now()}`;
-    const colors = ["#F59E0B", "#3B82F6", "#10B981", "#F59E0B", "#EF4444", "#8B5CF6", "#06B6D4", "#EC4899"];
+    const colors = ["#F4B544", "#58A6FF", "#2BBF8A", "#F4B544", "#F16D75", "#8B5CF6", "#06B6D4", "#EC4899"];
     const icons = ["BookOpen", "Scale", "Building2", "ShieldAlert", "FileText", "Laptop", "Calculator", "Sparkles"];
 
     const builtDisciplines: Discipline[] = [];
@@ -1762,7 +1741,7 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
           // Optional dev mirror to SQLite if in development
           if (import.meta.env.DEV) {
             try {
-              fetch("/api/user-plans/sync", {
+              authFetch("/api/user-plans/sync", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -1878,7 +1857,7 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     // 8. Optional dev sync deletion to backend if in development
     if (import.meta.env.DEV) {
       try {
-        fetch(`/api/user-plans/${id}`, { method: "DELETE" }).catch(() => {});
+        authFetch(`/api/user-plans/${id}`, { method: "DELETE" }).catch(() => {});
       } catch {
         // Non-blocking
       }
@@ -1927,7 +1906,7 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         id: newDiscId,
         editalId,
         name: td.name,
-        color: td.color || "#F59E0B",
+        color: td.color || "#F4B544",
         iconName: td.iconName || "BookOpen",
         priority: td.priority || "alta",
         difficulty: td.difficulty || "medio",
@@ -2033,7 +2012,7 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     // 4. Optional backend notification to increment clone count in background
     if (import.meta.env.DEV) {
       try {
-        fetch(`/api/planos/templates/${template.id}/clone`, { method: "POST" }).catch(() => {});
+        authFetch(`/api/planos/templates/${template.id}/clone`, { method: "POST" }).catch(() => {});
       } catch {
         // Non-blocking
       }
@@ -2130,8 +2109,8 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       const userEditalId = `edital-cat-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`;
       const discIdMap = new Map<string, string>();
       const PRESET_COLORS = [
-        "#249D84", "#3B82F6", "#10B981", "#8B5CF6", "#F59E0B",
-        "#EC4899", "#06B6D4", "#6366F1", "#14B8A6", "#F59E0B"
+        "#2BBF8A", "#58A6FF", "#2BBF8A", "#8B5CF6", "#F4B544",
+        "#EC4899", "#06B6D4", "#6366F1", "#14B8A6", "#F4B544"
       ];
 
       const newDisciplines: Discipline[] = (cargoSnapshot.disciplines || []).map((cd, idx) => {
@@ -2622,6 +2601,34 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     );
   };
 
+  // Mark a review as ignored WITHOUT deleting it: it stays stored, just leaves
+  // the pending queue. It can be reactivated later from the "Ignoradas" tab.
+  const ignoreScheduledReview = (reviewId: string) => {
+    setScheduledReviews((prev) =>
+      prev.map((r) => {
+        if (r.id === reviewId) {
+          const updated = { ...r, status: "Ignorada" as const };
+          if (user?.id) saveScheduledReviewToFirestore(user.id, updated).catch(console.error);
+          return updated;
+        }
+        return r;
+      })
+    );
+  };
+
+  const reactivateScheduledReview = (reviewId: string) => {
+    setScheduledReviews((prev) =>
+      prev.map((r) => {
+        if (r.id === reviewId) {
+          const updated = { ...r, status: "Pendente" as const };
+          if (user?.id) saveScheduledReviewToFirestore(user.id, updated).catch(console.error);
+          return updated;
+        }
+        return r;
+      })
+    );
+  };
+
   const batchRescheduleOverdueReviews = (newDueDate?: string) => {
     const todayStr = new Date().toISOString().split("T")[0];
     const targetDate = newDueDate || todayStr;
@@ -2875,7 +2882,7 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     try {
       if (import.meta.env.DEV) {
         const currentUserId = user?.id || "guest";
-        const res = await fetch(`/api/backups/daily/list?userId=${encodeURIComponent(currentUserId)}`).catch(() => null);
+        const res = await authFetch(`/api/backups/daily/list?userId=${encodeURIComponent(currentUserId)}`).catch(() => null);
         if (res && res.ok) {
           const json = await res.json();
           if (json.success && Array.isArray(json.backups)) {
@@ -2919,7 +2926,7 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         simulados,
       };
 
-      const res = await fetch("/api/backups/daily/sync", {
+      const res = await authFetch("/api/backups/daily/sync", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -2969,7 +2976,7 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   const restoreDailyBackup = async (backupId: string): Promise<boolean> => {
     try {
       const currentUserId = user?.id || "guest";
-      const res = await fetch(`/api/backups/daily/get/${encodeURIComponent(backupId)}?userId=${encodeURIComponent(currentUserId)}`);
+      const res = await authFetch(`/api/backups/daily/get/${encodeURIComponent(backupId)}?userId=${encodeURIComponent(currentUserId)}`);
       if (res.ok) {
         const json = await res.json();
         if (json.success && json.backup?.data) {
@@ -2988,7 +2995,7 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   const deleteDailyBackup = async (backupId: string): Promise<boolean> => {
     try {
       const currentUserId = user?.id || "guest";
-      const res = await fetch(`/api/backups/daily/${encodeURIComponent(backupId)}?userId=${encodeURIComponent(currentUserId)}`, {
+      const res = await authFetch(`/api/backups/daily/${encodeURIComponent(backupId)}?userId=${encodeURIComponent(currentUserId)}`, {
         method: "DELETE",
       });
       if (res.ok) {
@@ -3002,17 +3009,27 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     }
   };
 
-  // Download a specific backup snapshot file
-  const downloadDailyBackup = (backupId: string) => {
-    const currentUserId = user?.id || "guest";
-    const downloadUrl = `/api/backups/daily/download/${encodeURIComponent(backupId)}?userId=${encodeURIComponent(currentUserId)}`;
-    const a = document.createElement("a");
-    a.href = downloadUrl;
-    a.download = `nexo_backup_${backupId}.json`;
-    a.target = "_blank";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+  // Download a specific backup snapshot file (authFetch: the endpoint requires
+  // the Firebase token — direct <a href> download cannot send headers)
+  const downloadDailyBackup = async (backupId: string) => {
+    try {
+      const currentUserId = user?.id || "guest";
+      const res = await authFetch(
+        `/api/backups/daily/download/${encodeURIComponent(backupId)}?userId=${encodeURIComponent(currentUserId)}`
+      );
+      if (!res.ok) return;
+      const blob = await res.blob();
+      const objectUrl = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = objectUrl;
+      a.download = `nexo_backup_${backupId}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(objectUrl);
+    } catch (err) {
+      console.error("[DAILY BACKUP DOWNLOAD ERROR]:", err);
+    }
   };
 
   // Initial load & automated daily backup runner effect
@@ -3134,6 +3151,8 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         rescheduleReview,
         deleteScheduledReview,
         updateScheduledReview,
+        ignoreScheduledReview,
+        reactivateScheduledReview,
         batchRescheduleOverdueReviews,
         clearAllScheduledReviews,
         pendingReviewsToday,

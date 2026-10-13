@@ -7,10 +7,10 @@ export const PASTEL_COLORS = [
   "#FDE047", // soft warm yellow
   "#C4B5FD", // soft purple
   "#6EE7B7", // soft emerald
-  "#FCD34D", // soft orange
+  "#F4B544", // soft orange
   "#A7F3D0", // soft mint
   "#F9A8D4", // soft pink
-  "#CBD5E1", // soft slate
+  "#C4CEDB", // soft slate
   "#99F6E4", // soft cyan
 ];
 
@@ -62,7 +62,7 @@ export const DISCIPLINE_PALETTES: DisciplinePalette[] = [
     text: "text-[#B45309] dark:text-[#FDE68A]",
     badgeBg: "bg-[#FDE68A] dark:bg-[#B45309]",
     badgeText: "text-[#92400E] dark:text-[#FEF3C7]",
-    barBg: "#FBBF24",
+    barBg: "#F4B544",
   },
   {
     bg: "bg-[#FEF3C7] dark:bg-[#7C2D12]/40",
@@ -70,7 +70,7 @@ export const DISCIPLINE_PALETTES: DisciplinePalette[] = [
     text: "text-[#C2410C] dark:text-[#FED7AA]",
     badgeBg: "bg-[#FED7AA] dark:bg-[#C2410C]",
     badgeText: "text-[#9A3412] dark:text-[#FEF3C7]",
-    barBg: "#FBBF24",
+    barBg: "#F4B544",
   },
 ];
 

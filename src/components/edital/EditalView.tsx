@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from "react";
 import { useStudy } from "../../context/StudyContext";
+import { PlanSelector } from "../common/PlanSelector";
 import { Discipline, Topic } from "../../types";
 import {
   Edit2,
@@ -9,14 +10,13 @@ import {
   Plus,
   Sparkles,
   Search,
-  Globe,
   Sliders,
   CheckCircle2,
   RotateCcw,
   Trophy,
 } from "lucide-react";
 import { EditDisciplineModal } from "../modals/EditDisciplineModal";
-import { ManualStudyModal } from "../modals/ManualStudyModal";
+import { RegistroEstudoModal } from "../revisoes/RegistroEstudoModal";
 import { EditalInfoModal } from "../modals/EditalInfoModal";
 import { AiAssistantModal } from "../ai/AiAssistantModal";
 import { AddContentModal } from "../modals/AddContentModal";
@@ -28,7 +28,14 @@ export const EditalView: React.FC = () => {
     setActiveEditalId,
     editais,
     toggleTopicStudied,
+    activePlan,
+    studyPlans,
+    getPlanImageUrl,
   } = useStudy();
+
+  // Mesma resolução de imagem do Histórico: imagem customizada do plano > plano > edital
+  const planImage =
+    (activePlan ? getPlanImageUrl(activePlan.id) : null) || activePlan?.imageUrl || activeEdital?.imageUrl;
 
   // Accordion state - set of expanded discipline IDs
   const [expandedDisciplineIds, setExpandedDisciplineIds] = useState<Set<string>>(() => {
@@ -143,7 +150,7 @@ export const EditalView: React.FC = () => {
         <div className="flex flex-wrap items-center gap-2.5">
           <button
             onClick={() => setManualStudyTopic({ discId: disciplines[0]?.id || "", topicId: "" })}
-            className="flex items-center gap-1.5 rounded-xl bg-[#F59E0B] hover:bg-[#D97706] px-4 py-2.5 text-xs font-bold text-white shadow-xs transition active:scale-98"
+            className="flex items-center gap-1.5 rounded-xl bg-[#527DFF] hover:bg-[#416CEB] px-4 py-2.5 text-xs font-bold text-white shadow-xs transition active:scale-98"
           >
             <Plus className="h-4 w-4" />
             <span>Adicionar Estudo</span>
@@ -151,26 +158,25 @@ export const EditalView: React.FC = () => {
 
           {/* Plano selector dropdown */}
           {editais.length > 0 && (
-            <div className="relative">
-              <select
-                value={activeEditalId || ""}
-                onChange={(e) => setActiveEditalId(e.target.value)}
-                className="appearance-none rounded-xl border border-amber-500/40 bg-white dark:bg-[#0F172A] pl-8 pr-8 py-2.5 text-xs font-bold text-[#F59E0B] hover:border-[#F59E0B] focus:outline-none focus:ring-1 focus:ring-[#F59E0B] cursor-pointer shadow-2xs"
-              >
-                {editais.map((ed) => (
-                  <option key={ed.id} value={ed.id}>
-                    {ed.title}
-                  </option>
-                ))}
-              </select>
-              <Globe className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#F59E0B] pointer-events-none" />
-              <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#F59E0B] pointer-events-none" />
-            </div>
+            <PlanSelector
+              items={editais.map((ed) => {
+                const plan = studyPlans.find((p) => p.editalId === ed.id);
+                return {
+                  id: ed.id,
+                  title: ed.title,
+                  imageUrl: (plan ? getPlanImageUrl(plan.id) : null) || plan?.imageUrl || ed.imageUrl,
+                };
+              })}
+              activeId={activeEditalId || undefined}
+              activeLabel={activeEdital?.title || "Plano"}
+              imageUrl={planImage}
+              onSelect={setActiveEditalId}
+            />
           )}
 
           <button
             onClick={() => setIsEditalInfoOpen(true)}
-            className="rounded-xl border border-[#E2E8F0] bg-white p-2.5 text-[#6B7280] hover:bg-[#F3F4F6] dark:border-[#1E293B] dark:bg-[#252B38] dark:text-[#9CA3AF] dark:hover:bg-[#1E293B]"
+            className="rounded-xl border border-[#E2E8F0] bg-white p-2.5 text-[#6B7280] hover:bg-[#F3F4F6] dark:border-[#263447] dark:bg-[#1D2B40] dark:text-[#9CA3AF] dark:hover:bg-[#172235]"
             title="Configurações do Edital"
           >
             <Sliders className="h-4 w-4" />
@@ -181,13 +187,13 @@ export const EditalView: React.FC = () => {
       {/* LISTA DE DISCIPLINAS (ACORDEÃO) */}
       <div className="space-y-3">
         {disciplines.length === 0 ? (
-          <div className="rounded-2xl border border-dashed border-[#E2E8F0] bg-white p-12 text-center dark:border-[#1E293B] dark:bg-[#252B38]">
+          <div className="rounded-2xl border border-dashed border-[#E2E8F0] bg-white p-12 text-center dark:border-[#263447] dark:bg-[#1D2B40]">
             <p className="text-sm font-semibold text-white dark:text-white">
               Nenhuma disciplina cadastrada neste edital.
             </p>
             <button
               onClick={() => setIsAddContentOpen(true)}
-              className="mt-3 inline-flex items-center gap-1.5 rounded-xl bg-[#F59E0B] hover:bg-[#D97706] px-4 py-2 text-xs font-bold text-white"
+              className="mt-3 inline-flex items-center gap-1.5 rounded-xl bg-[#527DFF] hover:bg-[#416CEB] px-4 py-2 text-xs font-bold text-white"
             >
               <Plus className="h-4 w-4" />
               Adicionar Matéria / Tópicos
@@ -212,10 +218,10 @@ export const EditalView: React.FC = () => {
             return (
               <div
                 key={discipline.id}
-                className={`overflow-hidden rounded-2xl border bg-white shadow-2xs dark:bg-[#252B38] transition ${
+                className={`overflow-hidden rounded-2xl border bg-white shadow-2xs dark:bg-[#1D2B40] transition ${
                   isDisciplineFullyCompleted
-                    ? "border-emerald-300/80 dark:border-emerald-900/60"
-                    : "border-[#E2E8F0] dark:border-[#1E293B]"
+                    ? "border-[#2BBF8A]/80 dark:border-[#2BBF8A]/60"
+                    : "border-[#E2E8F0] dark:border-[#263447]"
                 }`}
               >
                 {/* HEADER DA DISCIPLINA (BARRA CLICÁVEL) */}
@@ -227,7 +233,7 @@ export const EditalView: React.FC = () => {
                   <div className="flex items-center gap-3 min-w-0">
                     <span
                       className="h-6 w-1.5 rounded-full flex-shrink-0"
-                      style={{ backgroundColor: discipline.color || "#3B82F6" }}
+                      style={{ backgroundColor: discipline.color || "#58A6FF" }}
                     />
                     <h3 className="text-base font-bold text-white dark:text-white truncate">
                       {discipline.name}
@@ -235,7 +241,7 @@ export const EditalView: React.FC = () => {
 
                     {/* Selo Gamificado de Disciplina Zerada */}
                     {isDisciplineFullyCompleted && (
-                      <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 dark:bg-emerald-950/60 border border-emerald-300 dark:border-emerald-700 px-2.5 py-0.5 text-[10px] font-black text-emerald-800 dark:text-emerald-300 shadow-2xs">
+                      <span className="inline-flex items-center gap-1 rounded-full bg-[#15382F] dark:bg-[#2BBF8A]/60 border border-[#24634F] dark:border-[#24634F] px-2.5 py-0.5 text-[10px] font-black text-[#2BBF8A] dark:text-[#2BBF8A] shadow-2xs">
                         🏆 Matéria Zerada!
                       </span>
                     )}
@@ -244,24 +250,24 @@ export const EditalView: React.FC = () => {
                   {/* Right: 4 Bolhas de métricas + Mini barra + Lápis + Chevron */}
                   <div className="flex flex-wrap items-center gap-4 sm:gap-6">
                     {/* 4 Bolhas de Métricas Alinhadas: [Acertos] [Erros] [Total] [Desempenho] */}
-                    <div className="flex items-center gap-1.5 rounded-full border border-emerald-200/80 bg-emerald-50/50 px-3 py-1 dark:border-emerald-900/40 dark:bg-emerald-950/20">
+                    <div className="flex items-center gap-1.5 rounded-full border border-[#2BBF8A]/80 bg-[#2BBF8A]/50 px-3 py-1 dark:border-[#2BBF8A]/40 dark:bg-[#2BBF8A]/20">
                       {/* Acertos (Verde) */}
-                      <span className="min-w-[28px] text-center text-xs font-black text-emerald-600 dark:text-emerald-400">
+                      <span className="min-w-[28px] text-center text-xs font-black text-[#2BBF8A] dark:text-[#2BBF8A]">
                         {stats.correct}
                       </span>
-                      <span className="text-[10px] text-emerald-300 dark:text-emerald-700">|</span>
+                      <span className="text-[10px] text-[#2BBF8A] dark:text-[#2BBF8A]">|</span>
 
                       {/* Erros (Vermelho) */}
-                      <span className="min-w-[28px] text-center text-xs font-black text-red-500 dark:text-red-400">
+                      <span className="min-w-[28px] text-center text-xs font-black text-[#F16D75] dark:text-[#F16D75]">
                         {stats.errors}
                       </span>
-                      <span className="text-[10px] text-emerald-300 dark:text-emerald-700">|</span>
+                      <span className="text-[10px] text-[#2BBF8A] dark:text-[#2BBF8A]">|</span>
 
                       {/* Total Questões (Neutro) */}
                       <span className="min-w-[28px] text-center text-xs font-black text-white dark:text-white">
                         {stats.totalQuestions}
                       </span>
-                      <span className="text-[10px] text-emerald-300 dark:text-emerald-700">|</span>
+                      <span className="text-[10px] text-[#2BBF8A] dark:text-[#2BBF8A]">|</span>
 
                       {/* Desempenho % (Neutro) */}
                       <span className="min-w-[28px] text-center text-xs font-black text-white dark:text-white">
@@ -271,12 +277,12 @@ export const EditalView: React.FC = () => {
 
                     {/* Mini barra de progresso individual da matéria com % */}
                     <div className="flex items-center gap-2.5 min-w-[130px]">
-                      <div className="h-2 w-20 sm:w-24 overflow-hidden rounded-full bg-[#E2E8F0] dark:bg-[#1E293B]">
+                      <div className="h-2 w-20 sm:w-24 overflow-hidden rounded-full bg-[#E2E8F0] dark:bg-[#172235]">
                         <div
                           className="h-full rounded-full transition-all duration-300"
                           style={{
                             width: `${stats.progress}%`,
-                            backgroundColor: discipline.color || "#F59E0B",
+                            backgroundColor: discipline.color || "#F4B544",
                           }}
                         />
                       </div>
@@ -285,7 +291,7 @@ export const EditalView: React.FC = () => {
                         style={{
                           backgroundColor:
                             stats.progress > 0
-                              ? discipline.color || "#F59E0B"
+                              ? discipline.color || "#F4B544"
                               : "#9CA3AF",
                         }}
                       >
@@ -299,7 +305,7 @@ export const EditalView: React.FC = () => {
                         e.stopPropagation();
                         setEditingDiscipline(discipline);
                       }}
-                      className="p-1.5 text-white hover:text-white dark:hover:text-white rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+                      className="p-1.5 text-white hover:text-white dark:hover:text-white rounded-lg hover:bg-slate-100 dark:hover:bg-[#172235] transition"
                       title="Editar Disciplina"
                     >
                       <Edit2 className="h-3.5 w-3.5" />
@@ -318,11 +324,11 @@ export const EditalView: React.FC = () => {
 
                 {/* TABELA DE TÓPICOS QUANDO EXPANDIDO */}
                 {isExpanded && (
-                  <div className="border-t border-[#E2E8F0] dark:border-[#1E293B]">
+                  <div className="border-t border-[#E2E8F0] dark:border-[#263447]">
                     <div className="overflow-x-auto">
                       <table className="w-full text-left text-xs border-collapse">
                         <thead>
-                          <tr className="border-b border-[#E2E8F0] bg-slate-50/70 text-white dark:border-[#1E293B] dark:bg-[#1E293B]/60 dark:text-white">
+                          <tr className="border-b border-[#E2E8F0] bg-slate-50/70 text-white dark:border-[#263447] dark:bg-[#172235]/60 dark:text-white">
                             <th className="py-2.5 px-4 font-bold w-12 text-center">Status</th>
                             <th className="py-2.5 px-4 font-bold min-w-[280px]">Tópico do Edital</th>
                             <th className="py-2.5 px-4 font-bold text-center w-24">Questões</th>
@@ -332,7 +338,7 @@ export const EditalView: React.FC = () => {
                             <th className="py-2.5 px-4 font-bold text-center w-28">Último Estudo</th>
                           </tr>
                         </thead>
-                        <tbody className="divide-y divide-[#E2E8F0] dark:divide-[#1E293B]">
+                        <tbody className="divide-y divide-[#E2E8F0] dark:divide-[#172235]">
                           {discTopics.length === 0 ? (
                             <tr>
                               <td colSpan={7} className="text-center py-6 text-white dark:text-white">
@@ -348,7 +354,7 @@ export const EditalView: React.FC = () => {
                               return (
                                 <tr
                                   key={topic.id}
-                                  className="hover:bg-slate-50/50 dark:hover:bg-[#1E293B]/30 transition select-none"
+                                  className="hover:bg-slate-50/50 dark:hover:bg-[#172235]/30 transition select-none"
                                 >
                                   {/* Checkbox de Estudado */}
                                   <td className="py-3 px-4 text-center">
@@ -357,8 +363,8 @@ export const EditalView: React.FC = () => {
                                       onClick={() => toggleTopicStudied(topic.id)}
                                       className={`h-5 w-5 rounded-md border flex items-center justify-center transition-all ${
                                         topic.isStudied
-                                          ? "bg-[#F59E0B] border-[#F59E0B] text-white shadow-2xs"
-                                          : "border-[#CBD5E1] bg-white hover:border-[#F59E0B] dark:border-[#334155] dark:bg-[#0F172A]"
+                                          ? "bg-[#527DFF] border-[#F4B544] text-white shadow-2xs"
+                                          : "border-[#CBD5E1] bg-white hover:border-[#F4B544] dark:border-[#263447] dark:bg-[#0B1120]"
                                       }`}
                                       title={topic.isStudied ? "Marcar como pendente" : "Marcar como estudado (+150 XP)"}
                                     >
@@ -381,7 +387,7 @@ export const EditalView: React.FC = () => {
 
                                       <button
                                         onClick={() => setManualStudyTopic({ discId: discipline.id, topicId: topic.id })}
-                                        className="opacity-0 group-hover:opacity-100 hover:opacity-100 focus:opacity-100 p-1 text-[#F59E0B] hover:bg-amber-50 dark:hover:bg-amber-500/10 rounded-md transition"
+                                        className="opacity-0 group-hover:opacity-100 hover:opacity-100 focus:opacity-100 p-1 text-[#F4B544] hover:bg-[#342B1C] dark:hover:bg-[#527DFF]/10 rounded-md transition"
                                         title="Registrar sessão de estudo neste tópico"
                                       >
                                         <Plus className="h-3.5 w-3.5" />
@@ -395,7 +401,7 @@ export const EditalView: React.FC = () => {
                                   </td>
 
                                   {/* Acertos */}
-                                  <td className="py-3 px-4 text-center font-semibold text-emerald-600 dark:text-emerald-400">
+                                  <td className="py-3 px-4 text-center font-semibold text-[#2BBF8A] dark:text-[#2BBF8A]">
                                     {qCorr}
                                   </td>
 
@@ -404,12 +410,12 @@ export const EditalView: React.FC = () => {
                                     <span
                                       className={`inline-block px-2.5 py-0.5 rounded-full text-[11px] font-bold ${
                                         qDone === 0
-                                          ? "bg-slate-100 text-white dark:bg-[#1E293B] dark:text-white"
+                                          ? "bg-slate-100 text-white dark:bg-[#172235] dark:text-white"
                                           : accuracy >= 80
-                                          ? "bg-emerald-500 text-white font-bold"
+                                          ? "bg-[#2BBF8A] text-white font-bold"
                                           : accuracy >= 60
-                                          ? "bg-amber-500 text-white font-bold"
-                                          : "bg-red-500 text-white font-bold"
+                                          ? "bg-[#527DFF] text-white font-bold"
+                                          : "bg-[#F16D75] text-white font-bold"
                                       }`}
                                     >
                                       {qDone > 0 ? `${accuracy}%` : "—"}
@@ -450,8 +456,8 @@ export const EditalView: React.FC = () => {
       )}
 
       {manualStudyTopic && (
-        <ManualStudyModal
-          isOpen={Boolean(manualStudyTopic)}
+        <RegistroEstudoModal
+          open={Boolean(manualStudyTopic)}
           onClose={() => setManualStudyTopic(null)}
           preselectedDisciplineId={manualStudyTopic.discId}
           preselectedTopicId={manualStudyTopic.topicId}

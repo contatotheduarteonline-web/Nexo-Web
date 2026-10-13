@@ -127,7 +127,7 @@ export function computeGamificationData(
   let rankLevel = 1;
   let rankIcon = "compass";
   let rankTier: MedalTier = "bronze";
-  let rankBadgeStyle = "bg-slate-100 text-slate-700 border-slate-300 dark:bg-slate-800 dark:text-slate-200 dark:border-slate-700";
+  let rankBadgeStyle = "bg-slate-100 text-[#172235] border-slate-300 dark:bg-[#172235] dark:text-[#C4CEDB] dark:bg-[#172235]";
   let nextRankName = "Prática (20%)";
   let targetPctForNext = 20;
 
@@ -136,7 +136,7 @@ export function computeGamificationData(
     rankLevel = 6;
     rankIcon = "check";
     rankTier = "diamond";
-    rankBadgeStyle = "bg-amber-50 text-[#F59E0B] border-amber-200 dark:bg-amber-950/40 dark:text-[#FBBF24] dark:border-amber-800";
+    rankBadgeStyle = "bg-[#F4B544] text-[#F4B544] border-[#F4B544] dark:bg-[#F4B544]/40 dark:text-[#F4B544] dark:border-[#F4B544]";
     nextRankName = "100% Concluído";
     targetPctForNext = 100;
   } else if (globalProgressPercentage >= 80) {
@@ -144,7 +144,7 @@ export function computeGamificationData(
     rankLevel = 5;
     rankIcon = "award";
     rankTier = "gold";
-    rankBadgeStyle = "bg-amber-50 text-amber-800 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800";
+    rankBadgeStyle = "bg-[#F4B544] text-[#F4B544] border-[#F4B544] dark:bg-[#F4B544]/40 dark:text-[#F4B544] dark:border-[#F4B544]";
     nextRankName = "Conclusão (100%)";
     targetPctForNext = 100;
   } else if (globalProgressPercentage >= 60) {
@@ -152,7 +152,7 @@ export function computeGamificationData(
     rankLevel = 4;
     rankIcon = "target";
     rankTier = "emerald";
-    rankBadgeStyle = "bg-emerald-50 text-emerald-800 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800";
+    rankBadgeStyle = "bg-[#2BBF8A] text-[#2BBF8A] border-[#2BBF8A] dark:bg-[#2BBF8A]/40 dark:text-[#2BBF8A] dark:border-[#2BBF8A]";
     nextRankName = "Especialização (80%)";
     targetPctForNext = 80;
   } else if (globalProgressPercentage >= 40) {
@@ -160,7 +160,7 @@ export function computeGamificationData(
     rankLevel = 3;
     rankIcon = "activity";
     rankTier = "sapphire";
-    rankBadgeStyle = "bg-blue-50 text-blue-800 border-blue-200 dark:bg-blue-950/40 dark:text-blue-300 dark:border-blue-800";
+    rankBadgeStyle = "bg-[#58A6FF] text-[#58A6FF] border-[#58A6FF] dark:bg-[#58A6FF]/40 dark:text-[#58A6FF] dark:border-[#58A6FF]";
     nextRankName = "Domínio (60%)";
     targetPctForNext = 60;
   } else if (globalProgressPercentage >= 20) {
@@ -168,7 +168,7 @@ export function computeGamificationData(
     rankLevel = 2;
     rankIcon = "target";
     rankTier = "silver";
-    rankBadgeStyle = "bg-slate-100 text-slate-800 border-slate-300 dark:bg-slate-800 dark:text-slate-200 dark:border-slate-700";
+    rankBadgeStyle = "bg-slate-100 text-[#172235] border-slate-300 dark:bg-[#172235] dark:text-[#C4CEDB] dark:bg-[#172235]";
     nextRankName = "Constância (40%)";
     targetPctForNext = 40;
   }

@@ -24,7 +24,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         particleCount: 80,
         spread: 70,
         origin: { y: 0.15, x: 0.5 },
-        colors: ["#F59E0B", "#FBBF24", "#F59E0B", "#8B5CF6", "#10B981"],
+        colors: ["#F4B544", "#F4B544", "#F4B544", "#8B5CF6", "#2BBF8A"],
         disableForReducedMotion: true,
         zIndex: 9999,
       });

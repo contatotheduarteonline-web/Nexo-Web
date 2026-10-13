@@ -33,7 +33,7 @@ export const AddContentModal: React.FC<AddContentModalProps> = ({
 
   // Disciplina Form State
   const [discName, setDiscName] = useState("");
-  const [discColor, setDiscColor] = useState("#48C3A7");
+  const [discColor, setDiscColor] = useState("#2BBF8A");
   const [discWeight, setDiscWeight] = useState<1 | 2 | 3>(2);
   const [discPriority, setDiscPriority] = useState<"alta" | "media" | "baixa">("media");
   const [discTargetHours, setDiscTargetHours] = useState<number>(30);
@@ -54,15 +54,15 @@ export const AddContentModal: React.FC<AddContentModalProps> = ({
   const [subtopicText, setSubtopicText] = useState("");
 
   const colors = [
-    "#48C3A7",
-    "#3B82F6",
+    "#2BBF8A",
+    "#58A6FF",
     "#8B5CF6",
-    "#F59E0B",
-    "#EF4444",
+    "#F4B544",
+    "#F16D75",
     "#EC4899",
     "#06B6D4",
     "#6366F1",
-    "#10B981",
+    "#2BBF8A",
   ];
 
   if (!isOpen || !activeEdital) return null;
@@ -131,11 +131,11 @@ export const AddContentModal: React.FC<AddContentModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs">
-      <div className="w-full max-w-lg overflow-hidden rounded-2xl border border-[#E2E8F0] bg-white shadow-2xl dark:border-[#1E293B] dark:bg-[#1E293B]">
+      <div className="w-full max-w-lg overflow-hidden rounded-2xl border border-[#E2E8F0] bg-white shadow-2xl dark:border-[#263447] dark:bg-[#172235]">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-[#E2E8F0] bg-[#F8FAFC] px-6 py-4 dark:border-[#1E293B] dark:bg-[#1E293B]/60">
+        <div className="flex items-center justify-between border-b border-[#E2E8F0] bg-[#F1F5F9] px-6 py-4 dark:border-[#263447] dark:bg-[#172235]/60">
           <div className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-500/15 text-[#F59E0B] border border-amber-500/30 dark:bg-amber-500/20">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#527DFF]/15 text-[#F4B544] border border-[#F4B544]/30 dark:bg-[#527DFF]/20">
               <Plus className="h-5 w-5" />
             </div>
             <div>
@@ -156,7 +156,7 @@ export const AddContentModal: React.FC<AddContentModalProps> = ({
 
           <button
             onClick={onClose}
-            className="rounded-lg p-1.5 text-[#737D89] hover:bg-[#E2E8F0] hover:text-[#374151] dark:hover:bg-[#1E293B] dark:hover:text-white cursor-pointer"
+            className="rounded-lg p-1.5 text-[#718096] hover:bg-[#E2E8F0] hover:text-[#93A2B7] dark:hover:bg-[#172235] dark:hover:text-white cursor-pointer"
           >
             <X className="h-5 w-5" />
           </button>
@@ -173,14 +173,14 @@ export const AddContentModal: React.FC<AddContentModalProps> = ({
               {/* Option 1: Disciplina */}
               <button
                 onClick={() => setMode("discipline")}
-                className="group flex w-full items-center justify-between rounded-xl border border-[#E2E8F0] bg-white p-4 text-left shadow-xs transition hover:border-[#F59E0B] hover:bg-amber-50/20 dark:border-[#1E293B] dark:bg-[#0F172A] dark:hover:bg-[#1E293B] cursor-pointer"
+                className="group flex w-full items-center justify-between rounded-xl border border-[#E2E8F0] bg-white p-4 text-left shadow-xs transition hover:border-[#F4B544] hover:bg-[#F4B544]/20 dark:border-[#263447] dark:bg-[#0B1120] dark:hover:bg-[#172235] cursor-pointer"
               >
                 <div className="flex items-center gap-3.5">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-50 text-[#F59E0B] border border-amber-200/60 dark:bg-amber-950/40 dark:text-[#FBBF24] dark:border-amber-800/40">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#342B1C] text-[#F4B544] border border-[#F4B544]/60 dark:bg-[#F4B544]/40 dark:text-[#F4B544] dark:border-[#F4B544]/40">
                     <BookOpen className="h-5 w-5" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-bold text-white group-hover:text-[#F59E0B] dark:text-white dark:group-hover:text-[#FBBF24]">
+                    <h3 className="text-sm font-bold text-white group-hover:text-[#F4B544] dark:text-white dark:group-hover:text-[#F4B544]">
                       Nova Disciplina
                     </h3>
                     <p className="text-xs text-white dark:text-white">
@@ -188,20 +188,20 @@ export const AddContentModal: React.FC<AddContentModalProps> = ({
                     </p>
                   </div>
                 </div>
-                <ChevronRight className="h-5 w-5 text-white group-hover:text-[#F59E0B] dark:text-white dark:group-hover:text-[#FBBF24]" />
+                <ChevronRight className="h-5 w-5 text-white group-hover:text-[#F4B544] dark:text-white dark:group-hover:text-[#F4B544]" />
               </button>
 
               {/* Option 2: Tópico */}
               <button
                 onClick={() => setMode("topic")}
-                className="group flex w-full items-center justify-between rounded-xl border border-[#E2E8F0] bg-white p-4 text-left shadow-xs transition hover:border-[#F59E0B] hover:bg-amber-50/20 dark:border-[#1E293B] dark:bg-[#0F172A] dark:hover:bg-[#1E293B] cursor-pointer"
+                className="group flex w-full items-center justify-between rounded-xl border border-[#E2E8F0] bg-white p-4 text-left shadow-xs transition hover:border-[#F4B544] hover:bg-[#F4B544]/20 dark:border-[#263447] dark:bg-[#0B1120] dark:hover:bg-[#172235] cursor-pointer"
               >
                 <div className="flex items-center gap-3.5">
                   <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-zinc-900 text-white dark:bg-white dark:text-zinc-900">
                     <ListPlus className="h-5 w-5" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-bold text-white group-hover:text-[#F59E0B] dark:text-white dark:group-hover:text-[#FBBF24]">
+                    <h3 className="text-sm font-bold text-white group-hover:text-[#F4B544] dark:text-white dark:group-hover:text-[#F4B544]">
                       Novo Tópico
                     </h3>
                     <p className="text-xs text-white dark:text-white">
@@ -209,20 +209,20 @@ export const AddContentModal: React.FC<AddContentModalProps> = ({
                     </p>
                   </div>
                 </div>
-                <ChevronRight className="h-5 w-5 text-white group-hover:text-[#F59E0B] dark:text-white dark:group-hover:text-[#FBBF24]" />
+                <ChevronRight className="h-5 w-5 text-white group-hover:text-[#F4B544] dark:text-white dark:group-hover:text-[#F4B544]" />
               </button>
 
               {/* Option 3: Subtópico */}
               <button
                 onClick={() => setMode("subtopic")}
-                className="group flex w-full items-center justify-between rounded-xl border border-[#E2E8F0] bg-white p-4 text-left shadow-xs transition hover:border-[#F59E0B] hover:bg-amber-50/20 dark:border-[#1E293B] dark:bg-[#0F172A] dark:hover:bg-[#1E293B] cursor-pointer"
+                className="group flex w-full items-center justify-between rounded-xl border border-[#E2E8F0] bg-white p-4 text-left shadow-xs transition hover:border-[#F4B544] hover:bg-[#F4B544]/20 dark:border-[#263447] dark:bg-[#0B1120] dark:hover:bg-[#172235] cursor-pointer"
               >
                 <div className="flex items-center gap-3.5">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-100 text-[#F59E0B] dark:bg-amber-950/40 dark:text-[#FBBF24]">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#342B1C] text-[#F4B544] dark:bg-[#F4B544]/40 dark:text-[#F4B544]">
                     <Layers className="h-5 w-5" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-bold text-white group-hover:text-[#F59E0B] dark:text-white dark:group-hover:text-[#FBBF24]">
+                    <h3 className="text-sm font-bold text-white group-hover:text-[#F4B544] dark:text-white dark:group-hover:text-[#F4B544]">
                       Novo Subtópico
                     </h3>
                     <p className="text-xs text-white dark:text-white">
@@ -230,7 +230,7 @@ export const AddContentModal: React.FC<AddContentModalProps> = ({
                     </p>
                   </div>
                 </div>
-                <ChevronRight className="h-5 w-5 text-white group-hover:text-[#F59E0B] dark:text-white dark:group-hover:text-[#FBBF24]" />
+                <ChevronRight className="h-5 w-5 text-white group-hover:text-[#F4B544] dark:text-white dark:group-hover:text-[#F4B544]" />
               </button>
             </div>
           )}
@@ -245,7 +245,7 @@ export const AddContentModal: React.FC<AddContentModalProps> = ({
                   type="text"
                   value={discName}
                   onChange={(e) => setDiscName(e.target.value)}
-                  className="mt-1 w-full rounded-xl border border-[#CCD2D8] bg-white px-3.5 py-2 text-sm text-[#374151] focus:border-[#F59E0B] focus:ring-1 focus:ring-[#F59E0B] focus:outline-hidden dark:border-[#3A454F] dark:bg-[#1E293B] dark:text-white"
+                  className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-white px-3.5 py-2 text-sm text-[#93A2B7] focus:border-[#7DA2FF] focus:ring-1 focus:ring-[#7DA2FF] focus:outline-hidden dark:border-[#39475C] dark:bg-[#172235] dark:text-white"
                   placeholder="Ex: Direito Penal Especial"
                   required
                   autoFocus
@@ -263,7 +263,7 @@ export const AddContentModal: React.FC<AddContentModalProps> = ({
                       type="button"
                       onClick={() => setDiscColor(c)}
                       className={`h-7 w-7 rounded-full transition-transform ${
-                        discColor === c ? "scale-115 ring-2 ring-offset-2 ring-[#F59E0B] dark:ring-white" : ""
+                        discColor === c ? "scale-115 ring-2 ring-offset-2 ring-[#527DFF] dark:ring-white" : ""
                       }`}
                       style={{ backgroundColor: c }}
                     />
@@ -279,7 +279,7 @@ export const AddContentModal: React.FC<AddContentModalProps> = ({
                   <select
                     value={discWeight}
                     onChange={(e) => setDiscWeight(Number(e.target.value) as 1 | 2 | 3)}
-                    className="mt-1 w-full rounded-xl border border-[#CCD2D8] bg-white px-3 py-2 text-xs font-semibold text-[#374151] focus:border-[#F59E0B] focus:ring-1 focus:ring-[#F59E0B] focus:outline-hidden dark:border-[#3A454F] dark:bg-[#1E293B] dark:text-white"
+                    className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-white px-3 py-2 text-xs font-semibold text-[#93A2B7] focus:border-[#7DA2FF] focus:ring-1 focus:ring-[#7DA2FF] focus:outline-hidden dark:border-[#39475C] dark:bg-[#172235] dark:text-white"
                   >
                     <option value={1}>Peso 1 (Básico)</option>
                     <option value={2}>Peso 2 (Intermediário)</option>
@@ -294,7 +294,7 @@ export const AddContentModal: React.FC<AddContentModalProps> = ({
                   <select
                     value={discPriority}
                     onChange={(e) => setDiscPriority(e.target.value as any)}
-                    className="mt-1 w-full rounded-xl border border-[#CCD2D8] bg-white px-3 py-2 text-xs font-semibold text-[#374151] focus:border-[#F59E0B] focus:ring-1 focus:ring-[#F59E0B] focus:outline-hidden dark:border-[#3A454F] dark:bg-[#1E293B] dark:text-white"
+                    className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-white px-3 py-2 text-xs font-semibold text-[#93A2B7] focus:border-[#7DA2FF] focus:ring-1 focus:ring-[#7DA2FF] focus:outline-hidden dark:border-[#39475C] dark:bg-[#172235] dark:text-white"
                   >
                     <option value="alta">Alta</option>
                     <option value="media">Média</option>
@@ -316,13 +316,13 @@ export const AddContentModal: React.FC<AddContentModalProps> = ({
                   <button
                     type="button"
                     onClick={onClose}
-                    className="rounded-xl border border-[#CCD2D8] bg-white px-3.5 py-1.5 text-xs font-semibold text-[#374151] hover:bg-[#F8FAFC] dark:border-[#3A454F] dark:bg-[#1E293B] dark:text-white cursor-pointer"
+                    className="rounded-xl border border-[#E2E8F0] bg-white px-3.5 py-1.5 text-xs font-semibold text-[#93A2B7] hover:bg-[#F1F5F9] dark:border-[#39475C] dark:bg-[#172235] dark:text-white cursor-pointer"
                   >
                     Cancelar
                   </button>
                   <button
                     type="submit"
-                    className="rounded-xl bg-gradient-to-r from-[#F59E0B] to-[#FBBF24] hover:from-[#D97706] hover:to-[#F59E0B] px-4 py-1.5 text-xs font-bold text-white shadow-md shadow-amber-500/25 transition cursor-pointer"
+                    className="rounded-xl bg-gradient-to-r from-[#F4B544] to-[#F4B544] hover:from-[#D97706] hover:to-[#F4B544] px-4 py-1.5 text-xs font-bold text-white shadow-md shadow-amber-500/25 transition cursor-pointer"
                   >
                     Salvar Disciplina
                   </button>
@@ -340,7 +340,7 @@ export const AddContentModal: React.FC<AddContentModalProps> = ({
                 <select
                   value={selectedDiscId}
                   onChange={(e) => setSelectedDiscId(e.target.value)}
-                  className="mt-1 w-full rounded-xl border border-[#CCD2D8] bg-white px-3.5 py-2 text-xs font-semibold text-[#374151] focus:border-[#F59E0B] focus:ring-1 focus:ring-[#F59E0B] focus:outline-hidden dark:border-[#3A454F] dark:bg-[#1E293B] dark:text-white"
+                  className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-white px-3.5 py-2 text-xs font-semibold text-[#93A2B7] focus:border-[#7DA2FF] focus:ring-1 focus:ring-[#7DA2FF] focus:outline-hidden dark:border-[#39475C] dark:bg-[#172235] dark:text-white"
                   required
                 >
                   {activeEdital.disciplines.map((d) => (
@@ -359,7 +359,7 @@ export const AddContentModal: React.FC<AddContentModalProps> = ({
                   type="text"
                   value={topicName}
                   onChange={(e) => setTopicName(e.target.value)}
-                  className="mt-1 w-full rounded-xl border border-[#CCD2D8] bg-white px-3.5 py-2 text-sm text-[#374151] focus:border-[#F59E0B] focus:ring-1 focus:ring-[#F59E0B] focus:outline-hidden dark:border-[#3A454F] dark:bg-[#1E293B] dark:text-white"
+                  className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-white px-3.5 py-2 text-sm text-[#93A2B7] focus:border-[#7DA2FF] focus:ring-1 focus:ring-[#7DA2FF] focus:outline-hidden dark:border-[#39475C] dark:bg-[#172235] dark:text-white"
                   placeholder="Ex: Teoria Geral dos Direitos Fundamentais"
                   required
                   autoFocus
@@ -374,7 +374,7 @@ export const AddContentModal: React.FC<AddContentModalProps> = ({
                   <select
                     value={topicPriority}
                     onChange={(e) => setTopicPriority(e.target.value as any)}
-                    className="mt-1 w-full rounded-xl border border-[#CCD2D8] bg-white px-3 py-2 text-xs font-semibold text-[#374151] focus:border-[#F59E0B] focus:ring-1 focus:ring-[#F59E0B] focus:outline-hidden dark:border-[#3A454F] dark:bg-[#1E293B] dark:text-white"
+                    className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-white px-3 py-2 text-xs font-semibold text-[#93A2B7] focus:border-[#7DA2FF] focus:ring-1 focus:ring-[#7DA2FF] focus:outline-hidden dark:border-[#39475C] dark:bg-[#172235] dark:text-white"
                   >
                     <option value="alta">Alta</option>
                     <option value="media">Média</option>
@@ -389,7 +389,7 @@ export const AddContentModal: React.FC<AddContentModalProps> = ({
                   <select
                     value={topicDifficulty}
                     onChange={(e) => setTopicDifficulty(e.target.value as any)}
-                    className="mt-1 w-full rounded-xl border border-[#CCD2D8] bg-white px-3 py-2 text-xs font-semibold text-[#374151] focus:border-[#F59E0B] focus:ring-1 focus:ring-[#F59E0B] focus:outline-hidden dark:border-[#3A454F] dark:bg-[#1E293B] dark:text-white"
+                    className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-white px-3 py-2 text-xs font-semibold text-[#93A2B7] focus:border-[#7DA2FF] focus:ring-1 focus:ring-[#7DA2FF] focus:outline-hidden dark:border-[#39475C] dark:bg-[#172235] dark:text-white"
                   >
                     <option value="facil">Fácil</option>
                     <option value="medio">Médio</option>
@@ -406,7 +406,7 @@ export const AddContentModal: React.FC<AddContentModalProps> = ({
                   rows={3}
                   value={topicSubtopicsRaw}
                   onChange={(e) => setTopicSubtopicsRaw(e.target.value)}
-                  className="mt-1 w-full rounded-xl border border-[#CCD2D8] bg-white px-3.5 py-2 text-xs text-[#374151] focus:border-[#F59E0B] focus:ring-1 focus:ring-[#F59E0B] focus:outline-hidden dark:border-[#3A454F] dark:bg-[#1E293B] dark:text-white"
+                  className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-white px-3.5 py-2 text-xs text-[#93A2B7] focus:border-[#7DA2FF] focus:ring-1 focus:ring-[#7DA2FF] focus:outline-hidden dark:border-[#39475C] dark:bg-[#172235] dark:text-white"
                   placeholder={`Conceito e evolução\nCaracterísticas e eficácia\nTitularidade`}
                 />
               </div>
@@ -424,13 +424,13 @@ export const AddContentModal: React.FC<AddContentModalProps> = ({
                   <button
                     type="button"
                     onClick={onClose}
-                    className="rounded-xl border border-[#CCD2D8] bg-white px-3.5 py-1.5 text-xs font-semibold text-[#374151] hover:bg-[#F8FAFC] dark:border-[#3A454F] dark:bg-[#1E293B] dark:text-white cursor-pointer"
+                    className="rounded-xl border border-[#E2E8F0] bg-white px-3.5 py-1.5 text-xs font-semibold text-[#93A2B7] hover:bg-[#F1F5F9] dark:border-[#39475C] dark:bg-[#172235] dark:text-white cursor-pointer"
                   >
                     Cancelar
                   </button>
                   <button
                     type="submit"
-                    className="rounded-xl bg-gradient-to-r from-[#F59E0B] to-[#FBBF24] hover:from-[#D97706] hover:to-[#F59E0B] px-4 py-1.5 text-xs font-bold text-white shadow-md shadow-amber-500/25 transition cursor-pointer"
+                    className="rounded-xl bg-gradient-to-r from-[#F4B544] to-[#F4B544] hover:from-[#D97706] hover:to-[#F4B544] px-4 py-1.5 text-xs font-bold text-white shadow-md shadow-amber-500/25 transition cursor-pointer"
                   >
                     Salvar Tópico
                   </button>
@@ -448,7 +448,7 @@ export const AddContentModal: React.FC<AddContentModalProps> = ({
                 <select
                   value={selectedTopicId}
                   onChange={(e) => setSelectedTopicId(e.target.value)}
-                  className="mt-1 w-full rounded-xl border border-[#CCD2D8] bg-white px-3.5 py-2 text-xs font-semibold text-[#374151] focus:border-[#F59E0B] focus:ring-1 focus:ring-[#F59E0B] focus:outline-hidden dark:border-[#3A454F] dark:bg-[#1E293B] dark:text-white"
+                  className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-white px-3.5 py-2 text-xs font-semibold text-[#93A2B7] focus:border-[#7DA2FF] focus:ring-1 focus:ring-[#7DA2FF] focus:outline-hidden dark:border-[#39475C] dark:bg-[#172235] dark:text-white"
                   required
                 >
                   {activeEdital.topics.map((t) => {
@@ -470,7 +470,7 @@ export const AddContentModal: React.FC<AddContentModalProps> = ({
                   type="text"
                   value={subtopicText}
                   onChange={(e) => setSubtopicText(e.target.value)}
-                  className="mt-1 w-full rounded-xl border border-[#CCD2D8] bg-white px-3.5 py-2 text-sm text-[#374151] focus:border-[#F59E0B] focus:ring-1 focus:ring-[#F59E0B] focus:outline-hidden dark:border-[#3A454F] dark:bg-[#1E293B] dark:text-white"
+                  className="mt-1 w-full rounded-xl border border-[#E2E8F0] bg-white px-3.5 py-2 text-sm text-[#93A2B7] focus:border-[#7DA2FF] focus:ring-1 focus:ring-[#7DA2FF] focus:outline-hidden dark:border-[#39475C] dark:bg-[#172235] dark:text-white"
                   placeholder="Ex: Mandado de Segurança Individual e Coletivo"
                   required
                   autoFocus
@@ -490,13 +490,13 @@ export const AddContentModal: React.FC<AddContentModalProps> = ({
                   <button
                     type="button"
                     onClick={onClose}
-                    className="rounded-xl border border-[#CCD2D8] bg-white px-3.5 py-1.5 text-xs font-semibold text-[#374151] hover:bg-[#F8FAFC] dark:border-[#3A454F] dark:bg-[#1E293B] dark:text-white cursor-pointer"
+                    className="rounded-xl border border-[#E2E8F0] bg-white px-3.5 py-1.5 text-xs font-semibold text-[#93A2B7] hover:bg-[#F1F5F9] dark:border-[#39475C] dark:bg-[#172235] dark:text-white cursor-pointer"
                   >
                     Cancelar
                   </button>
                   <button
                     type="submit"
-                    className="rounded-xl bg-gradient-to-r from-[#F59E0B] to-[#FBBF24] hover:from-[#D97706] hover:to-[#F59E0B] px-4 py-1.5 text-xs font-bold text-white shadow-md shadow-amber-500/25 transition cursor-pointer"
+                    className="rounded-xl bg-gradient-to-r from-[#F4B544] to-[#F4B544] hover:from-[#D97706] hover:to-[#F4B544] px-4 py-1.5 text-xs font-bold text-white shadow-md shadow-amber-500/25 transition cursor-pointer"
                   >
                     Adicionar Subtópico
                   </button>

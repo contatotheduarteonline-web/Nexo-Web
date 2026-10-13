@@ -126,21 +126,21 @@ export const PlanDetailView: React.FC<PlanDetailViewProps> = ({
       <div className="flex items-center justify-between">
         <button
           onClick={onBack}
-          className="group flex items-center gap-2 rounded-xl border border-zinc-200 bg-white px-3.5 py-2 text-xs font-bold text-zinc-700 hover:border-zinc-300 hover:bg-zinc-50 dark:border-zinc-800 dark:bg-[#252B38] dark:text-zinc-300 dark:hover:bg-zinc-850 transition"
+          className="group flex items-center gap-2 rounded-xl border border-zinc-200 bg-white px-3.5 py-2 text-xs font-bold text-zinc-700 hover:border-zinc-300 hover:bg-zinc-50 dark:border-zinc-800 dark:bg-[#1D2B40] dark:text-zinc-300 dark:hover:bg-zinc-850 transition"
         >
           <ArrowLeft className="h-4 w-4 transition group-hover:-translate-x-0.5" />
           <span>Voltar para todos os planos</span>
         </button>
 
         {isArchived && (
-          <span className="rounded-xl bg-amber-500/10 px-3 py-1.5 text-xs font-bold text-amber-600 dark:text-amber-400">
+          <span className="rounded-xl bg-[#527DFF]/10 px-3 py-1.5 text-xs font-bold text-[#F4B544] dark:text-[#F4B544]">
             Plano Arquivado
           </span>
         )}
       </div>
 
       {/* Hero Card with Plan info */}
-      <div className="relative overflow-hidden rounded-2xl border border-zinc-200 bg-white p-6 shadow-xs dark:border-zinc-800 dark:bg-[#252B38]">
+      <div className="relative overflow-hidden rounded-2xl border border-zinc-200 bg-white p-6 shadow-xs dark:border-zinc-800 dark:bg-[#1D2B40]">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5 min-w-0">
             {/* Plan Logo / Cover */}
@@ -158,7 +158,7 @@ export const PlanDetailView: React.FC<PlanDetailViewProps> = ({
                   }}
                 />
               ) : (
-                <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#F59E0B]/20 to-[#F59E0B]/5 text-[#F59E0B]">
+                <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#F4B544]/20 to-[#F4B544]/5 text-[#F4B544]">
                   <Shield className="h-10 w-10" />
                 </div>
               )}
@@ -220,7 +220,7 @@ export const PlanDetailView: React.FC<PlanDetailViewProps> = ({
                     className="fixed inset-0 z-20"
                     onClick={() => setIsMenuOpen(false)}
                   />
-                  <div className="absolute right-0 z-30 mt-1 w-44 rounded-xl border border-zinc-200 bg-white py-1.5 shadow-xl dark:border-zinc-800 dark:bg-[#252B38]">
+                  <div className="absolute right-0 z-30 mt-1 w-44 rounded-xl border border-zinc-200 bg-white py-1.5 shadow-xl dark:border-zinc-800 dark:bg-[#1D2B40]">
                     <button
                       onClick={() => {
                         setIsMenuOpen(false);
@@ -230,12 +230,12 @@ export const PlanDetailView: React.FC<PlanDetailViewProps> = ({
                     >
                       {isArchived ? (
                         <>
-                          <ArchiveRestore className="h-3.5 w-3.5 text-amber-500" />
+                          <ArchiveRestore className="h-3.5 w-3.5 text-[#F4B544]" />
                           <span>Desarquivar Plano</span>
                         </>
                       ) : (
                         <>
-                          <Archive className="h-3.5 w-3.5 text-amber-500" />
+                          <Archive className="h-3.5 w-3.5 text-[#F4B544]" />
                           <span>Arquivar Plano</span>
                         </>
                       )}
@@ -246,7 +246,7 @@ export const PlanDetailView: React.FC<PlanDetailViewProps> = ({
                         setIsMenuOpen(false);
                         onDeletePlan(plan);
                       }}
-                      className="flex w-full items-center gap-2 px-3 py-2 text-xs font-semibold text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950/40"
+                      className="flex w-full items-center gap-2 px-3 py-2 text-xs font-semibold text-[#F16D75] hover:bg-[#3B2029] dark:text-[#F16D75] dark:hover:bg-[#F16D75]/40"
                     >
                       <Trash2 className="h-3.5 w-3.5" />
                       <span>Excluir Plano</span>
@@ -262,10 +262,10 @@ export const PlanDetailView: React.FC<PlanDetailViewProps> = ({
       {/* Indicadores do Plano (Real Data) */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Horas Estudadas */}
-        <div className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-xs dark:border-zinc-800 dark:bg-[#252B38]">
+        <div className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-xs dark:border-zinc-800 dark:bg-[#1D2B40]">
           <div className="flex items-center justify-between text-white dark:text-white">
             <span className="text-xs font-bold uppercase tracking-wider">Horas Estudadas</span>
-            <div className="rounded-xl bg-amber-500/10 p-2 text-[#F59E0B]">
+            <div className="rounded-xl bg-[#527DFF]/10 p-2 text-[#F4B544]">
               <Clock className="h-4 w-4" />
             </div>
           </div>
@@ -280,10 +280,10 @@ export const PlanDetailView: React.FC<PlanDetailViewProps> = ({
         </div>
 
         {/* Questões Resolvidas */}
-        <div className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-xs dark:border-zinc-800 dark:bg-[#252B38]">
+        <div className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-xs dark:border-zinc-800 dark:bg-[#1D2B40]">
           <div className="flex items-center justify-between text-white dark:text-white">
             <span className="text-xs font-bold uppercase tracking-wider">Questões Resolvidas</span>
-            <div className="rounded-xl bg-blue-500/10 p-2 text-blue-500">
+            <div className="rounded-xl bg-[#58A6FF]/10 p-2 text-[#58A6FF]">
               <HelpCircle className="h-4 w-4" />
             </div>
           </div>
@@ -298,10 +298,10 @@ export const PlanDetailView: React.FC<PlanDetailViewProps> = ({
         </div>
 
         {/* Desempenho */}
-        <div className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-xs dark:border-zinc-800 dark:bg-[#252B38]">
+        <div className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-xs dark:border-zinc-800 dark:bg-[#1D2B40]">
           <div className="flex items-center justify-between text-white dark:text-white">
             <span className="text-xs font-bold uppercase tracking-wider">Desempenho Médio</span>
-            <div className="rounded-xl bg-emerald-500/10 p-2 text-emerald-500">
+            <div className="rounded-xl bg-[#2BBF8A]/10 p-2 text-[#2BBF8A]">
               <TrendingUp className="h-4 w-4" />
             </div>
           </div>
@@ -316,10 +316,10 @@ export const PlanDetailView: React.FC<PlanDetailViewProps> = ({
         </div>
 
         {/* Progresso Geral */}
-        <div className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-xs dark:border-zinc-800 dark:bg-[#252B38]">
+        <div className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-xs dark:border-zinc-800 dark:bg-[#1D2B40]">
           <div className="flex items-center justify-between text-white dark:text-white">
             <span className="text-xs font-bold uppercase tracking-wider">Progresso Geral</span>
-            <div className="rounded-xl bg-amber-500/10 p-2 text-[#F59E0B]">
+            <div className="rounded-xl bg-[#527DFF]/10 p-2 text-[#F4B544]">
               <CheckCircle2 className="h-4 w-4" />
             </div>
           </div>
@@ -339,7 +339,7 @@ export const PlanDetailView: React.FC<PlanDetailViewProps> = ({
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-200 pb-3 dark:border-zinc-800">
           <div>
             <h2 className="text-base font-bold text-white dark:text-white flex items-center gap-2">
-              <BookOpen className="h-4 w-4 text-[#F59E0B]" />
+              <BookOpen className="h-4 w-4 text-[#F4B544]" />
               <span>Disciplinas do Plano</span>
               <span className="text-xs font-medium text-white dark:text-white">
                 ({disciplines.length})
@@ -353,7 +353,7 @@ export const PlanDetailView: React.FC<PlanDetailViewProps> = ({
           <div className="flex items-center gap-2">
             <button
               onClick={() => setIsAddDisciplineOpen(true)}
-              className="flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#F59E0B] to-[#FBBF24] hover:from-[#D97706] hover:to-[#F59E0B] px-4 py-2 text-xs font-bold text-white shadow-md shadow-amber-500/20 active:scale-98 transition cursor-pointer"
+              className="flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#F4B544] to-[#F4B544] hover:from-[#D97706] hover:to-[#F4B544] px-4 py-2 text-xs font-bold text-white shadow-md shadow-amber-500/20 active:scale-98 transition cursor-pointer"
             >
               <Plus className="h-3.5 w-3.5" />
               <span>Nova Disciplina</span>
@@ -363,8 +363,8 @@ export const PlanDetailView: React.FC<PlanDetailViewProps> = ({
 
         {/* Empty state or Grid */}
         {disciplines.length === 0 ? (
-          <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-zinc-200 bg-white p-12 text-center dark:border-zinc-800 dark:bg-[#252B38]">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-500/10 text-[#F59E0B]">
+          <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-zinc-200 bg-white p-12 text-center dark:border-zinc-800 dark:bg-[#1D2B40]">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#527DFF]/10 text-[#F4B544]">
               <BookOpen className="h-6 w-6" />
             </div>
             <h3 className="mt-3 text-sm font-bold text-white dark:text-white">
@@ -375,7 +375,7 @@ export const PlanDetailView: React.FC<PlanDetailViewProps> = ({
             </p>
             <button
               onClick={() => setIsAddDisciplineOpen(true)}
-              className="mt-4 flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#F59E0B] to-[#FBBF24] hover:from-[#D97706] hover:to-[#F59E0B] px-4 py-2 text-xs font-bold text-white shadow-md shadow-amber-500/20 transition cursor-pointer"
+              className="mt-4 flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#F4B544] to-[#F4B544] hover:from-[#D97706] hover:to-[#F4B544] px-4 py-2 text-xs font-bold text-white shadow-md shadow-amber-500/20 transition cursor-pointer"
             >
               <Plus className="h-3.5 w-3.5" />
               <span>Adicionar Primeira Disciplina</span>
@@ -420,7 +420,7 @@ export const PlanDetailView: React.FC<PlanDetailViewProps> = ({
                 <div
                   key={disc.id}
                   onClick={() => setSelectedDisciplineForEdit(disc)}
-                  className="group relative flex flex-col justify-between rounded-2xl border border-zinc-200 bg-white p-5 shadow-xs transition hover:border-[#F59E0B] hover:shadow-md cursor-pointer dark:border-zinc-800 dark:bg-[#252B38]"
+                  className="group relative flex flex-col justify-between rounded-2xl border border-zinc-200 bg-white p-5 shadow-xs transition hover:border-[#F4B544] hover:shadow-md cursor-pointer dark:border-zinc-800 dark:bg-[#1D2B40]"
                 >
                   <div>
                     {/* Header: Color Indicator + Title + Tag */}
@@ -428,9 +428,9 @@ export const PlanDetailView: React.FC<PlanDetailViewProps> = ({
                       <div className="flex items-center gap-2.5 min-w-0">
                         <span
                           className="h-3 w-3 rounded-full shrink-0 shadow-xs"
-                          style={{ backgroundColor: disc.color || "#F59E0B" }}
+                          style={{ backgroundColor: disc.color || "#F4B544" }}
                         />
-                        <h3 className="font-bold text-white group-hover:text-[#F59E0B] dark:text-white dark:group-hover:text-[#FBBF24] truncate text-sm transition">
+                        <h3 className="font-bold text-white group-hover:text-[#F4B544] dark:text-white dark:group-hover:text-[#F4B544] truncate text-sm transition">
                           {disc.name}
                         </h3>
                       </div>
@@ -455,7 +455,7 @@ export const PlanDetailView: React.FC<PlanDetailViewProps> = ({
                       </div>
                       <div>
                         <span className="text-[10px] text-white block">Desempenho</span>
-                        <span className="text-xs font-bold text-[#F59E0B] dark:text-[#FBBF24]">
+                        <span className="text-xs font-bold text-[#F4B544] dark:text-[#F4B544]">
                           {discAccuracy}%
                         </span>
                       </div>
@@ -476,7 +476,7 @@ export const PlanDetailView: React.FC<PlanDetailViewProps> = ({
                           className="h-full rounded-full transition-all duration-500"
                           style={{
                             width: `${discProgress}%`,
-                            backgroundColor: disc.color || "#F59E0B",
+                            backgroundColor: disc.color || "#F4B544",
                           }}
                         />
                       </div>
@@ -486,7 +486,7 @@ export const PlanDetailView: React.FC<PlanDetailViewProps> = ({
                   {/* Card Footer: Quick edit cue */}
                   <div className="mt-4 pt-3 border-t border-zinc-100 dark:border-zinc-800 flex items-center justify-between text-[11px] text-white group-hover:text-white dark:group-hover:text-white transition">
                     <span>Clique para editar tópicos</span>
-                    <Edit2 className="h-3.5 w-3.5 text-white group-hover:text-[#F59E0B] transition" />
+                    <Edit2 className="h-3.5 w-3.5 text-white group-hover:text-[#F4B544] transition" />
                   </div>
                 </div>
               );
