@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { useStudy } from "../../context/StudyContext";
-import { Flame, Check } from "lucide-react";
+import { Flame, Check, X } from "lucide-react";
 
 /**
  * Retorna a data local no formato YYYY-MM-DD sem distorção de timezone
@@ -185,7 +185,7 @@ export const OfensivaCard: React.FC<OfensivaCardProps> = ({ className = "" }) =>
                 id={`ofensiva-dia-${day.label.toLowerCase()}`}
                 className={`relative flex flex-col items-center justify-between rounded-xl py-3.5 px-2 sm:px-3 text-center transition-colors duration-200 ${
                   day.isStudied
-                    ? "border border-[#F4B544]/30 bg-[#527DFF]/[0.07]"
+                    ? "border border-[#2BBF8A]/30 bg-[#2BBF8A]/[0.08]"
                     : day.isToday
                     ? "border-2 border-[#F4B544] bg-[#111B2D]"
                     : day.isFuture
@@ -199,7 +199,7 @@ export const OfensivaCard: React.FC<OfensivaCardProps> = ({ className = "" }) =>
                     day.isToday
                       ? "text-[#F4B544]"
                       : day.isStudied
-                      ? "text-[#F4B544]"
+                      ? "text-[#2BBF8A]"
                       : "text-white"
                   }`}
                 >
@@ -210,7 +210,7 @@ export const OfensivaCard: React.FC<OfensivaCardProps> = ({ className = "" }) =>
                 <span
                   className={`num-condensed my-1.5 text-[20px] sm:text-[22px] font-bold ${
                     day.isStudied
-                      ? "text-[#F4B544]"
+                      ? "text-[#2BBF8A]"
                       : day.isToday
                       ? "text-white"
                       : day.isFuture
@@ -226,9 +226,9 @@ export const OfensivaCard: React.FC<OfensivaCardProps> = ({ className = "" }) =>
                   {day.isStudied ? (
                     <div
                       title="Estudado"
-                      className="flex h-5 w-5 items-center justify-center rounded-full bg-[#527DFF] text-white"
+                      className="flex h-5 w-5 items-center justify-center rounded-lg bg-[#2BBF8A]/25 text-[#2BBF8A]"
                     >
-                      <Check className="h-3 w-3 stroke-[3]" />
+                      <Check className="h-3.5 w-3.5 stroke-[3]" />
                     </div>
                   ) : day.isToday ? (
                     <span className="inline-flex items-center rounded-full border border-[#F4B544]/25 bg-[#527DFF]/10 px-2 py-0.5 text-[10px] font-bold text-[#F4B544]">
@@ -239,8 +239,10 @@ export const OfensivaCard: React.FC<OfensivaCardProps> = ({ className = "" }) =>
                   ) : (
                     <span
                       title="Sem estudo"
-                      className="h-1.5 w-1.5 rounded-full bg-[#475569]"
-                    />
+                      className="flex h-5 w-5 items-center justify-center rounded-lg bg-[#F16D75]/15 text-[#F16D75]"
+                    >
+                      <X className="h-3 w-3 stroke-[3]" />
+                    </span>
                   )}
                 </div>
               </div>
