@@ -153,7 +153,7 @@ export const OfensivaCard: React.FC<OfensivaCardProps> = ({ className = "" }) =>
             <Flame className="h-5 w-5 fill-[#F59E0B] text-[#F4B544]" />
           </div>
           <div className="flex items-baseline gap-2.5">
-            <h2 className="font-condensed text-[19px] font-bold text-white">
+            <h2 className="font-condensed text-[15px] font-bold tracking-[0.08em] text-white">
               CONSTÂNCIA
             </h2>
           </div>
@@ -164,7 +164,7 @@ export const OfensivaCard: React.FC<OfensivaCardProps> = ({ className = "" }) =>
       </div>
 
       {/* Mensagem amigável (como no exemplo de Constância) */}
-      <p className="mt-4 text-[12.5px] text-[#C4CEDB]">
+      <p className="mt-3.5 text-[13.5px] leading-relaxed text-[#C4CEDB]">
         Você está há{" "}
         <span className="font-bold text-[#F4B544]">{currentStreak} {currentStreak === 1 ? "dia" : "dias"}</span>{" "}
         sem faltar! Seu recorde é de{" "}
@@ -191,7 +191,7 @@ export const OfensivaCard: React.FC<OfensivaCardProps> = ({ className = "" }) =>
               >
                 {/* Rótulo do dia (SEG, TER, QUA...) */}
                 <span
-                  className={`text-[11px] font-bold tracking-wider ${
+                  className={`text-[10px] font-semibold tracking-wider ${
                     day.isToday
                       ? "text-[#F4B544]"
                       : day.isStudied
@@ -204,7 +204,7 @@ export const OfensivaCard: React.FC<OfensivaCardProps> = ({ className = "" }) =>
 
                 {/* Número do dia */}
                 <span
-                  className={`num-condensed my-1.5 text-[20px] sm:text-[22px] font-bold ${
+                  className={`num-condensed my-1.5 text-[18px] sm:text-[19px] font-bold ${
                     day.isStudied
                       ? "text-[#2BBF8A]"
                       : day.isToday
@@ -227,7 +227,7 @@ export const OfensivaCard: React.FC<OfensivaCardProps> = ({ className = "" }) =>
                       <Check className="h-4 w-4 stroke-[3]" />
                     </div>
                   ) : day.isToday ? (
-                    <span className="inline-flex items-center rounded-full border border-[#F4B544]/25 bg-[#527DFF]/10 px-2 py-0.5 text-[10px] font-bold text-[#F4B544]">
+                    <span className="inline-flex items-center rounded-full border border-[#F4B544]/25 bg-[#527DFF]/10 px-2 py-0.5 text-[9.5px] font-bold text-[#F4B544]">
                       Hoje
                     </span>
                   ) : day.isFuture ? (
