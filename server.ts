@@ -857,6 +857,10 @@ export interface EmailConfig {
 
 const EMAIL_CONFIG_PATH = path.join(process.cwd(), "data", "email_config.json");
 
+// In-memory secrets set by the admin UI at runtime (never persisted to disk).
+// Live only for the current process; on restart the environment variables win.
+const runtimeEmailSecrets: { smtpPass?: string; resendApiKey?: string } = {};
+
 function getEmailConfig(): EmailConfig {
   let fileConfig: Partial<EmailConfig> = {};
   try {
@@ -868,13 +872,16 @@ function getEmailConfig(): EmailConfig {
     console.warn("[EMAIL CONFIG] Aviso ao ler email_config.json:", e);
   }
 
-  // Mandatory Fallback: Read process.env if field is not configured in the admin file
+  // Secrets (SMTP_PASS / RESEND_API_KEY) MUST come from protected environment variables
+  // first (env > in-memory admin override > file). The JSON file is versioned and must
+  // never hold credentials. Non-secret settings (host, port, user, sender) keep the
+  // admin-file priority so the admin UI continues to work as before.
+  const smtpPass = (process.env.SMTP_PASS?.trim() || runtimeEmailSecrets.smtpPass?.trim() || fileConfig.smtpPass?.trim() || "");
+  const resendApiKey = (process.env.RESEND_API_KEY?.trim() || runtimeEmailSecrets.resendApiKey?.trim() || fileConfig.resendApiKey?.trim() || "");
   const smtpHost = (fileConfig.smtpHost?.trim() || process.env.SMTP_HOST?.trim() || "");
   const smtpPort = fileConfig.smtpPort || (process.env.SMTP_PORT ? Number(process.env.SMTP_PORT) : 587);
   const smtpUser = (fileConfig.smtpUser?.trim() || process.env.SMTP_USER?.trim() || "");
-  const smtpPass = (fileConfig.smtpPass?.trim() || process.env.SMTP_PASS?.trim() || "");
   const smtpSecure = fileConfig.smtpSecure ?? (process.env.SMTP_SECURE === "true" || smtpPort === 465);
-  const resendApiKey = (fileConfig.resendApiKey?.trim() || process.env.RESEND_API_KEY?.trim() || "");
   const senderEmail = (fileConfig.senderEmail?.trim() || process.env.EMAIL_FROM?.trim() || "contato@projetofarda.com.br");
   const senderName = (fileConfig.senderName?.trim() || process.env.EMAIL_SENDER_NAME?.trim() || "Projeto Farda");
 
@@ -920,7 +927,12 @@ function saveEmailConfig(cfg: EmailConfig) {
     if (!fs.existsSync(dataDir)) {
       fs.mkdirSync(dataDir, { recursive: true });
     }
-    fs.writeFileSync(EMAIL_CONFIG_PATH, JSON.stringify(cfg, null, 2), "utf-8");
+    // Credentials are NEVER written to the versioned JSON file — they live only in
+    // environment variables (protected) or in the in-memory runtime override.
+    if (cfg.smtpPass) runtimeEmailSecrets.smtpPass = cfg.smtpPass;
+    if (cfg.resendApiKey) runtimeEmailSecrets.resendApiKey = cfg.resendApiKey;
+    const sanitized: EmailConfig = { ...cfg, smtpPass: "", resendApiKey: "" };
+    fs.writeFileSync(EMAIL_CONFIG_PATH, JSON.stringify(sanitized, null, 2), "utf-8");
     logEmailConfigStatus();
   } catch (e) {
     console.error("Erro ao salvar email_config.json:", e);

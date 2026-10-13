@@ -3,7 +3,7 @@
   "smtpHost": "smtp.gmail.com",
   "smtpPort": 587,
   "smtpUser": "suporte.projetofarda@gmail.com",
-  "smtpPass": "kyuuzvtrdkadlenf",
+  "smtpPass": "",
   "smtpSecure": false,
   "resendApiKey": "",
   "senderEmail": "suporte.projetofarda@gmail.com",
