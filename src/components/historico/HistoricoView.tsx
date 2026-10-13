@@ -1,25 +1,24 @@
 import React, { useState, useMemo, useEffect, useRef } from "react";
 import { useStudy } from "../../context/StudyContext";
 import { StudyModality, StudySession } from "../../types";
+import { RegistroEstudoModal } from "../revisoes/RegistroEstudoModal";
 import { StudySessionEditModal } from "./StudySessionEditModal";
 import {
   Search,
   Trash2,
-  Calendar,
   Clock,
-  Target,
-  Check,
-  RotateCw,
-  FileText,
-  MoreVertical,
+  Filter,
+  Globe,
   ChevronDown,
   X,
   Loader2,
   Plus,
   Pencil,
+  MessageSquare,
+  Check,
 } from "lucide-react";
 
-// Helpers for dates without timezone off-by-one errors
+// Helpers de data sem distorção de timezone
 function getSessionStudyDateStr(session: StudySession): string {
   if (session.studyDate) return session.studyDate;
   if (session.date) return session.date.split("T")[0];
@@ -38,41 +37,10 @@ function getSessionCreatedAtTime(session: StudySession): number {
   return 0;
 }
 
-function formatStudyDateDisplay(session: StudySession): string {
-  const ymd = getSessionStudyDateStr(session);
-  if (!ymd) return "—";
-  const parts = ymd.split("-");
-  if (parts.length === 3) {
-    const [y, m, d] = parts;
-    const months = [
-      "JAN",
-      "FEV",
-      "MAR",
-      "ABR",
-      "MAI",
-      "JUN",
-      "JUL",
-      "AGO",
-      "SET",
-      "OUT",
-      "NOV",
-      "DEZ",
-    ];
-    const monthName = months[parseInt(m, 10) - 1] || m;
-    return `${d} ${monthName} ${y}`;
-  }
-  return ymd;
-}
-
-function formatDuration(minutes: number): string {
-  if (!minutes || minutes <= 0) return "0 min";
-  const h = Math.floor(minutes / 60);
-  const m = minutes % 60;
-  if (h > 0) {
-    return `${h}h ${String(m).padStart(2, "0")}m`;
-  }
-  return `${m} min`;
-}
+const MONTHS_PT = [
+  "JAN", "FEV", "MAR", "ABR", "MAI", "JUN",
+  "JUL", "AGO", "SET", "OUT", "NOV", "DEZ",
+];
 
 function getTodayYmd(): string {
   const d = new Date();
@@ -91,21 +59,43 @@ function getDaysAgoYmd(days: number): string {
   return `${y}-${m}-${day}`;
 }
 
+/** Formata minutos como "52h38min" (ou "25min" quando menor que 1h). */
+function formatHM(minutes: number): string {
+  const total = Math.max(0, Math.round(minutes || 0));
+  const h = Math.floor(total / 60);
+  const m = total % 60;
+  if (h > 0) return `${h}h${String(m).padStart(2, "0")}min`;
+  return `${m}min`;
+}
+
 type PeriodFilter = "all" | "today" | "7days" | "30days" | "custom";
+
+const MODALITY_BADGE_COLOR: Record<string, string> = {
+  Teoria: "#8B5CF6",
+  "Questões": "#2BBF8A",
+  Revisão: "#F16D75",
+  Videoaula: "#58A6FF",
+  "Lei Seca": "#F4B544",
+  Simulado: "#6366F1",
+};
+
+const PASTEL_FALLBACK = [
+  "#58A6FF", "#2BBF8A", "#8B5CF6", "#EC4899", "#F4B544",
+  "#06B6D4", "#6366F1", "#D946EF", "#F16D75", "#84CC16",
+];
 
 export const HistoricoView: React.FC = () => {
   const {
     studySessions,
-    scheduledReviews,
     editais,
     activeEdital,
     studyPlans,
     activePlan,
+    setActivePlanId,
     deleteStudySession,
-    setActiveTab,
   } = useStudy();
 
-  // Filters state
+  // Filtros
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedModality, setSelectedModality] = useState<string>("all");
   const [selectedDiscipline, setSelectedDiscipline] = useState<string>("all");
@@ -113,48 +103,47 @@ export const HistoricoView: React.FC = () => {
   const [customStartDate, setCustomStartDate] = useState<string>("");
   const [customEndDate, setCustomEndDate] = useState<string>("");
 
-  // Interaction state
-  const [openMenuSessionId, setOpenMenuSessionId] = useState<string | null>(null);
+  // Interação
+  const [openDropdown, setOpenDropdown] = useState<"plan" | "filters" | null>(null);
   const [expandedSessionId, setExpandedSessionId] = useState<string | null>(null);
+  const [addModalOpen, setAddModalOpen] = useState(false);
   const [sessionToEdit, setSessionToEdit] = useState<StudySession | null>(null);
   const [sessionToDelete, setSessionToDelete] = useState<StudySession | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  // Close menus on outside click
-  const menuContainerRef = useRef<HTMLDivElement>(null);
+  const actionsRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (menuContainerRef.current && !menuContainerRef.current.contains(event.target as Node)) {
-        setOpenMenuSessionId(null);
+      if (actionsRef.current && !actionsRef.current.contains(event.target as Node)) {
+        setOpenDropdown(null);
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Available disciplines for filtering
+  // Disciplinas do edital ativo (id → nome e cor)
   const availableDisciplines = useMemo(() => {
-    const map = new Map<string, string>();
-    // From active edital or plans
-    const curEdital =
-      activePlan && activePlan.editalId
-        ? editais.find((e) => e.id === activePlan.editalId) || activeEdital
-        : activeEdital;
-
-    if (curEdital?.disciplines) {
-      curEdital.disciplines.forEach((d) => map.set(d.id, d.name));
-    }
-    // Also include any disciplines that exist in studySessions
+    const map = new Map<string, { name: string; color?: string }>();
+    (activeEdital?.disciplines || []).forEach((d) => {
+      map.set(d.id, { name: d.name, color: (d as { color?: string }).color });
+    });
     studySessions.forEach((s) => {
       if (s.disciplineId && s.disciplineName && !map.has(s.disciplineId)) {
-        map.set(s.disciplineId, s.disciplineName);
+        map.set(s.disciplineId, { name: s.disciplineName });
       }
     });
+    return Array.from(map.entries()).map(([id, v]) => ({ id, ...v }));
+  }, [activeEdital, studySessions]);
 
-    return Array.from(map.entries()).map(([id, name]) => ({ id, name }));
-  }, [editais, activeEdital, activePlan, studySessions]);
+  const disciplineColorMap = useMemo(() => {
+    const map = new Map<string, string>();
+    availableDisciplines.forEach((d, idx) => {
+      map.set(d.id, d.color || PASTEL_FALLBACK[idx % PASTEL_FALLBACK.length]);
+    });
+    return map;
+  }, [availableDisciplines]);
 
-  // Modalities list
   const modalities: StudyModality[] = [
     "Teoria",
     "Questões",
@@ -164,20 +153,16 @@ export const HistoricoView: React.FC = () => {
     "Simulado",
   ];
 
-  // Filtering logic
+  // Filtragem
   const filteredSessions = useMemo(() => {
     const todayYmd = getTodayYmd();
     const sevenDaysAgo = getDaysAgoYmd(7);
     const thirtyDaysAgo = getDaysAgoYmd(30);
 
     return studySessions.filter((s) => {
-      // Modality filter
       if (selectedModality !== "all" && s.modality !== selectedModality) return false;
-
-      // Discipline filter
       if (selectedDiscipline !== "all" && s.disciplineId !== selectedDiscipline) return false;
 
-      // Period filter based on studyDate
       const studyDateStr = getSessionStudyDateStr(s);
       if (periodFilter === "today") {
         if (studyDateStr !== todayYmd) return false;
@@ -190,14 +175,14 @@ export const HistoricoView: React.FC = () => {
         if (customEndDate && studyDateStr > customEndDate) return false;
       }
 
-      // Search query filter
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase();
-        const matchDisc = (s.disciplineName || "").toLowerCase().includes(q);
-        const matchTopic = (s.topicName || "").toLowerCase().includes(q);
-        const matchNotes = (s.notes || "").toLowerCase().includes(q);
-        const matchCargo = (s.cargo || "").toLowerCase().includes(q);
-        if (!matchDisc && !matchTopic && !matchNotes && !matchCargo) return false;
+        const match =
+          (s.disciplineName || "").toLowerCase().includes(q) ||
+          (s.topicName || "").toLowerCase().includes(q) ||
+          (s.notes || "").toLowerCase().includes(q) ||
+          (s.cargo || "").toLowerCase().includes(q);
+        if (!match) return false;
       }
 
       return true;
@@ -212,46 +197,72 @@ export const HistoricoView: React.FC = () => {
     searchQuery,
   ]);
 
-  // Strict sorting: 1. studyDate mais recente; 2. Em empate, createdAt mais recente
+  // Ordenação: studyDate desc, depois createdAt desc
   const sortedSessions = useMemo(() => {
     return [...filteredSessions].sort((a, b) => {
       const dateA = getSessionStudyDateStr(a);
       const dateB = getSessionStudyDateStr(b);
-      if (dateA !== dateB) {
-        return dateB.localeCompare(dateA);
-      }
-      const createdA = getSessionCreatedAtTime(a);
-      const createdB = getSessionCreatedAtTime(b);
-      return createdB - createdA;
+      if (dateA !== dateB) return dateB.localeCompare(dateA);
+      return getSessionCreatedAtTime(b) - getSessionCreatedAtTime(a);
     });
   }, [filteredSessions]);
 
-  // Aggregated indicators for the top summary
-  const totalFilteredMinutes = useMemo(() => {
-    return sortedSessions.reduce((acc, s) => acc + (s.durationMinutes || 0), 0);
+  // Agrupamento cronológico (dia → header + tempo total)
+  const groupedSessions = useMemo(() => {
+    const todayYmd = getTodayYmd();
+    const yesterdayYmd = getDaysAgoYmd(1);
+    const groups: { date: string; label: string; minutes: number; sessions: StudySession[] }[] = [];
+    const byDate = new Map<string, StudySession[]>();
+
+    sortedSessions.forEach((s) => {
+      const key = getSessionStudyDateStr(s) || "—";
+      if (!byDate.has(key)) byDate.set(key, []);
+      byDate.get(key)!.push(s);
+    });
+
+    byDate.forEach((sessions, date) => {
+      const [y, m, d] = date.split("-");
+      let label = date;
+      if (date === todayYmd) label = "HOJE";
+      else if (date === yesterdayYmd) label = "ONTEM";
+      else if (y && m && d) label = `${d} ${MONTHS_PT[parseInt(m, 10) - 1] || m} ${y}`;
+      groups.push({
+        date,
+        label,
+        minutes: sessions.reduce((acc, s) => acc + (s.durationMinutes || 0), 0),
+        sessions,
+      });
+    });
+
+    return groups;
   }, [sortedSessions]);
 
-  const totalFilteredHoursFormatted = useMemo(() => {
-    const h = Math.floor(totalFilteredMinutes / 60);
-    const m = totalFilteredMinutes % 60;
-    return `${h}h ${String(m).padStart(2, "0")}m`;
-  }, [totalFilteredMinutes]);
+  // Cards de resumo (respeitam os filtros ativos)
+  const summary = useMemo(() => {
+    const totalMinutes = sortedSessions.reduce((acc, s) => acc + (s.durationMinutes || 0), 0);
+    const acertos = sortedSessions.reduce((acc, s) => acc + (s.questionsCorrect || 0), 0);
+    const questoes = sortedSessions.reduce((acc, s) => acc + (s.questionsDone || 0), 0);
+    const erros = Math.max(0, questoes - acertos);
+    const desempenho = questoes > 0 ? Math.round((acertos / questoes) * 100) : 0;
 
-  const totalFilteredQuestions = useMemo(() => {
-    return sortedSessions.reduce((acc, s) => acc + (s.questionsDone || 0), 0);
-  }, [sortedSessions]);
+    const topics = activeEdital?.topics || [];
+    const totalTopics = topics.length;
+    const concluidos = topics.filter((t) => t.isStudied).length;
+    const pendentes = Math.max(0, totalTopics - concluidos);
+    const progresso = totalTopics > 0 ? Math.round((concluidos / totalTopics) * 100) : 0;
 
-  const totalFilteredCorrect = useMemo(() => {
-    return sortedSessions.reduce((acc, s) => acc + (s.questionsCorrect || 0), 0);
-  }, [sortedSessions]);
+    const paginas = sortedSessions.reduce(
+      (acc, s) =>
+        s.pagesStart != null && s.pagesEnd != null && s.pagesEnd > s.pagesStart
+          ? acc + (s.pagesEnd - s.pagesStart + 1)
+          : acc,
+      0
+    );
+    const paginasPorHora = totalMinutes > 0 ? paginas / (totalMinutes / 60) : 0;
 
-  const averageAccuracy = useMemo(() => {
-    return totalFilteredQuestions > 0
-      ? Math.round((totalFilteredCorrect / totalFilteredQuestions) * 100)
-      : 0;
-  }, [totalFilteredQuestions, totalFilteredCorrect]);
+    return { totalMinutes, acertos, erros, desempenho, concluidos, pendentes, progresso, paginas, paginasPorHora };
+  }, [sortedSessions, activeEdital]);
 
-  // Check if any filter is actively applied
   const isFiltered =
     selectedModality !== "all" ||
     selectedDiscipline !== "all" ||
@@ -269,19 +280,12 @@ export const HistoricoView: React.FC = () => {
     setCustomEndDate("");
   };
 
-  const handleEditSession = (session: StudySession) => {
-    setOpenMenuSessionId(null);
-    setSessionToEdit(session);
-  };
-
-  // Execution of session deletion
   const handleConfirmDelete = async () => {
     if (!sessionToDelete) return;
     setIsDeleting(true);
     try {
       await deleteStudySession(sessionToDelete.id);
       setSessionToDelete(null);
-      setOpenMenuSessionId(null);
     } catch (err) {
       console.error("Erro ao excluir estudo:", err);
     } finally {
@@ -289,405 +293,460 @@ export const HistoricoView: React.FC = () => {
     }
   };
 
+  const selectClass =
+    "w-full appearance-none rounded-lg border border-[#E3E6EB] bg-white px-3 py-2 pr-8 text-[13px] font-medium text-[#1A2332] outline-none transition focus:border-[#527DFF] focus:ring-1 focus:ring-[#527DFF] cursor-pointer truncate";
+
+  const outlineBtn =
+    "inline-flex items-center gap-2 rounded-lg border border-[#E3E6EB] bg-white px-3.5 py-2 text-[13px] font-semibold text-[#1A2332] transition hover:bg-[#F7F8FA] cursor-pointer";
+
   return (
-    <div className="mx-auto max-w-6xl space-y-6 pb-12" ref={menuContainerRef}>
-      {/* 1. NOVO CABEÇALHO LIMPO (mesmo padrão do Registro de Estudos) */}
-      <div className="border-b border-slate-200 pb-3 dark:border-[#263447]">
-        <h1 className="text-xl font-bold tracking-tight text-white dark:text-white">
-          Histórico de Estudos
-        </h1>
-      </div>
+    <div className="space-y-5 pb-12">
+      {/* ===== CABEÇALHO ===== */}
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <h1 className="text-[26px] font-bold tracking-tight text-[#1A2332]">Histórico</h1>
 
-      {/* 2. RESUMO SUPERIOR (compacto e elegante) */}
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-        {/* SESSÕES */}
-        <div className="rounded-xl border border-slate-200 bg-white p-3.5 sm:p-4 shadow-xs dark:border-[#263447] dark:bg-[#1D2B40]">
-          <div className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-white">
-            Sessões
-          </div>
-          <div className="mt-1 font-mono text-2xl font-bold text-white dark:text-white">
-            {sortedSessions.length}
-          </div>
-        </div>
+        <div className="flex flex-wrap items-center gap-2.5" ref={actionsRef}>
+          <button
+            type="button"
+            onClick={() => setAddModalOpen(true)}
+            className="inline-flex items-center gap-1.5 rounded-lg bg-[#2BBF8A] px-4 py-2 text-[13px] font-semibold text-white shadow-xs transition hover:bg-[#25A87A] cursor-pointer"
+          >
+            <Plus className="h-4 w-4" />
+            Adicionar Estudo
+          </button>
 
-        {/* TEMPO LÍQUIDO */}
-        <div className="rounded-xl border border-slate-200 bg-white p-3.5 sm:p-4 shadow-xs dark:border-[#263447] dark:bg-[#1D2B40]">
-          <div className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-white">
-            Tempo Líquido
-          </div>
-          <div className="mt-1 font-mono text-2xl font-bold text-[#F4B544] dark:text-[#F4B544]">
-            {totalFilteredHoursFormatted}
-          </div>
-        </div>
-
-        {/* QUESTÕES */}
-        <div className="rounded-xl border border-slate-200 bg-white p-3.5 sm:p-4 shadow-xs dark:border-[#263447] dark:bg-[#1D2B40]">
-          <div className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-white">
-            Questões
-          </div>
-          <div className="mt-1 font-mono text-2xl font-bold text-white dark:text-white">
-            {totalFilteredQuestions}
-          </div>
-        </div>
-
-        {/* APROVEITAMENTO */}
-        <div className="rounded-xl border border-slate-200 bg-white p-3.5 sm:p-4 shadow-xs dark:border-[#263447] dark:bg-[#1D2B40]">
-          <div className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-white">
-            Aproveitamento
-          </div>
-          <div className="mt-1 font-mono text-2xl font-bold text-[#2BBF8A] dark:text-[#2BBF8A]">
-            {averageAccuracy}%
-          </div>
-        </div>
-      </div>
-
-      {/* 3. ÁREA DE FILTROS COMPACTA E MODERNA */}
-      <div className="rounded-xl border border-slate-200 bg-white p-3.5 sm:p-4 shadow-xs dark:border-[#263447] dark:bg-[#1D2B40] space-y-3">
-        {/* Linha superior: Busca, Modalidade e Disciplina */}
-        <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-12">
-          {/* Busca */}
-          <div className="relative sm:col-span-6 lg:col-span-6">
-            <Search className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-white" />
-            <input
-              id="history-search-input"
-              type="text"
-              placeholder="Buscar por disciplina, assunto ou anotação..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full rounded-lg border border-slate-200 bg-slate-50 py-2 pl-8 pr-8 text-xs text-white placeholder:text-white focus:border-[#7DA2FF] focus:ring-1 focus:ring-[#7DA2FF] dark:border-[#263447] dark:bg-[#0B1120] dark:text-white"
-            />
-            {searchQuery && (
-              <button
-                type="button"
-                onClick={() => setSearchQuery("")}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-white hover:text-white dark:hover:text-white"
-              >
-                <X className="h-3.5 w-3.5" />
-              </button>
+          {/* Plano ativo */}
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => setOpenDropdown(openDropdown === "plan" ? null : "plan")}
+              className={outlineBtn}
+            >
+              <Globe className="h-4 w-4 text-[#527DFF]" />
+              <span className="max-w-[160px] truncate">{activePlan?.name || "Meu Plano"}</span>
+              <ChevronDown className="h-3.5 w-3.5 text-[#8A93A3]" />
+            </button>
+            {openDropdown === "plan" && (
+              <div className="absolute right-0 top-11 z-30 w-64 rounded-xl border border-[#E3E6EB] bg-white p-1.5 shadow-xl">
+                {studyPlans.map((p) => (
+                  <button
+                    key={p.id}
+                    type="button"
+                    onClick={() => {
+                      setActivePlanId(p.id);
+                      setOpenDropdown(null);
+                    }}
+                    className="flex w-full items-center justify-between gap-2 rounded-lg px-3 py-2 text-left text-[13px] font-medium text-[#1A2332] transition hover:bg-[#F7F8FA] cursor-pointer"
+                  >
+                    <span className="truncate">{p.name}</span>
+                    {p.id === activePlan?.id && <Check className="h-4 w-4 text-[#2BBF8A]" />}
+                  </button>
+                ))}
+                {studyPlans.length === 0 && (
+                  <p className="px-3 py-2 text-[13px] text-[#8A93A3]">Nenhum plano criado.</p>
+                )}
+              </div>
             )}
           </div>
 
-          {/* Disciplina */}
-          <div className="relative sm:col-span-3 lg:col-span-3">
-            <select
-              id="history-discipline-filter"
-              value={selectedDiscipline}
-              onChange={(e) => setSelectedDiscipline(e.target.value)}
-              className="w-full appearance-none rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 pr-8 text-xs font-semibold text-white transition focus:border-[#7DA2FF] focus:ring-1 focus:ring-[#7DA2FF] dark:border-[#263447] dark:bg-[#0B1120] dark:text-white cursor-pointer truncate"
-            >
-              <option value="all">Todas as disciplinas</option>
-              {availableDisciplines.map((d) => (
-                <option key={d.id} value={d.id}>
-                  {d.name}
-                </option>
-              ))}
-            </select>
-            <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-white" />
-          </div>
-
-          {/* Modalidade */}
-          <div className="relative sm:col-span-3 lg:col-span-3">
-            <select
-              id="history-modality-filter"
-              value={selectedModality}
-              onChange={(e) => setSelectedModality(e.target.value)}
-              className="w-full appearance-none rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 pr-8 text-xs font-semibold text-white transition focus:border-[#7DA2FF] focus:ring-1 focus:ring-[#7DA2FF] dark:border-[#263447] dark:bg-[#0B1120] dark:text-white cursor-pointer"
-            >
-              <option value="all">Todas as modalidades</option>
-              {modalities.map((m) => (
-                <option key={m} value={m}>
-                  {m}
-                </option>
-              ))}
-            </select>
-            <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-white" />
-          </div>
-        </div>
-
-        {/* Linha inferior: Filtro de Período (Pills compactas) e Limpar Filtros */}
-        <div className="flex flex-wrap items-center justify-between gap-2 border-t border-slate-100 pt-2.5 dark:border-[#263447]/80">
-          <div className="flex flex-wrap items-center gap-1.5">
-            <span className="mr-1 text-[11px] font-bold uppercase tracking-wider text-white">
-              Período:
-            </span>
-            {(
-              [
-                { key: "all", label: "Todos" },
-                { key: "today", label: "Hoje" },
-                { key: "7days", label: "Últimos 7 dias" },
-                { key: "30days", label: "Últimos 30 dias" },
-                { key: "custom", label: "Personalizado" },
-              ] as const
-            ).map((p) => {
-              const isSelected = periodFilter === p.key;
-              return (
-                <button
-                  key={p.key}
-                  type="button"
-                  onClick={() => setPeriodFilter(p.key)}
-                  className={`rounded-lg px-2.5 py-1 text-xs font-semibold transition cursor-pointer ${
-                    isSelected
-                      ? "bg-[#527DFF] text-white shadow-xs"
-                      : "bg-slate-100 text-white hover:bg-slate-200 dark:bg-[#0B1120] dark:text-white dark:hover:bg-[#172235]"
-                  }`}
-                >
-                  {p.label}
-                </button>
-              );
-            })}
-          </div>
-
-          {isFiltered && (
+          {/* Filtros */}
+          <div className="relative">
             <button
               type="button"
-              onClick={clearFilters}
-              className="text-xs font-semibold text-[#F4B544] hover:underline dark:text-[#F4B544] cursor-pointer"
+              onClick={() => setOpenDropdown(openDropdown === "filters" ? null : "filters")}
+              className={outlineBtn}
             >
-              Limpar filtros
+              <Filter className="h-4 w-4 text-[#527DFF]" />
+              Filtros
+              {isFiltered && <span className="h-2 w-2 rounded-full bg-[#2BBF8A]" />}
+              <ChevronDown className="h-3.5 w-3.5 text-[#8A93A3]" />
             </button>
-          )}
-        </div>
+            {openDropdown === "filters" && (
+              <div className="absolute right-0 top-11 z-30 w-[400px] max-w-[calc(100vw-2rem)] space-y-3 rounded-xl border border-[#E3E6EB] bg-white p-4 shadow-xl">
+                {/* Busca */}
+                <div className="relative">
+                  <Search className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#8A93A3]" />
+                  <input
+                    id="history-search-input"
+                    type="text"
+                    placeholder="Buscar por disciplina, assunto ou anotação..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full rounded-lg border border-[#E3E6EB] bg-[#F7F8FA] py-2 pl-8 pr-8 text-[13px] text-[#1A2332] placeholder:text-[#AEB7C4] outline-none focus:border-[#527DFF] focus:ring-1 focus:ring-[#527DFF]"
+                  />
+                  {searchQuery && (
+                    <button
+                      type="button"
+                      onClick={() => setSearchQuery("")}
+                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#AEB7C4] hover:text-[#1A2332] cursor-pointer"
+                    >
+                      <X className="h-3.5 w-3.5" />
+                    </button>
+                  )}
+                </div>
 
-        {/* Período Personalizado (Inputs discretos de data) */}
-        {periodFilter === "custom" && (
-          <div className="flex flex-wrap items-center gap-2 pt-1">
-            <span className="text-xs text-white">De:</span>
-            <input
-              type="date"
-              value={customStartDate}
-              onChange={(e) => setCustomStartDate(e.target.value)}
-              className="rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-medium text-white dark:border-[#263447] dark:bg-[#0B1120] dark:text-white"
-            />
-            <span className="text-xs text-white">Até:</span>
-            <input
-              type="date"
-              value={customEndDate}
-              onChange={(e) => setCustomEndDate(e.target.value)}
-              className="rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-medium text-white dark:border-[#263447] dark:bg-[#0B1120] dark:text-white"
-            />
+                <div className="grid grid-cols-2 gap-2.5">
+                  <div className="relative">
+                    <select
+                      id="history-discipline-filter"
+                      value={selectedDiscipline}
+                      onChange={(e) => setSelectedDiscipline(e.target.value)}
+                      className={selectClass}
+                    >
+                      <option value="all">Todas as disciplinas</option>
+                      {availableDisciplines.map((d) => (
+                        <option key={d.id} value={d.id}>
+                          {d.name}
+                        </option>
+                      ))}
+                    </select>
+                    <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#8A93A3]" />
+                  </div>
+                  <div className="relative">
+                    <select
+                      id="history-modality-filter"
+                      value={selectedModality}
+                      onChange={(e) => setSelectedModality(e.target.value)}
+                      className={selectClass}
+                    >
+                      <option value="all">Todas as modalidades</option>
+                      {modalities.map((m) => (
+                        <option key={m} value={m}>
+                          {m}
+                        </option>
+                      ))}
+                    </select>
+                    <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#8A93A3]" />
+                  </div>
+                </div>
+
+                {/* Período */}
+                <div className="flex flex-wrap items-center gap-1.5 border-t border-[#EEF1F5] pt-3">
+                  {(
+                    [
+                      { key: "all", label: "Todos" },
+                      { key: "today", label: "Hoje" },
+                      { key: "7days", label: "7 dias" },
+                      { key: "30days", label: "30 dias" },
+                      { key: "custom", label: "Personalizado" },
+                    ] as const
+                  ).map((p) => {
+                    const isSelected = periodFilter === p.key;
+                    return (
+                      <button
+                        key={p.key}
+                        type="button"
+                        onClick={() => setPeriodFilter(p.key)}
+                        className={`rounded-lg px-2.5 py-1 text-[12px] font-semibold transition cursor-pointer ${
+                          isSelected
+                            ? "bg-[#527DFF] text-white"
+                            : "bg-[#F7F8FA] text-[#1A2332] hover:bg-[#EEF1F5]"
+                        }`}
+                      >
+                        {p.label}
+                      </button>
+                    );
+                  })}
+                  {isFiltered && (
+                    <button
+                      type="button"
+                      onClick={clearFilters}
+                      className="ml-auto text-[12px] font-semibold text-[#F16D75] hover:underline cursor-pointer"
+                    >
+                      Limpar
+                    </button>
+                  )}
+                </div>
+
+                {periodFilter === "custom" && (
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="text-[12px] text-[#8A93A3]">De:</span>
+                    <input
+                      type="date"
+                      value={customStartDate}
+                      onChange={(e) => setCustomStartDate(e.target.value)}
+                      className="rounded-lg border border-[#E3E6EB] bg-[#F7F8FA] px-2.5 py-1 text-[12px] text-[#1A2332] outline-none focus:border-[#527DFF]"
+                    />
+                    <span className="text-[12px] text-[#8A93A3]">Até:</span>
+                    <input
+                      type="date"
+                      value={customEndDate}
+                      onChange={(e) => setCustomEndDate(e.target.value)}
+                      className="rounded-lg border border-[#E3E6EB] bg-[#F7F8FA] px-2.5 py-1 text-[12px] text-[#1A2332] outline-none focus:border-[#527DFF]"
+                    />
+                  </div>
+                )}
+              </div>
+            )}
           </div>
-        )}
+        </div>
       </div>
 
-      {/* 4. LISTA DE REGISTROS MODERNOS (Substitui completamente a tabela tradicional) */}
+      {/* ===== CARDS DE RESUMO ===== */}
+      <div className="grid grid-cols-2 gap-3.5 lg:grid-cols-4">
+        {/* TEMPO DE ESTUDO */}
+        <div className="rounded-xl border border-[#E7EAF0] bg-white p-4 shadow-[0_1px_2px_rgba(16,24,40,0.05)]">
+          <div className="text-[11px] font-bold uppercase tracking-[0.08em] text-[#8A93A3]">
+            Tempo de Estudo
+          </div>
+          <div className="mt-4 flex min-h-[32px] items-end justify-end">
+            <span className="num-condensed text-[22px] font-bold leading-none text-[#1A2332]">
+              {formatHM(summary.totalMinutes)}
+            </span>
+          </div>
+        </div>
+
+        {/* DESEMPENHO */}
+        <div className="rounded-xl border border-[#E7EAF0] bg-white p-4 shadow-[0_1px_2px_rgba(16,24,40,0.05)]">
+          <div className="text-[11px] font-bold uppercase tracking-[0.08em] text-[#8A93A3]">
+            Desempenho
+          </div>
+          <div className="mt-2.5 flex min-h-[32px] items-end justify-between gap-2">
+            <div className="flex flex-col gap-0.5 pb-0.5">
+              <span className="text-[12px] font-semibold text-[#2BBF8A]">
+                {`${summary.acertos} Acertos`}
+              </span>
+              <span className="text-[12px] font-semibold text-[#F16D75]">
+                {`${summary.erros} Erros`}
+              </span>
+            </div>
+            <span className="num-condensed text-[22px] font-bold leading-none text-[#1A2332]">
+              {summary.desempenho}%
+            </span>
+          </div>
+        </div>
+
+        {/* PROGRESSO NO EDITAL */}
+        <div className="rounded-xl border border-[#E7EAF0] bg-white p-4 shadow-[0_1px_2px_rgba(16,24,40,0.05)]">
+          <div className="text-[11px] font-bold uppercase tracking-[0.08em] text-[#8A93A3]">
+            Progresso no Edital
+          </div>
+          <div className="mt-2.5 flex min-h-[32px] items-end justify-between gap-2">
+            <div className="flex flex-col gap-0.5 pb-0.5">
+              <span className="text-[12px] font-semibold text-[#2BBF8A]">
+                {`${summary.concluidos} Tópicos Concluídos`}
+              </span>
+              <span className="text-[12px] font-semibold text-[#F16D75]">
+                {`${summary.pendentes} Tópicos Pendentes`}
+              </span>
+            </div>
+            <span className="num-condensed text-[22px] font-bold leading-none text-[#1A2332]">
+              {summary.progresso}%
+            </span>
+          </div>
+        </div>
+
+        {/* PÁGINAS LIDAS */}
+        <div className="rounded-xl border border-[#E7EAF0] bg-white p-4 shadow-[0_1px_2px_rgba(16,24,40,0.05)]">
+          <div className="text-[11px] font-bold uppercase tracking-[0.08em] text-[#8A93A3]">
+            Páginas Lidas
+          </div>
+          <div className="mt-2.5 flex min-h-[32px] items-end justify-between gap-2">
+            <span className="text-[12px] font-medium text-[#8A93A3] pb-0.5">
+              {summary.paginasPorHora > 0 ? `${summary.paginasPorHora.toFixed(1)} páginas por hora` : "—"}
+            </span>
+            <span className="num-condensed text-[22px] font-bold leading-none text-[#1A2332]">
+              {summary.paginas}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* ===== LISTA CRONOLÓGICA ===== */}
       {studySessions.length === 0 ? (
-        /* ESTADO VAZIO LIMPO (quando não há nenhum estudo registrado) */
-        <div className="rounded-2xl border border-slate-200 bg-white p-12 text-center shadow-xs dark:border-[#263447] dark:bg-[#1D2B40]">
-          <h2 className="text-base font-bold text-white dark:text-white">
-            Nenhum estudo registrado
-          </h2>
-          <p className="mt-1 text-xs text-white dark:text-white max-w-sm mx-auto">
+        <div className="rounded-xl border border-[#E7EAF0] bg-white p-12 text-center shadow-[0_1px_2px_rgba(16,24,40,0.05)]">
+          <h2 className="text-base font-bold text-[#1A2332]">Nenhum estudo registrado</h2>
+          <p className="mx-auto mt-1 max-w-sm text-[13px] text-[#8A93A3]">
             Seus estudos aparecerão aqui depois que você finalizar uma sessão.
           </p>
           <div className="mt-5">
             <button
               type="button"
-              onClick={() => setActiveTab("cronometro")}
-              className="inline-flex items-center gap-2 rounded-xl bg-[#527DFF] px-5 py-2.5 text-xs font-bold text-white shadow-sm shadow-amber-500/20 transition hover:bg-[#416CEB] active:scale-98 cursor-pointer"
+              onClick={() => setAddModalOpen(true)}
+              className="inline-flex items-center gap-2 rounded-lg bg-[#2BBF8A] px-5 py-2.5 text-[13px] font-semibold text-white transition hover:bg-[#25A87A] cursor-pointer"
             >
-              <Plus className="h-3.5 w-3.5" />
-              <span>Registrar estudo</span>
+              <Plus className="h-4 w-4" />
+              <span>Adicionar Estudo</span>
             </button>
           </div>
         </div>
       ) : sortedSessions.length === 0 ? (
-        /* VAZIO DEVIDO A FILTROS */
-        <div className="rounded-xl border border-slate-200 bg-white p-8 text-center shadow-xs dark:border-[#263447] dark:bg-[#1D2B40]">
-          <p className="text-xs font-medium text-white dark:text-white">
+        <div className="rounded-xl border border-[#E7EAF0] bg-white p-8 text-center shadow-[0_1px_2px_rgba(16,24,40,0.05)]">
+          <p className="text-[13px] font-medium text-[#8A93A3]">
             Nenhum estudo encontrado com os filtros selecionados.
           </p>
           <button
             type="button"
             onClick={clearFilters}
-            className="mt-3 inline-flex items-center gap-1 text-xs font-bold text-[#F4B544] hover:underline dark:text-[#F4B544] cursor-pointer"
+            className="mt-3 inline-flex items-center gap-1 text-[13px] font-bold text-[#527DFF] hover:underline cursor-pointer"
           >
             Limpar filtros aplicados
           </button>
         </div>
       ) : (
-        /* LISTA DE CARDS DE ESTUDO COMPACTOS */
-        <div className="space-y-3">
-          {sortedSessions.map((session) => {
-            // Associated scheduled reviews check
-            const linkedReviews = scheduledReviews.filter(
-              (r) =>
-                r.sessionId === session.id ||
-                r.originalSessionId === session.id ||
-                r.id.startsWith(`rev-${session.id}`)
-            );
-            const totalReviews =
-              linkedReviews.length > 0
-                ? linkedReviews.length
-                : session.reviewsScheduled || 0;
-            const completedReviews = linkedReviews.filter((r) => r.completed).length;
+        <div className="space-y-5">
+          {groupedSessions.map((group) => (
+            <section key={group.date}>
+              {/* Header do dia com linha do tempo */}
+              <div className="flex items-center gap-3 px-0.5">
+                <h2 className="text-[15px] font-bold uppercase tracking-[0.08em] text-[#1A2332]">
+                  {group.label}
+                </h2>
+                <div className="h-px flex-1 bg-[#D9DEE7]" />
+                <span className="inline-flex items-center gap-1.5 text-[13px] font-medium text-[#8A93A3]">
+                  <Clock className="h-3.5 w-3.5" />
+                  {formatHM(group.minutes)}
+                </span>
+              </div>
 
-            const accuracy =
-              session.questionsDone > 0
-                ? Math.round((session.questionsCorrect / session.questionsDone) * 100)
-                : 0;
+              {/* Linhas do dia */}
+              <div className="mt-2.5 divide-y divide-[#EEF1F5] overflow-hidden rounded-xl border border-[#E7EAF0] bg-white shadow-[0_1px_2px_rgba(16,24,40,0.05)]">
+                {group.sessions.map((session) => {
+                  const accuracy =
+                    session.questionsDone > 0
+                      ? Math.round((session.questionsCorrect / session.questionsDone) * 100)
+                      : 0;
+                  const hasNotes = Boolean(session.notes && session.notes.trim());
+                  const isExpanded = expandedSessionId === session.id;
+                  const discColor =
+                    disciplineColorMap.get(session.disciplineId) || "#58A6FF";
+                  const modalityColor = MODALITY_BADGE_COLOR[session.modality] || "#64748B";
 
-            const isMenuOpen = openMenuSessionId === session.id;
-            const isExpanded = expandedSessionId === session.id;
-            const hasNotes = Boolean(session.notes && session.notes.trim());
+                  const perfBadge =
+                    session.questionsDone > 0 ? (
+                      <span
+                        className={`inline-flex h-7 min-w-[36px] items-center justify-center rounded-md px-1.5 text-[12px] font-bold ${
+                          accuracy >= 80
+                            ? "bg-[#2BBF8A]/15 text-[#1F9E6E]"
+                            : accuracy >= 60
+                            ? "bg-[#F4B544]/25 text-[#B07C0A]"
+                            : "bg-[#F16D75]/15 text-[#F16D75]"
+                        }`}
+                      >
+                        {accuracy}
+                      </span>
+                    ) : (
+                      <span className="inline-flex h-7 min-w-[36px] items-center justify-center rounded-md border border-[#EEF1F5] px-1.5 text-[12px] font-bold text-[#8A93A3]">
+                        0
+                      </span>
+                    );
 
-            return (
-              <div
-                key={session.id}
-                className="group relative rounded-xl border border-slate-200 bg-white p-4 shadow-xs transition hover:border-[#39475C] dark:border-[#263447] dark:bg-[#1D2B40] dark:hover:border-[#172235]"
-              >
-                {/* Linha Superior: Data do Estudo & Menu 3 Pontos */}
-                <div className="flex items-start justify-between gap-2">
-                  <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                    <span className="font-mono text-xs font-bold uppercase tracking-wider text-white">
-                      {formatStudyDateDisplay(session)}
-                    </span>
-                    <span className="text-white dark:text-white">·</span>
-                    <span className="text-xs font-bold uppercase tracking-wider text-[#F4B544] dark:text-[#F4B544]">
-                      {session.disciplineName || "Disciplina"}
-                    </span>
-                  </div>
+                  return (
+                    <div key={session.id} className="group">
+                      <div className="flex items-center gap-3 px-3 py-3 transition hover:bg-[#FAFBFC]">
+                        {/* Barra de cor da disciplina */}
+                        <div
+                          className="h-10 w-1 shrink-0 rounded-full"
+                          style={{ backgroundColor: discColor }}
+                        />
 
-                  {/* Menu de Ação de 3 Pontos */}
-                  <div className="relative">
-                    <button
-                      id={`session-menu-btn-${session.id}`}
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setOpenMenuSessionId(isMenuOpen ? null : session.id);
-                      }}
-                      className="flex h-7 w-7 items-center justify-center rounded-lg text-white transition hover:bg-slate-100 hover:text-white dark:hover:bg-[#172235] dark:hover:text-white cursor-pointer"
-                      title="Opções do registro"
-                    >
-                      <MoreVertical className="h-4 w-4" />
-                    </button>
+                        {/* Disciplina + tópico */}
+                        <div className="min-w-0 flex-1">
+                          <div className="truncate text-[13px] font-bold uppercase tracking-wide text-[#1A2332]">
+                            {session.disciplineName || "Disciplina"}
+                          </div>
+                          <div className="mt-0.5 truncate text-[12px] text-[#8A93A3]">
+                            {session.topicName || "Geral"}
+                          </div>
+                        </div>
 
-                    {/* Dropdown discreto de ações */}
-                    {isMenuOpen && (
-                      <div className="absolute right-0 top-8 z-20 w-44 rounded-xl border border-slate-200 bg-white py-1 shadow-lg dark:border-[#263447] dark:bg-[#1D2B40]">
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleEditSession(session);
-                          }}
-                          className="flex w-full items-center gap-2 px-3 py-2 text-left text-xs font-semibold text-white hover:bg-slate-100 dark:text-white dark:hover:bg-[#172235] cursor-pointer transition"
+                        {/* Duração */}
+                        <div className="hidden w-[96px] items-center justify-end gap-1.5 text-[12.5px] text-[#8A93A3] sm:flex">
+                          <Clock className="h-3.5 w-3.5" />
+                          <span className="num-condensed">{formatHM(session.durationMinutes)}</span>
+                        </div>
+
+                        {/* Acertos */}
+                        <div className="num-condensed w-9 text-center text-[13px] font-semibold text-[#2BBF8A]">
+                          {session.questionsDone > 0 ? session.questionsCorrect : 0}
+                        </div>
+
+                        {/* Erros */}
+                        <div className="num-condensed w-9 text-center text-[13px] font-semibold text-[#F16D75]">
+                          {session.questionsDone > 0
+                            ? session.questionsDone - session.questionsCorrect
+                            : 0}
+                        </div>
+
+                        {/* Aproveitamento */}
+                        <div className="hidden w-[52px] justify-center sm:flex">{perfBadge}</div>
+
+                        {/* Modalidade */}
+                        <span
+                          className="hidden rounded-md px-2.5 py-1 text-[10.5px] font-bold uppercase tracking-[0.06em] text-white sm:inline-flex"
+                          style={{ backgroundColor: modalityColor }}
                         >
-                          <Pencil className="h-3.5 w-3.5" />
-                          <span>Editar registro</span>
-                        </button>
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setOpenMenuSessionId(null);
-                            setSessionToDelete(session);
-                          }}
-                          className="flex w-full items-center gap-2 px-3 py-2 text-left text-xs font-semibold text-[#F16D75] hover:bg-[#3B2029] dark:text-[#F16D75] dark:hover:bg-[#F16D75]/40 cursor-pointer transition"
-                        >
-                          <Trash2 className="h-3.5 w-3.5" />
-                          <span>Excluir registro</span>
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                {/* Título do Tópico / Assunto */}
-                <h3 className="mt-1 text-sm font-semibold text-white dark:text-white leading-snug">
-                  {session.topicName || "Geral"}
-                </h3>
-
-                {/* Badges / Chips Discretos de Métricas e Indicadores */}
-                <div className="mt-3 flex flex-wrap items-center gap-2 text-xs">
-                  {/* Modalidade */}
-                  <span className="inline-flex items-center rounded-md bg-slate-100 px-2 py-0.5 text-xs font-semibold text-white dark:bg-[#0B1120] dark:text-white border border-slate-200/80 dark:border-[#263447]">
-                    {session.modality}
-                  </span>
-
-                  {/* Duração líquida */}
-                  <span className="inline-flex items-center gap-1 font-mono text-xs font-medium text-white dark:text-white">
-                    <Clock className="h-3 w-3 text-white" />
-                    {formatDuration(session.durationMinutes)}
-                  </span>
-
-                  {/* Questões e Aproveitamento */}
-                  {session.questionsDone > 0 && (
-                    <span className="inline-flex items-center gap-1 font-mono text-xs font-medium text-white dark:text-white">
-                      <Target className="h-3 w-3 text-white" />
-                      <span>
-                        {session.questionsCorrect}/{session.questionsDone}
-                      </span>
-                      <span className="font-semibold text-[#2BBF8A] dark:text-[#2BBF8A]">
-                        · {accuracy}%
-                      </span>
-                    </span>
-                  )}
-
-                  {/* Teoria finalizada */}
-                  {session.theoryCompleted && (
-                    <span className="inline-flex items-center gap-1 rounded-md bg-[#15382F] px-2 py-0.5 text-xs font-bold text-[#2BBF8A] border border-[#2BBF8A]/70 dark:bg-[#2BBF8A]/40 dark:text-[#2BBF8A] dark:border-[#2BBF8A]/60">
-                      <Check className="h-3 w-3 stroke-[3]" />
-                      Teoria finalizada
-                    </span>
-                  )}
-
-                  {/* Revisões Programadas */}
-                  {totalReviews > 0 && (
-                    <span className="inline-flex items-center gap-1 rounded-md bg-[#342B1C] px-2 py-0.5 text-xs font-semibold text-[#F4B544] border border-[#F4B544]/70 dark:bg-[#F4B544]/30 dark:text-[#F4B544] dark:border-[#F4B544]/50">
-                      <RotateCw className="h-3 w-3" />
-                      {completedReviews > 0
-                        ? `${completedReviews}/${totalReviews} revisões`
-                        : `${totalReviews} revisões programadas`}
-                    </span>
-                  )}
-
-                  {/* Anotação (Chip discreto clicável para abrir detalhes) */}
-                  {hasNotes && (
-                    <button
-                      type="button"
-                      onClick={() => setExpandedSessionId(isExpanded ? null : session.id)}
-                      className="inline-flex items-center gap-1 rounded-md bg-slate-100 px-2 py-0.5 text-xs font-medium text-white hover:bg-slate-200 dark:bg-[#172235] dark:text-white dark:hover:bg-[#172235] transition cursor-pointer"
-                    >
-                      <FileText className="h-3 w-3" />
-                      <span>Anotação</span>
-                    </button>
-                  )}
-                </div>
-
-                {/* Detalhe Expandido de Anotações (quando acionado pelo chip) */}
-                {isExpanded && hasNotes && (
-                  <div className="mt-3 rounded-lg border border-slate-200/80 bg-slate-50/70 p-3 text-xs dark:border-[#263447] dark:bg-[#0B1120]/60">
-                    <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-wider text-white">
-                      <span className="flex items-center gap-1">
-                        <FileText className="h-3 w-3" />
-                        Anotações da sessão
-                      </span>
-                      {session.cargo && (
-                        <span className="text-white dark:text-white">
-                          Cargo: {session.cargo}
+                          {session.modality}
                         </span>
+
+                        {/* Ações */}
+                        <div className="flex items-center gap-1">
+                          <button
+                            type="button"
+                            title={hasNotes ? "Ver anotação" : "Sem anotação"}
+                            onClick={() =>
+                              hasNotes && setExpandedSessionId(isExpanded ? null : session.id)
+                            }
+                            className={`flex h-8 w-8 items-center justify-center rounded-lg transition hover:bg-[#F1F4F8] cursor-pointer ${
+                              hasNotes ? "text-[#527DFF]" : "text-[#C3CAD4]"
+                            } ${hasNotes ? "" : "cursor-default"}`}
+                          >
+                            <MessageSquare className="h-4 w-4" />
+                          </button>
+                          <button
+                            type="button"
+                            title="Editar registro"
+                            onClick={() => setSessionToEdit(session)}
+                            className="flex h-8 w-8 items-center justify-center rounded-lg text-[#AEB7C4] transition hover:bg-[#F1F4F8] hover:text-[#1A2332] cursor-pointer"
+                          >
+                            <Pencil className="h-4 w-4" />
+                          </button>
+                          <button
+                            type="button"
+                            title="Excluir registro"
+                            onClick={() => setSessionToDelete(session)}
+                            className="flex h-8 w-8 items-center justify-center rounded-lg text-[#AEB7C4] transition hover:bg-[#FDEBEC] hover:text-[#F16D75] cursor-pointer"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Anotação expandida */}
+                      {isExpanded && hasNotes && (
+                        <div className="border-t border-[#EEF1F5] bg-[#F7F8FA] px-4 py-3">
+                          <div className="flex items-center justify-between">
+                            <span className="text-[10px] font-bold uppercase tracking-wider text-[#8A93A3]">
+                              Anotações da sessão
+                            </span>
+                            {session.cargo && (
+                              <span className="text-[11px] font-medium text-[#8A93A3]">
+                                Cargo: {session.cargo}
+                              </span>
+                            )}
+                          </div>
+                          <p className="mt-1.5 whitespace-pre-wrap text-[13px] leading-relaxed text-[#3B4453]">
+                            {session.notes}
+                          </p>
+                        </div>
                       )}
                     </div>
-                    <p className="mt-1.5 whitespace-pre-wrap text-xs text-white dark:text-white leading-relaxed">
-                      {session.notes}
-                    </p>
-                  </div>
-                )}
+                  );
+                })}
               </div>
-            );
-          })}
+            </section>
+          ))}
         </div>
       )}
 
-      {/* 5. MODAL COMPACTO DE CONFIRMAÇÃO DE EXCLUSÃO */}
+      {/* ===== MODAL DE CONFIRMAÇÃO DE EXCLUSÃO ===== */}
       {sessionToDelete && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#0B1120]/40 backdrop-blur-xs p-4 animate-in fade-in duration-150">
-          <div className="w-full max-w-sm rounded-2xl border border-slate-200 bg-white p-5 shadow-xl dark:border-[#263447] dark:bg-[#1D2B40]">
-            <h3 className="text-sm font-bold text-white dark:text-white">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#0B1120]/40 p-4 backdrop-blur-xs animate-in fade-in duration-150">
+          <div className="w-full max-w-sm rounded-2xl border border-[#E7EAF0] bg-white p-5 shadow-xl">
+            <h3 className="text-[15px] font-bold text-[#1A2332]">
               Excluir este registro de estudo?
             </h3>
-            <p className="mt-2 text-xs text-white dark:text-white leading-relaxed">
+            <p className="mt-2 text-[13px] leading-relaxed text-[#8A93A3]">
               Essa ação também removerá os dados relacionados a este estudo.
             </p>
 
@@ -696,7 +755,7 @@ export const HistoricoView: React.FC = () => {
                 type="button"
                 disabled={isDeleting}
                 onClick={() => setSessionToDelete(null)}
-                className="rounded-xl border border-slate-200 px-3.5 py-2 text-xs font-semibold text-white hover:bg-slate-50 dark:bg-[#172235] dark:bg-[#161C28] dark:text-white dark:hover:bg-[#172235] cursor-pointer disabled:opacity-50"
+                className="rounded-lg border border-[#E3E6EB] bg-white px-3.5 py-2 text-[13px] font-semibold text-[#1A2332] transition hover:bg-[#F7F8FA] cursor-pointer disabled:opacity-50"
               >
                 Cancelar
               </button>
@@ -704,7 +763,7 @@ export const HistoricoView: React.FC = () => {
                 type="button"
                 disabled={isDeleting}
                 onClick={handleConfirmDelete}
-                className="flex items-center gap-1.5 rounded-xl bg-[#F16D75] px-4 py-2 text-xs font-bold text-white shadow-xs hover:bg-[#F16D75] active:scale-98 cursor-pointer disabled:opacity-50"
+                className="flex items-center gap-1.5 rounded-lg bg-[#F16D75] px-4 py-2 text-[13px] font-bold text-white shadow-xs transition hover:bg-[#E45A63] active:scale-98 cursor-pointer disabled:opacity-50"
               >
                 {isDeleting ? (
                   <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -718,6 +777,8 @@ export const HistoricoView: React.FC = () => {
         </div>
       )}
 
+      {/* ===== MODAIS ===== */}
+      <RegistroEstudoModal open={addModalOpen} onClose={() => setAddModalOpen(false)} />
       {sessionToEdit && (
         <StudySessionEditModal
           session={sessionToEdit}
