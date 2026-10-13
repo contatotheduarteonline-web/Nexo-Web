@@ -121,7 +121,7 @@ export const Header: React.FC<HeaderProps> = () => {
             title={user?.name || "Perfil"}
             className="flex h-9 items-center gap-2 rounded-lg p-1 text-xs font-medium text-[#172235] transition-colors hover:bg-slate-100 dark:text-[#C4CEDB] dark:hover:bg-[#172235] cursor-pointer"
           >
-            <div className="relative flex h-8.5 w-8.5 items-center justify-center rounded-full p-[1.5px] bg-gradient-to-tr from-[#D97706] via-[#F4B544] to-[#C2410C] shadow-xs">
+            <div className="relative flex h-8.5 w-8.5 items-center justify-center">
               <div className="h-full w-full rounded-full overflow-hidden bg-white dark:bg-[#111520] flex items-center justify-center">
                 <img
                   src={
