@@ -28,7 +28,13 @@ export const EditalView: React.FC = () => {
     setActiveEditalId,
     editais,
     toggleTopicStudied,
+    activePlan,
+    getPlanImageUrl,
   } = useStudy();
+
+  // Mesma resolução de imagem do Histórico: imagem customizada do plano > plano > edital
+  const planImage =
+    (activePlan ? getPlanImageUrl(activePlan.id) : null) || activePlan?.imageUrl || activeEdital?.imageUrl;
 
   // Accordion state - set of expanded discipline IDs
   const [expandedDisciplineIds, setExpandedDisciplineIds] = useState<Set<string>>(() => {
@@ -164,7 +170,7 @@ export const EditalView: React.FC = () => {
                 ))}
               </select>
               <PlanLogo
-                imageUrl={activeEdital?.imageUrl}
+                imageUrl={planImage}
                 alt={activeEdital?.title || "Edital"}
                 className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 pointer-events-none"
                 fallbackClassName="text-[#F4B544]"

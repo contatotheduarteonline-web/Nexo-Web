@@ -50,10 +50,14 @@ function barColor(pct: number): string {
 }
 
 export const SimuladosView: React.FC = () => {
-  const { activeEdital, editais, simulados, addSimulado, deleteSimulado } = useStudy();
+  const { activeEdital, editais, simulados, addSimulado, deleteSimulado, activePlan, getPlanImageUrl } = useStudy();
 
   // Edital ativo com fallback para o primeiro edital (mesmo comportamento do Histórico)
   const edital = activeEdital || editais[0] || null;
+
+  // Mesma resolução de imagem do Histórico: imagem customizada do plano > plano > edital
+  const planImage =
+    (activePlan ? getPlanImageUrl(activePlan.id) : null) || activePlan?.imageUrl || edital?.imageUrl;
 
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [title, setTitle] = useState("");
@@ -192,7 +196,7 @@ export const SimuladosView: React.FC = () => {
 
           {edital && (
             <div className="flex items-center gap-2 rounded-xl border border-[#263447] bg-[#1D2B40] px-3.5 py-2 text-[13px] text-[#C4CEDB]">
-              <PlanLogo imageUrl={edital.imageUrl} alt={edital.title} className="h-4 w-4" />
+              <PlanLogo imageUrl={planImage} alt={edital.title} className="h-4 w-4" />
               <span className="max-w-[220px] truncate font-semibold">
                 {edital.title}
               </span>
