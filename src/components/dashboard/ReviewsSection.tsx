@@ -62,15 +62,15 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({
   const hiddenCount = pendingReviews.length - visibleGroups.reduce((acc, [, revs]) => acc + revs.length, 0);
 
   return (
-    <section id="section-revisoes" className="flex flex-col rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+    <section id="section-revisoes" className="nx-card p-5 flex flex-col">
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-        <span className="text-[12px] font-bold uppercase tracking-widest text-slate-500">Revisões</span>
+      <div className="flex items-center justify-between border-b border-[#384154] pb-3">
+        <span className="text-[12px] font-bold uppercase tracking-widest text-slate-400">Revisões</span>
         <button
           type="button"
           id="btn-abrir-modulo-revisoes"
           onClick={onNavigateToReviews}
-          className="flex items-center gap-1 text-[12px] font-semibold text-slate-400 transition hover:text-teal-600"
+          className="flex items-center gap-1 text-[12px] font-semibold text-slate-400 transition hover:text-amber-400"
         >
           Ver todas
           <ArrowUpRight className="h-3.5 w-3.5" />
@@ -89,13 +89,13 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({
               <div key={dateKey}>
                 <div className="flex items-center gap-3">
                   {dateKey === todayStr ? (
-                    <span className="text-base font-extrabold uppercase tracking-wide text-slate-700">Hoje</span>
+                    <span className="text-base font-extrabold uppercase tracking-wide text-white">Hoje</span>
                   ) : (
-                    <span className="text-[13px] font-bold text-slate-700">
+                    <span className="text-[13px] font-bold text-white">
                       {formatShortDate(dateKey)}
                     </span>
                   )}
-                  <div className="h-0.5 flex-1 rounded bg-teal-400" />
+                  <div className="h-0.5 flex-1 rounded bg-amber-500/40" />
                 </div>
 
                 <div className="mt-2 space-y-2">
@@ -105,7 +105,7 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({
                       <div key={rev.id} className="space-y-1.5">
                         {/* Linha compacta: intervalo + ações + disciplina */}
                         <div className="flex items-center gap-2">
-                          <span className="rounded-lg border border-teal-400 bg-teal-50 px-3 py-1 text-[11px] font-semibold text-slate-600">
+                          <span className="rounded-lg border border-[#F3AA2D]/30 bg-[#F3AA2D]/10 px-3 py-1 text-[11px] font-semibold text-amber-300">
                             {getIntervalLabel(rev.stage)}
                           </span>
                           <button
@@ -113,7 +113,7 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({
                             id={`btn-revisar-${rev.id}`}
                             title="Iniciar revisão no cronômetro"
                             onClick={() => onStartReview(rev)}
-                            className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-teal-500 text-white shadow-xs transition hover:bg-teal-600"
+                            className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-amber-500 text-white shadow-xs transition hover:bg-amber-600"
                           >
                             <Play className="h-2.5 w-2.5 fill-current" />
                           </button>
@@ -121,7 +121,7 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({
                             type="button"
                             title="Registrar estudo"
                             onClick={() => onOpenReview(rev)}
-                            className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-teal-500 text-white shadow-xs transition hover:bg-teal-600"
+                            className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-amber-500 text-white shadow-xs transition hover:bg-amber-600"
                           >
                             <Plus className="h-3 w-3" />
                           </button>
@@ -133,15 +133,15 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({
                           >
                             <X className="h-3 w-3" />
                           </button>
-                          <span className="truncate text-[11px] font-bold uppercase tracking-wide text-slate-800">
+                          <span className="truncate text-[11px] font-bold uppercase tracking-wide text-white">
                             {rev.disciplineName}
                           </span>
                         </div>
 
                         {/* Registro de estudo real */}
                         {record && (
-                          <div className="rounded-lg bg-slate-100 px-3 py-2">
-                            <div className="flex items-center gap-x-3 gap-y-1.5 text-[11px] text-slate-600">
+                          <div className="rounded-lg bg-[#171B25] px-3 py-2">
+                            <div className="flex items-center gap-x-3 gap-y-1.5 text-[11px] text-slate-300">
                               <span className="font-semibold">
                                 {formatShortDate(getSessionLocalDate(record))}
                               </span>
@@ -157,7 +157,7 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({
                                 {record.topicName || rev.topicName}
                               </span>
                               <span className="flex items-center" title={record.notes ? "Com comentários" : undefined}>
-                                {record.notes && <MessageCircle className="h-3.5 w-3.5 text-teal-500" />}
+                                {record.notes && <MessageCircle className="h-3.5 w-3.5 text-amber-400" />}
                               </span>
                             </div>
                           </div>
@@ -173,7 +173,7 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({
               <button
                 type="button"
                 onClick={onNavigateToReviews}
-                className="w-full rounded-lg border border-dashed border-slate-200 px-3 py-2 text-[11px] font-semibold text-slate-500 transition hover:border-teal-300 hover:text-teal-600"
+                className="w-full rounded-lg border border-dashed border-[#384154] px-3 py-2 text-[11px] font-semibold text-slate-400 transition hover:border-[#F3AA2D]/40 hover:text-amber-400"
               >
                 + {hiddenCount} outras pendências — ver todas
               </button>

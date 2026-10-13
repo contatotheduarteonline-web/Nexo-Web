@@ -48,11 +48,11 @@ const StudyRecordRow: React.FC<{ session: StudySession }> = ({ session }) => {
   const accuracy = qDone > 0 ? Math.round((qCorrect / qDone) * 100) : null;
 
   return (
-    <div className="rounded-lg bg-slate-100 px-4 py-2.5">
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-[12px] text-slate-600">
-        <span className="font-semibold text-slate-600">{formatShortDate(getSessionLocalDate(session))}</span>
+    <div className="rounded-lg bg-[#171B25] px-4 py-2.5">
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-[12px] text-slate-300">
+        <span className="font-semibold text-slate-300">{formatShortDate(getSessionLocalDate(session))}</span>
 
-        <span className="min-w-0 flex-1 truncate font-medium text-slate-700" title={session.topicName}>
+        <span className="min-w-0 flex-1 truncate font-medium text-slate-200" title={session.topicName}>
           {session.topicName || "-"}
         </span>
 
@@ -64,7 +64,7 @@ const StudyRecordRow: React.FC<{ session: StudySession }> = ({ session }) => {
           {session.modality}
         </span>
 
-        <span className="font-mono text-slate-600">{formatDurationClock(session.durationMinutes)}</span>
+        <span className="font-mono text-slate-300">{formatDurationClock(session.durationMinutes)}</span>
 
         {qDone > 0 && (
           <>
@@ -83,13 +83,13 @@ const StudyRecordRow: React.FC<{ session: StudySession }> = ({ session }) => {
         )}
 
         {session.material && (
-          <span className="max-w-[140px] truncate text-slate-500" title={session.material}>
+          <span className="max-w-[140px] truncate text-slate-400" title={session.material}>
             {session.material}
           </span>
         )}
 
         {session.videoTitle && (
-          <span className="truncate text-slate-500" title={session.videoTitle}>
+          <span className="truncate text-slate-400" title={session.videoTitle}>
             {session.videoTitle}
           </span>
         )}
@@ -97,7 +97,7 @@ const StudyRecordRow: React.FC<{ session: StudySession }> = ({ session }) => {
         <span className="text-slate-400">{session.videoEnd || "-"}</span>
 
         <span className="ml-auto flex items-center" title={session.notes ? "Com comentários" : undefined}>
-          {session.notes && <MessageCircle className="h-4 w-4 text-teal-500" />}
+          {session.notes && <MessageCircle className="h-4 w-4 text-amber-400" />}
         </span>
       </div>
     </div>
@@ -230,17 +230,17 @@ export const RevisoesView: React.FC = () => {
   };
 
   return (
-    <div className="-m-4 min-h-full bg-[#F4F5F7] p-4 md:-m-6 md:p-6 lg:-m-7 lg:p-7">
+    <div className="-m-4 min-h-full p-4 md:-m-6 md:p-6 lg:-m-7 lg:p-7">
       <div className="mx-auto max-w-7xl">
         {/* Cabeçalho */}
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <h1 className="text-2xl font-extrabold tracking-tight text-slate-800 sm:text-3xl">Revisões</h1>
+          <h1 className="text-2xl font-extrabold tracking-tight text-white sm:text-3xl">Revisões</h1>
 
           <div className="flex flex-wrap items-center gap-2.5">
             <button
               id="btn-adicionar-estudo"
               onClick={() => openRegistro(null)}
-              className="flex items-center gap-1.5 rounded-lg bg-teal-500 px-4 py-2 text-xs font-bold text-white shadow-xs transition hover:bg-teal-600"
+              className="flex items-center gap-1.5 rounded-lg bg-amber-500 px-4 py-2 text-xs font-bold text-white shadow-xs transition hover:bg-amber-600"
             >
               <Plus className="h-4 w-4" />
               Adicionar Estudo
@@ -252,7 +252,7 @@ export const RevisoesView: React.FC = () => {
                 <select
                   value={activeEdital?.id || ""}
                   onChange={(e) => setActiveEditalId(e.target.value)}
-                  className="appearance-none rounded-lg border border-teal-300 bg-teal-50 py-2 pl-8 pr-7 text-xs font-bold text-teal-700 shadow-xs hover:border-teal-400 focus:outline-none"
+                  className="appearance-none rounded-lg border border-[#384154] bg-[#171B25] py-2 pl-8 pr-7 text-xs font-bold text-white shadow-xs hover:border-[#F3AA2D]/40 focus:outline-none"
                 >
                   {editais.map((ed) => (
                     <option key={ed.id} value={ed.id}>
@@ -260,8 +260,8 @@ export const RevisoesView: React.FC = () => {
                     </option>
                   ))}
                 </select>
-                <Globe className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-teal-500" />
-                <ChevronDown className="pointer-events-none absolute right-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-teal-500" />
+                <Globe className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-amber-400" />
+                <ChevronDown className="pointer-events-none absolute right-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-amber-400" />
               </div>
             )}
 
@@ -272,8 +272,8 @@ export const RevisoesView: React.FC = () => {
                 onClick={() => setShowFilters((prev) => !prev)}
                 className={`flex items-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-semibold shadow-xs transition ${
                   showFilters
-                    ? "border-teal-400 bg-teal-50 text-teal-700"
-                    : "border-slate-300 bg-white text-slate-600 hover:bg-slate-50"
+                    ? "border-[#F3AA2D]/40 bg-[#F3AA2D]/10 text-amber-300"
+                    : "border-[#384154] bg-[#171B25] text-slate-300 hover:bg-[#2D3442]"
                 }`}
               >
                 <Filter className="h-3.5 w-3.5" />
@@ -282,7 +282,7 @@ export const RevisoesView: React.FC = () => {
               </button>
 
               {showFilters && (
-                <div className="absolute right-0 z-30 mt-2 w-72 rounded-xl border border-slate-200 bg-white p-3 shadow-lg">
+                <div className="absolute right-0 z-30 mt-2 w-72 rounded-xl border border-[#384154] bg-[#252B38] p-3 shadow-lg">
                   <div className="relative">
                     <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400" />
                     <input
@@ -290,13 +290,13 @@ export const RevisoesView: React.FC = () => {
                       placeholder="Buscar por tópico ou disciplina..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-full rounded-lg border border-slate-200 bg-slate-50 py-2 pl-9 pr-3 text-xs text-slate-800 placeholder:text-slate-400 focus:border-teal-500 focus:bg-white focus:outline-none"
+                      className="w-full rounded-lg border border-[#384154] bg-[#171B25] py-2 pl-9 pr-3 text-xs text-white placeholder:text-slate-500 focus:border-[#F3AA2D] focus:outline-none"
                     />
                   </div>
                   <select
                     value={selectedDiscipline}
                     onChange={(e) => setSelectedDiscipline(e.target.value)}
-                    className="mt-2 w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-medium text-slate-700 focus:border-teal-500 focus:outline-none"
+                    className="mt-2 w-full rounded-lg border border-[#384154] bg-[#171B25] px-3 py-2 text-xs font-medium text-white focus:border-[#F3AA2D] focus:outline-none"
                   >
                     <option value="all">Todas as Disciplinas</option>
                     {activeEdital?.disciplines.map((d) => (
@@ -321,14 +321,14 @@ export const RevisoesView: React.FC = () => {
                 key={tab.key}
                 onClick={() => setActiveSubTab(tab.key)}
                 className={`flex items-center gap-2 rounded-md px-4 py-2 text-[11px] font-bold uppercase tracking-wide transition ${
-                  isActive ? "bg-teal-500 text-white" : "bg-slate-200 text-slate-500 hover:bg-slate-300"
+                  isActive ? "bg-amber-500 text-white" : "bg-[#171B25] text-slate-400 hover:bg-[#2D3442]"
                 }`}
               >
                 <span>{tab.label}</span>
                 {count > 0 && (
                   <span
                     className={`rounded-full px-1.5 py-0.5 text-[10px] font-bold ${
-                      isActive ? "bg-white/25 text-white" : "bg-white text-teal-600"
+                      isActive ? "bg-white/25 text-white" : "bg-[#2D3442] text-amber-400"
                     }`}
                   >
                     {count}
@@ -340,7 +340,7 @@ export const RevisoesView: React.FC = () => {
         </div>
 
         {/* Área principal: grupos cronológicos */}
-        <div className="mt-4 max-h-[72vh] overflow-y-auto rounded-xl border border-slate-200 bg-white px-6 py-4 shadow-sm">
+        <div className="mt-4 max-h-[72vh] overflow-y-auto rounded-xl border border-[#384154] bg-[#252B38] px-6 py-4 shadow-sm">
           {filteredReviews.length === 0 ? (
             <div className="flex flex-col items-center py-10 text-center">
               <Inbox className="h-8 w-8 text-slate-300" />
@@ -364,13 +364,13 @@ export const RevisoesView: React.FC = () => {
                     {/* Cabeçalho do grupo: data à esquerda + linha verde-água */}
                     <div className="flex items-center gap-3">
                       {isToday ? (
-                        <span className="text-lg font-extrabold uppercase tracking-wide text-slate-800">
+                        <span className="text-lg font-extrabold uppercase tracking-wide text-white">
                           Hoje
                         </span>
                       ) : (
                         <div className="flex items-center gap-1.5">
-                          <span className="text-2xl font-bold leading-none text-slate-800">{parts.day}</span>
-                          <span className="flex flex-col text-[9px] font-bold uppercase leading-tight text-slate-500">
+                          <span className="text-2xl font-bold leading-none text-white">{parts.day}</span>
+                          <span className="flex flex-col text-[9px] font-bold uppercase leading-tight text-slate-400">
                             <span>
                               {parts.month}/{parts.year}
                             </span>
@@ -378,7 +378,7 @@ export const RevisoesView: React.FC = () => {
                           </span>
                         </div>
                       )}
-                      <div className="h-0.5 flex-1 rounded bg-teal-400" />
+                      <div className="h-0.5 flex-1 rounded bg-amber-500/40" />
                     </div>
 
                     {/* Linhas de revisão */}
@@ -389,7 +389,7 @@ export const RevisoesView: React.FC = () => {
                           <div key={rev.id} className="space-y-1.5">
                             {/* Linha compacta da revisão */}
                             <div className="flex items-center gap-2">
-                              <span className="rounded-lg border border-teal-400 bg-teal-50 px-3 py-1 text-[12px] font-semibold text-slate-600">
+                              <span className="rounded-lg border border-[#F3AA2D]/30 bg-[#F3AA2D]/10 px-3 py-1 text-[12px] font-semibold text-amber-300">
                                 {getIntervalLabel(rev.stage)}
                               </span>
 
@@ -401,7 +401,7 @@ export const RevisoesView: React.FC = () => {
                                     onClick={() =>
                                       launchStudySessionForTopic(rev.disciplineId, rev.topicId, "Revisão")
                                     }
-                                    className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-teal-500 text-white shadow-xs transition hover:bg-teal-600"
+                                    className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-amber-500 text-white shadow-xs transition hover:bg-amber-600"
                                   >
                                     <Play className="h-3 w-3 fill-current" />
                                   </button>
@@ -410,7 +410,7 @@ export const RevisoesView: React.FC = () => {
                                     type="button"
                                     title="Registrar estudo"
                                     onClick={() => openRegistro(rev)}
-                                    className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-teal-500 text-white shadow-xs transition hover:bg-teal-600"
+                                    className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-amber-500 text-white shadow-xs transition hover:bg-amber-600"
                                   >
                                     <Plus className="h-3.5 w-3.5" />
                                   </button>
@@ -440,13 +440,13 @@ export const RevisoesView: React.FC = () => {
                               {rev.completed && (
                                 <span
                                   title="Concluída"
-                                  className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-teal-500 text-white shadow-xs"
+                                  className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-amber-500 text-white shadow-xs"
                                 >
                                   <Check className="h-3.5 w-3.5" />
                                 </span>
                               )}
 
-                              <span className="truncate text-[12px] font-bold uppercase tracking-wide text-slate-800">
+                              <span className="truncate text-[12px] font-bold uppercase tracking-wide text-white">
                                 {rev.disciplineName}
                               </span>
 
@@ -460,13 +460,13 @@ export const RevisoesView: React.FC = () => {
                                     setRescheduleDate(rev.dueDate);
                                     setConfirmingDeleteId(null);
                                   }}
-                                  className="flex h-7 w-7 items-center justify-center rounded-full text-slate-400 transition hover:bg-slate-100 hover:text-slate-600"
+                                  className="flex h-7 w-7 items-center justify-center rounded-full text-slate-400 transition hover:bg-[#2D3442] hover:text-white"
                                 >
                                   <CalendarClock className="h-4 w-4" />
                                 </button>
 
                                 {manageMenuFor === rev.id && (
-                                  <div className="absolute right-0 z-20 mt-1 w-64 rounded-xl border border-slate-200 bg-white p-3 shadow-lg">
+                                  <div className="absolute right-0 z-20 mt-1 w-64 rounded-xl border border-[#384154] bg-[#252B38] p-3 shadow-lg">
                                     <p className="text-[10px] font-bold uppercase tracking-wide text-slate-500">
                                       Reagendar
                                     </p>
@@ -475,21 +475,21 @@ export const RevisoesView: React.FC = () => {
                                         type="date"
                                         value={rescheduleDate}
                                         onChange={(e) => setRescheduleDate(e.target.value)}
-                                        className="w-full rounded-lg border border-slate-200 px-2 py-1.5 text-xs text-slate-700 focus:border-teal-500 focus:outline-none"
+                                        className="w-full rounded-lg border border-[#384154] bg-[#171B25] px-2 py-1.5 text-xs text-white focus:border-[#F3AA2D] focus:outline-none"
                                       />
                                       <button
                                         type="button"
                                         onClick={() => handleReschedule(rev)}
-                                        className="shrink-0 rounded-lg bg-teal-500 px-3 py-1.5 text-xs font-bold text-white hover:bg-teal-600"
+                                        className="shrink-0 rounded-lg bg-amber-500 px-3 py-1.5 text-xs font-bold text-white hover:bg-amber-600"
                                       >
                                         Mover
                                       </button>
                                     </div>
 
-                                    <div className="mt-3 border-t border-slate-100 pt-2">
+                                    <div className="mt-3 border-t border-[#384154] pt-2">
                                       {confirmingDeleteId === rev.id ? (
                                         <div className="flex items-center justify-between gap-2">
-                                          <span className="text-[11px] font-semibold text-slate-600">
+                                          <span className="text-[11px] font-semibold text-slate-300">
                                             Excluir definitivamente?
                                           </span>
                                           <button
@@ -524,8 +524,8 @@ export const RevisoesView: React.FC = () => {
                                 ))}
                               </div>
                             ) : (
-                              <div className="rounded-lg bg-slate-100 px-4 py-2 text-[12px] text-slate-500">
-                                <span className="font-medium text-slate-600">{rev.topicName}</span>
+                              <div className="rounded-lg bg-[#171B25] px-4 py-2 text-[12px] text-slate-400">
+                                <span className="font-medium text-slate-300">{rev.topicName}</span>
                                 <span className="mx-2 text-slate-300">&bull;</span>
                                 Sem registro de estudo — use Registrar para lançar sua revisão.
                               </div>
@@ -544,7 +544,7 @@ export const RevisoesView: React.FC = () => {
 
       {/* Toast */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 rounded-lg bg-slate-800 px-4 py-2.5 text-xs font-semibold text-white shadow-lg">
+        <div className="fixed bottom-6 right-6 z-50 rounded-lg border border-[#384154] bg-[#252B38] px-4 py-2.5 text-xs font-semibold text-white shadow-lg">
           {toastMessage}
         </div>
       )}
