@@ -24,7 +24,7 @@ export const FloatingTimerWidget: React.FC = () => {
         id="floating-clock-btn"
         aria-label="Abrir Registro de Estudos em tela cheia"
         title="Abrir Registro de Estudos em tela cheia"
-        className={`relative flex h-16 w-16 items-center justify-center rounded-2xl sm:rounded-3xl cursor-pointer select-none transition-colors duration-200 border ${
+        className={`relative flex h-12 w-12 items-center justify-center rounded-2xl cursor-pointer select-none transition-colors duration-200 border ${
           timer.isRunning
             ? "border-[#2BBF8A]/40 bg-[#2BBF8A] text-white shadow-[0_10px_28px_-8px_rgba(16,185,129,0.5)]"
             : "border-[#527DFF]/40 bg-[#527DFF] text-white shadow-[0_10px_28px_-8px_rgba(82,125,255,0.5)] hover:bg-[#416CEB]"
@@ -32,9 +32,9 @@ export const FloatingTimerWidget: React.FC = () => {
       >
         <div className="relative flex items-center justify-center">
           {timer.isRunning ? (
-            <Timer className="h-8 w-8 stroke-[2.2]" />
+            <Timer className="h-6 w-6 stroke-[2.2]" />
           ) : (
-            <Clock className="h-8 w-8 stroke-[2.2]" />
+            <Clock className="h-6 w-6 stroke-[2.2]" />
           )}
 
           {timer.elapsedSeconds > 0 && !timer.isRunning && (
