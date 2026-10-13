@@ -26,11 +26,7 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({
           <h2 className="font-condensed text-[19px] font-bold text-white">
             REVISÕES
           </h2>
-          {todayReviews.length > 0 ? (
-            <span className="rounded-full border border-[#F3AA2D]/25 bg-[#F3AA2D]/10 px-2 py-0.5 text-[11px] font-bold text-[#F3AA2D]">
-              {todayReviews.length} {todayReviews.length === 1 ? "pendente" : "pendentes"}
-            </span>
-          ) : null}
+
         </div>
 
         <button
