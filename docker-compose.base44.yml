@@ -14,19 +14,6 @@ services:
       retries: 10
     restart: on-failure
 
-  prepare:
-    image: node:22-slim
-    working_dir: /app
-    volumes:
-      - .:/app
-      - app_node_modules:/app/node_modules
-    environment:
-      - DATABASE_URL=postgresql://nexo:nexodevpass@postgres:5432/nexo?sslmode=disable
-    depends_on:
-      postgres:
-        condition: service_healthy
-    command: ["sh", "-ec", "npm ci --no-audit --no-fund && npx prisma generate && npx prisma migrate deploy"]
-
   app:
     image: node:22-slim
     working_dir: /app
@@ -49,9 +36,9 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-      prepare:
-        condition: service_completed_successfully
-    command: ["sh", "-ec", "exec npx tsx watch server.ts"]
+    # Install deps + prisma generate/migrate inline (skipped when the lockfile is
+    # unchanged) so no one-shot "prepare" service is left in an exited state.
+    command: ["sh", "-ec", "if [ ! -d node_modules ] || [ package-lock.json -nt node_modules/.package-lock.json ]; then npm ci --no-audit --no-fund; fi && npx prisma generate && npx prisma migrate deploy && exec npx tsx watch server.ts"]
     healthcheck:
       test:
         - CMD
@@ -60,7 +47,7 @@ services:
         - "Promise.all(['/api/health', '/'].map(async p => { const r = await fetch('http://127.0.0.1:3000' + p, { signal: AbortSignal.timeout(3000) }); if (!r.ok || (p === '/' && !(await r.text()).includes('/@vite/client'))) throw new Error(p + ' unavailable'); })).catch(e => { console.error(e.message); process.exit(1); });"
       interval: 15s
       timeout: 5s
-      start_period: 60s
+      start_period: 120s
       retries: 3
     restart: on-failure
 

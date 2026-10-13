@@ -11,8 +11,8 @@
 
 ## Dev Setup (docker-compose.base44.yml)
 - `postgres:16-alpine` — PostgreSQL with generated credentials.
-- `prepare` installs the current lockfile with `npm ci`, generates Prisma and applies migrations before `app` starts. Both services mount the same checkout/dependency volume; never install concurrently.
 - `app` (node:22-slim) runs `tsx watch server.ts` with Vite middleware/HMR and a private runtime-data volume. The healthcheck verifies both API and live-source HTML.
+- Dependency install, `prisma generate` and `prisma migrate deploy` run inline at `app` startup (npm ci only when `package-lock.json` is newer than `node_modules/.package-lock.json`). There is deliberately NO separate one-shot `prepare` service — a completed one-shot leaves an exited container that platform validation reports as a failure.
 - `npm run dev` remains `tsx server.ts`; Compose adds the backend watcher.
 - `CHOKIDAR_USEPOLLING=true` enables file-watch polling for bind-mount compatibility.
 
