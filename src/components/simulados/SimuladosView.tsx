@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { useStudy } from "../../context/StudyContext";
-import { PlanLogo } from "../common/PlanLogo";
+import { PlanSelector } from "../common/PlanSelector";
 import { Simulado, SimuladoDisciplineResult } from "../../types";
 import {
   FileCheck,
@@ -195,12 +195,7 @@ export const SimuladosView: React.FC = () => {
           </button>
 
           {edital && (
-            <div className="flex items-center gap-2 rounded-xl border border-[#263447] bg-[#1D2B40] px-3.5 py-2 text-[13px] text-[#C4CEDB]">
-              <PlanLogo imageUrl={planImage} alt={edital.title} className="h-4 w-4" />
-              <span className="max-w-[220px] truncate font-semibold">
-                {edital.title}
-              </span>
-            </div>
+            <PlanSelector activeLabel={edital.title} imageUrl={planImage} />
           )}
         </div>
       </div>

@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect, useRef } from "react";
 import { useStudy } from "../../context/StudyContext";
-import { PlanLogo } from "../common/PlanLogo";
+import { PlanSelector } from "../common/PlanSelector";
 import { StudyModality, StudySession } from "../../types";
 import { RegistroEstudoModal } from "../revisoes/RegistroEstudoModal";
 import { StudySessionEditModal } from "./StudySessionEditModal";
@@ -325,43 +325,18 @@ export const HistoricoView: React.FC = () => {
           </button>
 
           {/* Plano ativo */}
-          <div className="relative">
-            <button
-              type="button"
-              onClick={() => setOpenDropdown(openDropdown === "plan" ? null : "plan")}
-              className={outlineBtn}
-            >
-              <PlanLogo
-                imageUrl={planImage}
-                isLoading={planIsLoading}
-                alt={activePlan?.name || "Meu Plano"}
-                className="h-5 w-5"
-              />
-              <span className="max-w-[160px] truncate">{activePlan?.name || "Meu Plano"}</span>
-              <ChevronDown className="h-3.5 w-3.5 text-[#93A2B7]" />
-            </button>
-            {openDropdown === "plan" && (
-              <div className="absolute right-0 top-11 z-30 w-64 rounded-xl border border-[#263447] bg-[#1D2B40] p-1.5 shadow-xl">
-                {studyPlans.map((p) => (
-                  <button
-                    key={p.id}
-                    type="button"
-                    onClick={() => {
-                      setActivePlanId(p.id);
-                      setOpenDropdown(null);
-                    }}
-                    className="flex w-full items-center justify-between gap-2 rounded-lg px-3 py-2 text-left text-[13px] font-medium text-white transition hover:bg-[#0B1120] cursor-pointer"
-                  >
-                    <span className="truncate">{p.name}</span>
-                    {p.id === activePlan?.id && <Check className="h-4 w-4 text-[#2BBF8A]" />}
-                  </button>
-                ))}
-                {studyPlans.length === 0 && (
-                  <p className="px-3 py-2 text-[13px] text-[#93A2B7]">Nenhum plano criado.</p>
-                )}
-              </div>
-            )}
-          </div>
+          <PlanSelector
+            items={studyPlans.map((p) => ({
+              id: p.id,
+              title: p.name,
+              imageUrl: getPlanImageUrl(p.id) || p.imageUrl,
+            }))}
+            activeId={activePlan?.id}
+            activeLabel={activePlan?.name || "Meu Plano"}
+            imageUrl={planImage}
+            isLoading={planIsLoading}
+            onSelect={setActivePlanId}
+          />
 
           {/* Filtros */}
           <div className="relative">

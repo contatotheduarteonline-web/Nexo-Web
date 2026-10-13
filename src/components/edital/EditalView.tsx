@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
 import { useStudy } from "../../context/StudyContext";
-import { PlanLogo } from "../common/PlanLogo";
+import { PlanSelector } from "../common/PlanSelector";
 import { Discipline, Topic } from "../../types";
 import {
   Edit2,
@@ -157,26 +157,13 @@ export const EditalView: React.FC = () => {
 
           {/* Plano selector dropdown */}
           {editais.length > 0 && (
-            <div className="relative">
-              <select
-                value={activeEditalId || ""}
-                onChange={(e) => setActiveEditalId(e.target.value)}
-                className="appearance-none rounded-xl border border-[#F4B544]/40 bg-white dark:bg-[#0B1120] pl-8 pr-8 py-2.5 text-xs font-bold text-[#F4B544] hover:border-[#F4B544] focus:outline-none focus:ring-1 focus:ring-[#7DA2FF] cursor-pointer shadow-2xs"
-              >
-                {editais.map((ed) => (
-                  <option key={ed.id} value={ed.id}>
-                    {ed.title}
-                  </option>
-                ))}
-              </select>
-              <PlanLogo
-                imageUrl={planImage}
-                alt={activeEdital?.title || "Edital"}
-                className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 pointer-events-none"
-                fallbackClassName="text-[#F4B544]"
-              />
-              <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#F4B544] pointer-events-none" />
-            </div>
+            <PlanSelector
+              items={editais.map((ed) => ({ id: ed.id, title: ed.title, imageUrl: ed.imageUrl }))}
+              activeId={activeEditalId || undefined}
+              activeLabel={activeEdital?.title || "Plano"}
+              imageUrl={planImage}
+              onSelect={setActiveEditalId}
+            />
           )}
 
           <button

@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { useStudy } from "../../context/StudyContext";
-import { PlanLogo } from "../common/PlanLogo";
+import { PlanSelector } from "../common/PlanSelector";
 import { ScheduledReview, StudySession } from "../../types";
 import { RegistroEstudoModal } from "./RegistroEstudoModal";
 import {
@@ -250,30 +250,17 @@ export const RevisoesView: React.FC = () => {
 
             {/* Seletor do plano de estudos */}
             {editais.length > 0 && (
-              <div className="relative">
-                <select
-                  value={activeEdital?.id || ""}
-                  onChange={(e) => setActiveEditalId(e.target.value)}
-                  className="appearance-none rounded-lg border border-[#263447] bg-[#111B2D] py-2 pl-8 pr-7 text-xs font-bold text-white shadow-xs hover:border-[#F4B544]/40 focus:outline-none"
-                >
-                  {editais.map((ed) => (
-                    <option key={ed.id} value={ed.id}>
-                      {ed.title}
-                    </option>
-                  ))}
-                </select>
-                <PlanLogo
-                  imageUrl={
-                    (activePlan ? getPlanImageUrl(activePlan.id) : null) ||
-                    activePlan?.imageUrl ||
-                    activeEdital?.imageUrl
-                  }
-                  alt={activeEdital?.title || "Edital"}
-                  className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2"
-                  fallbackClassName="text-[#F4B544]"
-                />
-                <ChevronDown className="pointer-events-none absolute right-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#F4B544]" />
-              </div>
+              <PlanSelector
+                items={editais.map((ed) => ({ id: ed.id, title: ed.title, imageUrl: ed.imageUrl }))}
+                activeId={activeEdital?.id}
+                activeLabel={activeEdital?.title || "Plano"}
+                imageUrl={
+                  (activePlan ? getPlanImageUrl(activePlan.id) : null) ||
+                  activePlan?.imageUrl ||
+                  activeEdital?.imageUrl
+                }
+                onSelect={setActiveEditalId}
+              />
             )}
 
             {/* Filtros */}
