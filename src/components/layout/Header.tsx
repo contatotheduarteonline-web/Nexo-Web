@@ -89,7 +89,7 @@ export const Header: React.FC<HeaderProps> = () => {
               setIsProfileMenuOpen(false);
             }}
             title="Notificações"
-            className="group relative flex h-9.5 w-9.5 items-center justify-center rounded-xl border border-[#E4E7EC] bg-[#FAFAFC] text-[#667085] shadow-[0_1px_2px_rgba(0,0,0,0.04)] transition-all duration-200 hover:border-[#D0D5DD] hover:bg-white hover:text-white active:scale-95 dark:border-[#263447] dark:bg-[#172235] dark:text-[#93A2B7] dark:hover:border-[#263447] dark:hover:bg-[#172235] dark:hover:text-white cursor-pointer"
+            className="group relative flex h-9.5 w-9.5 items-center justify-center text-[#667085] transition-all duration-200 hover:text-white active:scale-95 dark:text-[#93A2B7] dark:hover:text-white cursor-pointer"
           >
             <Bell className="h-4.5 w-4.5 transition-transform duration-200 group-hover:scale-105" />
             {totalNotifications > 0 && (
