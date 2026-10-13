@@ -7,7 +7,7 @@ import { motion } from "motion/react";
  * Botão flutuante do Registro de Estudos.
  *
  * O botão não abre mais um popup intermediário. Ao clicar no relógio,
- * o usuário entra diretamente no CronometroModal em tela cheia.
+ * abre diretamente o modal compacto "Registro de Estudo".
  * Isso evita que o conteúdo completo do registro seja renderizado
  * dentro de uma caixa estreita e cause estouro de cards/textos.
  */

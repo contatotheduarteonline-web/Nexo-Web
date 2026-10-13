@@ -47,6 +47,11 @@ interface RegistroEstudoModalProps {
   onClose: () => void;
   review?: ScheduledReview | null;
   onSuccessToast?: (msg: string) => void;
+  preselectedDisciplineId?: string;
+  preselectedTopicId?: string;
+  preselectedModality?: StudyModality;
+  /** Aberto pelo cronômetro: pré-preenche o tempo decorrido e zera o timer ao salvar. */
+  fromTimer?: boolean;
 }
 
 export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
@@ -54,9 +59,20 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
   onClose,
   review,
   onSuccessToast,
+  preselectedDisciplineId,
+  preselectedTopicId,
+  preselectedModality,
+  fromTimer,
 }) => {
-  const { activeEdital, logStudySession, completeScheduledReview, updateScheduledReview, createScheduledReview } =
-    useStudy();
+  const {
+    activeEdital,
+    timer,
+    logStudySession,
+    finishCurrentSession,
+    completeScheduledReview,
+    updateScheduledReview,
+    createScheduledReview,
+  } = useStudy();
 
   const todayStr = getTodayLocalYmd();
   const yesterdayStr = addDaysYmd(todayStr, -1);
@@ -81,6 +97,7 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
   const [comments, setComments] = useState("");
   const [saveAndCreateNew, setSaveAndCreateNew] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
 
   // Prefill: com revisão vinculada, categoria/disciplina/tópico/data já vêm prontos.
   useEffect(() => {
@@ -108,11 +125,23 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
       setChips(DEFAULT_CHIPS);
       if (review.durationMinutes) setTimeText(review.durationMinutes >= 60 ? `${Math.floor(review.durationMinutes / 60)}:${String(review.durationMinutes % 60).padStart(2, "0")}:00` : `${review.durationMinutes}:00`);
     } else {
-      setModality("Teoria");
-      setDisciplineId(activeEdital?.disciplines[0]?.id || "");
-      setTopicId("");
+      setModality(fromTimer ? timer.modality || "Teoria" : preselectedModality || "Teoria");
+      setDisciplineId(preselectedDisciplineId || activeEdital?.disciplines[0]?.id || "");
+      setTopicId(preselectedTopicId || "");
       setScheduleReviews(true);
       setChips(DEFAULT_CHIPS);
+      if (fromTimer && timer.elapsedSeconds > 0) {
+        const sec = timer.elapsedSeconds;
+        setTimeText(
+          `${Math.floor(sec / 3600)}:${String(Math.floor((sec % 3600) / 60)).padStart(2, "0")}:${String(
+            sec % 60
+          ).padStart(2, "0")}`
+        );
+      }
+      if (fromTimer && timer.questionsDone > 0) {
+        setAcertos(Math.max(0, timer.questionsCorrect || 0));
+        setErros(Math.max(0, timer.questionsDone - (timer.questionsCorrect || 0)));
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, review?.id]);
@@ -127,7 +156,7 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
     setChips([...chips, next].sort((a, b) => a - b));
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!studyDate) {
       setFormError("Informe a data do estudo.");
       return;
@@ -145,7 +174,13 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
 
     const durationMinutes = parseTimeToMinutes(timeText);
     const qDone = Math.max(0, acertos) + Math.max(0, erros);
+    if (durationMinutes <= 0 && qDone <= 0) {
+      setFormError("Informe o tempo estudado ou registre questões.");
+      return;
+    }
 
+    setSaving(true);
+    try {
     const sessionData: Omit<StudySession, "id"> = {
       editalId: review?.editalId || activeEdital?.id || "",
       disciplineId: disc.id,
@@ -168,10 +203,10 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
       theoryCompleted: theoryCompleted || undefined,
     };
 
-    // Registra a sessão completa (com material, páginas, videoaula e comentários).
-    logStudySession(sessionData);
-
     if (review) {
+      // Registra a sessão completa (com material, páginas, videoaula e comentários).
+      logStudySession(sessionData);
+
       // Mantém o vínculo: conclui a revisão (gera o próximo ciclo) e grava as métricas nela.
       completeScheduledReview(review.id, { logAsSession: false, notes: comments });
       updateScheduledReview(review.id, {
@@ -181,16 +216,30 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
       });
       onSuccessToast?.("Registro salvo! Revisão concluída e próximo ciclo programado.");
     } else {
-      if (scheduleReviews) {
-        chips.forEach((days) =>
-          createScheduledReview(topic.id, days === 1 ? "24h" : `${days}d`, addDaysYmd(studyDate, days))
-        );
-      }
+      // Fluxo padrão: mesma persistência do registro manual/cronômetro (finishCurrentSession
+      // salva a sessão, cria as revisões dos ciclos escolhidos e zera o timer ativo).
+      await finishCurrentSession({
+        editalId: review?.editalId || activeEdital?.id || "",
+        disciplineId: disc.id,
+        topicId: topic.id,
+        modality,
+        durationMinutes,
+        questionsDone: qDone,
+        questionsCorrect: Math.max(0, acertos),
+        notes: comments,
+        studyDate,
+        theoryCompleted,
+        scheduleReviews,
+        selectedReviewDays: chips,
+      });
       onSuccessToast?.(
         scheduleReviews && chips.length > 0
           ? "Registro salvo e revisões programadas!"
           : "Registro de estudo salvo!"
       );
+    }
+    } finally {
+      setSaving(false);
     }
 
     if (saveAndCreateNew) {
@@ -506,7 +555,7 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
             <button
               type="button"
               onClick={handleSave}
-              disabled={!disciplineId || !topicId}
+              disabled={saving || !disciplineId || !topicId}
               className="rounded-lg bg-amber-500 px-8 py-2 text-sm font-bold text-white transition enabled:hover:bg-amber-600 disabled:cursor-not-allowed disabled:bg-amber-500/40"
             >
               Salvar

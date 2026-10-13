@@ -16,7 +16,7 @@ import {
   Trophy,
 } from "lucide-react";
 import { EditDisciplineModal } from "../modals/EditDisciplineModal";
-import { ManualStudyModal } from "../modals/ManualStudyModal";
+import { RegistroEstudoModal } from "../revisoes/RegistroEstudoModal";
 import { EditalInfoModal } from "../modals/EditalInfoModal";
 import { AiAssistantModal } from "../ai/AiAssistantModal";
 import { AddContentModal } from "../modals/AddContentModal";
@@ -450,8 +450,8 @@ export const EditalView: React.FC = () => {
       )}
 
       {manualStudyTopic && (
-        <ManualStudyModal
-          isOpen={Boolean(manualStudyTopic)}
+        <RegistroEstudoModal
+          open={Boolean(manualStudyTopic)}
           onClose={() => setManualStudyTopic(null)}
           preselectedDisciplineId={manualStudyTopic.discId}
           preselectedTopicId={manualStudyTopic.topicId}

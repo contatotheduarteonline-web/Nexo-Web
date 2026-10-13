@@ -15,8 +15,8 @@ import { Header } from "./components/layout/Header";
 import { DashboardView } from "./components/dashboard/DashboardView";
 import { FloatingTimerWidget } from "./components/dashboard/FloatingTimerWidget";
 import { EditalView } from "./components/edital/EditalView";
-import { CronometroModal } from "./components/cronometro/CronometroModal";
 import { RevisoesView } from "./components/revisoes/RevisoesView";
+import { RegistroEstudoModal } from "./components/revisoes/RegistroEstudoModal";
 import { PlanosView } from "./components/planos/PlanosView";
 import { DiagnosticoView } from "./components/diagnostico/DiagnosticoView";
 import { EstatisticasView } from "./components/estatisticas/EstatisticasView";
@@ -33,7 +33,6 @@ import { GlobalWatermark } from "./components/brand/GlobalWatermark";
 import { AiAssistantModal } from "./components/ai/AiAssistantModal";
 import { NewEditalModal } from "./components/modals/NewEditalModal";
 import { NewTopicModal } from "./components/modals/NewTopicModal";
-import { ManualStudyModal } from "./components/modals/ManualStudyModal";
 
 const AuthenticatedApp: React.FC = () => {
   const { activeTab, setActiveTab, isSidebarCollapsed, setIsSidebarCollapsed } = useStudy();
@@ -139,8 +138,9 @@ const AuthenticatedApp: React.FC = () => {
       {/* Mantém o relógio flutuante disponível fora da Home também. */}
       {mainTab !== "dashboard" && <FloatingTimerWidget />}
 
-      <CronometroModal
-        isOpen={activeTab === "cronometro"}
+      <RegistroEstudoModal
+        open={activeTab === "cronometro"}
+        fromTimer
         onClose={() => setActiveTab(lastMainTab)}
       />
 
@@ -160,8 +160,8 @@ const AuthenticatedApp: React.FC = () => {
         onClose={() => setIsNewTopicOpen(false)}
       />
 
-      <ManualStudyModal
-        isOpen={isManualStudyOpen}
+      <RegistroEstudoModal
+        open={isManualStudyOpen}
         onClose={() => setIsManualStudyOpen(false)}
         preselectedDisciplineId={manualStudyDisciplineId}
         preselectedTopicId={manualStudyTopicId}
