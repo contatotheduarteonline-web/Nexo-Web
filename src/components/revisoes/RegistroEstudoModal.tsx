@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useStudy } from "../../context/StudyContext";
 import { ScheduledReview, StudyModality, StudySession } from "../../types";
 import { getTodayLocalYmd } from "./reviewHelpers";
+import { TimerOverlay } from "./TimerOverlay";
 import { X, CalendarCheck2, ChevronDown, Plus, Pause, Play, RotateCcw } from "lucide-react";
 
 /**
@@ -67,8 +68,6 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
   const {
     activeEdital,
     timer,
-    startTimer,
-    pauseTimer,
     resetTimer,
     logStudySession,
     finishCurrentSession,
@@ -100,6 +99,7 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
   const [videoEnd, setVideoEnd] = useState("");
   const [comments, setComments] = useState("");
   const [saveAndCreateNew, setSaveAndCreateNew] = useState(false);
+  const [timerOverlayOpen, setTimerOverlayOpen] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
 
@@ -270,7 +270,10 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
     }
   };
 
+  const overlayDisciplineName = activeEdital?.disciplines.find((d) => d.id === disciplineId)?.name;
+
   return (
+    <>
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#0B1120]/40 p-4">
       <div className="w-full max-w-3xl max-h-[92vh] overflow-y-auto rounded-2xl border border-[#263447] bg-[#1D2B40] p-7 shadow-2xl">
         {/* Header */}
@@ -363,18 +366,8 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
               <div className="mt-1 flex items-center gap-1.5">
                 <button
                   type="button"
-                  onClick={() => {
-                    if (timer.isRunning) {
-                      const sec = timer.elapsedSeconds;
-                      setTimeText(
-                        `${Math.floor(sec / 3600)}:${String(Math.floor((sec % 3600) / 60)).padStart(2, "0")}:${String(sec % 60).padStart(2, "0")}`
-                      );
-                      pauseTimer();
-                    } else {
-                      startTimer();
-                    }
-                  }}
-                  title={timer.isRunning ? "Pausar contagem" : "Retomar contagem"}
+                  onClick={() => setTimerOverlayOpen(true)}
+                  title="Retomar contagem"
                   className="flex h-6 w-6 items-center justify-center rounded-md bg-[#111B2D] text-[#93A2B7] hover:bg-[#223149] hover:text-white"
                 >
                   {timer.isRunning ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}
@@ -619,5 +612,18 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
         </div>
       </div>
     </div>
+
+    {/* Cronômetro flutuante: contagem real em segundo plano, encerra no "Parar e salvar". */}
+    <TimerOverlay
+      open={timerOverlayOpen}
+      disciplineName={overlayDisciplineName}
+      onStop={(elapsedSeconds) => {
+        setTimeText(
+          `${Math.floor(elapsedSeconds / 3600)}:${String(Math.floor((elapsedSeconds % 3600) / 60)).padStart(2, "0")}:${String(elapsedSeconds % 60).padStart(2, "0")}`
+        );
+        setTimerOverlayOpen(false);
+      }}
+    />
+    </>
   );
 };
