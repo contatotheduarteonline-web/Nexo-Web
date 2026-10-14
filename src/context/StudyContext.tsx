@@ -51,6 +51,7 @@ import {
   saveScheduledReviewToFirestore,
   deleteScheduledReviewFromFirestore,
   subscribeScheduledReviewsFromFirestore,
+
   saveSimuladoToFirestore,
   deleteSimuladoFromFirestore,
   subscribeSimuladosFromFirestore,
@@ -62,6 +63,13 @@ import {
   migrateLocalDataToFirestore,
   reportOrphanEditais,
 } from "../lib/firestoreService";
+import { sanitizeFirestorePayload } from "../lib/firestoreUtils";
+import {
+  isCompletedReview,
+  isPendingReview,
+  getReviewDueYmd,
+  getTodayLocalYmd,
+} from "../components/revisoes/reviewHelpers";
 import {
   getPublishedEditais,
   subscribePublishedEditais,
@@ -1079,19 +1087,21 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     };
   }, [studySessions, activeEdital, activePlan, userSettings]);
 
-  // Pending & Overdue Reviews
+  // Pending & Overdue Reviews — same source of truth as the Revisões page:
+  // local "today", excluding ignored and any already-completed record.
   const { pendingReviewsToday, overdueReviews } = useMemo(() => {
-    const todayStr = new Date().toISOString().split("T")[0];
+    const todayStr = getTodayLocalYmd();
     const pendingToday: ScheduledReview[] = [];
     const overdue: ScheduledReview[] = [];
 
     scheduledReviews
       .filter((r) => !activeEdital || r.editalId === activeEdital.id)
       .forEach((r) => {
-        if (!r.completed) {
-          if (r.dueDate === todayStr) {
+        if (isPendingReview(r)) {
+          const due = getReviewDueYmd(r);
+          if (due === todayStr) {
             pendingToday.push(r);
-          } else if (r.dueDate < todayStr) {
+          } else if (due < todayStr) {
             overdue.push(r);
           }
         }
@@ -2504,6 +2514,7 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     const updatedRev: ScheduledReview = {
       ...rev,
       completed: true,
+      status: "Concluída",
       completedAt,
       notes: notes ?? rev.notes,
       durationMinutes: durationMinutes > 0 ? durationMinutes : rev.durationMinutes,
@@ -2653,8 +2664,8 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     setScheduledReviews((prev) =>
       prev.map((r) => {
         if (r.id === reviewId) {
-          const updated = { ...r, status: "Pendente" as const };
-          if (user?.id) saveScheduledReviewToFirestore(user.id, updated).catch(console.error);
+          const updated = { ...r, completed: false, status: "Pendente" as const, completedAt: undefined };
+          if (user?.id) saveScheduledReviewToFirestore(user.id, sanitizeFirestorePayload(updated) as ScheduledReview).catch(console.error);
           return updated;
         }
         return r;
@@ -2663,11 +2674,11 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   };
 
   const batchRescheduleOverdueReviews = (newDueDate?: string) => {
-    const todayStr = new Date().toISOString().split("T")[0];
+    const todayStr = getTodayLocalYmd();
     const targetDate = newDueDate || todayStr;
     setScheduledReviews((prev) =>
       prev.map((r) => {
-        if (!r.completed && r.dueDate < todayStr) {
+        if (isPendingReview(r) && getReviewDueYmd(r) < todayStr) {
           const updated = { ...r, dueDate: targetDate };
           if (user?.id) saveScheduledReviewToFirestore(user.id, updated).catch(console.error);
           return updated;
@@ -2694,7 +2705,11 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
     const targetDate = new Date();
     targetDate.setDate(targetDate.getDate() + daysToAdd);
-    const dueDate = customDueDate || targetDate.toISOString().split("T")[0];
+    // Data local (não UTC) — evita +1 dia no fuso brasileiro (UTC-3), que
+    // mantinha revisões já vencidas na aba "Programadas".
+    const dueDate =
+      customDueDate ||
+      `${targetDate.getFullYear()}-${String(targetDate.getMonth() + 1).padStart(2, "0")}-${String(targetDate.getDate()).padStart(2, "0")}`;
 
     const newRev: ScheduledReview = {
       id: `rev-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,

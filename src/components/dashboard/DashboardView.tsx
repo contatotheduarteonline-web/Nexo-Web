@@ -206,7 +206,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy 
   const pendingReviews = useMemo(() => {
     return scheduledReviews
       .filter(
-        (r) => (!activeEdital || r.editalId === activeEdital.id) && !r.completed && r.status !== "Ignorada"
+        (r) => (!activeEdital || r.editalId === activeEdital.id) && !r.completed && r.status !== "Ignorada" && r.status !== "Concluída"
       )
       .sort((a, b) => a.dueDate.localeCompare(b.dueDate));
   }, [scheduledReviews, activeEdital]);
