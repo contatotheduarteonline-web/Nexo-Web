@@ -11,6 +11,8 @@ interface Step3SpecificGoalProps {
   organ?: string;
   cargo?: string;
   banca?: string;
+  selectedEditalId?: string;
+  selectedCargoId?: string;
   onChangeGoalKnown: (known: boolean) => void;
   onChangeOrgan: (organ: string) => void;
   onChangeCargo: (cargo: string) => void;
@@ -37,6 +39,8 @@ export const Step3SpecificGoal: React.FC<Step3SpecificGoalProps> = ({
   organ = "",
   cargo = "",
   banca = "",
+  selectedEditalId,
+  selectedCargoId,
   onChangeGoalKnown,
   onChangeOrgan,
   onChangeCargo,
@@ -347,24 +351,40 @@ export const Step3SpecificGoal: React.FC<Step3SpecificGoalProps> = ({
 
                   {/* Cargo rows */}
                   <div className="px-2 pb-2">
-                    {group.entries.map((entry, idx) => (
-                      <button
-                        key={`${entry.edital.id}-${idx}`}
-                        type="button"
-                        onClick={() => handleSelectCargo(group, entry)}
-                        className="group flex w-full items-center justify-between rounded-lg px-2.5 py-2.5 text-left hover:bg-zinc-800/70 transition-colors cursor-pointer"
-                      >
-                        <div className="min-w-0">
-                          <span className="block text-sm font-medium text-zinc-100 group-hover:text-white truncate">
-                            {entry.cargoName}
-                          </span>
-                          <span className="block text-[11px] text-zinc-500 mt-0.5 truncate">
-                            {entry.meta}
-                          </span>
-                        </div>
-                        <ArrowRight className="h-4 w-4 shrink-0 text-zinc-600 group-hover:text-[#7DA2FF] transition-colors" />
-                      </button>
-                    ))}
+                    {group.entries.map((entry, idx) => {
+                      const isSelected =
+                        entry.edital.id === selectedEditalId &&
+                        (entry.cargoId ? entry.cargoId === selectedCargoId : true);
+                      return (
+                        <button
+                          key={`${entry.edital.id}-${idx}`}
+                          type="button"
+                          aria-pressed={isSelected}
+                          onClick={() => handleSelectCargo(group, entry)}
+                          className={`group flex w-full items-center justify-between rounded-lg px-2.5 py-2.5 text-left transition-colors cursor-pointer ${
+                            isSelected
+                              ? "bg-[#527DFF]/15 border border-[#527DFF]/60"
+                              : "border border-transparent hover:bg-zinc-800/70"
+                          }`}
+                        >
+                          <div className="min-w-0">
+                            <span className={`block text-sm font-medium truncate ${isSelected ? "text-white font-semibold" : "text-zinc-100 group-hover:text-white"}`}>
+                              {entry.cargoName}
+                            </span>
+                            <span className="block text-[11px] text-zinc-500 mt-0.5 truncate">
+                              {entry.meta}
+                            </span>
+                          </div>
+                          {isSelected ? (
+                            <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#527DFF] text-white">
+                              <Check className="h-3.5 w-3.5" />
+                            </span>
+                          ) : (
+                            <ArrowRight className="h-4 w-4 shrink-0 text-zinc-600 group-hover:text-[#7DA2FF] transition-colors" />
+                          )}
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
               ))

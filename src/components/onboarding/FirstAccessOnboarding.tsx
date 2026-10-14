@@ -556,6 +556,8 @@ export const FirstAccessOnboarding: React.FC = () => {
                   organ={draft.organ}
                   cargo={draft.cargo}
                   banca={draft.banca}
+                  selectedEditalId={draft.catalogEditalId}
+                  selectedCargoId={draft.catalogCargoId}
                   onChangeGoalKnown={(known: boolean) => updateDraft({ knowsSpecificGoal: known })}
                   onChangeOrgan={(organ: string) => updateDraft({ organ })}
                   onChangeCargo={(cargo: string) => updateDraft({ cargo })}
