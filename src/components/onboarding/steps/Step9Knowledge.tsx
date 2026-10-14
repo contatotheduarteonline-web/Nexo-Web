@@ -1,11 +1,9 @@
 import React from "react";
 import { DisciplineDraftItem, KnowledgeLevel } from "../types";
-import { ArrowRight } from "lucide-react";
 
 interface Step9KnowledgeProps {
   disciplines: DisciplineDraftItem[];
   onChangeLevel: (disciplineId: string, level: KnowledgeLevel) => void;
-  onNext: () => void;
 }
 
 const LEVEL_OPTIONS: { id: KnowledgeLevel; label: string }[] = [
@@ -19,35 +17,36 @@ const LEVEL_OPTIONS: { id: KnowledgeLevel; label: string }[] = [
 export const Step9Knowledge: React.FC<Step9KnowledgeProps> = ({
   disciplines,
   onChangeLevel,
-  onNext,
 }) => {
   return (
-    <div id="step-9-knowledge" className="w-full max-w-3xl mx-auto px-4 py-4 sm:py-8">
-      {/* Question Header */}
-      <div className="mb-8 text-center sm:text-left">
-        <span className="text-xs font-semibold text-[#F4B544] tracking-wider uppercase">
-          Etapa 9 de 12
+    <div id="step-9-knowledge" className="w-full">
+      {/* Section header */}
+      <div className="flex items-center justify-between gap-3 mb-3">
+        <p className="text-sm font-bold text-white">
+          Marque onde você está em cada disciplina
+        </p>
+        <span className="text-xs text-[#718096] hidden sm:block">
+          Opcional — dá para marcar depois
         </span>
-        <h2 className="text-2xl sm:text-4xl font-bold tracking-tight text-white mt-1">
-          Como você se sente em cada matéria?
-        </h2>
       </div>
 
       {/* Disciplines List */}
-      <div className="space-y-4 mb-8">
-        {disciplines.map((disc) => {
+      <div className="rounded-2xl border border-[#263447] bg-[#172235] overflow-hidden">
+        {disciplines.map((disc, idx) => {
           const currentLevel = disc.knowledgeLevel || "nunca_estudei";
           return (
             <div
               key={disc.id}
-              className="p-4 sm:p-5 rounded-xl bg-zinc-900/80 border border-zinc-800 space-y-3"
+              className={`flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-4 sm:px-5 py-3.5 ${
+                idx > 0 ? "border-t border-[#1C2940]" : ""
+              }`}
             >
-              <div className="text-base font-semibold text-white tracking-wide">
+              <span className="text-sm font-semibold text-white truncate">
                 {disc.name}
-              </div>
+              </span>
 
               {/* Levels pills */}
-              <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
+              <div className="flex flex-wrap gap-1.5 shrink-0">
                 {LEVEL_OPTIONS.map((lvl) => {
                   const isSelected = currentLevel === lvl.id;
                   return (
@@ -55,10 +54,10 @@ export const Step9Knowledge: React.FC<Step9KnowledgeProps> = ({
                       key={lvl.id}
                       type="button"
                       onClick={() => onChangeLevel(disc.id, lvl.id)}
-                      className={`px-3 py-2 rounded-lg text-xs font-medium border text-center transition-all duration-150 cursor-pointer ${
+                      className={`px-3 py-1.5 rounded-lg text-xs font-medium border text-center transition-all duration-150 cursor-pointer ${
                         isSelected
-                          ? "bg-[#527DFF] border-[#F4B544] text-white shadow-sm font-semibold"
-                          : "bg-zinc-800/60 border-zinc-700/60 text-zinc-300 hover:bg-zinc-800 hover:text-white"
+                          ? "bg-[#527DFF] border-[#527DFF] text-white font-semibold"
+                          : "bg-[#111B2D] border-[#263447] text-[#93A2B7] hover:bg-[#223149] hover:text-white"
                       }`}
                     >
                       {lvl.label}
@@ -69,19 +68,6 @@ export const Step9Knowledge: React.FC<Step9KnowledgeProps> = ({
             </div>
           );
         })}
-      </div>
-
-      {/* Action Footer */}
-      <div className="flex justify-end">
-        <button
-          type="button"
-          id="btn-knowledge-next"
-          onClick={onNext}
-          className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-[#527DFF] hover:bg-[#FF7A1A] text-white font-semibold text-sm transition-all duration-200 cursor-pointer shadow-[0_6px_20px_rgba(255,107,0,0.25)]"
-        >
-          <span>Continuar</span>
-          <ArrowRight className="w-4 h-4" />
-        </button>
       </div>
     </div>
   );

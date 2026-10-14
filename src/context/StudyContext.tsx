@@ -580,6 +580,23 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     );
   }, [firestoreCatalogEditais]);
 
+  // Enriquecimento somente-leitura: editais pessoais criados a partir do
+  // catálogo herdam o logo do edital de origem para os seletores de plano.
+  const editaisWithCatalogLogos = useMemo<Edital[]>(() => {
+    if (editais.length === 0) return editais;
+    const logoByCatalogId = new Map<string, string>();
+    for (const ce of catalogEditais) {
+      const logo = ce.logoDataUrl || ce.logoUrl;
+      if (logo) logoByCatalogId.set(ce.id, logo);
+    }
+    if (logoByCatalogId.size === 0) return editais;
+    return editais.map((ed) => {
+      if (ed.imageUrl || !ed.sourceEditalId) return ed;
+      const logo = logoByCatalogId.get(ed.sourceEditalId);
+      return logo ? { ...ed, imageUrl: logo } : ed;
+    });
+  }, [editais, catalogEditais]);
+
   const fetchGlobalTemplates = async () => {
     // Permanent architecture uses catalogEditais. Mocks/seeds are never used.
     setIsLoadingTemplates(false);
@@ -863,24 +880,24 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   }, [studyPlans, activeEditalId]);
 
   const activeEdital = useMemo(() => {
-    if (editais.length === 0) return undefined;
+    if (editaisWithCatalogLogos.length === 0) return undefined;
     if (activePlan?.editalId) {
-      const match = editais.find((e) => e.id === activePlan.editalId);
+      const match = editaisWithCatalogLogos.find((e) => e.id === activePlan.editalId);
       if (match) return match;
     }
     if (activeEditalId) {
-      const match = editais.find((e) => e.id === activeEditalId);
+      const match = editaisWithCatalogLogos.find((e) => e.id === activeEditalId);
       if (match) return match;
     }
     if (studyPlans.length > 0 && studyPlans[0].editalId) {
-      const match = editais.find((e) => e.id === studyPlans[0].editalId);
+      const match = editaisWithCatalogLogos.find((e) => e.id === studyPlans[0].editalId);
       if (match) return match;
     }
     if (studyPlans.length === 0 && !activeEditalId) {
       return undefined;
     }
-    return editais[0];
-  }, [editais, activeEditalId, activePlan, studyPlans]);
+    return editaisWithCatalogLogos[0];
+  }, [editaisWithCatalogLogos, activeEditalId, activePlan, studyPlans]);
 
   // Derived Metrics & Analytics
   const metrics = useMemo(() => {
@@ -2168,6 +2185,7 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         isCustom: false,
         disciplines: newDisciplines,
         topics: newTopics,
+        imageUrl: catalogEdital.logoDataUrl || catalogEdital.logoUrl,
         createdAt: new Date().toISOString(),
       };
 
@@ -3085,7 +3103,7 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         toggleSidebar,
         userSettings,
         updateUserSettings,
-        editais,
+        editais: editaisWithCatalogLogos,
         activeEditalId,
         activeEdital,
         setActiveEditalId,

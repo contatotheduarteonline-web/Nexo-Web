@@ -1,5 +1,5 @@
 import React from "react";
-import { Bell, Clock, Calendar, CheckCircle2, ChevronRight } from "lucide-react";
+import { BellOff, Clock, Calendar, ChevronRight } from "lucide-react";
 import type { ScheduledReview, Reminder } from "../../types";
 
 interface NotificationsPanelProps {
@@ -32,31 +32,21 @@ export const NotificationsPanel: React.FC<NotificationsPanelProps> = ({
     <div className="absolute right-0 top-full mt-2 w-[360px] overflow-hidden rounded-2xl border border-[#263447] bg-[#101827] shadow-xl z-50">
       {/* Header */}
       <div className="flex items-center justify-between border-b border-[#263447] px-4 py-3">
-        <div className="flex items-center gap-2.5">
-          <div className="flex h-7 w-7 items-center justify-center rounded-lg border border-[#F4B544]/25 bg-[#527DFF]/10">
-            <Bell className="h-3.5 w-3.5 text-[#F4B544]" />
-          </div>
-          <span className="text-xs font-bold uppercase tracking-wider text-white">
-            Notificações
-          </span>
-        </div>
-        {total > 0 && (
-          <span className="rounded-full border border-[#F4B544]/30 bg-[#527DFF]/10 px-2.5 py-0.5 text-[10px] font-bold text-[#F4B544]">
-            {total} pendente{total > 1 ? "s" : ""}
-          </span>
-        )}
+        <span className="text-sm font-bold text-white">Notificações</span>
+        <button
+          type="button"
+          onClick={onClose}
+          className="text-[11px] font-semibold text-[#93A2B7] transition-colors hover:text-[#527DFF] cursor-pointer"
+        >
+          Fechar painel
+        </button>
       </div>
 
       {/* Body */}
       {total === 0 ? (
-        <div className="px-6 py-8 text-center">
-          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full border border-[#2BBF8A]/25 bg-[#2BBF8A]/10">
-            <CheckCircle2 className="h-6 w-6 text-[#2BBF8A]" />
-          </div>
-          <p className="mt-3 text-sm font-bold text-white">Tudo em dia</p>
-          <p className="mt-1 text-[11px] text-white/50">
-            Nenhuma revisão ou lembrete pendente. Sua rotina está em ordem.
-          </p>
+        <div className="flex flex-col items-center justify-center px-6 py-12 text-center">
+          <BellOff className="h-8 w-8 text-[#5A6B84]" strokeWidth={1.75} />
+          <p className="mt-4 text-sm text-[#93A2B7]">Nenhuma notificação por aqui.</p>
         </div>
       ) : (
         <div className="max-h-80 overflow-y-auto">
@@ -131,20 +121,17 @@ export const NotificationsPanel: React.FC<NotificationsPanelProps> = ({
       )}
 
       {/* Footer */}
-      <div className="grid grid-cols-2 gap-2 border-t border-[#263447] p-3">
+      <div className="flex items-center justify-center gap-1.5 border-t border-[#263447] px-4 py-3">
+        <Clock className="h-4 w-4 text-[#93A2B7]" />
+        <span className="text-[11px] text-[#93A2B7]">
+          Mostrando as dos últimos 30 dias.
+        </span>
         <button
           type="button"
           onClick={() => go("revisoes")}
-          className="rounded-xl border border-[#263447] bg-[#111B2D] px-3 py-2 text-[11px] font-bold text-white/70 transition hover:border-[#F4B544]/40 hover:text-[#F4B544] cursor-pointer"
+          className="text-[11px] font-semibold text-[#C4CEDB] transition-colors hover:text-[#527DFF] cursor-pointer"
         >
-          Ver Revisões &rarr;
-        </button>
-        <button
-          type="button"
-          onClick={() => go("lembretes")}
-          className="rounded-xl border border-[#263447] bg-[#111B2D] px-3 py-2 text-[11px] font-bold text-white/70 transition hover:border-[#F4B544]/40 hover:text-[#F4B544] cursor-pointer"
-        >
-          Ver Lembretes &rarr;
+          Ver todas
         </button>
       </div>
     </div>

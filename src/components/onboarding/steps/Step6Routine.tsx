@@ -1,11 +1,9 @@
 import React from "react";
 import { RoutineType } from "../types";
-import { ArrowRight, Check } from "lucide-react";
 
 interface Step6RoutineProps {
   value?: RoutineType;
   onChange: (value: RoutineType) => void;
-  onNext: () => void;
 }
 
 const ROUTINE_OPTIONS: RoutineType[] = [
@@ -19,22 +17,16 @@ const ROUTINE_OPTIONS: RoutineType[] = [
 export const Step6Routine: React.FC<Step6RoutineProps> = ({
   value,
   onChange,
-  onNext,
 }) => {
   return (
-    <div id="step-6-routine" className="w-full max-w-2xl mx-auto px-4 py-4 sm:py-8">
-      {/* Question Header */}
-      <div className="mb-8 text-center sm:text-left">
-        <span className="text-xs font-semibold text-[#F4B544] tracking-wider uppercase">
-          Etapa 6 de 12
-        </span>
-        <h2 className="text-2xl sm:text-4xl font-bold tracking-tight text-white mt-1">
-          Como é sua rotina atualmente?
-        </h2>
-      </div>
+    <div id="step-6-routine" className="w-full">
+      {/* Section label */}
+      <p className="text-sm font-bold text-white mb-3">
+        Você trabalha ou tem outra atividade além dos estudos?
+      </p>
 
-      {/* Routine Options */}
-      <div className="space-y-3 mb-8">
+      {/* Routine Options (radio rows) */}
+      <div className="space-y-3">
         {ROUTINE_OPTIONS.map((opt) => {
           const isSelected = value === opt;
           return (
@@ -43,41 +35,29 @@ export const Step6Routine: React.FC<Step6RoutineProps> = ({
               type="button"
               id={`routine-card-${opt.toLowerCase().replace(/\s+/g, "-")}`}
               onClick={() => onChange(opt)}
-              className={`w-full flex items-center justify-between p-4 sm:p-4.5 rounded-xl border text-left transition-all duration-150 cursor-pointer ${
+              className={`w-full flex items-center gap-3 p-4 rounded-xl border text-left transition-all duration-150 cursor-pointer ${
                 isSelected
-                  ? "bg-zinc-800/90 border-[#F4B544] shadow-[0_0_18px_rgba(255,107,0,0.18)]"
-                  : "bg-zinc-900/60 border-zinc-800/80 hover:bg-zinc-800/50 hover:border-zinc-700"
+                  ? "bg-[#1A2A4A] border-[#527DFF]"
+                  : "bg-[#172235] border-[#263447] hover:bg-[#223149] hover:border-[#39475C]"
               }`}
             >
-              <span className={`text-base font-medium ${isSelected ? "text-white font-semibold" : "text-zinc-200"}`}>
-                {opt}
-              </span>
-              <div
-                className={`w-5 h-5 rounded-full border flex items-center justify-center shrink-0 ml-3 transition-colors ${
-                  isSelected
-                    ? "border-[#F4B544] bg-[#527DFF] text-white"
-                    : "border-zinc-700 bg-zinc-800/40 text-transparent"
+              <span
+                className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${
+                  isSelected ? "border-[#527DFF]" : "border-[#39475C]"
                 }`}
               >
-                <Check className="w-3 h-3" />
-              </div>
+                <span
+                  className={`w-2.5 h-2.5 rounded-full transition-colors ${
+                    isSelected ? "bg-[#527DFF]" : "bg-transparent"
+                  }`}
+                />
+              </span>
+              <span className={`text-sm sm:text-base font-medium ${isSelected ? "text-white font-semibold" : "text-[#C4CEDB]"}`}>
+                {opt}
+              </span>
             </button>
           );
         })}
-      </div>
-
-      {/* Action Footer */}
-      <div className="flex justify-end">
-        <button
-          type="button"
-          id="btn-routine-next"
-          onClick={onNext}
-          disabled={!value}
-          className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-[#527DFF] hover:bg-[#FF7A1A] disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold text-sm transition-all duration-200 cursor-pointer shadow-[0_6px_20px_rgba(255,107,0,0.25)]"
-        >
-          <span>Continuar</span>
-          <ArrowRight className="w-4 h-4" />
-        </button>
       </div>
     </div>
   );

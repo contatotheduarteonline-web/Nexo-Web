@@ -1,27 +1,28 @@
 import React from "react";
-import { WeeklyAvailability, DayAvailability } from "../types";
-import { ArrowRight, Clock } from "lucide-react";
+import { WeeklyAvailability } from "../types";
+import { Info, Minus, Plus } from "lucide-react";
 
 interface Step7AvailabilityProps {
   value: WeeklyAvailability;
   onChange: (value: WeeklyAvailability) => void;
-  onNext: () => void;
 }
 
-const DAYS_META: { key: keyof WeeklyAvailability; label: string; fullLabel: string }[] = [
-  { key: "seg", label: "SEG", fullLabel: "Segunda-feira" },
-  { key: "ter", label: "TER", fullLabel: "Terça-feira" },
-  { key: "qua", label: "QUA", fullLabel: "Quarta-feira" },
-  { key: "qui", label: "QUI", fullLabel: "Quinta-feira" },
-  { key: "sex", label: "SEX", fullLabel: "Sexta-feira" },
-  { key: "sab", label: "SÁB", fullLabel: "Sábado" },
-  { key: "dom", label: "DOM", fullLabel: "Domingo" },
+const DAYS_META: { key: keyof WeeklyAvailability; label: string }[] = [
+  { key: "seg", label: "Segunda" },
+  { key: "ter", label: "Terça" },
+  { key: "qua", label: "Quarta" },
+  { key: "qui", label: "Quinta" },
+  { key: "sex", label: "Sexta" },
+  { key: "sab", label: "Sábado" },
+  { key: "dom", label: "Domingo" },
 ];
+
+const STEP_MINUTES = 30;
+const MAX_MINUTES = 16 * 60;
 
 export const Step7Availability: React.FC<Step7AvailabilityProps> = ({
   value,
   onChange,
-  onNext,
 }) => {
   // Toggle day active state
   const handleToggleDay = (dayKey: keyof WeeklyAvailability) => {
@@ -37,21 +38,27 @@ export const Step7Availability: React.FC<Step7AvailabilityProps> = ({
     });
   };
 
-  // Update hours / minutes for a day
-  const handleUpdateDayTime = (
+  // Adjust a day's total time in fixed steps (±30min)
+  const handleAdjustDayTime = (
     dayKey: keyof WeeklyAvailability,
-    hours: number,
-    minutes: number
+    direction: 1 | -1
   ) => {
+    const day = value[dayKey];
+    const total = Math.max(0, Math.min(MAX_MINUTES, day.hours * 60 + day.minutes + direction * STEP_MINUTES));
     onChange({
       ...value,
       [dayKey]: {
-        ...value[dayKey],
-        hours: Math.max(0, Math.min(16, hours)),
-        minutes: Math.max(0, Math.min(59, minutes)),
+        ...day,
+        enabled: total > 0,
+        hours: Math.floor(total / 60),
+        minutes: total % 60,
       },
     });
   };
+
+  // Format "2h00min" / "0h"
+  const formatTime = (hours: number, minutes: number) =>
+    minutes > 0 || hours > 0 ? `${hours}h${String(minutes).padStart(2, "0")}min` : "0h";
 
   // Calculate total weekly minutes
   const totalWeeklyMinutes = DAYS_META.reduce((acc, { key }) => {
@@ -60,140 +67,115 @@ export const Step7Availability: React.FC<Step7AvailabilityProps> = ({
     return acc + day.hours * 60 + day.minutes;
   }, 0);
 
-  const totalWeeklyHours = Math.floor(totalWeeklyMinutes / 60);
-  const remainingMinutes = totalWeeklyMinutes % 60;
-  const formattedWeekly = `${totalWeeklyHours}h${
-    remainingMinutes > 0 ? String(remainingMinutes).padStart(2, "0") : "00"
-  }`;
-
-  const canContinue = totalWeeklyMinutes > 0;
+  const formattedWeekly = `${Math.floor(totalWeeklyMinutes / 60)}h${String(
+    totalWeeklyMinutes % 60
+  ).padStart(2, "0")}`;
 
   return (
-    <div id="step-7-availability" className="w-full max-w-3xl mx-auto px-4 py-4 sm:py-8">
+    <div id="step-7-availability" className="w-full">
       {/* Question Header */}
-      <div className="mb-6 text-center sm:text-left">
-        <span className="text-xs font-semibold text-[#F4B544] tracking-wider uppercase">
-          Etapa 7 de 12
-        </span>
-        <h2 className="text-2xl sm:text-4xl font-bold tracking-tight text-white mt-1">
-          Quando você consegue estudar?
+      <div className="mb-6">
+        <h2 className="text-2xl sm:text-4xl font-bold tracking-tight text-white">
+          Quais dias e quanto tempo em cada um?
         </h2>
+        <p className="text-sm text-[#93A2B7] mt-2 max-w-xl">
+          Seja realista: um plano que cabe na sua semana rende mais do que um
+          plano ideal.
+        </p>
       </div>
 
-      {/* Real-time Summary Card */}
-      <div className="mb-6 p-4 rounded-xl bg-zinc-900/90 border border-zinc-800 flex items-center justify-between shadow-md">
-        <div className="flex items-center gap-2.5">
-          <Clock className="w-5 h-5 text-[#F4B544]" />
-          <span className="text-sm text-zinc-300 font-medium">
-            Disponibilidade semanal:
-          </span>
-        </div>
-        <span className="text-lg sm:text-xl font-bold text-[#F4B544] font-mono tracking-tight">
-          {formattedWeekly}
-        </span>
+      {/* Info callout */}
+      <div className="mb-5 flex items-start gap-3 rounded-xl border border-[var(--info-border)] bg-[var(--info-soft)] p-4">
+        <Info className="w-4.5 h-4.5 text-[var(--info)] shrink-0 mt-0.5" />
+        <p className="text-[13px] leading-relaxed text-[#C4CEDB]">
+          Quem trabalha em período integral costuma render de 2 a 3h por dia
+          útil e de 3 a 5h nos fins de semana.
+        </p>
       </div>
 
       {/* Days List */}
-      <div className="space-y-2.5 mb-8">
-        {DAYS_META.map(({ key, label, fullLabel }) => {
+      <div className="rounded-2xl border border-[#263447] bg-[#172235] overflow-hidden mb-8">
+        {DAYS_META.map(({ key, label }, index) => {
           const day = value[key];
           return (
             <div
               key={key}
-              className={`p-3.5 sm:p-4 rounded-xl border transition-all duration-150 flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
-                day.enabled
-                  ? "bg-zinc-800/80 border-[#F4B544]/70 shadow-sm"
-                  : "bg-zinc-900/40 border-zinc-800/60 opacity-70"
-              }`}
+              className={`flex items-center justify-between gap-3 px-4 sm:px-5 py-3.5 transition-colors ${
+                index > 0 ? "border-t border-[#1C2940]" : ""
+              } ${day.enabled ? "bg-[#172235]" : "bg-[#101827]"}`}
             >
-              {/* Day Toggle */}
-              <div className="flex items-center gap-3">
-                <button
-                  type="button"
-                  id={`toggle-day-${key}`}
-                  onClick={() => handleToggleDay(key)}
-                  className={`w-12 h-9 rounded-lg font-bold text-xs flex items-center justify-center transition-colors cursor-pointer ${
+              {/* Day switch + label */}
+              <button
+                type="button"
+                id={`toggle-day-${key}`}
+                onClick={() => handleToggleDay(key)}
+                className="flex items-center gap-3 cursor-pointer group shrink-0"
+              >
+                <span
+                  className={`relative w-10 h-6 rounded-full transition-colors ${
                     day.enabled
-                      ? "bg-[#527DFF] text-white"
-                      : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700"
+                      ? "bg-[#527DFF]"
+                      : "bg-[#111B2D] border border-[#39475C] group-hover:border-[#527DFF]/60"
+                  }`}
+                >
+                  <span
+                    className={`absolute top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-white shadow transition-all ${
+                      day.enabled ? "left-[calc(100%-1.25rem)]" : "left-1"
+                    }`}
+                  />
+                </span>
+                <span
+                  className={`text-sm font-semibold transition-colors ${
+                    day.enabled ? "text-white" : "text-[#718096]"
                   }`}
                 >
                   {label}
-                </button>
-                <span className={`text-sm font-medium ${day.enabled ? "text-white" : "text-zinc-400"}`}>
-                  {fullLabel}
                 </span>
+              </button>
+
+              {/* Time stepper */}
+              <div
+                className={`flex items-center rounded-xl border border-[#263447] bg-[#111B2D] px-1.5 py-1.5 ${
+                  day.enabled ? "" : "opacity-50"
+                }`}
+              >
+                <button
+                  type="button"
+                  id={`step-down-${key}`}
+                  onClick={() => handleAdjustDayTime(key, -1)}
+                  disabled={!day.enabled}
+                  className="w-8 h-8 flex items-center justify-center rounded-lg text-[#93A2B7] hover:text-white hover:bg-[#223149] transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+                  aria-label={`Diminuir tempo de ${label}`}
+                >
+                  <Minus className="w-4 h-4" />
+                </button>
+                <span className="w-20 text-center text-sm font-bold text-white font-mono">
+                  {formatTime(day.hours, day.minutes)}
+                </span>
+                <button
+                  type="button"
+                  id={`step-up-${key}`}
+                  onClick={() => handleAdjustDayTime(key, 1)}
+                  disabled={!day.enabled}
+                  className="w-8 h-8 flex items-center justify-center rounded-lg text-[#93A2B7] hover:text-white hover:bg-[#223149] transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+                  aria-label={`Aumentar tempo de ${label}`}
+                >
+                  <Plus className="w-4 h-4" />
+                </button>
               </div>
-
-              {/* Time inputs (only enabled if day is active) */}
-              {day.enabled ? (
-                <div className="flex items-center gap-2">
-                  <div className="flex items-center bg-zinc-900/90 border border-zinc-700 rounded-lg px-2.5 py-1.5">
-                    <input
-                      type="number"
-                      min={0}
-                      max={16}
-                      value={day.hours}
-                      onChange={(e) =>
-                        handleUpdateDayTime(key, parseInt(e.target.value) || 0, day.minutes)
-                      }
-                      className="w-10 bg-transparent text-white font-mono text-center font-bold text-sm focus:outline-none"
-                    />
-                    <span className="text-zinc-400 text-xs font-mono">h</span>
-                    <span className="text-zinc-500 mx-1">:</span>
-                    <select
-                      value={day.minutes}
-                      onChange={(e) =>
-                        handleUpdateDayTime(key, day.hours, parseInt(e.target.value) || 0)
-                      }
-                      className="bg-transparent text-white font-mono text-xs font-bold focus:outline-none cursor-pointer"
-                    >
-                      <option value={0} className="bg-zinc-900 text-white">00m</option>
-                      <option value={15} className="bg-zinc-900 text-white">15m</option>
-                      <option value={30} className="bg-zinc-900 text-white">30m</option>
-                      <option value={45} className="bg-zinc-900 text-white">45m</option>
-                    </select>
-                  </div>
-
-                  {/* Preset quick buttons */}
-                  <div className="hidden sm:flex items-center gap-1">
-                    {[1, 2, 3, 4].map((presetH) => (
-                      <button
-                        key={presetH}
-                        type="button"
-                        onClick={() => handleUpdateDayTime(key, presetH, 0)}
-                        className={`px-2 py-1 text-[11px] rounded font-mono transition-colors ${
-                          day.hours === presetH && day.minutes === 0
-                            ? "bg-[#527DFF]/20 text-[#F4B544] border border-[#F4B544]/40 font-bold"
-                            : "bg-zinc-800/60 text-zinc-400 hover:text-zinc-200"
-                        }`}
-                      >
-                        {presetH}h
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              ) : (
-                <span className="text-xs text-zinc-500 italic">Dia livre / Sem estudo</span>
-              )}
             </div>
           );
         })}
       </div>
 
-      {/* Action Footer */}
-      <div className="flex justify-end">
-        <button
-          type="button"
-          id="btn-availability-next"
-          onClick={onNext}
-          disabled={!canContinue}
-          className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-[#527DFF] hover:bg-[#FF7A1A] disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold text-sm transition-all duration-200 cursor-pointer shadow-[0_6px_20px_rgba(255,107,0,0.25)]"
-        >
-          <span>Continuar</span>
-          <ArrowRight className="w-4 h-4" />
-        </button>
-      </div>
+      {/* Weekly total */}
+      <p className="text-sm text-[#93A2B7]">
+        Total:{" "}
+        <span className="num-condensed font-bold text-[#F4B544]">
+          {formattedWeekly}
+        </span>{" "}
+        por semana
+      </p>
     </div>
   );
 };
