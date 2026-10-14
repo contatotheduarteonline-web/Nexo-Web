@@ -38,7 +38,7 @@ export const NotificationsPanel: React.FC<NotificationsPanelProps> = ({
           onClick={onClose}
           className="text-[11px] font-semibold text-[#93A2B7] transition-colors hover:text-[#527DFF] cursor-pointer"
         >
-          Marcar todas como lidas
+          Fechar painel
         </button>
       </div>
 
