@@ -42,7 +42,7 @@ import {
   deleteEditalFromFirestore,
   subscribeEditaisFromFirestore,
   saveStudyPlanToFirestore,
-  deleteStudyPlanFromFirestore,
+  deleteStudyPlanCascadeFromFirestore,
   subscribeStudyPlansFromFirestore,
   saveStudySessionToFirestore,
   deleteStudySessionFromFirestore,
@@ -73,7 +73,6 @@ import { auth } from "../lib/firebase";
 import { authFetch } from "../lib/apiClient";
 import {
   fetchPlanImageFromFirestore,
-  deletePlanImageFromFirestore,
   getCachedPlanImage,
   setCachedPlanImage,
   migrateLegacyPlanImage,
@@ -880,6 +879,9 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   }, [studyPlans, activeEditalId]);
 
   const activeEdital = useMemo(() => {
+    // Sem nenhum plano, não há "edital ativo": dados órfãos de editais antigos
+    // (o "plano secundário") jamais devem aparecer no app.
+    if (studyPlans.length === 0) return undefined;
     if (editaisWithCatalogLogos.length === 0) return undefined;
     if (activePlan?.editalId) {
       const match = editaisWithCatalogLogos.find((e) => e.id === activePlan.editalId);
@@ -1783,15 +1785,17 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
   const deleteStudyPlan = (id: string) => {
     const uid = auth.currentUser?.uid || user?.id;
-    if (uid) {
-      deleteStudyPlanFromFirestore(uid, id).catch((err) =>
-        console.error("Erro ao excluir plano no Firestore:", err)
-      );
-      deletePlanImageFromFirestore(uid, id).catch(() => {});
-    }
-    setPlanImageCache(id, null);
     const planToDelete = studyPlans.find((p) => p.id === id);
     const targetEditalId = planToDelete?.editalId;
+    if (uid) {
+      // Exclusão em cascata no Firestore (plano + imagem + edital + sessões +
+      // revisões + simulados + lembretes). Sem ela, as assinaturas em tempo real
+      // ressuscitam os dados e o plano "fantasma" volta a aparecer.
+      deleteStudyPlanCascadeFromFirestore(uid, id, targetEditalId).catch((err) =>
+        console.error("Erro ao excluir plano em cascata no Firestore:", err)
+      );
+    }
+    setPlanImageCache(id, null);
 
     // 1. Filter out the plan and any orphaned plans referencing the same edital
     const remainingPlans = studyPlans.filter((p) => p.id !== id && (!targetEditalId || p.editalId !== targetEditalId));

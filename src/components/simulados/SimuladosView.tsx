@@ -63,8 +63,9 @@ export const SimuladosView: React.FC = () => {
     isPlanImageLoading,
   } = useStudy();
 
-  // Edital ativo com fallback para o primeiro edital (mesmo comportamento do Histórico)
-  const edital = activeEdital || editais[0] || null;
+  // Sem plano ativo não há edital válido: dados órfãos de planos apagados
+  // jamais devem alimentar a tela.
+  const edital = activeEdital || null;
 
   // Mesma resolução de imagem do Histórico: imagem customizada do plano > plano > edital
   const planCustomImageUrl = activePlan ? getPlanImageUrl(activePlan.id) : null;
