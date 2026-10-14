@@ -100,6 +100,10 @@ export const isCompletedReview = (
   review: { completed: boolean; status?: string }
 ): boolean => review.completed || review.status === "Concluída";
 
+/** Date part (YYYY-MM-DD) of a review's dueDate, tolerating ISO datetime strings. */
+export const getReviewDueYmd = (review: { dueDate: string }): string =>
+  (review.dueDate || "").split("T")[0];
+
 export const isPendingReview = (
   review: { completed: boolean; status?: string }
 ): boolean => !isCompletedReview(review) && review.status !== "Ignorada";

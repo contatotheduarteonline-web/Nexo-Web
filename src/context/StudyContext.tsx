@@ -67,6 +67,7 @@ import { sanitizeFirestorePayload } from "../lib/firestoreUtils";
 import {
   isCompletedReview,
   isPendingReview,
+  getReviewDueYmd,
   getTodayLocalYmd,
 } from "../components/revisoes/reviewHelpers";
 import {
@@ -1097,9 +1098,10 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       .filter((r) => !activeEdital || r.editalId === activeEdital.id)
       .forEach((r) => {
         if (isPendingReview(r)) {
-          if (r.dueDate === todayStr) {
+          const due = getReviewDueYmd(r);
+          if (due === todayStr) {
             pendingToday.push(r);
-          } else if (r.dueDate < todayStr) {
+          } else if (due < todayStr) {
             overdue.push(r);
           }
         }
@@ -2676,7 +2678,7 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     const targetDate = newDueDate || todayStr;
     setScheduledReviews((prev) =>
       prev.map((r) => {
-        if (isPendingReview(r) && r.dueDate < todayStr) {
+        if (isPendingReview(r) && getReviewDueYmd(r) < todayStr) {
           const updated = { ...r, dueDate: targetDate };
           if (user?.id) saveScheduledReviewToFirestore(user.id, updated).catch(console.error);
           return updated;
@@ -2703,7 +2705,11 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
     const targetDate = new Date();
     targetDate.setDate(targetDate.getDate() + daysToAdd);
-    const dueDate = customDueDate || targetDate.toISOString().split("T")[0];
+    // Data local (não UTC) — evita +1 dia no fuso brasileiro (UTC-3), que
+    // mantinha revisões já vencidas na aba "Programadas".
+    const dueDate =
+      customDueDate ||
+      `${targetDate.getFullYear()}-${String(targetDate.getMonth() + 1).padStart(2, "0")}-${String(targetDate.getDate()).padStart(2, "0")}`;
 
     const newRev: ScheduledReview = {
       id: `rev-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,

@@ -11,6 +11,7 @@ import {
   getSessionLocalDate,
   isCompletedReview,
   isPendingReview,
+  getReviewDueYmd,
   groupReviewsByDate,
   getTodayLocalYmd,
 } from "./reviewHelpers";
@@ -163,8 +164,8 @@ export const RevisoesView: React.FC = () => {
           r.notes?.toLowerCase().includes(q);
         if (!hit) return false;
       }
-      if (activeSubTab === "programadas") return isPendingReview(r) && r.dueDate >= todayStr;
-      if (activeSubTab === "atrasadas") return isPendingReview(r) && r.dueDate < todayStr;
+      if (activeSubTab === "programadas") return isPendingReview(r) && getReviewDueYmd(r) >= todayStr;
+      if (activeSubTab === "atrasadas") return isPendingReview(r) && getReviewDueYmd(r) < todayStr;
       if (activeSubTab === "ignoradas") return !isCompletedReview(r) && r.status === "Ignorada";
       return isCompletedReview(r);
     });
@@ -174,8 +175,8 @@ export const RevisoesView: React.FC = () => {
 
   const counts = useMemo(
     () => ({
-      programadas: editalReviews.filter((r) => isPendingReview(r) && r.dueDate >= todayStr).length,
-      atrasadas: editalReviews.filter((r) => isPendingReview(r) && r.dueDate < todayStr).length,
+      programadas: editalReviews.filter((r) => isPendingReview(r) && getReviewDueYmd(r) >= todayStr).length,
+      atrasadas: editalReviews.filter((r) => isPendingReview(r) && getReviewDueYmd(r) < todayStr).length,
       ignoradas: editalReviews.filter((r) => !isCompletedReview(r) && r.status === "Ignorada").length,
       concluidas: editalReviews.filter((r) => isCompletedReview(r)).length,
     }),
