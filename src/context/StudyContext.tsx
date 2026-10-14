@@ -581,17 +581,30 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
   // Enriquecimento somente-leitura: editais pessoais criados a partir do
   // catálogo herdam o logo do edital de origem para os seletores de plano.
+  // Editais antigos (antes de sourceEditalId existir) também herdam quando o
+  // título/órgão coincide com o edital do catálogo de origem.
   const editaisWithCatalogLogos = useMemo<Edital[]>(() => {
     if (editais.length === 0) return editais;
     const logoByCatalogId = new Map<string, string>();
+    const logoByKey = new Map<string, string>();
+    const norm = (s?: string) =>
+      s?.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, " ").trim();
     for (const ce of catalogEditais) {
       const logo = ce.logoDataUrl || ce.logoUrl;
-      if (logo) logoByCatalogId.set(ce.id, logo);
+      if (!logo) continue;
+      logoByCatalogId.set(ce.id, logo);
+      const byTitle = norm(ce.title);
+      const byInstitution = norm(ce.institution);
+      if (byTitle && !logoByKey.has(byTitle)) logoByKey.set(byTitle, logo);
+      if (byInstitution && !logoByKey.has(byInstitution)) logoByKey.set(byInstitution, logo);
     }
     if (logoByCatalogId.size === 0) return editais;
     return editais.map((ed) => {
-      if (ed.imageUrl || !ed.sourceEditalId) return ed;
-      const logo = logoByCatalogId.get(ed.sourceEditalId);
+      if (ed.imageUrl) return ed;
+      const logo =
+        (ed.sourceEditalId && logoByCatalogId.get(ed.sourceEditalId)) ||
+        (ed.title && logoByKey.get(norm(ed.title))) ||
+        (ed.organ && logoByKey.get(norm(ed.organ)));
       return logo ? { ...ed, imageUrl: logo } : ed;
     });
   }, [editais, catalogEditais]);
