@@ -16,7 +16,7 @@ import {
   OrganizationPreference,
   StartDateOption,
 } from "./types";
-import { Discipline, CatalogCargo } from "../../types";
+import { Discipline, Topic, CatalogCargo } from "../../types";
 import {
   fetchPublishedEditaisFromServer,
   PublishedEditalSnapshot,
@@ -378,20 +378,70 @@ export const FirstAccessOnboarding: React.FC = () => {
       // 2. Generate editalId upfront
       const editalId = `edital-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`;
 
-      // 3. Map user entered disciplines into real Discipline models
+      // 3. Mapeia as disciplinas para modelos reais. Quando um edital do
+      // catálogo foi selecionado, traz TODAS as disciplinas e tópicos dele;
+      // disciplinas adicionadas manualmente pelo usuário são preservadas.
       const colors = ["#58A6FF", "#2BBF8A", "#F4B544", "#8B5CF6", "#EC4899", "#06B6D4", "#F4B544"];
-      const newDisciplines: Discipline[] = (draft.disciplines || []).map((disc, idx) => ({
-        id: `disc-${editalId}-${idx + 1}-${Math.random().toString(36).substr(2, 6)}`,
-        editalId: editalId,
-        name: disc.name,
-        color: colors[idx % colors.length],
-        iconName: "BookOpen",
-        priority: "media",
-        difficulty: disc.knowledgeLevel === "muito_bom" || disc.knowledgeLevel === "bom" ? "facil" : "medio",
-        weight: disc.knowledgeLevel === "nunca_estudei" ? 3 : 2,
-        targetHours: 30,
-        studiedHours: 0,
-      }));
+      const levelByKeyName = new Map(
+        (draft.disciplines || []).map((d) => [normalizeKey(d.name), d.knowledgeLevel])
+      );
+      const catalogDiscs = [...(cargoStructure?.disciplines || [])].sort(
+        (a, b) => (a.order ?? 0) - (b.order ?? 0)
+      );
+
+      const newDisciplines: Discipline[] = [];
+      const newTopics: Topic[] = [];
+      const pushDiscipline = (name: string, catalogWeight?: number) => {
+        const level = levelByKeyName.get(normalizeKey(name));
+        const newDisc: Discipline = {
+          id: `disc-${editalId}-${newDisciplines.length + 1}-${Math.random().toString(36).substr(2, 6)}`,
+          editalId: editalId,
+          name,
+          color: colors[newDisciplines.length % colors.length],
+          iconName: "BookOpen",
+          priority: "media",
+          difficulty: level === "muito_bom" || level === "bom" ? "facil" : "medio",
+          weight: catalogWeight || (level === "nunca_estudei" ? 3 : 2),
+          targetHours: 30,
+          studiedHours: 0,
+        };
+        newDisciplines.push(newDisc);
+        return newDisc;
+      };
+
+      catalogDiscs.forEach((cd) => {
+        const disc = pushDiscipline(cd.name, cd.weight || 0);
+        (cd.topics || []).forEach((ct) => {
+          newTopics.push({
+            id: `top-${editalId}-${newTopics.length + 1}`,
+            disciplineId: disc.id,
+            name: ct.title,
+            subtopics: [],
+            isStudied: false,
+            isReviewed: false,
+            reviewCount: 0,
+            questionsDone: 0,
+            questionsCorrect: 0,
+            accuracyRate: 0,
+            masteryRate: 0,
+            notes: ct.sourceReference ? `Referência: ${ct.sourceReference}` : "",
+            priority: "media",
+            difficulty: "medio",
+          });
+        });
+      });
+
+      (draft.disciplines || []).forEach((disc) => {
+        const fromCatalog = catalogDiscs.some(
+          (cd) => normalizeKey(cd.name) === normalizeKey(disc.name)
+        );
+        if (!fromCatalog) pushDiscipline(disc.name);
+      });
+
+      // Linhagem e logo do edital do catálogo selecionado (quando houver)
+      const catalogEdital = draft.catalogEditalId
+        ? allCatalogEditais.find((e) => e.id === draft.catalogEditalId)
+        : undefined;
 
       // Create associated Edital with disciplines populated
       const createdEdital = await createEdital({
@@ -402,7 +452,11 @@ export const FirstAccessOnboarding: React.FC = () => {
         banca: draft.banca?.trim() || "A definir",
         year: new Date().getFullYear(),
         disciplines: newDisciplines,
-        topics: [],
+        topics: newTopics,
+        imageUrl: catalogEdital?.logoDataUrl || catalogEdital?.logoUrl,
+        sourceEditalId: draft.catalogEditalId,
+        sourceCargoId: draft.catalogCargoId,
+        sourceEditalVersion: catalogEdital?.version,
       });
 
       // 4. Resolve dates
