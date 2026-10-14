@@ -349,7 +349,7 @@ const getStorageKeys = (userId?: string) => {
 const StudyContext = createContext<StudyContextType | undefined>(undefined);
 
 export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const { user, authStatus, completeUserOnboarding } = useAuth();
+  const { user, authStatus } = useAuth();
   const [activeTab, setActiveTab] = useState<ActiveTab>("dashboard");
 
   const storageKeys = useMemo(() => getStorageKeys(user?.id), [user?.id]);
@@ -1729,11 +1729,9 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     if (user?.id) {
       try {
         await saveStudyPlanToFirestore(user.id, newPlan);
-        if (user.onboarding?.completed === false || user.onboardingCompleted === false) {
-          completeUserOnboarding?.().catch((err) =>
-            console.error("Erro ao concluir onboarding após salvar plano:", err)
-          );
-        }
+        // A conclusão do onboarding é responsabilidade do fluxo de onboarding
+        // (após a tela "Montando seu plano"); completar aqui fecha a tela antes
+        // dos ~20s e interrompe a criação do planejamento.
       } catch (err) {
         console.error("Erro ao salvar plano no Firestore:", err);
       }

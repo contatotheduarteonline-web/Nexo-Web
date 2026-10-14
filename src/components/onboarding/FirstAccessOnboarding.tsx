@@ -28,6 +28,7 @@ import {
   getEditalCargos,
   FullCargoSnapshot,
 } from "../../lib/catalogEditalService";
+import { buildPlanSchedule } from "../../lib/planScheduleEngine";
 
 // Step Components
 import { Step0Welcome } from "./steps/Step0Welcome";
@@ -617,7 +618,30 @@ export const FirstAccessOnboarding: React.FC = () => {
         dom: draft.availability?.dom.enabled ? draft.availability.dom.hours + draft.availability.dom.minutes / 60 : 0,
       };
 
-      const weeklyGoal = Math.max(2, Math.round(totalWeeklyMinutes / 60));
+      // 5b. Planejamento semanal + ciclo gerados com o mesmo motor do
+      // Planejamento (importância × (6 − conhecimento)), para o plano já
+      // nascer com a agenda preenchida.
+      const KNOWLEDGE_NUMBERS: Record<KnowledgeLevel, number> = {
+        nunca_estudei: 1,
+        pouco: 2,
+        intermediario: 3,
+        bom: 4,
+        muito_bom: 5,
+      };
+      const scheduleEngine = buildPlanSchedule({
+        disciplines: newDisciplines.map((d) => ({
+          id: d.id,
+          name: d.name,
+          importance: d.weight,
+          knowledgeLevel:
+            KNOWLEDGE_NUMBERS[levelByKeyName.get(normalizeKey(d.name)) || "intermediario"],
+        })),
+        dailyAvailability: dailyMap as Record<string, number>,
+        minSessionMinutes: 30,
+        maxSessionMinutes: 90,
+      });
+
+      const weeklyGoal = scheduleEngine.weeklyGoalHours || Math.max(2, Math.round(totalWeeklyMinutes / 60));
 
       // 6. Create study plan
       const newPlan = await createStudyPlan({
@@ -629,12 +653,16 @@ export const FirstAccessOnboarding: React.FC = () => {
         active: true,
         organizationType: draft.organization === "semanal" ? "semanal" : "ciclo",
         planningMode: draft.organization === "semanal" ? "WEEKLY" : "CYCLE",
-        cycle: newDisciplines.map((d, idx) => ({
-          id: `step-${idx + 1}`,
-          disciplineId: d.id,
-          targetMinutes: d.weight === 3 ? 90 : 60,
-          order: idx + 1,
-        })),
+        cycle:
+          scheduleEngine.cycle.length > 0
+            ? scheduleEngine.cycle
+            : newDisciplines.map((d, idx) => ({
+                id: `step-${idx + 1}`,
+                disciplineId: d.id,
+                targetMinutes: d.weight === 3 ? 90 : 60,
+                order: idx + 1,
+              })),
+        weeklySchedule: scheduleEngine.weeklySchedule,
         currentCycleIndex: 0,
         currentStepElapsedMinutes: 0,
         completedCycles: 0,
