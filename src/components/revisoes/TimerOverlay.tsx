@@ -76,7 +76,7 @@ export const TimerOverlay: React.FC<TimerOverlayProps> = ({ open, disciplineName
 
   // Tela cheia flutuante sobre o app.
   return (
-    <div className="fixed inset-0 z-[70] flex flex-col bg-[#0B1120]/70">
+    <div className="fixed inset-0 z-[70] flex flex-col bg-[#0B1120]/85">
       <div className="flex justify-end gap-3 p-5">
         <button
           type="button"
