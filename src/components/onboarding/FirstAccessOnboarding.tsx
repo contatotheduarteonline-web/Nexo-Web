@@ -420,9 +420,9 @@ export const FirstAccessOnboarding: React.FC = () => {
               type="button"
               id="btn-onboarding-back"
               onClick={handleBack}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-zinc-400 hover:text-white bg-zinc-900/60 hover:bg-zinc-800/80 border border-zinc-800 transition-colors cursor-pointer"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#527DFF] hover:bg-[#FF7A1A] text-white font-semibold text-sm transition-all duration-200 cursor-pointer shadow-[0_6px_20px_rgba(255,107,0,0.25)]"
             >
-              <ArrowLeft className="w-3.5 h-3.5" />
+              <ArrowLeft className="w-4 h-4" />
               <span>Voltar</span>
             </button>
           )}
@@ -453,10 +453,10 @@ export const FirstAccessOnboarding: React.FC = () => {
             id="btn-onboarding-logout"
             type="button"
             onClick={handleLogout}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-zinc-400 hover:text-white bg-zinc-900/60 hover:bg-zinc-800/80 border border-zinc-800 transition-colors cursor-pointer"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#527DFF] hover:bg-[#FF7A1A] text-white font-semibold text-sm transition-all duration-200 cursor-pointer shadow-[0_6px_20px_rgba(255,107,0,0.25)]"
             title="Sair da sua conta"
           >
-            <LogOut className="w-3.5 h-3.5" />
+            <LogOut className="w-4 h-4" />
             <span className="hidden sm:inline">Sair da conta</span>
           </button>
         )}
