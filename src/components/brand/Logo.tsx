@@ -50,13 +50,6 @@ export const Logo: React.FC<LogoProps> = ({
       ? "text-white"
       : "text-white dark:text-white";
 
-  const subtitleSlate =
-    themeMode === "dark"
-      ? "text-[#93A2B7]"
-      : themeMode === "light"
-      ? "text-[#718096]"
-      : "text-[#718096] dark:text-[#93A2B7]";
-
   const BrandIcon: React.FC<{ sizeClass: string }> = ({ sizeClass }) => (
     <img
       src={iconWhite ? LOGO_WHITE_SRC : LOGO_SRC}
@@ -71,13 +64,6 @@ export const Logo: React.FC<LogoProps> = ({
   const Wordmark: React.FC<{ sizeClass: string }> = ({ sizeClass }) => (
     <span className={`font-black uppercase leading-none tracking-[0.14em] ${sizeClass} ${textColor}`}>
       NEXO<span className="text-[#F4B544]">.</span>
-    </span>
-  );
-
-  const Subtitle: React.FC = () => (
-    <span className="text-[9px] font-bold uppercase tracking-[0.24em] leading-none mt-1">
-      <span className={subtitleSlate}>Plataforma</span>{" "}
-      <span className="text-[#F4B544]">de Estudos</span>
     </span>
   );
 
@@ -99,15 +85,12 @@ export const Logo: React.FC<LogoProps> = ({
     );
   }
 
-  // Horizontal: icon + wordmark + subtitle, left-aligned
+  // Horizontal: icon + wordmark, left-aligned
   if (variant === "horizontal") {
     return (
       <div className={`inline-flex items-center gap-2.5 ${className}`}>
         <BrandIcon sizeClass={iconSizes[size]} />
-        <div className="inline-flex flex-col items-start justify-center">
-          <Wordmark sizeClass={wordmarkSizes[size]} />
-          <Subtitle />
-        </div>
+        <Wordmark sizeClass={wordmarkSizes[size]} />
       </div>
     );
   }
@@ -118,7 +101,6 @@ export const Logo: React.FC<LogoProps> = ({
       <BrandIcon sizeClass={iconSizes[size]} />
       <div className="flex flex-col items-center">
         <Wordmark sizeClass={wordmarkSizes[size]} />
-        <Subtitle />
       </div>
     </div>
   );
