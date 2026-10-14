@@ -355,39 +355,42 @@ export const FirstAccessOnboarding: React.FC = () => {
     updateDraft({ disciplines: nextDisciplines });
   };
 
-  // Upsert do nível de conhecimento (disciplina pode ainda não estar no draft)
-  const handleUpdateKnowledgeLevel = (id: string, level: KnowledgeLevel) => {
+  // Upsert por id OU nome normalizado: rascunhos antigos com ids defasados
+  // são atualizados (e ganham o id canônico) em vez de gerar entradas duplicadas.
+  const upsertDraftDiscipline = (
+    id: string,
+    patch: { knowledgeLevel?: KnowledgeLevel; weightLevel?: DisciplineWeightLevel }
+  ) => {
     const list = [...(draft.disciplines || [])];
-    const idx = list.findIndex((d) => d.id === id);
+    const fromCatalog = catalogDisciplines.find((c) => c.id === id);
+    const nameKey = normalizeKey(fromCatalog?.name || id);
+    const idx = list.findIndex(
+      (d) => d.id === id || normalizeKey(d.name) === nameKey
+    );
     if (idx >= 0) {
-      list[idx] = { ...list[idx], knowledgeLevel: level };
+      list[idx] = { ...list[idx], ...patch, id, name: fromCatalog?.name || list[idx].name };
     } else {
-      const fromCatalog = catalogDisciplines.find((c) => c.id === id);
-      list.push({
-        id,
-        name: fromCatalog?.name || id,
-        knowledgeLevel: level,
-      });
-    }
-    updateDraft({ disciplines: list });
-  };
-
-  // Upsert do peso da disciplina (o edital continua completo no plano criado)
-  const handleUpdateWeightLevel = (id: string, level: DisciplineWeightLevel) => {
-    const list = [...(draft.disciplines || [])];
-    const idx = list.findIndex((d) => d.id === id);
-    if (idx >= 0) {
-      list[idx] = { ...list[idx], weightLevel: level };
-    } else {
-      const fromCatalog = catalogDisciplines.find((c) => c.id === id);
       list.push({
         id,
         name: fromCatalog?.name || id,
         knowledgeLevel: "nunca_estudei" as KnowledgeLevel,
-        weightLevel: level,
+        ...patch,
       });
     }
-    updateDraft({ disciplines: list, weightsSkipped: false });
+    return list;
+  };
+
+  // Upsert do nível de conhecimento (disciplina pode ainda não estar no draft)
+  const handleUpdateKnowledgeLevel = (id: string, level: KnowledgeLevel) => {
+    updateDraft({ disciplines: upsertDraftDiscipline(id, { knowledgeLevel: level }) });
+  };
+
+  // Upsert do peso da disciplina (o edital continua completo no plano criado)
+  const handleUpdateWeightLevel = (id: string, level: DisciplineWeightLevel) => {
+    updateDraft({
+      disciplines: upsertDraftDiscipline(id, { weightLevel: level }),
+      weightsSkipped: false,
+    });
   };
 
   const handleSkipWeights = () => {
@@ -421,15 +424,30 @@ export const FirstAccessOnboarding: React.FC = () => {
     }
   };
 
-  // Disciplinas exibidas na etapa Momento (do edital + adicionadas manualmente)
+  // Disciplinas exibidas nas etapas Momento e Pesos (do edital + adicionadas manualmente).
+  // Agrupadas por nome normalizado: rascunhos antigos podem ter entradas com ids
+  // defasados — o id canônico do catálogo prevalece e o nível/peso é preservado.
   const momentDisciplines = useMemo(() => {
-    const list = [...(draft.disciplines || [])];
-    for (const cat of catalogDisciplines) {
-      if (!list.some((d) => d.id === cat.id)) {
-        list.push({ id: cat.id, name: cat.name, knowledgeLevel: "nunca_estudei" as KnowledgeLevel });
+    const byName = new Map<string, DisciplineDraftItem>();
+    const put = (item: DisciplineDraftItem, canonicalId?: string) => {
+      const key = normalizeKey(item.name);
+      const existing = byName.get(key);
+      if (existing) {
+        byName.set(key, {
+          ...existing,
+          knowledgeLevel: item.knowledgeLevel || existing.knowledgeLevel,
+          weightLevel: item.weightLevel || existing.weightLevel,
+          ...(canonicalId ? { id: canonicalId } : {}),
+        });
+        return;
       }
+      byName.set(key, canonicalId ? { ...item, id: canonicalId } : { ...item });
+    };
+    for (const d of draft.disciplines || []) put(d);
+    for (const cat of catalogDisciplines) {
+      put({ id: cat.id, name: cat.name, knowledgeLevel: "nunca_estudei" as KnowledgeLevel }, cat.id);
     }
-    return list;
+    return Array.from(byName.values());
   }, [draft.disciplines, catalogDisciplines]);
 
   // Linhas da etapa de pesos (peso efetivo: escolhido ou pré-preenchido)
@@ -894,6 +912,7 @@ export const FirstAccessOnboarding: React.FC = () => {
                     disciplines={weightDisciplines}
                     skipped={draft.weightsSkipped}
                     onChangeLevel={handleUpdateWeightLevel}
+                    onChangeKnowledgeLevel={handleUpdateKnowledgeLevel}
                     onSkip={handleSkipWeights}
                   />
                 )}
