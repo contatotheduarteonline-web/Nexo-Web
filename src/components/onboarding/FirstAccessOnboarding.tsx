@@ -77,9 +77,15 @@ const LEGACY_STEP_MAP: Record<number, number> = {
   12: 7,
 };
 
-const normalizeStep = (step: unknown): number => {
-  if (typeof step !== "number") return 0;
-  if (step >= 0 && step <= 7) return step;
+const normalizeStep = (step: unknown, savedDraft?: Partial<OnboardingDraft> | null): number => {
+  if (typeof step !== "number" || !Number.isFinite(step)) return 0;
+
+  // Once this flow has saved its marker, stored steps are already in the new 0–7 scale.
+  if (savedDraft?.flowVersion === 2) {
+    return Math.max(0, Math.min(7, Math.trunc(step)));
+  }
+
+  // Existing records without the marker came from the previous 13-screen flow.
   return LEGACY_STEP_MAP[step] ?? 0;
 };
 
@@ -100,6 +106,7 @@ export const FirstAccessOnboarding: React.FC = () => {
       organization: saved.organization || "ciclo",
       startDateOption: saved.startDateOption || "hoje",
       customStartDate: saved.customStartDate || "",
+      flowVersion: 2,
     };
     if (saved.objective) d.objective = saved.objective;
     if (saved.area) d.area = saved.area;
@@ -112,7 +119,10 @@ export const FirstAccessOnboarding: React.FC = () => {
   }, [user]);
 
   const [currentStep, setCurrentStep] = useState<number>(() =>
-    normalizeStep(user?.onboarding?.currentStep)
+    normalizeStep(
+      user?.onboarding?.currentStep,
+      user?.onboarding?.draft || user?.onboardingData || {}
+    )
   );
 
   const [draft, setDraft] = useState<OnboardingDraft>(initialDraft);
@@ -128,7 +138,12 @@ export const FirstAccessOnboarding: React.FC = () => {
       if (user.onboarding?.draft || user.onboardingData) {
         setDraft(initialDraft);
         if (typeof user.onboarding?.currentStep === "number") {
-          setCurrentStep(normalizeStep(user.onboarding.currentStep));
+          setCurrentStep(
+            normalizeStep(
+              user.onboarding.currentStep,
+              user.onboarding.draft || user.onboardingData || {}
+            )
+          );
         }
       }
     }

@@ -73,6 +73,8 @@ export interface DisciplineDraftItem {
 }
 
 export interface OnboardingDraft {
+  /** Version of the grouped onboarding flow; enables safe progress migration. */
+  flowVersion?: number;
   objective?: ObjectiveType;
   area?: ConcursoArea;
   catalogEditalId?: string; // edital do catálogo oficial selecionado
