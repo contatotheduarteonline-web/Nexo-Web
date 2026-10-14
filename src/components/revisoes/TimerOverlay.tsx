@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useStudy } from "../../context/StudyContext";
 import { Logo } from "../brand/Logo";
-import { Pause, Play, Square, Minus, Maximize2 } from "lucide-react";
+import { Pause, Play, Square, Minus, Maximize2, X } from "lucide-react";
 
 /**
  * Tela flutuante do cronômetro (estilo "estudei"): contagem real e verdadeira,
@@ -19,9 +19,11 @@ interface TimerOverlayProps {
   disciplineName?: string;
   /** Chamado ao "PARAR E SALVAR" com o tempo decorrido; o overlay se fecha. */
   onStop: (elapsedSeconds: number) => void;
+  /** Fecha a tela flutuante sem parar a contagem (continua em segundo plano). */
+  onClose: () => void;
 }
 
-export const TimerOverlay: React.FC<TimerOverlayProps> = ({ open, disciplineName, onStop }) => {
+export const TimerOverlay: React.FC<TimerOverlayProps> = ({ open, disciplineName, onStop, onClose }) => {
   const { timer, startTimer, pauseTimer } = useStudy();
   const [minimized, setMinimized] = useState(false);
 
@@ -74,8 +76,8 @@ export const TimerOverlay: React.FC<TimerOverlayProps> = ({ open, disciplineName
 
   // Tela cheia flutuante sobre o app.
   return (
-    <div className="fixed inset-0 z-[70] flex flex-col bg-[#0B1120]/[0.97] backdrop-blur-sm">
-      <div className="flex justify-end p-5">
+    <div className="fixed inset-0 z-[70] flex flex-col bg-[#0B1120]/30">
+      <div className="flex justify-end gap-3 p-5">
         <button
           type="button"
           onClick={() => setMinimized(true)}
@@ -83,6 +85,14 @@ export const TimerOverlay: React.FC<TimerOverlayProps> = ({ open, disciplineName
           className="flex h-9 w-9 items-center justify-center rounded-full bg-[#111B2D] text-[#93A2B7] hover:bg-[#223149] hover:text-white"
         >
           <Minus className="h-4 w-4" />
+        </button>
+        <button
+          type="button"
+          onClick={onClose}
+          title="Fechar (continua contando)"
+          className="flex h-9 w-9 items-center justify-center rounded-full bg-[#111B2D] text-[#93A2B7] hover:bg-[#223149] hover:text-white"
+        >
+          <X className="h-4 w-4" />
         </button>
       </div>
 

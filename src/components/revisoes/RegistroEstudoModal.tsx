@@ -616,6 +616,7 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
     {/* Cronômetro flutuante: contagem real em segundo plano, encerra no "Parar e salvar". */}
     <TimerOverlay
       open={timerOverlayOpen}
+      onClose={() => setTimerOverlayOpen(false)}
       disciplineName={overlayDisciplineName}
       onStop={(elapsedSeconds) => {
         setTimeText(
