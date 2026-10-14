@@ -1,16 +1,21 @@
 import React from "react";
 
 interface OnboardingProgressProps {
-  currentStep: number; // 0 = welcome, 1..6 = sections
+  currentStep: number; // 0 = welcome, 1..7 = steps (4 e 5 = Rotina em duas etapas)
 }
 
 const SECTIONS = ["Objetivo", "Concurso", "Momento", "Rotina", "Prioridades", "Início"];
+
+// Mapeia a etapa atual para o segmento da barra (Rotina cobre 2 etapas)
+const SECTION_OF_STEP: Record<number, number> = { 1: 1, 2: 2, 3: 3, 4: 4, 5: 4, 6: 5, 7: 6 };
 
 export const OnboardingProgress: React.FC<OnboardingProgressProps> = ({
   currentStep,
 }) => {
   // Welcome screen has no visible progress yet
   if (currentStep <= 0) return null;
+
+  const section = SECTION_OF_STEP[currentStep] ?? currentStep;
 
   return (
     <div
@@ -19,9 +24,9 @@ export const OnboardingProgress: React.FC<OnboardingProgressProps> = ({
     >
       <div className="grid grid-cols-6 gap-2">
         {SECTIONS.map((label, idx) => {
-          const section = idx + 1;
-          const done = currentStep > section;
-          const active = currentStep === section;
+          const seg = idx + 1;
+          const done = section > seg;
+          const active = section === seg;
           return (
             <div key={label} className="flex flex-col gap-1.5 min-w-0">
               <div

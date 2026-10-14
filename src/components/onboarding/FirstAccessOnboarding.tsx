@@ -16,12 +16,16 @@ import {
   OrganizationPreference,
   StartDateOption,
 } from "./types";
-import { Discipline } from "../../types";
+import { Discipline, CatalogCargo } from "../../types";
 import {
   fetchPublishedEditaisFromServer,
   PublishedEditalSnapshot,
 } from "../../lib/serverCatalogService";
-import { getFullCargoStructure, FullCargoSnapshot } from "../../lib/catalogEditalService";
+import {
+  getFullCargoStructure,
+  getEditalCargos,
+  FullCargoSnapshot,
+} from "../../lib/catalogEditalService";
 
 // Step Components
 import { Step0Welcome } from "./steps/Step0Welcome";
@@ -65,17 +69,17 @@ const LEGACY_STEP_MAP: Record<number, number> = {
   4: 2,
   5: 3,
   6: 4,
-  7: 4,
-  8: 5,
+  7: 5,
+  8: 6,
   9: 3,
   10: 4,
-  11: 6,
-  12: 6,
+  11: 7,
+  12: 7,
 };
 
 const normalizeStep = (step: unknown): number => {
   if (typeof step !== "number") return 0;
-  if (step >= 0 && step <= 6) return step;
+  if (step >= 0 && step <= 7) return step;
   return LEGACY_STEP_MAP[step] ?? 0;
 };
 
@@ -192,68 +196,103 @@ export const FirstAccessOnboarding: React.FC = () => {
     };
   }, []);
 
-  // Estrutura completa do cargo selecionado no catálogo (subcoleções do Firestore)
-  const [cargoStructure, setCargoStructure] = useState<FullCargoSnapshot | null>(null);
-  useEffect(() => {
-    let isMounted = true;
-    if (draft.catalogEditalId && draft.catalogCargoId) {
-      getFullCargoStructure(draft.catalogEditalId, draft.catalogCargoId).then((s) => {
-        if (isMounted) setCargoStructure(s);
-      });
-    } else {
-      setCargoStructure(null);
-    }
-    return () => {
-      isMounted = false;
-    };
-  }, [draft.catalogEditalId, draft.catalogCargoId]);
-
-  // Disciplinas do edital selecionado — usadas nas etapas Momento e Prioridades
-  const catalogDisciplines = useMemo(() => {
-    // 1. Preferência: cargo selecionado no catálogo (ids salvos no rascunho)
-    if (cargoStructure) {
-      const discs = [...(cargoStructure.disciplines || [])].sort(
-        (a, b) => (a.order ?? 0) - (b.order ?? 0)
-      );
-      const hasWeights = discs.some((d) => typeof d.weight === "number" && d.weight > 0);
-      return discs.map((d, idx) => ({
-        id: `disc-cat-${draft.catalogEditalId}-${d.id}`,
-        name: d.name,
-        recommended: hasWeights ? (d.weight || 0) >= 3 : idx < 5,
-        color: DISCIPLINE_COLORS[idx % DISCIPLINE_COLORS.length],
-      }));
-    }
-
-    // 2. Fallback: snapshot publicada no servidor, casando órgão + cargo
-    const organKey = normalizeKey(draft.organ || "");
-    if (!organKey) return [];
+  // Localiza a lista completa de editais (servidor + espelho do Firestore)
+  const allCatalogEditais = useMemo<PublishedEditalSnapshot[]>(() => {
     const seenIds = new Set(serverEditais.map((e) => e.id));
     const fallback = catalogEditais
       .filter((e) => !seenIds.has(e.id))
       .map((e) => ({ ...e }) as PublishedEditalSnapshot);
-    const all = [...serverEditais, ...fallback].filter(
+    return [...serverEditais, ...fallback].filter(
       (e) => (e.status || "published") === "published"
     );
+  }, [serverEditais, catalogEditais]);
 
-    const edital = all.find((e) => normalizeKey(e.institution || e.title) === organKey);
-    if (!edital || !edital.cargos || edital.cargos.length === 0) return [];
+  // Estrutura completa do cargo selecionado no catálogo.
+  // O catálogo do Firestore guarda cargos e disciplinas em SUBCOLEÇÕES
+  // (catalogEditais/{edital}/cargos/{cargo}/disciplines) — o mesmo caminho
+  // usado pelo wizard de planos. Editais publicados no servidor podem ter
+  // cargos + disciplinas embutidos no snapshot.
+  const [cargoStructure, setCargoStructure] = useState<FullCargoSnapshot | null>(null);
+  useEffect(() => {
+    let isMounted = true;
+    const run = async () => {
+      const organKey = normalizeKey(draft.organ || "");
+      const cargoKey = normalizeKey(draft.cargo || "");
+      if (!draft.catalogEditalId && !organKey) {
+        setCargoStructure(null);
+        return;
+      }
 
-    const cargoKey = normalizeKey(draft.cargo || "");
-    const cargo =
-      (cargoKey && edital.cargos.find((c) => normalizeKey(c.name) === cargoKey)) ||
-      edital.cargos[0];
-    const discs = [...(cargo.disciplines || [])].sort(
+      // 1. Cargo selecionado diretamente no catálogo (ids salvos no rascunho)
+      if (draft.catalogEditalId && draft.catalogCargoId) {
+        const s = await getFullCargoStructure(draft.catalogEditalId, draft.catalogCargoId);
+        if (s && isMounted) {
+          setCargoStructure(s);
+          return;
+        }
+      }
+
+      // 2. Fallback: localizar o edital pelo órgão e resolver o cargo
+      if (!organKey) {
+        if (isMounted) setCargoStructure(null);
+        return;
+      }
+      const edital = allCatalogEditais.find(
+        (e) => normalizeKey(e.institution || e.title) === organKey
+      );
+      if (!edital) {
+        if (isMounted) setCargoStructure(null);
+        return;
+      }
+
+      if (edital.cargos && edital.cargos.length > 0) {
+        // Snapshot embutida (edital publicado no servidor)
+        const cargo =
+          (cargoKey && edital.cargos.find((c) => normalizeKey(c.name) === cargoKey)) ||
+          edital.cargos[0];
+        if (cargo && isMounted) {
+          const discs = [...(cargo.disciplines || [])].sort(
+            (a, b) => (a.order ?? 0) - (b.order ?? 0)
+          );
+          setCargoStructure({ ...cargo, disciplines: discs.map((d) => ({ ...d, topics: d.topics || [] })) });
+        }
+      } else {
+        // Catálogo do Firestore: resolver o cargo nas subcoleções
+        const cargos: CatalogCargo[] = await getEditalCargos(edital.id);
+        const cargo =
+          (cargoKey && cargos.find((c) => normalizeKey(c.name) === cargoKey)) ||
+          cargos[0] ||
+          undefined;
+        if (cargo) {
+          const s = await getFullCargoStructure(edital.id, cargo.id);
+          if (s && isMounted) {
+            setCargoStructure(s);
+            return;
+          }
+        }
+        if (isMounted) setCargoStructure(null);
+      }
+    };
+    run();
+    return () => {
+      isMounted = false;
+    };
+  }, [draft.catalogEditalId, draft.catalogCargoId, draft.organ, draft.cargo, allCatalogEditais]);
+
+  // Disciplinas do edital selecionado — usadas nas etapas Momento e Prioridades
+  const catalogDisciplines = useMemo(() => {
+    if (!cargoStructure) return [];
+    const discs = [...(cargoStructure.disciplines || [])].sort(
       (a, b) => (a.order ?? 0) - (b.order ?? 0)
     );
     const hasWeights = discs.some((d) => typeof d.weight === "number" && d.weight > 0);
-
     return discs.map((d, idx) => ({
-      id: `disc-cat-${edital.id}-${d.id}`,
+      id: `disc-cat-${draft.catalogEditalId || draft.organ}-${d.id}`,
       name: d.name,
       recommended: hasWeights ? (d.weight || 0) >= 3 : idx < 5,
       color: DISCIPLINE_COLORS[idx % DISCIPLINE_COLORS.length],
     }));
-  }, [cargoStructure, draft.catalogEditalId, draft.organ, draft.cargo, serverEditais, catalogEditais]);
+  }, [cargoStructure, draft.catalogEditalId, draft.organ]);
 
   // Toggle disciplina do edital na etapa Prioridades
   const handleToggleCatalogDiscipline = (item: { id: string; name: string }) => {
@@ -445,8 +484,9 @@ export const FirstAccessOnboarding: React.FC = () => {
     draft.preparationMoment !== "Estou começando agora" &&
     momentDisciplines.length > 0;
 
-  const canContinueRotina =
-    !!draft.routineType && !!draft.organization && totalWeeklyMinutes > 0;
+  const canContinueRotina = !!draft.routineType && !!draft.organization;
+
+  const canContinueDisponibilidade = totalWeeklyMinutes > 0;
 
   const canContinueInicio =
     draft.startDateOption === "hoje" ||
@@ -604,7 +644,7 @@ export const FirstAccessOnboarding: React.FC = () => {
               </>
             )}
 
-            {/* 4. Rotina */}
+            {/* 4. Rotina (tipo + organização) */}
             {currentStep === 4 && (
               <>
                 <Step6Routine
@@ -617,12 +657,6 @@ export const FirstAccessOnboarding: React.FC = () => {
                     onChange={(org: OrganizationPreference) => updateDraft({ organization: org })}
                   />
                 </div>
-                <div className="mt-8 pt-6 border-t border-[#1C2940]">
-                  <Step7Availability
-                    value={draft.availability || DEFAULT_AVAILABILITY}
-                    onChange={(avail: WeeklyAvailability) => updateDraft({ availability: avail })}
-                  />
-                </div>
                 <OnboardingGroupFooter
                   onNext={() => goToStep(5)}
                   disabled={!canContinueRotina}
@@ -630,8 +664,22 @@ export const FirstAccessOnboarding: React.FC = () => {
               </>
             )}
 
-            {/* 5. Prioridades */}
+            {/* 5. Disponibilidade (segunda etapa da Rotina) */}
             {currentStep === 5 && (
+              <>
+                <Step7Availability
+                  value={draft.availability || DEFAULT_AVAILABILITY}
+                  onChange={(avail: WeeklyAvailability) => updateDraft({ availability: avail })}
+                />
+                <OnboardingGroupFooter
+                  onNext={() => goToStep(6)}
+                  disabled={!canContinueDisponibilidade}
+                />
+              </>
+            )}
+
+            {/* 6. Prioridades */}
+            {currentStep === 6 && (
               <>
                 <Step8Disciplines
                   disciplines={draft.disciplines || []}
@@ -640,12 +688,12 @@ export const FirstAccessOnboarding: React.FC = () => {
                   onAddDiscipline={handleAddDiscipline}
                   onRemoveDiscipline={handleRemoveDiscipline}
                 />
-                <OnboardingGroupFooter onNext={() => goToStep(6)} />
+                <OnboardingGroupFooter onNext={() => goToStep(7)} />
               </>
             )}
 
-            {/* 6. Início */}
-            {currentStep === 6 && (
+            {/* 7. Início */}
+            {currentStep === 7 && (
               <>
                 <Step11StartDate
                   value={draft.startDateOption}
