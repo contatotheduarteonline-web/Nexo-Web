@@ -588,12 +588,12 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
               className={`flex cursor-pointer flex-col items-center rounded-2xl border p-6 text-center transition-all ${
                 planningMode === "CYCLE"
                   ? "border-[#F4B544] bg-[#527DFF]/10 ring-1 ring-[#527DFF]"
-                  : "border-slate-200 bg-white hover:border-[#39475C] dark:bg-[#172235] dark:bg-[#111B2D] dark:hover:border-[#39475C]"
+                  : "border-slate-200 bg-white hover:border-[#39475C] dark:border-[#39475C] dark:bg-[#172235] dark:bg-[#111B2D] dark:hover:border-[#39475C]"
               }`}
             >
               <RotateCw
                 className={`h-12 w-12 transition ${
-                  planningMode === "CYCLE" ? "text-[#F4B544]" : "text-[#C4CEDB] dark:text-[#223149]"
+                  planningMode === "CYCLE" ? "text-[#F4B544]" : "text-[#718096] dark:text-[#93A2B7]"
                 }`}
                 strokeWidth={1.5}
               />
@@ -613,14 +613,14 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
               className={`flex cursor-pointer flex-col items-center rounded-2xl border p-6 text-center transition-all ${
                 planningMode === "WEEKLY"
                   ? "border-[#F4B544] bg-[#527DFF]/10 ring-1 ring-[#527DFF]"
-                  : "border-slate-200 bg-white hover:border-[#39475C] dark:bg-[#172235] dark:bg-[#111B2D] dark:hover:border-[#39475C]"
+                  : "border-slate-200 bg-white hover:border-[#39475C] dark:border-[#39475C] dark:bg-[#172235] dark:bg-[#111B2D] dark:hover:border-[#39475C]"
               }`}
             >
               <CalendarDays
                 className={`h-12 w-12 transition ${
                   planningMode === "WEEKLY"
                     ? "text-[#F4B544]"
-                    : "text-[#C4CEDB] dark:text-[#223149]"
+                    : "text-[#718096] dark:text-[#93A2B7]"
                 }`}
                 strokeWidth={1.5}
               />
@@ -753,7 +753,7 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
                           step={1}
                           value={cfg.importance}
                           onChange={(e) => setSlider("importance", Number(e.target.value))}
-                          className="mt-1.5 w-full cursor-pointer accent-[#F59E0B]"
+                          className="mt-1.5 w-full cursor-pointer accent-[#F4B544]"
                         />
                       </div>
                       <div>
@@ -772,7 +772,7 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
                           step={1}
                           value={cfg.knowledgeLevel}
                           onChange={(e) => setSlider("knowledgeLevel", Number(e.target.value))}
-                          className="mt-1.5 w-full cursor-pointer accent-[#F59E0B]"
+                          className="mt-1.5 w-full cursor-pointer accent-[#F4B544]"
                         />
                       </div>
                     </div>
@@ -799,10 +799,10 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
                       backgroundColor: PASTEL_COLORS[idx % PASTEL_COLORS.length],
                     }}
                   >
-                    <span className="num-condensed text-xs font-bold text-white">
+                    <span className="num-condensed text-xs font-bold text-[#0B1120]">
                       {item.weightPercentage}%
                     </span>
-                    <span className="truncate text-[11px] font-semibold text-white">
+                    <span className="truncate text-[11px] font-semibold text-[#0B1120]">
                       {item.discipline.name}
                     </span>
                   </div>

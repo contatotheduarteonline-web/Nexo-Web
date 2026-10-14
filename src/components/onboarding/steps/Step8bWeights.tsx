@@ -113,7 +113,7 @@ export const Step8bWeights: React.FC<Step8bWeightsProps> = ({
                         onChange={(e) =>
                           onChangeLevel(disc.id, WEIGHT_OPTIONS[Number(e.target.value) - 1])
                         }
-                        className="mt-1.5 w-full cursor-pointer accent-[#F59E0B]"
+                        className="mt-1.5 w-full cursor-pointer accent-[#F4B544]"
                       />
                     </div>
                     <div>
@@ -137,7 +137,7 @@ export const Step8bWeights: React.FC<Step8bWeightsProps> = ({
                             KNOWLEDGE_OPTIONS[Number(e.target.value) - 1]
                           )
                         }
-                        className="mt-1.5 w-full cursor-pointer accent-[#F59E0B]"
+                        className="mt-1.5 w-full cursor-pointer accent-[#F4B544]"
                       />
                     </div>
                   </div>
@@ -157,10 +157,10 @@ export const Step8bWeights: React.FC<Step8bWeightsProps> = ({
                 className="flex items-center gap-2 rounded-xl px-3 py-2.5"
                 style={{ backgroundColor: PASTEL_COLORS[idx % PASTEL_COLORS.length] }}
               >
-                <span className="num-condensed text-xs font-bold text-white">
+                <span className="num-condensed text-xs font-bold text-[#0B1120]">
                   {item.weightPercentage}%
                 </span>
-                <span className="truncate text-[11px] font-semibold text-white">
+                <span className="truncate text-[11px] font-semibold text-[#0B1120]">
                   {item.name}
                 </span>
               </div>
