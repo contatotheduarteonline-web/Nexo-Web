@@ -12,6 +12,7 @@ interface LogoProps {
 }
 
 const LOGO_SRC = "/nexo-logo.png";
+const LOGO_WHITE_SRC = "/nexo-notification-icon.png";
 
 /**
  * NEXO brand logo — image-based icon with optional "NEXO" wordmark.
@@ -58,10 +59,10 @@ export const Logo: React.FC<LogoProps> = ({
 
   const BrandIcon: React.FC<{ sizeClass: string }> = ({ sizeClass }) => (
     <img
-      src={LOGO_SRC}
+      src={iconWhite ? LOGO_WHITE_SRC : LOGO_SRC}
       alt="NEXO"
-      className={`${sizeClass} shrink-0 rounded-lg object-cover ${
-        iconWhite ? "brightness-0 invert" : ""
+      className={`${sizeClass} shrink-0 object-contain ${
+        iconWhite ? "" : "rounded-lg"
       }`}
       draggable={false}
     />
