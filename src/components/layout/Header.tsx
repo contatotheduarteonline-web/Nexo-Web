@@ -74,7 +74,7 @@ export const Header: React.FC<HeaderProps> = () => {
           onClick={() => setActiveTab("dashboard")}
           className="flex cursor-pointer items-center gap-2.5 transition-opacity hover:opacity-85"
         >
-          <Logo variant="compact" size="sm" />
+          <Logo variant="compact" size="sm" iconWhite showWordmark />
         </div>
       </div>
 

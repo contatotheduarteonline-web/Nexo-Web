@@ -5,6 +5,10 @@ interface LogoProps {
   size?: "xs" | "sm" | "md" | "lg" | "xl" | "hero";
   className?: string;
   themeMode?: "dark" | "light" | "auto";
+  /** Torna o ícone totalmente branco (para fundos escuros). */
+  iconWhite?: boolean;
+  /** Exibe o wordmark "NEXO" ao lado do ícone nas variantes compactas. */
+  showWordmark?: boolean;
 }
 
 const LOGO_SRC = "/nexo-logo.png";
@@ -17,6 +21,8 @@ export const Logo: React.FC<LogoProps> = ({
   size = "md",
   className = "",
   themeMode = "auto",
+  iconWhite = false,
+  showWordmark = false,
 }) => {
   const iconSizes: Record<string, string> = {
     xs: "h-5 w-5",
@@ -54,7 +60,9 @@ export const Logo: React.FC<LogoProps> = ({
     <img
       src={LOGO_SRC}
       alt="NEXO"
-      className={`${sizeClass} shrink-0 rounded-lg object-cover`}
+      className={`${sizeClass} shrink-0 rounded-lg object-cover ${
+        iconWhite ? "brightness-0 invert" : ""
+      }`}
       draggable={false}
     />
   );
@@ -72,11 +80,20 @@ export const Logo: React.FC<LogoProps> = ({
     </span>
   );
 
-  // Symbol / compact: icon only (headers, toolbars)
+  // Symbol / compact: icon only (headers, toolbars) — opcionalmente com wordmark
   if (variant === "symbol" || variant === "compact") {
+    if (!showWordmark) {
+      return (
+        <div className={`inline-flex items-center justify-center ${className}`}>
+          <BrandIcon sizeClass={iconSizes[size]} />
+        </div>
+      );
+    }
+
     return (
-      <div className={`inline-flex items-center justify-center ${className}`}>
+      <div className={`inline-flex items-center gap-2.5 ${className}`}>
         <BrandIcon sizeClass={iconSizes[size]} />
+        <Wordmark sizeClass={wordmarkSizes[size]} />
       </div>
     );
   }
