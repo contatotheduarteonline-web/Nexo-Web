@@ -378,9 +378,8 @@ export const FirstAccessOnboarding: React.FC = () => {
       // 2. Generate editalId upfront
       const editalId = `edital-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`;
 
-      // 3. Mapeia as disciplinas para modelos reais. Quando um edital do
-      // catálogo foi selecionado, traz TODAS as disciplinas e tópicos dele;
-      // disciplinas adicionadas manualmente pelo usuário são preservadas.
+      // 3. Cria apenas as disciplinas escolhidas pelo usuário.
+      // As disciplinas do catálogo que não foram selecionadas ficam fora do plano.
       const colors = ["#58A6FF", "#2BBF8A", "#F4B544", "#8B5CF6", "#EC4899", "#06B6D4", "#F4B544"];
       const levelByKeyName = new Map(
         (draft.disciplines || []).map((d) => [normalizeKey(d.name), d.knowledgeLevel])
@@ -409,7 +408,18 @@ export const FirstAccessOnboarding: React.FC = () => {
         return newDisc;
       };
 
-      catalogDiscs.forEach((cd) => {
+      const selectedDisciplineKeys = new Set(
+        (draft.disciplines || []).flatMap((d) => [
+          d.id,
+          normalizeKey(d.name),
+        ])
+      );
+      const selectedCatalogDiscs = catalogDiscs.filter((cd) =>
+        selectedDisciplineKeys.has(cd.id) ||
+        selectedDisciplineKeys.has(normalizeKey(cd.name))
+      );
+
+      selectedCatalogDiscs.forEach((cd) => {
         const disc = pushDiscipline(cd.name, cd.weight || 0);
         (cd.topics || []).forEach((ct) => {
           newTopics.push({
@@ -433,7 +443,9 @@ export const FirstAccessOnboarding: React.FC = () => {
 
       (draft.disciplines || []).forEach((disc) => {
         const fromCatalog = catalogDiscs.some(
-          (cd) => normalizeKey(cd.name) === normalizeKey(disc.name)
+          (cd) =>
+            cd.id === disc.id ||
+            normalizeKey(cd.name) === normalizeKey(disc.name)
         );
         if (!fromCatalog) pushDiscipline(disc.name);
       });
