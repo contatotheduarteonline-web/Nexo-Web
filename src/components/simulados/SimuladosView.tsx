@@ -50,14 +50,30 @@ function barColor(pct: number): string {
 }
 
 export const SimuladosView: React.FC = () => {
-  const { activeEdital, editais, simulados, addSimulado, deleteSimulado, activePlan, getPlanImageUrl } = useStudy();
+  const {
+    activeEdital,
+    editais,
+    simulados,
+    addSimulado,
+    deleteSimulado,
+    activePlan,
+    studyPlans,
+    setActivePlanId,
+    getPlanImageUrl,
+    isPlanImageLoading,
+  } = useStudy();
 
   // Edital ativo com fallback para o primeiro edital (mesmo comportamento do Histórico)
   const edital = activeEdital || editais[0] || null;
 
   // Mesma resolução de imagem do Histórico: imagem customizada do plano > plano > edital
-  const planImage =
-    (activePlan ? getPlanImageUrl(activePlan.id) : null) || activePlan?.imageUrl || edital?.imageUrl;
+  const planCustomImageUrl = activePlan ? getPlanImageUrl(activePlan.id) : null;
+  const planHasCustomImage = Boolean(activePlan && (activePlan.hasCustomImage || activePlan.imageRef));
+  const planIsLoading =
+    planHasCustomImage && !planCustomImageUrl && activePlan
+      ? isPlanImageLoading(activePlan.id)
+      : false;
+  const planImage = planCustomImageUrl || activePlan?.imageUrl || edital?.imageUrl;
 
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [title, setTitle] = useState("");
@@ -195,7 +211,18 @@ export const SimuladosView: React.FC = () => {
           </button>
 
           {edital && (
-            <PlanSelector activeLabel={edital.title} imageUrl={planImage} />
+            <PlanSelector
+              items={studyPlans.map((p) => ({
+                id: p.id,
+                title: p.name,
+                imageUrl: getPlanImageUrl(p.id) || p.imageUrl,
+              }))}
+              activeId={activePlan?.id}
+              activeLabel={activePlan?.name || edital.title}
+              imageUrl={planImage}
+              isLoading={planIsLoading}
+              onSelect={setActivePlanId}
+            />
           )}
         </div>
       </div>
