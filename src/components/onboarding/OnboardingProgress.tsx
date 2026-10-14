@@ -6,8 +6,8 @@ interface OnboardingProgressProps {
 
 const SECTIONS = ["Objetivo", "Concurso", "Momento", "Rotina", "Prioridades", "Início"];
 
-// Mapeia a etapa atual para o segmento da barra (Rotina cobre 2 etapas)
-const SECTION_OF_STEP: Record<number, number> = { 1: 1, 2: 2, 3: 3, 4: 4, 5: 4, 6: 5, 7: 6 };
+// Mapeia a etapa atual para o segmento da barra (Rotina e Prioridades cobrem 2 etapas cada)
+const SECTION_OF_STEP: Record<number, number> = { 1: 1, 2: 2, 3: 3, 4: 4, 5: 4, 6: 5, 7: 5, 8: 6 };
 
 export const OnboardingProgress: React.FC<OnboardingProgressProps> = ({
   currentStep,

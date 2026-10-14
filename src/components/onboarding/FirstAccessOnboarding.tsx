@@ -76,16 +76,22 @@ const LEGACY_STEP_MAP: Record<number, number> = {
   8: 6,
   9: 3,
   10: 4,
-  11: 7,
-  12: 7,
+  11: 8,
+  12: 8,
 };
 
 const normalizeStep = (step: unknown, savedDraft?: Partial<OnboardingDraft> | null): number => {
   if (typeof step !== "number" || !Number.isFinite(step)) return 0;
 
-  // Once this flow has saved its marker, stored steps are already in the new 0–7 scale.
+  // flowVersion 3+: escala 0–8 (Prioridades em duas etapas: disciplinas, depois pesos).
+  if ((savedDraft?.flowVersion ?? 0) >= 3) {
+    return Math.max(0, Math.min(8, Math.trunc(step)));
+  }
+
+  // flowVersion 2: escala antiga 0–7, onde 7 = Início (agora 8).
   if (savedDraft?.flowVersion === 2) {
-    return Math.max(0, Math.min(7, Math.trunc(step)));
+    const s = Math.max(0, Math.min(7, Math.trunc(step)));
+    return s >= 7 ? 8 : s;
   }
 
   // Existing records without the marker came from the previous 13-screen flow.
@@ -109,7 +115,7 @@ export const FirstAccessOnboarding: React.FC = () => {
       organization: saved.organization || "ciclo",
       startDateOption: saved.startDateOption || "hoje",
       customStartDate: saved.customStartDate || "",
-      flowVersion: 2,
+      flowVersion: 3,
     };
     if (saved.objective) d.objective = saved.objective;
     if (saved.area) d.area = saved.area;
@@ -862,7 +868,7 @@ export const FirstAccessOnboarding: React.FC = () => {
               </>
             )}
 
-            {/* 6. Prioridades */}
+            {/* 6. Prioridades — etapa 1: disciplinas */}
             {currentStep === 6 && (
               <>
                 <Step8Disciplines
@@ -872,22 +878,31 @@ export const FirstAccessOnboarding: React.FC = () => {
                   onAddDiscipline={handleAddDiscipline}
                   onRemoveDiscipline={handleRemoveDiscipline}
                 />
+                <OnboardingGroupFooter
+                  onNext={() =>
+                    goToStep(weightDisciplines.length > 0 ? 7 : 8)
+                  }
+                />
+              </>
+            )}
+
+            {/* 6. Prioridades — etapa 2: pesos (mesmo segmento na barra) */}
+            {currentStep === 7 && (
+              <>
                 {weightDisciplines.length > 0 && (
-                  <div className="mt-8 pt-6 border-t border-[#1C2940]">
-                    <Step8bWeights
-                      disciplines={weightDisciplines}
-                      skipped={draft.weightsSkipped}
-                      onChangeLevel={handleUpdateWeightLevel}
-                      onSkip={handleSkipWeights}
-                    />
-                  </div>
+                  <Step8bWeights
+                    disciplines={weightDisciplines}
+                    skipped={draft.weightsSkipped}
+                    onChangeLevel={handleUpdateWeightLevel}
+                    onSkip={handleSkipWeights}
+                  />
                 )}
-                <OnboardingGroupFooter onNext={() => goToStep(7)} />
+                <OnboardingGroupFooter onNext={() => goToStep(8)} />
               </>
             )}
 
             {/* 7. Início */}
-            {currentStep === 7 && (
+            {currentStep === 8 && (
               <>
                 <Step11StartDate
                   value={draft.startDateOption}
