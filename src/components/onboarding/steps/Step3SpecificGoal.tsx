@@ -245,7 +245,7 @@ export const Step3SpecificGoal: React.FC<Step3SpecificGoalProps> = ({
                 className="inline-flex items-center justify-center gap-1.5 px-1 py-2 text-xs font-semibold text-[#7DA2FF] hover:text-white transition-colors cursor-pointer"
               >
                 <FilePlus2 className="h-3.5 w-3.5" />
-                <span>Pedir cadastro do edital</span>
+                <span>Cadastrar manualmente</span>
               </button>
             </div>
           </div>
@@ -314,7 +314,7 @@ export const Step3SpecificGoal: React.FC<Step3SpecificGoalProps> = ({
               <div className="p-6 rounded-xl bg-zinc-900/60 border border-zinc-800 text-center">
                 <p className="text-sm text-zinc-300 font-semibold">Nenhum edital encontrado{searchQuery ? ` para "${searchQuery}"` : ""}.</p>
                 <p className="text-xs text-zinc-500 mt-1">
-                  Use "Montar com as minhas disciplinas" para cadastrar seu concurso manualmente.
+                  O catálogo não encontrou seu edital. Você pode preencher os dados manualmente para montar seu plano.
                 </p>
               </div>
             ) : (
