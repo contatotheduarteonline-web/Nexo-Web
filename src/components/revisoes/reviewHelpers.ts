@@ -90,9 +90,19 @@ export const getTodayLocalYmd = (): string => {
   return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
 };
 
+/**
+ * A review is finished when the boolean flag is set OR its status says so
+ * (legacy records may carry `status: "Concluída"` with `completed: false`).
+ * Keeping both sources in one helper prevents a record from appearing in the
+ * pending tabs and in "Concluídas" at the same time — or in neither.
+ */
+export const isCompletedReview = (
+  review: { completed: boolean; status?: string }
+): boolean => review.completed || review.status === "Concluída";
+
 export const isPendingReview = (
   review: { completed: boolean; status?: string }
-): boolean => !review.completed && review.status !== "Ignorada";
+): boolean => !isCompletedReview(review) && review.status !== "Ignorada";
 
 export const groupReviewsByDate = <T extends { dueDate: string }>(reviews: T[]): [string, T[]][] => {
   const map = new Map<string, T[]>();

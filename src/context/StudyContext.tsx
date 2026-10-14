@@ -51,6 +51,7 @@ import {
   saveScheduledReviewToFirestore,
   deleteScheduledReviewFromFirestore,
   subscribeScheduledReviewsFromFirestore,
+
   saveSimuladoToFirestore,
   deleteSimuladoFromFirestore,
   subscribeSimuladosFromFirestore,
@@ -62,6 +63,12 @@ import {
   migrateLocalDataToFirestore,
   reportOrphanEditais,
 } from "../lib/firestoreService";
+import { sanitizeFirestorePayload } from "../lib/firestoreUtils";
+import {
+  isCompletedReview,
+  isPendingReview,
+  getTodayLocalYmd,
+} from "../components/revisoes/reviewHelpers";
 import {
   getPublishedEditais,
   subscribePublishedEditais,
@@ -1079,16 +1086,17 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     };
   }, [studySessions, activeEdital, activePlan, userSettings]);
 
-  // Pending & Overdue Reviews
+  // Pending & Overdue Reviews — same source of truth as the Revisões page:
+  // local "today", excluding ignored and any already-completed record.
   const { pendingReviewsToday, overdueReviews } = useMemo(() => {
-    const todayStr = new Date().toISOString().split("T")[0];
+    const todayStr = getTodayLocalYmd();
     const pendingToday: ScheduledReview[] = [];
     const overdue: ScheduledReview[] = [];
 
     scheduledReviews
       .filter((r) => !activeEdital || r.editalId === activeEdital.id)
       .forEach((r) => {
-        if (!r.completed) {
+        if (isPendingReview(r)) {
           if (r.dueDate === todayStr) {
             pendingToday.push(r);
           } else if (r.dueDate < todayStr) {
@@ -2504,6 +2512,7 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     const updatedRev: ScheduledReview = {
       ...rev,
       completed: true,
+      status: "Concluída",
       completedAt,
       notes: notes ?? rev.notes,
       durationMinutes: durationMinutes > 0 ? durationMinutes : rev.durationMinutes,
@@ -2653,8 +2662,8 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     setScheduledReviews((prev) =>
       prev.map((r) => {
         if (r.id === reviewId) {
-          const updated = { ...r, status: "Pendente" as const };
-          if (user?.id) saveScheduledReviewToFirestore(user.id, updated).catch(console.error);
+          const updated = { ...r, completed: false, status: "Pendente" as const, completedAt: undefined };
+          if (user?.id) saveScheduledReviewToFirestore(user.id, sanitizeFirestorePayload(updated) as ScheduledReview).catch(console.error);
           return updated;
         }
         return r;
@@ -2663,11 +2672,11 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   };
 
   const batchRescheduleOverdueReviews = (newDueDate?: string) => {
-    const todayStr = new Date().toISOString().split("T")[0];
+    const todayStr = getTodayLocalYmd();
     const targetDate = newDueDate || todayStr;
     setScheduledReviews((prev) =>
       prev.map((r) => {
-        if (!r.completed && r.dueDate < todayStr) {
+        if (isPendingReview(r) && r.dueDate < todayStr) {
           const updated = { ...r, dueDate: targetDate };
           if (user?.id) saveScheduledReviewToFirestore(user.id, updated).catch(console.error);
           return updated;

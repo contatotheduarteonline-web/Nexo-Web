@@ -218,9 +218,8 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
       // Mantém o vínculo: conclui a revisão (gera o próximo ciclo) e grava as métricas nela.
       completeScheduledReview(review.id, { logAsSession: false, notes: comments });
       updateScheduledReview(review.id, {
-        durationMinutes: durationMinutes > 0 ? durationMinutes : undefined,
-        questionsDone: qDone > 0 ? qDone : undefined,
-        questionsCorrect: qDone > 0 ? Math.max(0, acertos) : undefined,
+        ...(durationMinutes > 0 ? { durationMinutes } : {}),
+        ...(qDone > 0 ? { questionsDone: qDone, questionsCorrect: Math.max(0, acertos) } : {}),
       });
       onSuccessToast?.("Registro salvo! Revisão concluída e próximo ciclo programado.");
     } else {

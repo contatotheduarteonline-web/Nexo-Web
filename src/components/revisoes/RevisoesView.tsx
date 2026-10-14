@@ -9,6 +9,7 @@ import {
   formatShortDate,
   formatDurationClock,
   getSessionLocalDate,
+  isCompletedReview,
   isPendingReview,
   groupReviewsByDate,
   getTodayLocalYmd,
@@ -164,8 +165,8 @@ export const RevisoesView: React.FC = () => {
       }
       if (activeSubTab === "programadas") return isPendingReview(r) && r.dueDate >= todayStr;
       if (activeSubTab === "atrasadas") return isPendingReview(r) && r.dueDate < todayStr;
-      if (activeSubTab === "ignoradas") return !r.completed && r.status === "Ignorada";
-      return r.completed;
+      if (activeSubTab === "ignoradas") return !isCompletedReview(r) && r.status === "Ignorada";
+      return isCompletedReview(r);
     });
     return base.sort((a, b) => a.dueDate.localeCompare(b.dueDate));
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -175,8 +176,8 @@ export const RevisoesView: React.FC = () => {
     () => ({
       programadas: editalReviews.filter((r) => isPendingReview(r) && r.dueDate >= todayStr).length,
       atrasadas: editalReviews.filter((r) => isPendingReview(r) && r.dueDate < todayStr).length,
-      ignoradas: editalReviews.filter((r) => !r.completed && r.status === "Ignorada").length,
-      concluidas: editalReviews.filter((r) => r.completed).length,
+      ignoradas: editalReviews.filter((r) => !isCompletedReview(r) && r.status === "Ignorada").length,
+      concluidas: editalReviews.filter((r) => isCompletedReview(r)).length,
     }),
     [editalReviews, todayStr]
   );
@@ -399,7 +400,7 @@ export const RevisoesView: React.FC = () => {
                                 {getIntervalLabel(rev.stage)}
                               </span>
 
-                              {!rev.completed && rev.status !== "Ignorada" && (
+                              {isPendingReview(rev) && (
                                 <>
                                   <button
                                     type="button"
@@ -432,7 +433,7 @@ export const RevisoesView: React.FC = () => {
                                 </>
                               )}
 
-                              {rev.status === "Ignorada" && !rev.completed && (
+                              {rev.status === "Ignorada" && !isCompletedReview(rev) && (
                                 <button
                                   type="button"
                                   title="Reativar revisão"
@@ -443,7 +444,7 @@ export const RevisoesView: React.FC = () => {
                                 </button>
                               )}
 
-                              {rev.completed && (
+                              {isCompletedReview(rev) && (
                                 <span
                                   title="Concluída"
                                   className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#527DFF] text-white shadow-xs"
