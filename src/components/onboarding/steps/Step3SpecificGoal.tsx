@@ -15,6 +15,7 @@ interface Step3SpecificGoalProps {
   onChangeOrgan: (organ: string) => void;
   onChangeCargo: (cargo: string) => void;
   onChangeBanca: (banca: string) => void;
+  onChangeCatalogSelection: (editalId: string | undefined, cargoId: string | undefined) => void;
   onNext: () => void;
 }
 
@@ -22,7 +23,7 @@ interface CatalogGroup {
   key: string;
   institution: string;
   logoUrl?: string | null;
-  entries: { edital: PublishedEditalSnapshot; cargoName: string; meta: string }[];
+  entries: { edital: PublishedEditalSnapshot; cargoId?: string; cargoName: string; meta: string }[];
 }
 
 const normalize = (v: string) =>
@@ -40,6 +41,7 @@ export const Step3SpecificGoal: React.FC<Step3SpecificGoalProps> = ({
   onChangeOrgan,
   onChangeCargo,
   onChangeBanca,
+  onChangeCatalogSelection,
   onNext,
 }) => {
   const { catalogEditais, isLoadingCatalog } = useStudy();
@@ -92,7 +94,7 @@ export const Step3SpecificGoal: React.FC<Step3SpecificGoalProps> = ({
       const meta = `Ed. ${ed.editalNumber || "01"}/${ed.year} • ${ed.board || "Banca a definir"}`;
       if (ed.cargos && ed.cargos.length > 0) {
         for (const c of ed.cargos) {
-          group.entries.push({ edital: ed, cargoName: c.name, meta });
+          group.entries.push({ edital: ed, cargoId: c.id, cargoName: c.name, meta });
         }
       } else {
         group.entries.push({
@@ -122,10 +124,14 @@ export const Step3SpecificGoal: React.FC<Step3SpecificGoalProps> = ({
       .filter(Boolean) as CatalogGroup[];
   }, [catalogGroups, searchQuery]);
 
-  const handleSelectCargo = (group: CatalogGroup, entry: { edital: PublishedEditalSnapshot; cargoName: string }) => {
+  const handleSelectCargo = (
+    group: CatalogGroup,
+    entry: { edital: PublishedEditalSnapshot; cargoId?: string; cargoName: string }
+  ) => {
     onChangeOrgan(group.institution);
     onChangeCargo(entry.cargoName);
     if (entry.edital.board) onChangeBanca(entry.edital.board);
+    onChangeCatalogSelection(entry.edital.id, entry.cargoId);
     onNext();
   };
 
@@ -135,13 +141,10 @@ export const Step3SpecificGoal: React.FC<Step3SpecificGoalProps> = ({
     (knowsSpecificGoal === true && (organ.trim().length > 0 || cargo.trim().length > 0));
 
   return (
-    <div id="step-3-specific-goal" className="w-full max-w-2xl mx-auto px-4 py-4 sm:py-8">
+    <div id="step-3-specific-goal" className="w-full">
       {/* Question Header */}
-      <div className="mb-6 sm:mb-8 text-center sm:text-left">
-        <span className="text-xs font-semibold text-[#F4B544] tracking-wider uppercase">
-          Etapa 3 de 12
-        </span>
-        <h2 className="text-2xl sm:text-4xl font-bold tracking-tight text-white mt-1">
+      <div className="mb-6 sm:mb-8 text-left">
+        <h2 className="text-2xl sm:text-4xl font-bold tracking-tight text-white">
           Qual concurso e cargo?
         </h2>
         <p className="mt-2 text-sm text-zinc-400">
@@ -254,7 +257,10 @@ export const Step3SpecificGoal: React.FC<Step3SpecificGoalProps> = ({
                   id="input-onboarding-organ"
                   type="text"
                   value={organ}
-                  onChange={(e) => onChangeOrgan(e.target.value)}
+                  onChange={(e) => {
+                    onChangeOrgan(e.target.value);
+                    if (e.target.value) onChangeCatalogSelection(undefined, undefined);
+                  }}
                   placeholder="Ex: Órgão ou instituição desejada..."
                   className="w-full px-4 py-3 rounded-xl bg-zinc-800/80 border border-zinc-700/80 text-white placeholder-zinc-500 focus:outline-none focus:border-[#7DA2FF] focus:ring-1 focus:ring-[#7DA2FF] transition-colors text-sm"
                   autoFocus
@@ -367,19 +373,6 @@ export const Step3SpecificGoal: React.FC<Step3SpecificGoalProps> = ({
         </div>
       )}
 
-      {/* Action Footer */}
-      <div className="flex justify-end pt-2">
-        <button
-          type="button"
-          id="btn-specific-goal-next"
-          onClick={onNext}
-          disabled={!canContinue || knowsSpecificGoal === undefined}
-          className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-[#527DFF] hover:bg-[#FF7A1A] disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold text-sm transition-all duration-200 cursor-pointer shadow-[0_6px_20px_rgba(255,107,0,0.25)]"
-        >
-          <span>Continuar</span>
-          <ArrowRight className="w-4 h-4" />
-        </button>
-      </div>
     </div>
   );
 };

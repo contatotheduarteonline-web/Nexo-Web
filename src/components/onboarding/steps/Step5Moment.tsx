@@ -1,81 +1,59 @@
 import React from "react";
 import { PreparationMoment } from "../types";
-import { ArrowRight, Check } from "lucide-react";
+import { Check } from "lucide-react";
 
 interface Step5MomentProps {
   value?: PreparationMoment;
   onChange: (value: PreparationMoment) => void;
-  onNext: () => void;
 }
 
-const MOMENT_OPTIONS: PreparationMoment[] = [
-  "Estou começando agora",
-  "Já estudo algumas matérias",
-  "Já tenho uma preparação avançada",
+const MOMENT_OPTIONS: { id: PreparationMoment; label: string; description: string }[] = [
+  { id: "Estou começando agora", label: "Estou começando agora", description: "Ainda não estudei as matérias" },
+  { id: "Já estudo algumas matérias", label: "Já estudei algumas matérias", description: "Estou no meio do caminho" },
+  { id: "Já tenho uma preparação avançada", label: "Já tenho uma preparação avançada", description: "Falta pouco para a prova" },
 ];
 
 export const Step5Moment: React.FC<Step5MomentProps> = ({
   value,
   onChange,
-  onNext,
 }) => {
   return (
-    <div id="step-5-moment" className="w-full max-w-2xl mx-auto px-4 py-4 sm:py-8">
+    <div id="step-5-moment" className="w-full">
       {/* Question Header */}
-      <div className="mb-8 text-center sm:text-left">
-        <span className="text-xs font-semibold text-[#F4B544] tracking-wider uppercase">
-          Etapa 5 de 12
-        </span>
-        <h2 className="text-2xl sm:text-4xl font-bold tracking-tight text-white mt-1">
-          Em que momento da preparação você está?
+      <div className="mb-6">
+        <h2 className="text-2xl sm:text-4xl font-bold tracking-tight text-white">
+          Em que momento dos estudos você está?
         </h2>
+        <p className="text-sm text-[#93A2B7] mt-2">
+          Assim o plano não te faz recomeçar o que você já viu.
+        </p>
       </div>
 
-      {/* Options Stack */}
-      <div className="space-y-3.5 mb-8">
+      {/* Options Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
         {MOMENT_OPTIONS.map((opt) => {
-          const isSelected = value === opt;
+          const isSelected = value === opt.id;
           return (
             <button
-              key={opt}
+              key={opt.id}
               type="button"
-              id={`moment-card-${opt.toLowerCase().replace(/\s+/g, "-")}`}
-              onClick={() => onChange(opt)}
-              className={`w-full flex items-center justify-between p-5 rounded-xl border text-left transition-all duration-150 cursor-pointer ${
+              id={`moment-card-${opt.id.toLowerCase().replace(/\s+/g, "-")}`}
+              onClick={() => onChange(opt.id)}
+              className={`p-4 sm:p-5 rounded-xl border text-left transition-all duration-150 cursor-pointer ${
                 isSelected
-                  ? "bg-zinc-800/90 border-[#F4B544] shadow-[0_0_18px_rgba(255,107,0,0.18)]"
-                  : "bg-zinc-900/60 border-zinc-800/80 hover:bg-zinc-800/50 hover:border-zinc-700"
+                  ? "bg-[#1A2A4A] border-[#527DFF] shadow-[0_0_18px_rgba(82,125,255,0.18)]"
+                  : "bg-[#172235] border-[#263447] hover:bg-[#223149] hover:border-[#39475C]"
               }`}
             >
-              <span className={`text-base sm:text-lg font-medium ${isSelected ? "text-white font-semibold" : "text-zinc-200"}`}>
-                {opt}
+              <span className={`block text-base font-semibold ${isSelected ? "text-white" : "text-[#C4CEDB]"}`}>
+                {opt.label}
               </span>
-              <div
-                className={`w-6 h-6 rounded-full border flex items-center justify-center shrink-0 ml-3 transition-colors ${
-                  isSelected
-                    ? "border-[#F4B544] bg-[#527DFF] text-white"
-                    : "border-zinc-700 bg-zinc-800/40 text-transparent"
-                }`}
-              >
-                <Check className="w-3.5 h-3.5" />
-              </div>
+              <span className="block text-xs text-[#93A2B7] mt-0.5">
+                {opt.description}
+              </span>
             </button>
           );
         })}
-      </div>
-
-      {/* Action Footer */}
-      <div className="flex justify-end">
-        <button
-          type="button"
-          id="btn-moment-next"
-          onClick={onNext}
-          disabled={!value}
-          className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-[#527DFF] hover:bg-[#FF7A1A] disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold text-sm transition-all duration-200 cursor-pointer shadow-[0_6px_20px_rgba(255,107,0,0.25)]"
-        >
-          <span>Continuar</span>
-          <ArrowRight className="w-4 h-4" />
-        </button>
       </div>
     </div>
   );

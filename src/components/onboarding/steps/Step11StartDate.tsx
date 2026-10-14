@@ -1,13 +1,12 @@
 import React from "react";
 import { StartDateOption } from "../types";
-import { ArrowRight, Check, Calendar as CalendarIcon } from "lucide-react";
+import { Check, Calendar as CalendarIcon } from "lucide-react";
 
 interface Step11StartDateProps {
   value?: StartDateOption;
   customDate?: string;
   onChangeOption: (opt: StartDateOption) => void;
   onChangeCustomDate: (date: string) => void;
-  onNext: () => void;
 }
 
 export const Step11StartDate: React.FC<Step11StartDateProps> = ({
@@ -15,7 +14,6 @@ export const Step11StartDate: React.FC<Step11StartDateProps> = ({
   customDate = "",
   onChangeOption,
   onChangeCustomDate,
-  onNext,
 }) => {
   const today = new Date();
   const tomorrow = new Date();
@@ -34,13 +32,10 @@ export const Step11StartDate: React.FC<Step11StartDateProps> = ({
     (value === "custom" && customDate.trim().length > 0);
 
   return (
-    <div id="step-11-start-date" className="w-full max-w-2xl mx-auto px-4 py-4 sm:py-8">
+    <div id="step-11-start-date" className="w-full">
       {/* Question Header */}
-      <div className="mb-8 text-center sm:text-left">
-        <span className="text-xs font-semibold text-[#F4B544] tracking-wider uppercase">
-          Etapa 11 de 12
-        </span>
-        <h2 className="text-2xl sm:text-4xl font-bold tracking-tight text-white mt-1">
+      <div className="mb-6">
+        <h2 className="text-2xl sm:text-4xl font-bold tracking-tight text-white">
           Quando você quer começar?
         </h2>
       </div>
@@ -159,19 +154,6 @@ export const Step11StartDate: React.FC<Step11StartDateProps> = ({
         </div>
       )}
 
-      {/* Action Footer */}
-      <div className="flex justify-end pt-2">
-        <button
-          type="button"
-          id="btn-start-date-next"
-          onClick={onNext}
-          disabled={!canContinue}
-          className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-[#527DFF] hover:bg-[#FF7A1A] disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold text-sm transition-all duration-200 cursor-pointer shadow-[0_6px_20px_rgba(255,107,0,0.25)]"
-        >
-          <span>Continuar</span>
-          <ArrowRight className="w-4 h-4" />
-        </button>
-      </div>
     </div>
   );
 };

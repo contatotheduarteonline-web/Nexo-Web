@@ -1,27 +1,49 @@
 import React from "react";
 
 interface OnboardingProgressProps {
-  currentStep: number;
-  totalSteps?: number;
+  currentStep: number; // 0 = welcome, 1..6 = sections
 }
+
+const SECTIONS = ["Objetivo", "Concurso", "Momento", "Rotina", "Prioridades", "Início"];
 
 export const OnboardingProgress: React.FC<OnboardingProgressProps> = ({
   currentStep,
-  totalSteps = 12,
 }) => {
-  // Step 0 is the welcome screen (subtle starting indicator ~4%)
-  const percentage = currentStep === 0 ? 4 : Math.min(100, Math.round((currentStep / totalSteps) * 100));
+  // Welcome screen has no visible progress yet
+  if (currentStep <= 0) return null;
 
   return (
     <div
       id="onboarding-progress-bar-container"
-      className="fixed top-0 left-0 right-0 z-50 h-[3px] bg-zinc-800/50 backdrop-blur-xs pointer-events-none"
+      className="relative z-10 w-full max-w-3xl mx-auto px-4 sm:px-8 pt-6"
     >
-      <div
-        id="onboarding-progress-bar-fill"
-        className="h-full bg-gradient-to-r from-[#F4B544] to-[#FFA043] transition-all duration-500 ease-out shadow-[0_0_8px_rgba(255,107,0,0.5)]"
-        style={{ width: `${percentage}%` }}
-      />
+      <div className="grid grid-cols-6 gap-2">
+        {SECTIONS.map((label, idx) => {
+          const section = idx + 1;
+          const done = currentStep > section;
+          const active = currentStep === section;
+          return (
+            <div key={label} className="flex flex-col gap-1.5 min-w-0">
+              <div
+                className={`h-1 rounded-full transition-colors duration-300 ${
+                  done || active ? "bg-[#527DFF]" : "bg-[#263447]"
+                }`}
+              />
+              <span
+                className={`text-[11px] leading-none truncate ${
+                  done
+                    ? "text-[#C4CEDB]"
+                    : active
+                    ? "text-white font-semibold"
+                    : "text-[#718096]"
+                }`}
+              >
+                {label}
+              </span>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };

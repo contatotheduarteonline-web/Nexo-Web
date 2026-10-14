@@ -75,6 +75,8 @@ export interface DisciplineDraftItem {
 export interface OnboardingDraft {
   objective?: ObjectiveType;
   area?: ConcursoArea;
+  catalogEditalId?: string; // edital do catálogo oficial selecionado
+  catalogCargoId?: string; // cargo do catálogo selecionado
   knowsSpecificGoal?: boolean; // true: Sim, já sei / false: Ainda estou decidindo
   organ?: string;
   cargo?: string;

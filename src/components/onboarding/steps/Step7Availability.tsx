@@ -1,11 +1,10 @@
 import React from "react";
 import { WeeklyAvailability } from "../types";
-import { ArrowRight, Info, Minus, Plus } from "lucide-react";
+import { Info, Minus, Plus } from "lucide-react";
 
 interface Step7AvailabilityProps {
   value: WeeklyAvailability;
   onChange: (value: WeeklyAvailability) => void;
-  onNext: () => void;
 }
 
 const DAYS_META: { key: keyof WeeklyAvailability; label: string }[] = [
@@ -24,7 +23,6 @@ const MAX_MINUTES = 16 * 60;
 export const Step7Availability: React.FC<Step7AvailabilityProps> = ({
   value,
   onChange,
-  onNext,
 }) => {
   // Toggle day active state
   const handleToggleDay = (dayKey: keyof WeeklyAvailability) => {
@@ -73,16 +71,11 @@ export const Step7Availability: React.FC<Step7AvailabilityProps> = ({
     totalWeeklyMinutes % 60
   ).padStart(2, "0")}`;
 
-  const canContinue = totalWeeklyMinutes > 0;
-
   return (
-    <div id="step-7-availability" className="w-full max-w-3xl mx-auto px-4 py-4 sm:py-8">
+    <div id="step-7-availability" className="w-full">
       {/* Question Header */}
-      <div className="mb-6 text-center sm:text-left">
-        <span className="text-xs font-semibold text-[#F4B544] tracking-wider uppercase">
-          Etapa 7 de 12
-        </span>
-        <h2 className="text-2xl sm:text-4xl font-bold tracking-tight text-white mt-1">
+      <div className="mb-6">
+        <h2 className="text-2xl sm:text-4xl font-bold tracking-tight text-white">
           Quais dias e quanto tempo em cada um?
         </h2>
         <p className="text-sm text-[#93A2B7] mt-2 max-w-xl">
@@ -176,27 +169,13 @@ export const Step7Availability: React.FC<Step7AvailabilityProps> = ({
       </div>
 
       {/* Weekly total */}
-      <p className="text-sm text-[#93A2B7] mb-6">
+      <p className="text-sm text-[#93A2B7]">
         Total:{" "}
         <span className="num-condensed font-bold text-[#F4B544]">
           {formattedWeekly}
         </span>{" "}
         por semana
       </p>
-
-      {/* Action Footer */}
-      <div className="flex justify-end">
-        <button
-          type="button"
-          id="btn-availability-next"
-          onClick={onNext}
-          disabled={!canContinue}
-          className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-[#527DFF] hover:bg-[#FF7A1A] disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold text-sm transition-all duration-200 cursor-pointer shadow-[0_6px_20px_rgba(255,107,0,0.25)]"
-        >
-          <span>Continuar</span>
-          <ArrowRight className="w-4 h-4" />
-        </button>
-      </div>
     </div>
   );
 };

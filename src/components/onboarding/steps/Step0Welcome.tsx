@@ -6,48 +6,79 @@ interface Step0WelcomeProps {
   isStarting?: boolean;
 }
 
+const PREVIEW_ITEMS = [
+  {
+    number: 1,
+    title: "Seu objetivo e concurso",
+    description: "Buscamos o edital e as disciplinas para você",
+  },
+  {
+    number: 2,
+    title: "Sua rotina",
+    description: "Quanto tempo você tem e como é a sua semana",
+  },
+  {
+    number: 3,
+    title: "Suas prioridades",
+    description: "O que você já domina e o que mais cai na prova",
+  },
+];
+
 export const Step0Welcome: React.FC<Step0WelcomeProps> = ({ onStart, isStarting = false }) => {
   return (
     <div
       id="step-0-welcome"
-      className="flex flex-col items-center justify-center text-center max-w-xl mx-auto px-4 py-8 sm:py-12"
+      className="w-full max-w-xl mx-auto px-4 py-8 sm:py-12"
     >
-      {/* NEXO Brand Mark */}
-      <div className="mb-8 relative">
-        <img
-          src="/nexo-logo.png"
-          alt="NEXO"
-          className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-cover shadow-[0_12px_36px_rgba(0,189,145,0.25)] border border-[#00bd91]/30 transition-transform duration-300 hover:scale-105"
-          draggable={false}
-        />
-      </div>
+      {/* Eyebrow */}
+      <p className="text-xs font-bold tracking-widest uppercase text-[#F4B544] mb-5">
+        Bem-vindo ao NEXO
+      </p>
 
       {/* Main Title */}
       <h1 className="text-3xl sm:text-5xl font-bold tracking-tight text-white mb-4 leading-[1.15]">
-        Vamos montar sua preparação.
+        Vamos montar seu plano de estudos, do seu jeito
       </h1>
 
       {/* Description */}
-      <p className="text-zinc-400 text-base sm:text-lg leading-relaxed mb-10 max-w-md">
-        Responda algumas perguntas rápidas para organizarmos seu primeiro plano.
+      <p className="text-[#93A2B7] text-base leading-relaxed mb-8">
+        Leva cerca de 3 minutos. A cada resposta, você vê o seu plano tomando forma.
       </p>
+
+      {/* Preview card */}
+      <div className="rounded-2xl border border-[#263447] bg-[#172235] overflow-hidden mb-8">
+        {PREVIEW_ITEMS.map((item, idx) => (
+          <div
+            key={item.number}
+            className={`flex items-start gap-4 px-5 py-4 ${
+              idx > 0 ? "border-t border-[#1C2940]" : ""
+            }`}
+          >
+            <span className="w-8 h-8 rounded-full bg-[#1A2A4A] border border-[#3558A0] flex items-center justify-center shrink-0 num-condensed text-sm font-bold text-[#7DA2FF]">
+              {item.number}
+            </span>
+            <div>
+              <p className="text-sm sm:text-base font-semibold text-white">{item.title}</p>
+              <p className="text-xs sm:text-sm text-[#93A2B7] mt-0.5">{item.description}</p>
+            </div>
+          </div>
+        ))}
+      </div>
 
       {/* CTA Button */}
-      <button
-        id="btn-onboarding-start"
-        type="button"
-        onClick={onStart}
-        disabled={isStarting}
-        className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl bg-[#527DFF] hover:bg-[#FF7A1A] active:bg-[#E05300] text-white font-semibold text-base transition-all duration-200 shadow-[0_8px_24px_rgba(255,107,0,0.3)] hover:shadow-[0_12px_32px_rgba(255,107,0,0.45)] cursor-pointer disabled:opacity-50"
-      >
-        <span>Começar</span>
-        <ArrowRight className="w-5 h-5 transition-transform duration-200 group-hover:translate-x-1" />
-      </button>
-
-      {/* Auxiliary text */}
-      <p className="mt-4 text-xs text-zinc-500 font-normal">
-        Você poderá alterar tudo depois.
-      </p>
+      <div className="flex items-center gap-4">
+        <button
+          id="btn-onboarding-start"
+          type="button"
+          onClick={onStart}
+          disabled={isStarting}
+          className="group inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl bg-[#527DFF] hover:bg-[#FF7A1A] text-white font-semibold text-base transition-all duration-200 shadow-[0_6px_20px_rgba(255,107,0,0.25)] cursor-pointer disabled:opacity-50"
+        >
+          <span>Começar</span>
+          <ArrowRight className="w-5 h-5 transition-transform duration-200 group-hover:translate-x-1" />
+        </button>
+        <span className="text-xs text-[#718096]">Você pode ajustar tudo depois</span>
+      </div>
     </div>
   );
 };

@@ -3,6 +3,7 @@ import { ArrowLeft, LogOut } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 import { useStudy } from "../../context/StudyContext";
 import { OnboardingProgress } from "./OnboardingProgress";
+import { OnboardingGroupFooter } from "./OnboardingGroupFooter";
 import { OnboardingWatermarkBackground } from "./OnboardingWatermarkBackground";
 import {
   OnboardingDraft,
@@ -16,6 +17,11 @@ import {
   StartDateOption,
 } from "./types";
 import { Discipline } from "../../types";
+import {
+  fetchPublishedEditaisFromServer,
+  PublishedEditalSnapshot,
+} from "../../lib/serverCatalogService";
+import { getFullCargoStructure, FullCargoSnapshot } from "../../lib/catalogEditalService";
 
 // Step Components
 import { Step0Welcome } from "./steps/Step0Welcome";
@@ -30,7 +36,6 @@ import { Step8Disciplines } from "./steps/Step8Disciplines";
 import { Step9Knowledge } from "./steps/Step9Knowledge";
 import { Step10Organization } from "./steps/Step10Organization";
 import { Step11StartDate } from "./steps/Step11StartDate";
-import { Step12Summary } from "./steps/Step12Summary";
 import { StepProcessing } from "./steps/StepProcessing";
 
 const DEFAULT_AVAILABILITY: WeeklyAvailability = {
@@ -43,9 +48,40 @@ const DEFAULT_AVAILABILITY: WeeklyAvailability = {
   dom: { enabled: false, hours: 0, minutes: 0 },
 };
 
+const DISCIPLINE_COLORS = ["#58A6FF", "#2BBF8A", "#F4B544", "#8B5CF6", "#EC4899", "#06B6D4", "#FF7A1A"];
+
+const normalizeKey = (v: string) =>
+  (v || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+
+// Compat: persisted steps from the previous 13-screen flow mapped into the new 6 sections.
+const LEGACY_STEP_MAP: Record<number, number> = {
+  0: 0,
+  1: 1,
+  2: 1,
+  3: 2,
+  4: 2,
+  5: 3,
+  6: 4,
+  7: 4,
+  8: 5,
+  9: 3,
+  10: 4,
+  11: 6,
+  12: 6,
+};
+
+const normalizeStep = (step: unknown): number => {
+  if (typeof step !== "number") return 0;
+  if (step >= 0 && step <= 6) return step;
+  return LEGACY_STEP_MAP[step] ?? 0;
+};
+
 export const FirstAccessOnboarding: React.FC = () => {
   const { user, logout, updateOnboardingStep, completeUserOnboarding } = useAuth();
-  const { createEdital, createStudyPlan, setActivePlanId } = useStudy();
+  const { createEdital, createStudyPlan, setActivePlanId, catalogEditais } = useStudy();
 
   // Initialize draft from persisted user onboarding draft without undefined properties
   const initialDraft = useMemo<OnboardingDraft>(() => {
@@ -71,10 +107,9 @@ export const FirstAccessOnboarding: React.FC = () => {
     return d;
   }, [user]);
 
-  const [currentStep, setCurrentStep] = useState<number>(() => {
-    const step = user?.onboarding?.currentStep;
-    return typeof step === "number" && step >= 0 && step <= 12 ? step : 0;
-  });
+  const [currentStep, setCurrentStep] = useState<number>(() =>
+    normalizeStep(user?.onboarding?.currentStep)
+  );
 
   const [draft, setDraft] = useState<OnboardingDraft>(initialDraft);
   const draftRef = useRef<OnboardingDraft>(initialDraft);
@@ -89,7 +124,7 @@ export const FirstAccessOnboarding: React.FC = () => {
       if (user.onboarding?.draft || user.onboardingData) {
         setDraft(initialDraft);
         if (typeof user.onboarding?.currentStep === "number") {
-          setCurrentStep(user.onboarding.currentStep);
+          setCurrentStep(normalizeStep(user.onboarding.currentStep));
         }
       }
     }
@@ -108,88 +143,6 @@ export const FirstAccessOnboarding: React.FC = () => {
         console.error("[ONBOARDING] Erro ao salvar progresso:", err);
       }
     }
-  };
-
-  // --- Step Navigation & Dynamic Skip Logic ---
-  const handleNextFromWelcome = () => {
-    goToStep(1);
-  };
-
-  const handleNextFromObjective = () => {
-    if (draft.objective === "Concurso Público") {
-      goToStep(2);
-    } else {
-      goToStep(3); // Skip Area for non-concurso
-    }
-  };
-
-  const handleNextFromArea = () => {
-    goToStep(3);
-  };
-
-  const handleNextFromSpecificGoal = () => {
-    goToStep(4);
-  };
-
-  const handleNextFromExamDate = () => {
-    goToStep(5);
-  };
-
-  const handleNextFromMoment = () => {
-    goToStep(6);
-  };
-
-  const handleNextFromRoutine = () => {
-    goToStep(7);
-  };
-
-  const handleNextFromAvailability = () => {
-    goToStep(8);
-  };
-
-  const handleNextFromDisciplines = () => {
-    if (draft.disciplinesMode === "adicionar" && draft.disciplines && draft.disciplines.length > 0) {
-      goToStep(9);
-    } else {
-      goToStep(10); // Skip Knowledge level step if 0 disciplines
-    }
-  };
-
-  const handleNextFromKnowledge = () => {
-    goToStep(10);
-  };
-
-  const handleNextFromOrganization = () => {
-    goToStep(11);
-  };
-
-  const handleNextFromStartDate = () => {
-    goToStep(12);
-  };
-
-  // Back button handler with inverse skip logic
-  const handleBack = () => {
-    if (currentStep <= 0) return;
-
-    if (currentStep === 3) {
-      if (draft.objective === "Concurso Público") {
-        goToStep(2);
-      } else {
-        goToStep(1);
-      }
-      return;
-    }
-
-    if (currentStep === 10) {
-      if (draft.disciplines && draft.disciplines.length > 0) {
-        goToStep(9);
-      } else {
-        goToStep(8);
-      }
-      return;
-    }
-
-    goToStep(currentStep - 1);
   };
 
   // Logout handler
@@ -227,6 +180,96 @@ export const FirstAccessOnboarding: React.FC = () => {
     return () => clearTimeout(timer);
   }, [draft, currentStep, updateOnboardingStep, user]);
 
+  // --- Edital catalog snapshot (published editais, com disciplinas embutidas) ---
+  const [serverEditais, setServerEditais] = useState<PublishedEditalSnapshot[]>([]);
+  useEffect(() => {
+    let isMounted = true;
+    fetchPublishedEditaisFromServer().then((list) => {
+      if (isMounted) setServerEditais(list);
+    });
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  // Estrutura completa do cargo selecionado no catálogo (subcoleções do Firestore)
+  const [cargoStructure, setCargoStructure] = useState<FullCargoSnapshot | null>(null);
+  useEffect(() => {
+    let isMounted = true;
+    if (draft.catalogEditalId && draft.catalogCargoId) {
+      getFullCargoStructure(draft.catalogEditalId, draft.catalogCargoId).then((s) => {
+        if (isMounted) setCargoStructure(s);
+      });
+    } else {
+      setCargoStructure(null);
+    }
+    return () => {
+      isMounted = false;
+    };
+  }, [draft.catalogEditalId, draft.catalogCargoId]);
+
+  // Disciplinas do edital selecionado — usadas nas etapas Momento e Prioridades
+  const catalogDisciplines = useMemo(() => {
+    // 1. Preferência: cargo selecionado no catálogo (ids salvos no rascunho)
+    if (cargoStructure) {
+      const discs = [...(cargoStructure.disciplines || [])].sort(
+        (a, b) => (a.order ?? 0) - (b.order ?? 0)
+      );
+      const hasWeights = discs.some((d) => typeof d.weight === "number" && d.weight > 0);
+      return discs.map((d, idx) => ({
+        id: `disc-cat-${draft.catalogEditalId}-${d.id}`,
+        name: d.name,
+        recommended: hasWeights ? (d.weight || 0) >= 3 : idx < 5,
+        color: DISCIPLINE_COLORS[idx % DISCIPLINE_COLORS.length],
+      }));
+    }
+
+    // 2. Fallback: snapshot publicada no servidor, casando órgão + cargo
+    const organKey = normalizeKey(draft.organ || "");
+    if (!organKey) return [];
+    const seenIds = new Set(serverEditais.map((e) => e.id));
+    const fallback = catalogEditais
+      .filter((e) => !seenIds.has(e.id))
+      .map((e) => ({ ...e }) as PublishedEditalSnapshot);
+    const all = [...serverEditais, ...fallback].filter(
+      (e) => (e.status || "published") === "published"
+    );
+
+    const edital = all.find((e) => normalizeKey(e.institution || e.title) === organKey);
+    if (!edital || !edital.cargos || edital.cargos.length === 0) return [];
+
+    const cargoKey = normalizeKey(draft.cargo || "");
+    const cargo =
+      (cargoKey && edital.cargos.find((c) => normalizeKey(c.name) === cargoKey)) ||
+      edital.cargos[0];
+    const discs = [...(cargo.disciplines || [])].sort(
+      (a, b) => (a.order ?? 0) - (b.order ?? 0)
+    );
+    const hasWeights = discs.some((d) => typeof d.weight === "number" && d.weight > 0);
+
+    return discs.map((d, idx) => ({
+      id: `disc-cat-${edital.id}-${d.id}`,
+      name: d.name,
+      recommended: hasWeights ? (d.weight || 0) >= 3 : idx < 5,
+      color: DISCIPLINE_COLORS[idx % DISCIPLINE_COLORS.length],
+    }));
+  }, [cargoStructure, draft.catalogEditalId, draft.organ, draft.cargo, serverEditais, catalogEditais]);
+
+  // Toggle disciplina do edital na etapa Prioridades
+  const handleToggleCatalogDiscipline = (item: { id: string; name: string }) => {
+    const exists = (draft.disciplines || []).some((d) => d.id === item.id);
+    if (exists) {
+      updateDraft({ disciplines: (draft.disciplines || []).filter((d) => d.id !== item.id) });
+    } else {
+      updateDraft({
+        disciplines: [
+          ...(draft.disciplines || []),
+          { id: item.id, name: item.name, knowledgeLevel: "nunca_estudei" as KnowledgeLevel },
+        ],
+      });
+    }
+  };
+
   const handleAddDiscipline = (name: string) => {
     const trimmed = name.trim();
     if (!trimmed) return;
@@ -244,12 +287,33 @@ export const FirstAccessOnboarding: React.FC = () => {
     updateDraft({ disciplines: nextDisciplines });
   };
 
+  // Upsert do nível de conhecimento (disciplina pode ainda não estar no draft)
   const handleUpdateKnowledgeLevel = (id: string, level: KnowledgeLevel) => {
-    const nextDisciplines = (draft.disciplines || []).map((d) =>
-      d.id === id ? { ...d, knowledgeLevel: level } : d
-    );
-    updateDraft({ disciplines: nextDisciplines });
+    const list = [...(draft.disciplines || [])];
+    const idx = list.findIndex((d) => d.id === id);
+    if (idx >= 0) {
+      list[idx] = { ...list[idx], knowledgeLevel: level };
+    } else {
+      const fromCatalog = catalogDisciplines.find((c) => c.id === id);
+      list.push({
+        id,
+        name: fromCatalog?.name || id,
+        knowledgeLevel: level,
+      });
+    }
+    updateDraft({ disciplines: list });
   };
+
+  // Disciplinas exibidas na etapa Momento (do edital + adicionadas manualmente)
+  const momentDisciplines = useMemo(() => {
+    const list = [...(draft.disciplines || [])];
+    for (const cat of catalogDisciplines) {
+      if (!list.some((d) => d.id === cat.id)) {
+        list.push({ id: cat.id, name: cat.name, knowledgeLevel: "nunca_estudei" as KnowledgeLevel });
+      }
+    }
+    return list;
+  }, [draft.disciplines, catalogDisciplines]);
 
   // Format weekly availability
   const totalWeeklyMinutes = useMemo(() => {
@@ -260,39 +324,6 @@ export const FirstAccessOnboarding: React.FC = () => {
       return acc + (day.hours || 0) * 60 + (day.minutes || 0);
     }, 0);
   }, [draft.availability]);
-
-  const weeklyHoursFormatted = useMemo(() => {
-    const h = Math.floor(totalWeeklyMinutes / 60);
-    const m = totalWeeklyMinutes % 60;
-    return `${h}h${m > 0 ? String(m).padStart(2, "0") : "00"}`;
-  }, [totalWeeklyMinutes]);
-
-  // Format start date
-  const startDateFormatted = useMemo(() => {
-    if (draft.startDateOption === "amanha") {
-      const d = new Date();
-      d.setDate(d.getDate() + 1);
-      return `Amanhã (${d.toLocaleDateString("pt-BR")})`;
-    }
-    if (draft.startDateOption === "custom" && draft.customStartDate) {
-      const parts = draft.customStartDate.split("-");
-      if (parts.length === 3) {
-        return `${parts[2]}/${parts[1]}/${parts[0]}`;
-      }
-      return draft.customStartDate;
-    }
-    return `Hoje (${new Date().toLocaleDateString("pt-BR")})`;
-  }, [draft.startDateOption, draft.customStartDate]);
-
-  // Format exam date
-  const examDateFormatted = useMemo(() => {
-    if (!draft.knowsExamDate || !draft.examDate) return undefined;
-    const parts = draft.examDate.split("-");
-    if (parts.length === 3) {
-      return `${parts[2]}/${parts[1]}/${parts[0]}`;
-    }
-    return draft.examDate;
-  }, [draft.knowsExamDate, draft.examDate]);
 
   // Final Action: Create Plan & Complete Onboarding
   const handleCreatePlan = async () => {
@@ -397,21 +428,48 @@ export const FirstAccessOnboarding: React.FC = () => {
     }
   };
 
+  // --- Section navigation & gating (6 sections) ---
+  const canContinueObjetivo =
+    !!draft.objective &&
+    (draft.objective !== "Concurso Público" || !!draft.area);
+
+  const canContinueConcurso =
+    (draft.knowsSpecificGoal === false ||
+      (draft.knowsSpecificGoal === true &&
+        (!!draft.organ?.trim() || !!draft.cargo?.trim()))) &&
+    ((draft.knowsExamDate === false ||
+      (draft.knowsExamDate === true && !!draft.examDate)));
+
+  const showMomentDisciplines =
+    !!draft.preparationMoment &&
+    draft.preparationMoment !== "Estou começando agora" &&
+    momentDisciplines.length > 0;
+
+  const canContinueRotina =
+    !!draft.routineType && !!draft.organization && totalWeeklyMinutes > 0;
+
+  const canContinueInicio =
+    draft.startDateOption === "hoje" ||
+    draft.startDateOption === "amanha" ||
+    (draft.startDateOption === "custom" && !!draft.customStartDate);
+
+  const handleBack = () => {
+    if (currentStep <= 0) return;
+    goToStep(currentStep - 1);
+  };
+
   return (
     <div
       id="first-access-onboarding-screen"
       className="relative w-full min-h-screen bg-[#0B1120] text-white flex flex-col font-sans overflow-x-hidden"
     >
-      {/* 1. Discreet top progress bar */}
-      <OnboardingProgress currentStep={currentStep} totalSteps={12} />
-
-      {/* 2. Watermark decorative layer (opacity 5-8%, pointer-events-none) */}
+      {/* Watermark decorative layer (opacity 5-8%, pointer-events-none) */}
       <OnboardingWatermarkBackground />
 
-      {/* 3. Top Header Bar */}
+      {/* Top Header Bar */}
       <header
         id="onboarding-header"
-        className="relative z-20 w-full flex items-center justify-between px-4 sm:px-8 py-4 border-b border-zinc-800/40"
+        className="relative z-20 w-full flex items-center justify-between px-4 sm:px-8 py-4 border-b border-[#1C2940]"
       >
         {/* Left: Back button or Logo */}
         <div className="flex items-center gap-3">
@@ -440,13 +498,6 @@ export const FirstAccessOnboarding: React.FC = () => {
           </div>
         </div>
 
-        {/* Center: Discreet Step indicator (Desktop) */}
-        {currentStep > 0 && currentStep <= 12 && !isProcessing && (
-          <div className="hidden sm:block text-xs font-mono text-zinc-400">
-            Passo {currentStep} de 12
-          </div>
-        )}
-
         {/* Right: Sair da conta */}
         {!isProcessing && (
           <button
@@ -462,128 +513,153 @@ export const FirstAccessOnboarding: React.FC = () => {
         )}
       </header>
 
-      {/* 4. Question Container (One main question per screen) */}
+      {/* Section progress (6 labeled segments) */}
+      <OnboardingProgress currentStep={currentStep} />
+
+      {/* Question Container (One section per screen) */}
       <main className="relative z-10 flex-1 flex flex-col justify-center items-center w-full px-4 py-6 sm:py-10">
         {isProcessing ? (
           <StepProcessing onFinished={() => {}} />
         ) : (
-          <>
+          <div className="w-full max-w-3xl mx-auto">
             {currentStep === 0 && (
-              <Step0Welcome onStart={handleNextFromWelcome} />
+              <Step0Welcome onStart={() => goToStep(1)} />
             )}
 
+            {/* 1. Objetivo */}
             {currentStep === 1 && (
-              <Step1Objective
-                value={draft.objective}
-                onChange={(obj: ObjectiveType) => updateDraft({ objective: obj })}
-                onNext={handleNextFromObjective}
-              />
+              <>
+                <Step1Objective
+                  value={draft.objective}
+                  onChange={(obj: ObjectiveType) => updateDraft({ objective: obj })}
+                />
+                {draft.objective === "Concurso Público" && (
+                  <div className="mt-8 pt-6 border-t border-[#1C2940]">
+                    <Step2Area
+                      value={draft.area}
+                      onChange={(area: ConcursoArea) => updateDraft({ area })}
+                    />
+                  </div>
+                )}
+                <OnboardingGroupFooter
+                  onNext={() => goToStep(2)}
+                  disabled={!canContinueObjetivo}
+                />
+              </>
             )}
 
+            {/* 2. Concurso */}
             {currentStep === 2 && (
-              <Step2Area
-                value={draft.area}
-                onChange={(area: ConcursoArea) => updateDraft({ area })}
-                onNext={handleNextFromArea}
-              />
+              <>
+                <Step3SpecificGoal
+                  knowsSpecificGoal={draft.knowsSpecificGoal}
+                  organ={draft.organ}
+                  cargo={draft.cargo}
+                  banca={draft.banca}
+                  onChangeGoalKnown={(known: boolean) => updateDraft({ knowsSpecificGoal: known })}
+                  onChangeOrgan={(organ: string) => updateDraft({ organ })}
+                  onChangeCargo={(cargo: string) => updateDraft({ cargo })}
+                  onChangeBanca={(banca: string) => updateDraft({ banca })}
+                  onChangeCatalogSelection={(editalId, cargoId) =>
+                    updateDraft({ catalogEditalId: editalId, catalogCargoId: cargoId })
+                  }
+                  onNext={() => {}}
+                />
+                <div className="mt-8 pt-6 border-t border-[#1C2940]">
+                  <Step4ExamDate
+                    knowsExamDate={draft.knowsExamDate}
+                    examDate={draft.examDate}
+                    onChangeExamDateKnown={(known: boolean) => updateDraft({ knowsExamDate: known })}
+                    onChangeExamDate={(date: string) => updateDraft({ examDate: date })}
+                  />
+                </div>
+                <OnboardingGroupFooter
+                  onNext={() => goToStep(3)}
+                  disabled={!canContinueConcurso}
+                />
+              </>
             )}
 
+            {/* 3. Momento */}
             {currentStep === 3 && (
-              <Step3SpecificGoal
-                knowsSpecificGoal={draft.knowsSpecificGoal}
-                organ={draft.organ}
-                cargo={draft.cargo}
-                banca={draft.banca}
-                onChangeGoalKnown={(known: boolean) => updateDraft({ knowsSpecificGoal: known })}
-                onChangeOrgan={(organ: string) => updateDraft({ organ })}
-                onChangeCargo={(cargo: string) => updateDraft({ cargo })}
-                onChangeBanca={(banca: string) => updateDraft({ banca })}
-                onNext={handleNextFromSpecificGoal}
-              />
+              <>
+                <Step5Moment
+                  value={draft.preparationMoment}
+                  onChange={(mom: PreparationMoment) => updateDraft({ preparationMoment: mom })}
+                />
+                {showMomentDisciplines && (
+                  <div className="mt-8 pt-6 border-t border-[#1C2940]">
+                    <Step9Knowledge
+                      disciplines={momentDisciplines}
+                      onChangeLevel={handleUpdateKnowledgeLevel}
+                    />
+                  </div>
+                )}
+                <OnboardingGroupFooter
+                  onNext={() => goToStep(4)}
+                  disabled={!draft.preparationMoment}
+                />
+              </>
             )}
 
+            {/* 4. Rotina */}
             {currentStep === 4 && (
-              <Step4ExamDate
-                knowsExamDate={draft.knowsExamDate}
-                examDate={draft.examDate}
-                onChangeExamDateKnown={(known: boolean) => updateDraft({ knowsExamDate: known })}
-                onChangeExamDate={(date: string) => updateDraft({ examDate: date })}
-                onNext={handleNextFromExamDate}
-              />
+              <>
+                <Step6Routine
+                  value={draft.routineType}
+                  onChange={(rout: RoutineType) => updateDraft({ routineType: rout })}
+                />
+                <div className="mt-8 pt-6 border-t border-[#1C2940]">
+                  <Step10Organization
+                    value={draft.organization}
+                    onChange={(org: OrganizationPreference) => updateDraft({ organization: org })}
+                  />
+                </div>
+                <div className="mt-8 pt-6 border-t border-[#1C2940]">
+                  <Step7Availability
+                    value={draft.availability || DEFAULT_AVAILABILITY}
+                    onChange={(avail: WeeklyAvailability) => updateDraft({ availability: avail })}
+                  />
+                </div>
+                <OnboardingGroupFooter
+                  onNext={() => goToStep(5)}
+                  disabled={!canContinueRotina}
+                />
+              </>
             )}
 
+            {/* 5. Prioridades */}
             {currentStep === 5 && (
-              <Step5Moment
-                value={draft.preparationMoment}
-                onChange={(mom: PreparationMoment) => updateDraft({ preparationMoment: mom })}
-                onNext={handleNextFromMoment}
-              />
+              <>
+                <Step8Disciplines
+                  disciplines={draft.disciplines || []}
+                  catalogDisciplines={catalogDisciplines}
+                  onToggleCatalogDiscipline={handleToggleCatalogDiscipline}
+                  onAddDiscipline={handleAddDiscipline}
+                  onRemoveDiscipline={handleRemoveDiscipline}
+                />
+                <OnboardingGroupFooter onNext={() => goToStep(6)} />
+              </>
             )}
 
+            {/* 6. Início */}
             {currentStep === 6 && (
-              <Step6Routine
-                value={draft.routineType}
-                onChange={(rout: RoutineType) => updateDraft({ routineType: rout })}
-                onNext={handleNextFromRoutine}
-              />
+              <>
+                <Step11StartDate
+                  value={draft.startDateOption}
+                  customDate={draft.customStartDate}
+                  onChangeOption={(opt: StartDateOption) => updateDraft({ startDateOption: opt })}
+                  onChangeCustomDate={(date: string) => updateDraft({ customStartDate: date })}
+                />
+                <OnboardingGroupFooter
+                  onNext={handleCreatePlan}
+                  disabled={!canContinueInicio}
+                  label="Criar meu plano"
+                  isLoading={isProcessing}
+                />
+              </>
             )}
-
-            {currentStep === 7 && (
-              <Step7Availability
-                value={draft.availability || DEFAULT_AVAILABILITY}
-                onChange={(avail: WeeklyAvailability) => updateDraft({ availability: avail })}
-                onNext={handleNextFromAvailability}
-              />
-            )}
-
-            {currentStep === 8 && (
-              <Step8Disciplines
-                disciplinesMode={draft.disciplinesMode}
-                disciplines={draft.disciplines || []}
-                onChangeMode={(mode) => updateDraft({ disciplinesMode: mode })}
-                onAddDiscipline={handleAddDiscipline}
-                onRemoveDiscipline={handleRemoveDiscipline}
-                onNext={handleNextFromDisciplines}
-              />
-            )}
-
-            {currentStep === 9 && (
-              <Step9Knowledge
-                disciplines={draft.disciplines || []}
-                onChangeLevel={handleUpdateKnowledgeLevel}
-                onNext={handleNextFromKnowledge}
-              />
-            )}
-
-            {currentStep === 10 && (
-              <Step10Organization
-                value={draft.organization}
-                onChange={(org: OrganizationPreference) => updateDraft({ organization: org })}
-                onNext={handleNextFromOrganization}
-              />
-            )}
-
-            {currentStep === 11 && (
-              <Step11StartDate
-                value={draft.startDateOption}
-                customDate={draft.customStartDate}
-                onChangeOption={(opt: StartDateOption) => updateDraft({ startDateOption: opt })}
-                onChangeCustomDate={(date: string) => updateDraft({ customStartDate: date })}
-                onNext={handleNextFromStartDate}
-              />
-            )}
-
-            {currentStep === 12 && (
-              <Step12Summary
-                draft={draft}
-                weeklyHoursFormatted={weeklyHoursFormatted}
-                startDateFormatted={startDateFormatted}
-                examDateFormatted={examDateFormatted}
-                onCreatePlan={handleCreatePlan}
-                isCreating={isProcessing}
-              />
-            )}
-          </>
+          </div>
         )}
       </main>
     </div>
