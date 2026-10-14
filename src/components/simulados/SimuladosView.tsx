@@ -73,7 +73,9 @@ export const SimuladosView: React.FC = () => {
     planHasCustomImage && !planCustomImageUrl && activePlan
       ? isPlanImageLoading(activePlan.id)
       : false;
-  const planImage = planCustomImageUrl || activePlan?.imageUrl || edital?.imageUrl;
+  const planImage = activePlan
+    ? planCustomImageUrl || activePlan?.imageUrl || edital?.imageUrl
+    : undefined;
 
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [title, setTitle] = useState("");
