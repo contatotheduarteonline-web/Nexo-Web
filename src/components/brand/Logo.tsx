@@ -70,7 +70,7 @@ export const Logo: React.FC<LogoProps> = ({
 
   const Wordmark: React.FC<{ sizeClass: string }> = ({ sizeClass }) => (
     <span className={`font-black uppercase leading-none tracking-[0.14em] ${sizeClass} ${textColor}`}>
-      NEXO
+      NEXO<span className="text-[#F4B544]">.</span>
     </span>
   );
 
