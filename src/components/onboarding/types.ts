@@ -66,10 +66,18 @@ export interface WeeklyAvailability {
   dom: DayAvailability;
 }
 
+export type DisciplineWeightLevel =
+  | "muito_baixa"
+  | "baixa"
+  | "media"
+  | "alta"
+  | "muito_alta";
+
 export interface DisciplineDraftItem {
   id: string;
   name: string;
   knowledgeLevel?: KnowledgeLevel;
+  weightLevel?: DisciplineWeightLevel;
 }
 
 export interface OnboardingDraft {
@@ -93,4 +101,5 @@ export interface OnboardingDraft {
   organization?: OrganizationPreference;
   startDateOption?: StartDateOption;
   customStartDate?: string; // YYYY-MM-DD
+  weightsSkipped?: boolean; // true: usuário pulou a etapa de pesos
 }

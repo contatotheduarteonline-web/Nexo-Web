@@ -42,7 +42,7 @@ import {
   deleteEditalFromFirestore,
   subscribeEditaisFromFirestore,
   saveStudyPlanToFirestore,
-  deleteStudyPlanFromFirestore,
+  deleteStudyPlanCascadeFromFirestore,
   subscribeStudyPlansFromFirestore,
   saveStudySessionToFirestore,
   deleteStudySessionFromFirestore,
@@ -73,7 +73,6 @@ import { auth } from "../lib/firebase";
 import { authFetch } from "../lib/apiClient";
 import {
   fetchPlanImageFromFirestore,
-  deletePlanImageFromFirestore,
   getCachedPlanImage,
   setCachedPlanImage,
   migrateLegacyPlanImage,
@@ -350,7 +349,7 @@ const getStorageKeys = (userId?: string) => {
 const StudyContext = createContext<StudyContextType | undefined>(undefined);
 
 export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const { user, authStatus, completeUserOnboarding } = useAuth();
+  const { user, authStatus } = useAuth();
   const [activeTab, setActiveTab] = useState<ActiveTab>("dashboard");
 
   const storageKeys = useMemo(() => getStorageKeys(user?.id), [user?.id]);
@@ -582,17 +581,30 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
   // Enriquecimento somente-leitura: editais pessoais criados a partir do
   // catálogo herdam o logo do edital de origem para os seletores de plano.
+  // Editais antigos (antes de sourceEditalId existir) também herdam quando o
+  // título/órgão coincide com o edital do catálogo de origem.
   const editaisWithCatalogLogos = useMemo<Edital[]>(() => {
     if (editais.length === 0) return editais;
     const logoByCatalogId = new Map<string, string>();
+    const logoByKey = new Map<string, string>();
+    const norm = (s?: string) =>
+      s?.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, " ").trim();
     for (const ce of catalogEditais) {
       const logo = ce.logoDataUrl || ce.logoUrl;
-      if (logo) logoByCatalogId.set(ce.id, logo);
+      if (!logo) continue;
+      logoByCatalogId.set(ce.id, logo);
+      const byTitle = norm(ce.title);
+      const byInstitution = norm(ce.institution);
+      if (byTitle && !logoByKey.has(byTitle)) logoByKey.set(byTitle, logo);
+      if (byInstitution && !logoByKey.has(byInstitution)) logoByKey.set(byInstitution, logo);
     }
     if (logoByCatalogId.size === 0) return editais;
     return editais.map((ed) => {
-      if (ed.imageUrl || !ed.sourceEditalId) return ed;
-      const logo = logoByCatalogId.get(ed.sourceEditalId);
+      if (ed.imageUrl) return ed;
+      const logo =
+        (ed.sourceEditalId && logoByCatalogId.get(ed.sourceEditalId)) ||
+        (ed.title && logoByKey.get(norm(ed.title))) ||
+        (ed.organ && logoByKey.get(norm(ed.organ)));
       return logo ? { ...ed, imageUrl: logo } : ed;
     });
   }, [editais, catalogEditais]);
@@ -880,6 +892,9 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   }, [studyPlans, activeEditalId]);
 
   const activeEdital = useMemo(() => {
+    // Sem nenhum plano, não há "edital ativo": dados órfãos de editais antigos
+    // (o "plano secundário") jamais devem aparecer no app.
+    if (studyPlans.length === 0) return undefined;
     if (editaisWithCatalogLogos.length === 0) return undefined;
     if (activePlan?.editalId) {
       const match = editaisWithCatalogLogos.find((e) => e.id === activePlan.editalId);
@@ -1727,11 +1742,9 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     if (user?.id) {
       try {
         await saveStudyPlanToFirestore(user.id, newPlan);
-        if (user.onboarding?.completed === false || user.onboardingCompleted === false) {
-          completeUserOnboarding?.().catch((err) =>
-            console.error("Erro ao concluir onboarding após salvar plano:", err)
-          );
-        }
+        // A conclusão do onboarding é responsabilidade do fluxo de onboarding
+        // (após a tela "Montando seu plano"); completar aqui fecha a tela antes
+        // dos ~20s e interrompe a criação do planejamento.
       } catch (err) {
         console.error("Erro ao salvar plano no Firestore:", err);
       }
@@ -1783,15 +1796,17 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
   const deleteStudyPlan = (id: string) => {
     const uid = auth.currentUser?.uid || user?.id;
-    if (uid) {
-      deleteStudyPlanFromFirestore(uid, id).catch((err) =>
-        console.error("Erro ao excluir plano no Firestore:", err)
-      );
-      deletePlanImageFromFirestore(uid, id).catch(() => {});
-    }
-    setPlanImageCache(id, null);
     const planToDelete = studyPlans.find((p) => p.id === id);
     const targetEditalId = planToDelete?.editalId;
+    if (uid) {
+      // Exclusão em cascata no Firestore (plano + imagem + edital + sessões +
+      // revisões + simulados + lembretes). Sem ela, as assinaturas em tempo real
+      // ressuscitam os dados e o plano "fantasma" volta a aparecer.
+      deleteStudyPlanCascadeFromFirestore(uid, id, targetEditalId).catch((err) =>
+        console.error("Erro ao excluir plano em cascata no Firestore:", err)
+      );
+    }
+    setPlanImageCache(id, null);
 
     // 1. Filter out the plan and any orphaned plans referencing the same edital
     const remainingPlans = studyPlans.filter((p) => p.id !== id && (!targetEditalId || p.editalId !== targetEditalId));

@@ -17,7 +17,11 @@ export const DashboardHeaderActions: React.FC<DashboardHeaderActionsProps> = ({
   const isImageLoading = hasCustom && !customImageUrl && activePlan
     ? isPlanImageLoading(activePlan.id)
     : false;
-  const planImage = customImageUrl || activePlan?.imageUrl || activeEdital?.imageUrl;
+  // Sem plano ativo (ex.: todos os planos foram apagados), nenhum logo deve
+  // aparecer no seletor — o fallback para o logo do edital só vale com plano ativo.
+  const planImage = activePlan
+    ? customImageUrl || activePlan?.imageUrl || activeEdital?.imageUrl
+    : undefined;
 
   return (
     <div className="flex flex-wrap items-center gap-2.5">

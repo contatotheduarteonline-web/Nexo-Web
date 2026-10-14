@@ -13,8 +13,10 @@ import {
   RoutineType,
   WeeklyAvailability,
   KnowledgeLevel,
+  DisciplineWeightLevel,
   OrganizationPreference,
   StartDateOption,
+  DisciplineDraftItem,
 } from "./types";
 import { Discipline, Topic, CatalogCargo } from "../../types";
 import {
@@ -26,6 +28,7 @@ import {
   getEditalCargos,
   FullCargoSnapshot,
 } from "../../lib/catalogEditalService";
+import { buildPlanSchedule } from "../../lib/planScheduleEngine";
 
 // Step Components
 import { Step0Welcome } from "./steps/Step0Welcome";
@@ -37,6 +40,7 @@ import { Step5Moment } from "./steps/Step5Moment";
 import { Step6Routine } from "./steps/Step6Routine";
 import { Step7Availability } from "./steps/Step7Availability";
 import { Step8Disciplines } from "./steps/Step8Disciplines";
+import { Step8bWeights } from "./steps/Step8bWeights";
 import { Step9Knowledge } from "./steps/Step9Knowledge";
 import { Step10Organization } from "./steps/Step10Organization";
 import { Step11StartDate } from "./steps/Step11StartDate";
@@ -73,16 +77,22 @@ const LEGACY_STEP_MAP: Record<number, number> = {
   8: 6,
   9: 3,
   10: 4,
-  11: 7,
-  12: 7,
+  11: 8,
+  12: 8,
 };
 
 const normalizeStep = (step: unknown, savedDraft?: Partial<OnboardingDraft> | null): number => {
   if (typeof step !== "number" || !Number.isFinite(step)) return 0;
 
-  // Once this flow has saved its marker, stored steps are already in the new 0–7 scale.
+  // flowVersion 3+: escala 0–8 (Prioridades em duas etapas: disciplinas, depois pesos).
+  if ((savedDraft?.flowVersion ?? 0) >= 3) {
+    return Math.max(0, Math.min(8, Math.trunc(step)));
+  }
+
+  // flowVersion 2: escala antiga 0–7, onde 7 = Início (agora 8).
   if (savedDraft?.flowVersion === 2) {
-    return Math.max(0, Math.min(7, Math.trunc(step)));
+    const s = Math.max(0, Math.min(7, Math.trunc(step)));
+    return s >= 7 ? 8 : s;
   }
 
   // Existing records without the marker came from the previous 13-screen flow.
@@ -106,7 +116,7 @@ export const FirstAccessOnboarding: React.FC = () => {
       organization: saved.organization || "ciclo",
       startDateOption: saved.startDateOption || "hoje",
       customStartDate: saved.customStartDate || "",
-      flowVersion: 2,
+      flowVersion: 3,
     };
     if (saved.objective) d.objective = saved.objective;
     if (saved.area) d.area = saved.area;
@@ -129,6 +139,7 @@ export const FirstAccessOnboarding: React.FC = () => {
   const draftRef = useRef<OnboardingDraft>(initialDraft);
   draftRef.current = draft;
   const [isProcessing, setIsProcessing] = useState(false);
+  const [planWorkDone, setPlanWorkDone] = useState(false);
 
   // Sync draft if remote user state loads for the first time
   const lastSyncedUserIdRef = useRef<string | null>(null);
@@ -238,55 +249,59 @@ export const FirstAccessOnboarding: React.FC = () => {
         return;
       }
 
+      // Aceita apenas estruturas com disciplinas — evita estados vazios/parciais.
+      const accept = (s?: FullCargoSnapshot | null): s is FullCargoSnapshot => {
+        if (!s || !(s.disciplines || []).length || !isMounted) return false;
+        const discs = [...s.disciplines]
+          .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+          .map((d) => ({ ...d, topics: d.topics || [] }));
+        setCargoStructure({ ...s, disciplines: discs });
+        return true;
+      };
+
       // 1. Cargo selecionado diretamente no catálogo (ids salvos no rascunho)
       if (draft.catalogEditalId && draft.catalogCargoId) {
-        const s = await getFullCargoStructure(draft.catalogEditalId, draft.catalogCargoId);
-        if (s && isMounted) {
-          setCargoStructure(s);
+        if (
+          accept(
+            await getFullCargoStructure(draft.catalogEditalId, draft.catalogCargoId)
+          )
+        ) {
           return;
         }
       }
 
-      // 2. Fallback: localizar o edital pelo órgão e resolver o cargo
-      if (!organKey) {
-        if (isMounted) setCargoStructure(null);
-        return;
-      }
-      const edital = allCatalogEditais.find(
-        (e) => normalizeKey(e.institution || e.title) === organKey
-      );
+      // 2. Localizar o edital do catálogo (pelo id salvo ou pelo órgão)
+      const edital =
+        (draft.catalogEditalId &&
+          allCatalogEditais.find((e) => e.id === draft.catalogEditalId)) ||
+        (organKey
+          ? allCatalogEditais.find(
+              (e) => normalizeKey(e.institution || e.title) === organKey
+            )
+          : undefined);
       if (!edital) {
         if (isMounted) setCargoStructure(null);
         return;
       }
 
+      // 3. Snapshot embutida (edital publicado no servidor, com disciplinas e tópicos)
       if (edital.cargos && edital.cargos.length > 0) {
-        // Snapshot embutida (edital publicado no servidor)
         const cargo =
           (cargoKey && edital.cargos.find((c) => normalizeKey(c.name) === cargoKey)) ||
           edital.cargos[0];
-        if (cargo && isMounted) {
-          const discs = [...(cargo.disciplines || [])].sort(
-            (a, b) => (a.order ?? 0) - (b.order ?? 0)
-          );
-          setCargoStructure({ ...cargo, disciplines: discs.map((d) => ({ ...d, topics: d.topics || [] })) });
-        }
-      } else {
-        // Catálogo do Firestore: resolver o cargo nas subcoleções
-        const cargos: CatalogCargo[] = await getEditalCargos(edital.id);
-        const cargo =
-          (cargoKey && cargos.find((c) => normalizeKey(c.name) === cargoKey)) ||
-          cargos[0] ||
-          undefined;
-        if (cargo) {
-          const s = await getFullCargoStructure(edital.id, cargo.id);
-          if (s && isMounted) {
-            setCargoStructure(s);
-            return;
-          }
-        }
-        if (isMounted) setCargoStructure(null);
+        if (accept(cargo as FullCargoSnapshot | undefined)) return;
       }
+
+      // 4. Catálogo do Firestore: resolver o cargo nas subcoleções
+      const cargos: CatalogCargo[] = await getEditalCargos(edital.id);
+      const orderedCargos = [
+        ...(cargoKey ? cargos.filter((c) => normalizeKey(c.name) === cargoKey) : []),
+        ...cargos,
+      ];
+      for (const cargo of orderedCargos) {
+        if (accept(await getFullCargoStructure(edital.id, cargo.id))) return;
+      }
+      if (isMounted) setCargoStructure(null);
     };
     run();
     return () => {
@@ -341,33 +356,114 @@ export const FirstAccessOnboarding: React.FC = () => {
     updateDraft({ disciplines: nextDisciplines });
   };
 
-  // Upsert do nível de conhecimento (disciplina pode ainda não estar no draft)
-  const handleUpdateKnowledgeLevel = (id: string, level: KnowledgeLevel) => {
+  // Upsert por id OU nome normalizado: rascunhos antigos com ids defasados
+  // são atualizados (e ganham o id canônico) em vez de gerar entradas duplicadas.
+  const upsertDraftDiscipline = (
+    id: string,
+    patch: { knowledgeLevel?: KnowledgeLevel; weightLevel?: DisciplineWeightLevel }
+  ) => {
     const list = [...(draft.disciplines || [])];
-    const idx = list.findIndex((d) => d.id === id);
+    const fromCatalog = catalogDisciplines.find((c) => c.id === id);
+    const nameKey = normalizeKey(fromCatalog?.name || id);
+    const idx = list.findIndex(
+      (d) => d.id === id || normalizeKey(d.name) === nameKey
+    );
     if (idx >= 0) {
-      list[idx] = { ...list[idx], knowledgeLevel: level };
+      list[idx] = { ...list[idx], ...patch, id, name: fromCatalog?.name || list[idx].name };
     } else {
-      const fromCatalog = catalogDisciplines.find((c) => c.id === id);
       list.push({
         id,
         name: fromCatalog?.name || id,
-        knowledgeLevel: level,
+        knowledgeLevel: "nunca_estudei" as KnowledgeLevel,
+        ...patch,
       });
     }
-    updateDraft({ disciplines: list });
+    return list;
   };
 
-  // Disciplinas exibidas na etapa Momento (do edital + adicionadas manualmente)
-  const momentDisciplines = useMemo(() => {
-    const list = [...(draft.disciplines || [])];
-    for (const cat of catalogDisciplines) {
-      if (!list.some((d) => d.id === cat.id)) {
-        list.push({ id: cat.id, name: cat.name, knowledgeLevel: "nunca_estudei" as KnowledgeLevel });
-      }
+  // Upsert do nível de conhecimento (disciplina pode ainda não estar no draft)
+  const handleUpdateKnowledgeLevel = (id: string, level: KnowledgeLevel) => {
+    updateDraft({ disciplines: upsertDraftDiscipline(id, { knowledgeLevel: level }) });
+  };
+
+  // Upsert do peso da disciplina (o edital continua completo no plano criado)
+  const handleUpdateWeightLevel = (id: string, level: DisciplineWeightLevel) => {
+    updateDraft({
+      disciplines: upsertDraftDiscipline(id, { weightLevel: level }),
+      weightsSkipped: false,
+    });
+  };
+
+  const handleSkipWeights = () => {
+    updateDraft({ weightsSkipped: true });
+  };
+
+  // Peso pré-preenchido: pesos do edital > nível de conhecimento > média
+  const prefillWeightLevel = (disc: DisciplineDraftItem): DisciplineWeightLevel => {
+    const explicit = (draft.disciplines || []).find((d) => d.id === disc.id);
+    if (explicit?.weightLevel) return explicit.weightLevel;
+    const fromCatalog = (cargoStructure?.disciplines || []).find(
+      (cd) =>
+        normalizeKey(cd.name) === normalizeKey(disc.name)
+    );
+    if (fromCatalog && typeof fromCatalog.weight === "number" && fromCatalog.weight > 0) {
+      if (fromCatalog.weight >= 4) return "alta";
+      if (fromCatalog.weight === 3) return "media";
+      return "baixa";
     }
-    return list;
+    switch (explicit?.knowledgeLevel) {
+      case "muito_bom":
+        return "muito_baixa";
+      case "bom":
+        return "baixa";
+      case "pouco":
+        return "alta";
+      case "nunca_estudei":
+        return "muito_alta";
+      default:
+        return "media";
+    }
+  };
+
+  // Disciplinas exibidas nas etapas Momento e Pesos (do edital + adicionadas manualmente).
+  // Agrupadas por nome normalizado: rascunhos antigos podem ter entradas com ids
+  // defasados — o id canônico do catálogo prevalece e o nível/peso é preservado.
+  const momentDisciplines = useMemo(() => {
+    const byName = new Map<string, DisciplineDraftItem>();
+    const put = (item: DisciplineDraftItem, canonicalId?: string) => {
+      const key = normalizeKey(item.name);
+      const existing = byName.get(key);
+      if (existing) {
+        byName.set(key, {
+          ...existing,
+          knowledgeLevel: item.knowledgeLevel || existing.knowledgeLevel,
+          weightLevel: item.weightLevel || existing.weightLevel,
+          ...(canonicalId ? { id: canonicalId } : {}),
+        });
+        return;
+      }
+      byName.set(key, canonicalId ? { ...item, id: canonicalId } : { ...item });
+    };
+    for (const d of draft.disciplines || []) put(d);
+    for (const cat of catalogDisciplines) {
+      put({ id: cat.id, name: cat.name, knowledgeLevel: "nunca_estudei" as KnowledgeLevel }, cat.id);
+    }
+    return Array.from(byName.values());
   }, [draft.disciplines, catalogDisciplines]);
+
+  // Linhas da etapa de pesos (peso efetivo: escolhido ou pré-preenchido)
+  const weightDisciplines = useMemo(
+    () => momentDisciplines.map((d) => ({ ...d, weightLevel: prefillWeightLevel(d) })),
+    [momentDisciplines, cargoStructure, draft.disciplines]
+  );
+
+  // Quantas disciplinas o plano criado terá (todas do edital + extras manuais)
+  const plannedDisciplinesCount = useMemo(() => {
+    const manualCount = (draft.disciplines || []).filter(
+      (d) => !catalogDisciplines.some((c) => c.id === d.id)
+    ).length;
+    return (cargoStructure?.disciplines?.length || 0) + manualCount;
+  }, [cargoStructure, draft.disciplines, catalogDisciplines]);
 
   // Format weekly availability
   const totalWeeklyMinutes = useMemo(() => {
@@ -393,11 +489,23 @@ export const FirstAccessOnboarding: React.FC = () => {
       // 2. Generate editalId upfront
       const editalId = `edital-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`;
 
-      // 3. Cria apenas as disciplinas escolhidas pelo usuário.
-      // As disciplinas do catálogo que não foram selecionadas ficam fora do plano.
+      // 3. O plano traz TODAS as disciplinas e tópicos do edital selecionado,
+      // mesmo que o usuário tenha marcado apenas algumas na etapa Prioridades.
       const colors = ["#58A6FF", "#2BBF8A", "#F4B544", "#8B5CF6", "#EC4899", "#06B6D4", "#F4B544"];
-      const levelByKeyName = new Map(
+      const WEIGHT_NUMBERS: Record<DisciplineWeightLevel, number> = {
+        muito_baixa: 1,
+        baixa: 2,
+        media: 3,
+        alta: 4,
+        muito_alta: 5,
+      };
+      const levelByKeyName = new Map<string, KnowledgeLevel>(
         (draft.disciplines || []).map((d) => [normalizeKey(d.name), d.knowledgeLevel])
+      );
+      const weightByKeyName = new Map<string, DisciplineWeightLevel>(
+        (draft.disciplines || [])
+          .filter((d) => !!d.weightLevel && !draft.weightsSkipped)
+          .map((d) => [normalizeKey(d.name), d.weightLevel as DisciplineWeightLevel])
       );
       const catalogDiscs = [...(cargoStructure?.disciplines || [])].sort(
         (a, b) => (a.order ?? 0) - (b.order ?? 0)
@@ -405,7 +513,14 @@ export const FirstAccessOnboarding: React.FC = () => {
 
       const newDisciplines: Discipline[] = [];
       const newTopics: Topic[] = [];
-      const pushDiscipline = (name: string, catalogWeight?: number) => {
+      const resolveWeight = (name: string, catalogWeight?: number, level?: KnowledgeLevel) => {
+        const draftWeight = weightByKeyName.get(normalizeKey(name));
+        if (draftWeight) return WEIGHT_NUMBERS[draftWeight];
+        if (catalogWeight && catalogWeight > 0) return catalogWeight;
+        if (level === "nunca_estudei") return 3;
+        return 2;
+      };
+      const pushDiscipline = (name: string, weight: number) => {
         const level = levelByKeyName.get(normalizeKey(name));
         const newDisc: Discipline = {
           id: `disc-${editalId}-${newDisciplines.length + 1}-${Math.random().toString(36).substr(2, 6)}`,
@@ -415,7 +530,7 @@ export const FirstAccessOnboarding: React.FC = () => {
           iconName: "BookOpen",
           priority: "media",
           difficulty: level === "muito_bom" || level === "bom" ? "facil" : "medio",
-          weight: catalogWeight || (level === "nunca_estudei" ? 3 : 2),
+          weight,
           targetHours: 30,
           studiedHours: 0,
         };
@@ -423,19 +538,9 @@ export const FirstAccessOnboarding: React.FC = () => {
         return newDisc;
       };
 
-      const selectedDisciplineKeys = new Set(
-        (draft.disciplines || []).flatMap((d) => [
-          d.id,
-          normalizeKey(d.name),
-        ])
-      );
-      const selectedCatalogDiscs = catalogDiscs.filter((cd) =>
-        selectedDisciplineKeys.has(cd.id) ||
-        selectedDisciplineKeys.has(normalizeKey(cd.name))
-      );
-
-      selectedCatalogDiscs.forEach((cd) => {
-        const disc = pushDiscipline(cd.name, cd.weight || 0);
+      catalogDiscs.forEach((cd) => {
+        const level = levelByKeyName.get(normalizeKey(cd.name));
+        const disc = pushDiscipline(cd.name, resolveWeight(cd.name, cd.weight, level));
         (cd.topics || []).forEach((ct) => {
           newTopics.push({
             id: `top-${editalId}-${newTopics.length + 1}`,
@@ -462,7 +567,12 @@ export const FirstAccessOnboarding: React.FC = () => {
             cd.id === disc.id ||
             normalizeKey(cd.name) === normalizeKey(disc.name)
         );
-        if (!fromCatalog) pushDiscipline(disc.name);
+        if (!fromCatalog) {
+          pushDiscipline(
+            disc.name,
+            resolveWeight(disc.name, undefined, disc.knowledgeLevel)
+          );
+        }
       });
 
       // Linhagem e logo do edital do catálogo selecionado (quando houver)
@@ -508,7 +618,30 @@ export const FirstAccessOnboarding: React.FC = () => {
         dom: draft.availability?.dom.enabled ? draft.availability.dom.hours + draft.availability.dom.minutes / 60 : 0,
       };
 
-      const weeklyGoal = Math.max(2, Math.round(totalWeeklyMinutes / 60));
+      // 5b. Planejamento semanal + ciclo gerados com o mesmo motor do
+      // Planejamento (importância × (6 − conhecimento)), para o plano já
+      // nascer com a agenda preenchida.
+      const KNOWLEDGE_NUMBERS: Record<KnowledgeLevel, number> = {
+        nunca_estudei: 1,
+        pouco: 2,
+        intermediario: 3,
+        bom: 4,
+        muito_bom: 5,
+      };
+      const scheduleEngine = buildPlanSchedule({
+        disciplines: newDisciplines.map((d) => ({
+          id: d.id,
+          name: d.name,
+          importance: d.weight,
+          knowledgeLevel:
+            KNOWLEDGE_NUMBERS[levelByKeyName.get(normalizeKey(d.name)) || "intermediario"],
+        })),
+        dailyAvailability: dailyMap as Record<string, number>,
+        minSessionMinutes: 30,
+        maxSessionMinutes: 90,
+      });
+
+      const weeklyGoal = scheduleEngine.weeklyGoalHours || Math.max(2, Math.round(totalWeeklyMinutes / 60));
 
       // 6. Create study plan
       const newPlan = await createStudyPlan({
@@ -520,12 +653,16 @@ export const FirstAccessOnboarding: React.FC = () => {
         active: true,
         organizationType: draft.organization === "semanal" ? "semanal" : "ciclo",
         planningMode: draft.organization === "semanal" ? "WEEKLY" : "CYCLE",
-        cycle: newDisciplines.map((d, idx) => ({
-          id: `step-${idx + 1}`,
-          disciplineId: d.id,
-          targetMinutes: d.weight === 3 ? 90 : 60,
-          order: idx + 1,
-        })),
+        cycle:
+          scheduleEngine.cycle.length > 0
+            ? scheduleEngine.cycle
+            : newDisciplines.map((d, idx) => ({
+                id: `step-${idx + 1}`,
+                disciplineId: d.id,
+                targetMinutes: d.weight === 3 ? 90 : 60,
+                order: idx + 1,
+              })),
+        weeklySchedule: scheduleEngine.weeklySchedule,
         currentCycleIndex: 0,
         currentStepElapsedMinutes: 0,
         completedCycles: 0,
@@ -538,13 +675,26 @@ export const FirstAccessOnboarding: React.FC = () => {
 
       // Set as active plan
       setActivePlanId(newPlan.id);
-
-      // 7. Persist completion in AuthContext & Firestore
-      await completeUserOnboarding();
     } catch (err) {
       console.error("[ONBOARDING] Erro ao criar plano inicial:", err);
-      // Fallback: still complete onboarding to avoid trapping user
+    } finally {
+      // A tela "Montando seu plano" conclui o onboarding ao final (~20s)
+      setPlanWorkDone(true);
+    }
+  };
+
+  // Conclusão do onboarding após a tela de processamento terminar
+  const handleProcessingFinished = async () => {
+    try {
       await completeUserOnboarding();
+    } catch (err) {
+      console.error("[ONBOARDING] Erro ao concluir onboarding:", err);
+      // Fallback: tenta novamente para não prender o usuário na tela
+      try {
+        await completeUserOnboarding();
+      } catch {
+        // mantém o usuário na tela; pode tentar novamente recarregando
+      }
     }
   };
 
@@ -640,7 +790,12 @@ export const FirstAccessOnboarding: React.FC = () => {
       {/* Question Container (One section per screen) */}
       <main className="relative z-10 flex-1 flex flex-col justify-center items-center w-full px-4 py-6 sm:py-10">
         {isProcessing ? (
-          <StepProcessing onFinished={() => {}} />
+          <StepProcessing
+            planName={draft.cargo?.trim() || draft.organ?.trim() || "seu objetivo"}
+            disciplinesCount={plannedDisciplinesCount}
+            workDone={planWorkDone}
+            onFinished={handleProcessingFinished}
+          />
         ) : (
           <div className="w-full max-w-3xl mx-auto">
             {currentStep === 0 && (
@@ -759,7 +914,7 @@ export const FirstAccessOnboarding: React.FC = () => {
               </>
             )}
 
-            {/* 6. Prioridades */}
+            {/* 6. Prioridades — etapa 1: disciplinas */}
             {currentStep === 6 && (
               <>
                 <Step8Disciplines
@@ -769,12 +924,32 @@ export const FirstAccessOnboarding: React.FC = () => {
                   onAddDiscipline={handleAddDiscipline}
                   onRemoveDiscipline={handleRemoveDiscipline}
                 />
-                <OnboardingGroupFooter onNext={() => goToStep(7)} />
+                <OnboardingGroupFooter
+                  onNext={() =>
+                    goToStep(weightDisciplines.length > 0 ? 7 : 8)
+                  }
+                />
+              </>
+            )}
+
+            {/* 6. Prioridades — etapa 2: pesos (mesmo segmento na barra) */}
+            {currentStep === 7 && (
+              <>
+                {weightDisciplines.length > 0 && (
+                  <Step8bWeights
+                    disciplines={weightDisciplines}
+                    skipped={draft.weightsSkipped}
+                    onChangeLevel={handleUpdateWeightLevel}
+                    onChangeKnowledgeLevel={handleUpdateKnowledgeLevel}
+                    onSkip={handleSkipWeights}
+                  />
+                )}
+                <OnboardingGroupFooter onNext={() => goToStep(8)} />
               </>
             )}
 
             {/* 7. Início */}
-            {currentStep === 7 && (
+            {currentStep === 8 && (
               <>
                 <Step11StartDate
                   value={draft.startDateOption}

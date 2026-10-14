@@ -300,7 +300,9 @@ export const HistoricoView: React.FC = () => {
   const planIsLoading = planHasCustom && !planCustomImageUrl && activePlan
     ? isPlanImageLoading(activePlan.id)
     : false;
-  const planImage = planCustomImageUrl || activePlan?.imageUrl || activeEdital?.imageUrl;
+  const planImage = activePlan
+    ? planCustomImageUrl || activePlan?.imageUrl || activeEdital?.imageUrl
+    : undefined;
 
   const selectClass =
     "w-full appearance-none rounded-lg border border-[#263447] bg-[#1D2B40] px-3 py-2 pr-8 text-[13px] font-medium text-white outline-none transition focus:border-[#527DFF] focus:ring-1 focus:ring-[#527DFF] cursor-pointer truncate";

@@ -69,21 +69,8 @@ export const DisciplinasView: React.FC<DisciplinasViewProps> = ({
       }
     });
 
-    // Also include editais not tied to a formal plan (if any)
-    editais.forEach((edital) => {
-      const isAlreadyInPlan = studyPlans.some((p) => p.editalId === edital.id);
-      if (!isAlreadyInPlan) {
-        edital.disciplines.forEach((disc) => {
-          const discTopics = edital.topics.filter((t) => t.disciplineId === disc.id);
-          list.push({
-            discipline: disc,
-            plan: null,
-            editalId: edital.id,
-            topics: discTopics,
-          });
-        });
-      }
-    });
+    // Editais órfãos (sem nenhum plano) NUNCA entram na lista: eles são
+    // resquícios de planos apagados e apareceriam como "plano secundário".
 
     return list;
   }, [studyPlans, editais]);

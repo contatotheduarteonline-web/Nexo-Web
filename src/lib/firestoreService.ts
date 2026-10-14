@@ -332,6 +332,71 @@ export async function deleteStudyPlanFromFirestore(userId: string, planId: strin
   }
 }
 
+/**
+ * Exclusão em cascata de um plano no Firestore: plano, imagem, edital vinculado
+ * e todos os registros dependentes (sessões, revisões, simulados, lembretes).
+ * Sem isso, as assinaturas em tempo real ressuscitam os dados apagados — o
+ * "plano fantasma" que continuava aparecendo após excluir o plano principal.
+ */
+export async function deleteStudyPlanCascadeFromFirestore(
+  userId: string,
+  planId: string,
+  editalId?: string
+): Promise<void> {
+  if (!isAuthorizedUser(userId)) return;
+  const path = `users/${userId} (cascade plan ${planId})`;
+  try {
+    const batch = writeBatch(db);
+    batch.delete(doc(db, "users", userId, "studyPlans", planId));
+    batch.delete(doc(db, "users", userId, "planImages", planId));
+    if (editalId) {
+      batch.delete(doc(db, "users", userId, "editais", editalId));
+    }
+
+    const [sessionsSnap, reviewsSnap, simuladosSnap, remindersSnap] = await Promise.all([
+      getDocs(collection(db, "users", userId, "studySessions")),
+      getDocs(collection(db, "users", userId, "scheduledReviews")),
+      getDocs(collection(db, "users", userId, "simulados")),
+      getDocs(collection(db, "users", userId, "reminders")),
+    ]);
+
+    const extraDeleteRefs: ReturnType<typeof doc>[] = [];
+    sessionsSnap.forEach((d) => {
+      const data = d.data() as { editalId?: string; planningBlockId?: string };
+      if ((editalId && data.editalId === editalId) || data.planningBlockId === planId) {
+        extraDeleteRefs.push(d.ref);
+      }
+    });
+    reviewsSnap.forEach((d) => {
+      if (editalId && (d.data() as { editalId?: string }).editalId === editalId) {
+        extraDeleteRefs.push(d.ref);
+      }
+    });
+    simuladosSnap.forEach((d) => {
+      if (editalId && (d.data() as { editalId?: string }).editalId === editalId) {
+        extraDeleteRefs.push(d.ref);
+      }
+    });
+    remindersSnap.forEach((d) => {
+      if (editalId && (d.data() as { editalId?: string }).editalId === editalId) {
+        extraDeleteRefs.push(d.ref);
+      }
+    });
+
+    // Firestore limita batches a 500 operações — fatia em lotes de 450.
+    const CHUNK = 450;
+    for (let i = 0; i < extraDeleteRefs.length; i += CHUNK) {
+      const chunkBatch = writeBatch(db);
+      extraDeleteRefs.slice(i, i + CHUNK).forEach((ref) => chunkBatch.delete(ref));
+      await chunkBatch.commit();
+    }
+
+    await batch.commit();
+  } catch (error) {
+    handleFirestoreError(error as Error, OperationType.DELETE, path);
+  }
+}
+
 // ==========================================
 // STUDY SESSIONS FIRESTORE REPOSITORY
 // ==========================================
