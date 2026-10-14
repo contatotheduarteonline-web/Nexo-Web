@@ -11,7 +11,7 @@ interface LogoProps {
   showWordmark?: boolean;
 }
 
-const LOGO_SRC = "/nexo-logo.png";
+const LOGO_SRC = "/nexo-emblem-white.png";
 const LOGO_WHITE_SRC = "/nexo-notification-icon.png";
 
 /**
@@ -54,9 +54,7 @@ export const Logo: React.FC<LogoProps> = ({
     <img
       src={iconWhite ? LOGO_WHITE_SRC : LOGO_SRC}
       alt="NEXO"
-      className={`${sizeClass} shrink-0 object-contain ${
-        iconWhite ? "" : "rounded-lg"
-      }`}
+      className={`${sizeClass} shrink-0 object-contain`}
       draggable={false}
     />
   );
