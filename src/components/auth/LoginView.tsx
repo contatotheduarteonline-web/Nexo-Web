@@ -21,7 +21,6 @@ import {
 import { useAuth } from "../../context/AuthContext";
 import { Logo } from "../brand/Logo";
 import { ForgotPasswordModal } from "./ForgotPasswordModal";
-import { RegisterForm } from "./RegisterForm";
 
 export const LoginView: React.FC = () => {
   const { loginWithEmail, loginWithGoogle, isLoading } = useAuth();
@@ -33,7 +32,6 @@ export const LoginView: React.FC = () => {
   const [copiedDomain, setCopiedDomain] = useState(false);
   const [isForgotModalOpen, setIsForgotModalOpen] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState<"entrar" | "cadastrar">("entrar");
 
   const isValidEmail = (val: string): boolean => {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val.trim());
@@ -210,43 +208,13 @@ export const LoginView: React.FC = () => {
           {/* Form Header */}
           <div className="mb-6 space-y-2 text-left">
             <h2 className="text-2xl font-black uppercase tracking-tight text-white">
-              {activeTab === "entrar" ? "Bem-vindo de volta" : "Crie sua conta"}
+              Bem-vindo de volta
             </h2>
             <p className="text-sm text-[#718096] font-normal">
-              {activeTab === "entrar"
-                ? "Entre para continuar sua preparação."
-                : "Cadastre-se para começar sua preparação."}
+              Entre para continuar sua preparação.
             </p>
           </div>
 
-          {/* Tab Switcher */}
-          <div className="mb-6 flex rounded-xl bg-[#111B2D] p-1">
-            <button
-              type="button"
-              onClick={() => setActiveTab("entrar")}
-              className={
-                activeTab === "entrar"
-                  ? "flex-1 rounded-lg bg-[#527DFF] px-4 py-2.5 text-sm font-semibold text-[#0d0f12] transition-colors cursor-pointer"
-                  : "flex-1 rounded-lg px-4 py-2.5 text-sm font-semibold text-[#718096] hover:text-white transition-colors cursor-pointer"
-              }
-            >
-              Entrar
-            </button>
-            <button
-              type="button"
-              onClick={() => setActiveTab("cadastrar")}
-              className={
-                activeTab === "cadastrar"
-                  ? "flex-1 rounded-lg bg-[#527DFF] px-4 py-2.5 text-sm font-semibold text-[#0d0f12] transition-colors cursor-pointer"
-                  : "flex-1 rounded-lg px-4 py-2.5 text-sm font-semibold text-[#718096] hover:text-white transition-colors cursor-pointer"
-              }
-            >
-              Cadastrar
-            </button>
-          </div>
-
-          {activeTab === "entrar" ? (
-          <>
           {/* Unauthorized Domain Helper Notification */}
           {unauthorizedDomainInfo && (
             <div className="mb-6 rounded-2xl border border-[#F4B544]/30 bg-gradient-to-b from-amber-500/10 to-amber-950/20 p-4 text-xs text-[#F4B544] shadow-lg space-y-3">
@@ -413,11 +381,6 @@ export const LoginView: React.FC = () => {
               </button>
             </div>
           </form>
-
-          </>
-          ) : (
-            <RegisterForm onGoToLogin={() => setActiveTab("entrar")} />
-          )}
         </div>
       </div>
 

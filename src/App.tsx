@@ -8,7 +8,6 @@ import { ActiveTab } from "./types";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import { StudyProvider, useStudy } from "./context/StudyContext";
 import { LoginView } from "./components/auth/LoginView";
-import { CadastroView } from "./components/auth/CadastroView";
 import { FirstAccessOnboarding } from "./components/onboarding/FirstAccessOnboarding";
 import { Sidebar } from "./components/layout/Sidebar";
 import { Header } from "./components/layout/Header";
@@ -174,7 +173,6 @@ const AuthenticatedApp: React.FC = () => {
 
 const RootRouter: React.FC = () => {
   const { isAuthenticated, isLoading } = useAuth();
-  const [authView, setAuthView] = useState<"login" | "cadastro">("login");
 
   if (isLoading) {
     return (
@@ -188,9 +186,6 @@ const RootRouter: React.FC = () => {
   }
 
   if (!isAuthenticated) {
-    if (authView === "cadastro") {
-      return <CadastroView onGoToLogin={() => setAuthView("login")} />;
-    }
     return <LoginView />;
   }
 
