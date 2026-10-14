@@ -428,11 +428,14 @@ export const FirstAccessOnboarding: React.FC = () => {
           )}
 
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#F4B544] to-[#E05300] flex items-center justify-center shadow-[0_0_12px_rgba(255,107,0,0.3)]">
-              <span className="font-black text-xs text-white">N</span>
-            </div>
+            <img
+              src="/nexo-logo.png"
+              alt="NEXO"
+              className="w-7 h-7 rounded-lg object-cover"
+              draggable={false}
+            />
             <span className="text-base font-bold tracking-tight text-white">
-              NEXO<span className="text-[#F4B544]">.</span>
+              NEXO
             </span>
           </div>
         </div>

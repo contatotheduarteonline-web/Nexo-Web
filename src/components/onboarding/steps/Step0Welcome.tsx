@@ -1,5 +1,5 @@
 import React from "react";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 interface Step0WelcomeProps {
   onStart: () => void;
@@ -14,15 +14,12 @@ export const Step0Welcome: React.FC<Step0WelcomeProps> = ({ onStart, isStarting 
     >
       {/* NEXO Brand Mark */}
       <div className="mb-8 relative">
-        <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-3xl bg-gradient-to-br from-[#F4B544] via-[#FF5500] to-[#D94800] flex items-center justify-center shadow-[0_12px_36px_rgba(255,107,0,0.35)] border border-[#FF8533]/40 transition-transform duration-300 hover:scale-105">
-          <span className="font-black text-4xl sm:text-5xl text-white tracking-wider select-none">
-            N
-          </span>
-        </div>
-        <div className="absolute -bottom-2 -right-2 bg-zinc-900 border border-zinc-700 px-2 py-0.5 rounded-full flex items-center gap-1 shadow-md">
-          <Sparkles className="w-3 h-3 text-[#F4B544]" />
-          <span className="text-[10px] font-semibold text-zinc-300 tracking-wider">NEXO</span>
-        </div>
+        <img
+          src="/nexo-logo.png"
+          alt="NEXO"
+          className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-cover shadow-[0_12px_36px_rgba(0,189,145,0.25)] border border-[#00bd91]/30 transition-transform duration-300 hover:scale-105"
+          draggable={false}
+        />
       </div>
 
       {/* Main Title */}

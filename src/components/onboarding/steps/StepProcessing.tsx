@@ -31,11 +31,12 @@ export const StepProcessing: React.FC<StepProcessingProps> = ({ onFinished }) =>
     >
       {/* Brand Mark with subtle pulse */}
       <div className="mb-8 relative">
-        <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#F4B544] to-[#E05300] flex items-center justify-center shadow-[0_12px_36px_rgba(255,107,0,0.35)] border border-[#FF8533]/40 animate-pulse">
-          <span className="font-black text-4xl text-white select-none">
-            N
-          </span>
-        </div>
+        <img
+          src="/nexo-logo.png"
+          alt="NEXO"
+          className="w-20 h-20 rounded-2xl object-cover shadow-[0_12px_36px_rgba(0,189,145,0.25)] border border-[#00bd91]/30 animate-pulse"
+          draggable={false}
+        />
       </div>
 
       {/* Clean Heading */}
