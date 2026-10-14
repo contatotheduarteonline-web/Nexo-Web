@@ -433,6 +433,15 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
     setEditalBoard(ed.board || "");
     setEditalYear(ed.year || new Date().getFullYear());
 
+    // Propaga o logo do edital do catálogo para a Imagem do Plano
+    // (dataUrl publicado no catálogo ou URL direta).
+    const logoSrc: string | null =
+      ed.logoDataUrl ||
+      (ed.logoUrl && /^https?:\/\//i.test(ed.logoUrl) ? ed.logoUrl : null) ||
+      null;
+    setSelectedImageFile(null);
+    setPreviewImageUrl(logoSrc);
+
     try {
       // A estrutura do cargo é carregada diretamente das subcoleções do Firestore.
       const structure = await getFullCargoStructure(ed.id, cargoItem.id);
@@ -1051,6 +1060,14 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
       });
       console.log("==========================================");
 
+      // Logo herdado do edital do catálogo (fallback para a Imagem do Plano)
+      const catalogLogoSrc: string | null =
+        selectedCatalogEdital?.logoDataUrl ||
+        (selectedCatalogEdital?.logoUrl && /^https?:\/\//i.test(selectedCatalogEdital.logoUrl)
+          ? selectedCatalogEdital.logoUrl
+          : null) ||
+        null;
+
       // 3. Cria e persiste o Edital no Firestore com disciplinas e tópicos integrados
       const createdEdital = await createEdital({
         id: editalId,
@@ -1060,6 +1077,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
         banca: editalBoard.trim() || "A definir",
         year: editalYear || new Date().getFullYear(),
         careerId: selectedCareerId,
+        imageUrl: catalogLogoSrc || undefined,
         sourceHash: parsedData?.sourceHash,
         normalizedIdentity: parsedData?.normalizedIdentity,
         disciplines: newDisciplines,
@@ -1291,6 +1309,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
         weeklyGoalHours: Number(weeklyGoalHours) || 20,
         notes: editalNotes.trim() || undefined,
         active: true,
+        imageUrl: catalogLogoSrc || undefined,
         sourceEditalId: publishedCatalogId || selectedCatalogEdital?.id,
         sourceEditalType: selectedCatalogEdital ? "catalog" : editalFile ? "imported" : "manual",
         sourceEditalVersion: selectedCatalogEdital?.version || 1,
@@ -2094,7 +2113,7 @@ export const CreatePlanWizardModal: React.FC<CreatePlanWizardModalProps> = ({
                         onClick={() => imageInputRef.current?.click()}
                         className="text-xs font-semibold text-white hover:text-white dark:text-white dark:hover:text-white truncate flex-1 cursor-pointer"
                       >
-                        {selectedImageFile?.name}
+                        {selectedImageFile?.name || "Logo do edital do catálogo"}
                       </button>
                       <button
                         type="button"
