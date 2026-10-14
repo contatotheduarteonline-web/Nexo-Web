@@ -850,9 +850,15 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
                     type="checkbox"
                     checked={enabled}
                     onChange={(e) => toggleDay(day.key, e.target.checked)}
-                    className="h-4 w-4 cursor-pointer rounded accent-[#F59E0B]"
+                    className="h-4 w-4 cursor-pointer rounded accent-[#527DFF]"
                   />
-                  <span className="w-9 text-[11px] font-bold text-[#0B1120] dark:text-white">
+                  <span
+                    className={`flex h-8 min-w-[72px] items-center justify-center rounded-full px-4 text-[11px] font-bold tracking-wide transition ${
+                      enabled
+                        ? "bg-[#527DFF] text-white shadow-sm"
+                        : "bg-slate-200 text-[#718096] dark:bg-[#39475C] dark:text-[#93A2B7]"
+                    }`}
+                  >
                     {day.label}
                   </span>
                   <input
