@@ -1,0 +1,14 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.nexo.estudos",
+      "sha256_cert_fingerprints": [
+        "36:68:1E:81:3D:83:8B:07:D4:35:F6:7C:37:86:D5:DC:86:3B:02:2A:46:C3:F0:50:4E:88:74:B4:92:38:1B:8C"
+      ]
+    }
+  }
+]
