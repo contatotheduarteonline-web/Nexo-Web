@@ -185,19 +185,6 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy 
       }
     }
 
-    // Se o plano não possuir blocos agendados hoje, mas o edital ativo tiver disciplinas cadastradas
-    if (list.length === 0 && activeEdital && activeEdital.disciplines.length > 0) {
-      const fallbackDiscs = activeEdital.disciplines.slice(0, 2);
-      list = fallbackDiscs.map((d) => ({
-        id: `block-${d.id}`,
-        disciplineId: d.id,
-        disciplineName: d.name,
-        targetMinutes: 60,
-        color: d.color,
-        studiedMinutes: studiedMinutesByDiscipline.get(d.id) || 0,
-      }));
-    }
-
     return list;
   }, [activePlan, activeEdital, studiedMinutesByDiscipline]);
 
