@@ -407,7 +407,7 @@ export const RevisoesView: React.FC = () => {
                                     type="button"
                                     title="Iniciar revisão no cronômetro"
                                     onClick={() =>
-                                      launchStudySessionForTopic(rev.disciplineId, rev.topicId, "Revisão")
+                                      launchStudySessionForTopic(rev.disciplineId, rev.topicId, "Revisão", rev.id)
                                     }
                                     className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#527DFF] text-white shadow-xs transition hover:bg-[#416CEB]"
                                   >

@@ -119,6 +119,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy 
       elapsedSeconds: 0,
       isRunning: false,
       startedAt: undefined,
+      scheduledReviewId: undefined,
     });
 
     // Abrir o cronômetro NÃO inicia a contagem.
@@ -365,7 +366,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy 
           pendingReviews={pendingReviews}
           studySessions={studySessions}
           onOpenReview={(rev) => setSelectedReviewForModal(rev)}
-          onStartReview={(rev) => launchStudySessionForTopic(rev.disciplineId, rev.topicId, "Revisão")}
+          onStartReview={(rev) => launchStudySessionForTopic(rev.disciplineId, rev.topicId, "Revisão", rev.id)}
           onIgnoreReview={(rev) => ignoreScheduledReview(rev.id)}
           onNavigateToReviews={() => setActiveTab("revisoes")}
         />

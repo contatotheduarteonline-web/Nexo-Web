@@ -72,7 +72,6 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
     logStudySession,
     finishCurrentSession,
     completeScheduledReview,
-    updateScheduledReview,
     createScheduledReview,
   } = useStudy();
 
@@ -133,7 +132,7 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
       setModality(fromTimer ? timer.modality || "Teoria" : preselectedModality || "Teoria");
       setDisciplineId(preselectedDisciplineId || activeEdital?.disciplines[0]?.id || "");
       setTopicId(preselectedTopicId || "");
-      setScheduleReviews(true);
+      setScheduleReviews(!(fromTimer && timer.scheduledReviewId));
       setChips(DEFAULT_CHIPS);
       if (fromTimer && timer.elapsedSeconds > 0) {
         const sec = timer.elapsedSeconds;
@@ -216,10 +215,12 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
       logStudySession(sessionData);
 
       // Mantém o vínculo: conclui a revisão (gera o próximo ciclo) e grava as métricas nela.
-      completeScheduledReview(review.id, { logAsSession: false, notes: comments });
-      updateScheduledReview(review.id, {
-        ...(durationMinutes > 0 ? { durationMinutes } : {}),
-        ...(qDone > 0 ? { questionsDone: qDone, questionsCorrect: Math.max(0, acertos) } : {}),
+      completeScheduledReview(review.id, {
+        logAsSession: false,
+        notes: comments,
+        durationMinutes,
+        questionsDone: qDone,
+        questionsCorrect: Math.max(0, acertos),
       });
       onSuccessToast?.("Registro salvo! Revisão concluída e próximo ciclo programado.");
     } else {
@@ -237,9 +238,22 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
         notes: comments,
         studyDate,
         theoryCompleted,
-        scheduleReviews,
-        selectedReviewDays: chips,
+        scheduleReviews: fromTimer && timer.scheduledReviewId ? false : scheduleReviews,
+        selectedReviewDays: fromTimer && timer.scheduledReviewId ? [] : chips,
       });
+
+      // A sessão iniciada pelo botão "Iniciar revisão" mantém o ID da revisão
+      // até a gravação. Finalizamos a mesma revisão sem duplicar a sessão no histórico.
+      if (fromTimer && timer.scheduledReviewId) {
+        completeScheduledReview(timer.scheduledReviewId, {
+          logAsSession: false,
+          notes: comments,
+          durationMinutes,
+          questionsDone: qDone,
+          questionsCorrect: Math.max(0, acertos),
+        });
+      }
+
       onSuccessToast?.(
         scheduleReviews && chips.length > 0
           ? "Registro salvo e revisões programadas!"

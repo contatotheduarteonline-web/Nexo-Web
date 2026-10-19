@@ -527,6 +527,8 @@ export interface ActiveTimerState {
   topicName?: string;
   targetMinutes?: number;
   planningBlockId?: string;
+  /** ID da revisão programada vinculada à sessão iniciada pelo botão Revisar. */
+  scheduledReviewId?: string;
   modality: StudyModality;
   questionsDone: number;
   questionsCorrect: number;

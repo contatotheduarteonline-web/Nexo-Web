@@ -291,7 +291,7 @@ interface StudyContextType {
   finishCurrentSession: (
     options?: FinishSessionOptions
   ) => Promise<{ session: StudySession; reviews: ScheduledReview[] }>;
-  launchStudySessionForTopic: (disciplineId: string, topicId?: string, modality?: StudyModality) => void;
+  launchStudySessionForTopic: (disciplineId: string, topicId?: string, modality?: StudyModality, scheduledReviewId?: string) => void;
 
   // Derived Metrics & Analytics
   metrics: {
@@ -1131,9 +1131,10 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       ...prev,
       isRunning: false,
       elapsedSeconds: 0,
-        questionsDone: 0,
+      questionsDone: 0,
       questionsCorrect: 0,
       notes: "",
+      scheduledReviewId: undefined,
     }));
   };
 
@@ -1141,13 +1142,19 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     setTimer((prev) => ({ ...prev, ...config }));
   };
 
-  const launchStudySessionForTopic = (disciplineId: string, topicId?: string, modality: StudyModality = "Teoria") => {
+  const launchStudySessionForTopic = (
+    disciplineId: string,
+    topicId?: string,
+    modality: StudyModality = "Teoria",
+    scheduledReviewId?: string
+  ) => {
     const defaultTopic = topicId || activeEdital?.topics.find((t) => t.disciplineId === disciplineId)?.id || "";
     setTimer((prev) => ({
       ...prev,
       disciplineId,
       topicId: defaultTopic,
       modality,
+      scheduledReviewId,
       elapsedSeconds: 0,
       questionsDone: 0,
       questionsCorrect: 0,
@@ -2572,6 +2579,9 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
     const topic = activeEdital?.topics.find((t) => t.id === rev.topicId);
     if (topic) {
+      // Quando a sessão já foi registrada pelo fluxo principal, não some questões
+      // novamente: logStudySession/finishCurrentSession já atualizou esses totais.
+      const shouldAddQuestionMetrics = options?.logAsSession !== false;
       const newQuestionsDone = (topic.questionsDone || 0) + questionsDone;
       const newQuestionsCorrect = (topic.questionsCorrect || 0) + questionsCorrect;
       const accuracyRate =
@@ -2587,9 +2597,9 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       updateTopic(topic.id, {
         isReviewed: true,
         reviewCount: topic.reviewCount + 1,
-        questionsDone: newQuestionsDone,
-        questionsCorrect: newQuestionsCorrect,
-        accuracyRate,
+        ...(shouldAddQuestionMetrics
+          ? { questionsDone: newQuestionsDone, questionsCorrect: newQuestionsCorrect, accuracyRate }
+          : {}),
         masteryRate: Math.min(100, topic.masteryRate + masteryBonus),
       });
 
