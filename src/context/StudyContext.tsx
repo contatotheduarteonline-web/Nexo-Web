@@ -1139,7 +1139,16 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   };
 
   const setTimerConfig = (config: Partial<ActiveTimerState>) => {
-    setTimer((prev) => ({ ...prev, ...config }));
+    setTimer((prev) => ({
+      ...prev,
+      ...config,
+      // A configuração genérica de outra disciplina/tópico não deve herdar
+      // o vínculo com uma revisão iniciada anteriormente.
+      ...(config.scheduledReviewId === undefined &&
+      (config.disciplineId !== undefined || config.topicId !== undefined)
+        ? { scheduledReviewId: undefined }
+        : {}),
+    }));
   };
 
   const launchStudySessionForTopic = (
