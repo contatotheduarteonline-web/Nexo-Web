@@ -148,6 +148,8 @@ export interface CompleteReviewOptions {
   reviewMethod?: "Resumo" | "Flashcards" | "Questões" | "Lei Seca" | "Mapa Mental" | "Videoaula" | "Outro";
   retentionLevel?: "errei" | "dificil" | "bom" | "facil";
   logAsSession?: boolean;
+  /** Não cria outra etapa quando a revisão concluída já faz parte de intervalos pré-programados. */
+  createNextReview?: boolean;
 }
 
 export interface FinishSessionOptions {
@@ -2612,20 +2614,23 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         masteryRate: Math.min(100, topic.masteryRate + masteryBonus),
       });
 
-      // Adaptive next stage:
-      if (retentionLevel === "errei") {
-        createScheduledReview(topic.id, "24h");
-      } else {
-        const nextStages: Record<ReviewInterval, ReviewInterval | null> = {
-          "24h": "7d",
-          "7d": "15d",
-          "15d": "30d",
-          "30d": "60d",
-          "60d": null,
-        };
-        const nextStage = nextStages[rev.stage];
-        if (nextStage) {
-          createScheduledReview(topic.id, nextStage);
+      // Adaptive next stage: não duplicar intervalos que já foram programados
+      // a partir do estudo original quando o usuário conclui uma revisão existente.
+      if (options?.createNextReview !== false) {
+        if (retentionLevel === "errei") {
+          createScheduledReview(topic.id, "24h");
+        } else {
+          const nextStages: Record<ReviewInterval, ReviewInterval | null> = {
+            "24h": "7d",
+            "7d": "15d",
+            "15d": "30d",
+            "30d": "60d",
+            "60d": null,
+          };
+          const nextStage = nextStages[rev.stage];
+          if (nextStage) {
+            createScheduledReview(topic.id, nextStage);
+          }
         }
       }
     }

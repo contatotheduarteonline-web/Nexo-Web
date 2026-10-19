@@ -217,6 +217,7 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
       // Mantém o vínculo: conclui a revisão (gera o próximo ciclo) e grava as métricas nela.
       completeScheduledReview(review.id, {
         logAsSession: false,
+        createNextReview: false,
         notes: comments,
         durationMinutes,
         questionsDone: qDone,
@@ -247,6 +248,7 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
       if (fromTimer && timer.scheduledReviewId) {
         completeScheduledReview(timer.scheduledReviewId, {
           logAsSession: false,
+          createNextReview: false,
           notes: comments,
           durationMinutes,
           questionsDone: qDone,
