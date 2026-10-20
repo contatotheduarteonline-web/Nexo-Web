@@ -1,4 +1,4 @@
-import { ReviewInterval, StudySession } from "../../types";
+import { ReviewInterval, ScheduledReview, StudySession } from "../../types";
 
 /**
  * Shared display helpers for the Revisões module (page, dashboard card and
@@ -107,6 +107,70 @@ export const getReviewDueYmd = (review: { dueDate: string }): string =>
 export const isPendingReview = (
   review: { completed: boolean; status?: string }
 ): boolean => !isCompletedReview(review) && review.status !== "Ignorada";
+
+/** Converts interval labels ("24h", "1d", "7d"...) to a consistent day count. */
+export const getReviewIntervalDays = (stage: string | undefined): number => {
+  if (stage === "24h" || stage === "1d") return 1;
+  const match = typeof stage === "string" ? stage.match(/^(\d+)d$/) : null;
+  return match ? Number(match[1]) : 0;
+};
+
+/**
+ * Associates a revision session with only one scheduled review. Old sessions
+ * without an explicit ID are assigned to the oldest due item for that topic,
+ * letting legacy revision work be recognized without repeating it at every interval.
+ */
+export const getReviewSessionAssociations = (
+  reviews: ScheduledReview[],
+  sessions: StudySession[]
+): { sessionsByReview: Map<string, StudySession[]>; completedReviewIds: Set<string> } => {
+  const sessionsByReview = new Map<string, StudySession[]>();
+  const completedReviewIds = new Set<string>();
+  const pending = reviews
+    .filter((review) => isPendingReview(review))
+    .slice()
+    .sort((a, b) => getReviewDueYmd(a).localeCompare(getReviewDueYmd(b)));
+
+  const addSession = (reviewId: string, session: StudySession) => {
+    const related = sessionsByReview.get(reviewId) || [];
+    if (!related.some((item) => item.id === session.id)) related.push(session);
+    sessionsByReview.set(reviewId, related);
+    completedReviewIds.add(reviewId);
+  };
+  const removePending = (reviewId: string) => {
+    const index = pending.findIndex((review) => review.id === reviewId);
+    if (index >= 0) pending.splice(index, 1);
+  };
+
+  // New revision sessions use an explicit relationship.
+  sessions.forEach((session) => {
+    const reviewId = session.scheduledReviewId;
+    if (!reviewId || !reviews.some((review) => review.id === reviewId)) return;
+    addSession(reviewId, session);
+    removePending(reviewId);
+  });
+
+  // Legacy revision sessions are assigned once to the oldest item already due.
+  const legacyRevisionSessions = sessions
+    .filter((session) => session.modality === "Revisão" && Boolean(session.topicId) && !session.scheduledReviewId)
+    .slice()
+    .sort((a, b) => getSessionLocalDate(a).localeCompare(getSessionLocalDate(b)) || a.date.localeCompare(b.date));
+
+  legacyRevisionSessions.forEach((session) => {
+    const sessionDate = getSessionLocalDate(session);
+    if (!sessionDate) return;
+    const index = pending.findIndex((review) =>
+      review.topicId === session.topicId &&
+      review.editalId === session.editalId &&
+      getReviewDueYmd(review) <= sessionDate
+    );
+    if (index < 0) return;
+    const [review] = pending.splice(index, 1);
+    addSession(review.id, session);
+  });
+
+  return { sessionsByReview, completedReviewIds };
+};
 
 export const groupReviewsByDate = <T extends { dueDate: string }>(reviews: T[]): [string, T[]][] => {
   const map = new Map<string, T[]>();

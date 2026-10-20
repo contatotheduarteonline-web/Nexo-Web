@@ -68,6 +68,7 @@ import {
   isCompletedReview,
   isPendingReview,
   getReviewDueYmd,
+  getReviewIntervalDays,
   getTodayLocalYmd,
 } from "../components/revisoes/reviewHelpers";
 import {
@@ -158,6 +159,7 @@ export interface FinishSessionOptions {
   cargo?: string;
   disciplineId?: string;
   topicId?: string;
+  scheduledReviewId?: string;
   modality?: StudyModality;
   durationMinutes?: number;
   questionsDone?: number;
@@ -1210,7 +1212,19 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
     // 2. Build Scheduled Reviews upfront based STRICTLY on selectedReviewDays and baseDateStr (studyDate)
     const [bYear, bMonth, bDay] = baseDateStr.split("-").map(Number);
-    const createdReviews: ScheduledReview[] = selectedDays.map((days) => {
+    const existingPendingReviewDays = new Set(
+      scheduledReviews
+        .filter((review) =>
+          review.topicId === targetTopicId &&
+          review.editalId === targetEditalId &&
+          isPendingReview(review)
+        )
+        .map((review) => getReviewIntervalDays(review.stage))
+    );
+    const uniqueSelectedDays = Array.from(new Set(selectedDays)).filter(
+      (days) => !existingPendingReviewDays.has(days)
+    );
+    const createdReviews: ScheduledReview[] = uniqueSelectedDays.map((days) => {
       const targetDate = new Date(bYear, (bMonth || 1) - 1, bDay || 1);
       targetDate.setDate(targetDate.getDate() + days);
       const dueYear = targetDate.getFullYear();
@@ -1257,6 +1271,7 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       disciplineName: disc?.name || "Disciplina",
       topicId: top?.id || targetTopicId || undefined,
       topicName: top?.name || "Geral",
+      scheduledReviewId: options?.scheduledReviewId || timer.scheduledReviewId || undefined,
       planningBlockId: foundPlan?.id || undefined,
       date: sessionDateIso,
       studyDate: baseDateStr,
@@ -2519,7 +2534,7 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   // Reviews CRUD
   const completeScheduledReview = (reviewId: string, options?: CompleteReviewOptions) => {
     const rev = scheduledReviews.find((r) => r.id === reviewId);
-    if (!rev) return;
+    if (!rev || isCompletedReview(rev)) return;
 
     const completedAt = new Date().toISOString();
     const durationMinutes = options?.durationMinutes || 0;
@@ -2720,6 +2735,15 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     const topic = activeEdital?.topics.find((t) => t.id === topicId);
     const disc = activeEdital?.disciplines.find((d) => d.id === topic?.disciplineId);
     if (!topic || !disc) return;
+
+    const stageDays = getReviewIntervalDays(stage);
+    const alreadyPending = scheduledReviews.some((review) =>
+      review.editalId === activeEdital?.id &&
+      review.topicId === topic.id &&
+      isPendingReview(review) &&
+      getReviewIntervalDays(review.stage) === stageDays
+    );
+    if (alreadyPending) return;
 
     let daysToAdd = 1;
     if (stage === "7d") daysToAdd = 7;

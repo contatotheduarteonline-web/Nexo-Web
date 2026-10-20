@@ -8,9 +8,8 @@ import {
   getDateParts,
   formatShortDate,
   formatDurationClock,
-  getSessionLocalDate,
+  getReviewSessionAssociations,
   isCompletedReview,
-  isPendingReview,
   getReviewDueYmd,
   groupReviewsByDate,
   getTodayLocalYmd,
@@ -153,6 +152,21 @@ export const RevisoesView: React.FC = () => {
     [scheduledReviews, activeEdital]
   );
 
+  // Each session is associated with one review only. Older revision sessions
+  // are attached once to the oldest due review for the same topic.
+  const reviewSessionAssociations = useMemo(
+    () => getReviewSessionAssociations(
+      editalReviews,
+      studySessions.filter((session) => !activeEdital || session.editalId === activeEdital.id)
+    ),
+    [editalReviews, studySessions, activeEdital]
+  );
+  const sessionsByReview = reviewSessionAssociations.sessionsByReview;
+  const reviewIsCompleted = (item: ScheduledReview) =>
+    isCompletedReview(item) || reviewSessionAssociations.completedReviewIds.has(item.id);
+  const reviewIsPending = (item: ScheduledReview) =>
+    !reviewIsCompleted(item) && item.status !== "Ignorada";
+
   const filteredReviews = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
     const base = editalReviews.filter((r) => {
@@ -164,37 +178,25 @@ export const RevisoesView: React.FC = () => {
           r.notes?.toLowerCase().includes(q);
         if (!hit) return false;
       }
-      if (activeSubTab === "programadas") return isPendingReview(r) && getReviewDueYmd(r) >= todayStr;
-      if (activeSubTab === "atrasadas") return isPendingReview(r) && getReviewDueYmd(r) < todayStr;
-      if (activeSubTab === "ignoradas") return !isCompletedReview(r) && r.status === "Ignorada";
-      return isCompletedReview(r);
+      if (activeSubTab === "programadas") return reviewIsPending(r) && getReviewDueYmd(r) >= todayStr;
+      if (activeSubTab === "atrasadas") return reviewIsPending(r) && getReviewDueYmd(r) < todayStr;
+      if (activeSubTab === "ignoradas") return !reviewIsCompleted(r) && r.status === "Ignorada";
+      return reviewIsCompleted(r);
     });
     return base.sort((a, b) => a.dueDate.localeCompare(b.dueDate));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [editalReviews, selectedDiscipline, searchQuery, activeSubTab, todayStr]);
+  }, [editalReviews, selectedDiscipline, searchQuery, activeSubTab, todayStr, reviewSessionAssociations]);
 
   const counts = useMemo(
     () => ({
-      programadas: editalReviews.filter((r) => isPendingReview(r) && getReviewDueYmd(r) >= todayStr).length,
-      atrasadas: editalReviews.filter((r) => isPendingReview(r) && getReviewDueYmd(r) < todayStr).length,
-      ignoradas: editalReviews.filter((r) => !isCompletedReview(r) && r.status === "Ignorada").length,
-      concluidas: editalReviews.filter((r) => isCompletedReview(r)).length,
+      programadas: editalReviews.filter((r) => reviewIsPending(r) && getReviewDueYmd(r) >= todayStr).length,
+      atrasadas: editalReviews.filter((r) => reviewIsPending(r) && getReviewDueYmd(r) < todayStr).length,
+      ignoradas: editalReviews.filter((r) => !reviewIsCompleted(r) && r.status === "Ignorada").length,
+      concluidas: editalReviews.filter((r) => reviewIsCompleted(r)).length,
     }),
-    [editalReviews, todayStr]
+    [editalReviews, todayStr, reviewSessionAssociations]
   );
 
-  // Sessões reais por tópico → registros de estudo abaixo de cada revisão.
-  const sessionsByTopic = useMemo(() => {
-    const map = new Map<string, StudySession[]>();
-    studySessions.forEach((s) => {
-      if (!s.topicId) return;
-      const arr = map.get(s.topicId);
-      if (arr) arr.push(s);
-      else map.set(s.topicId, [s]);
-    });
-    map.forEach((arr) => arr.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()));
-    return map;
-  }, [studySessions]);
 
   const groupedReviews = useMemo(() => groupReviewsByDate(filteredReviews), [filteredReviews]);
 
@@ -392,7 +394,7 @@ export const RevisoesView: React.FC = () => {
                     {/* Linhas de revisão */}
                     <div className="mt-3 space-y-3">
                       {reviews.map((rev) => {
-                        const relatedSessions = sessionsByTopic.get(rev.topicId) || [];
+                        const relatedSessions = sessionsByReview.get(rev.id) || [];
                         return (
                           <div key={rev.id} className="space-y-1.5">
                             {/* Linha compacta da revisão */}
@@ -401,7 +403,7 @@ export const RevisoesView: React.FC = () => {
                                 {getIntervalLabel(rev.stage)}
                               </span>
 
-                              {isPendingReview(rev) && (
+                              {reviewIsPending(rev) && (
                                 <>
                                   <button
                                     type="button"
@@ -434,7 +436,7 @@ export const RevisoesView: React.FC = () => {
                                 </>
                               )}
 
-                              {rev.status === "Ignorada" && !isCompletedReview(rev) && (
+                              {rev.status === "Ignorada" && !reviewIsCompleted(rev) && (
                                 <button
                                   type="button"
                                   title="Reativar revisão"
@@ -445,7 +447,7 @@ export const RevisoesView: React.FC = () => {
                                 </button>
                               )}
 
-                              {isCompletedReview(rev) && (
+                              {reviewIsCompleted(rev) && (
                                 <span
                                   title="Concluída"
                                   className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#527DFF] text-white shadow-xs"
@@ -535,7 +537,9 @@ export const RevisoesView: React.FC = () => {
                               <div className="rounded-lg bg-[#111B2D] px-4 py-2 text-[12px] text-[#93A2B7]">
                                 <span className="font-medium text-[#C4CEDB]">{rev.topicName}</span>
                                 <span className="mx-2 text-[#C4CEDB]">&bull;</span>
-                                Sem registro de estudo — use Registrar para lançar sua revisão.
+                                {reviewIsCompleted(rev)
+                                  ? "Revisão concluída — o registro permanece no Histórico."
+                                  : "Sem registro vinculado a esta revisão — use Registrar para lançar sua revisão."}
                               </div>
                             )}
                           </div>

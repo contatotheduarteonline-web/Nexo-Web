@@ -424,6 +424,8 @@ export interface StudySession {
   topicId?: string;
   topicName?: string;
   planningBlockId?: string;
+  /** Revisão programada concluída por esta sessão, quando aplicável. */
+  scheduledReviewId?: string;
   date: string; // ISO String
   studyDate?: string; // YYYY-MM-DD
   createdAt?: string; // ISO String

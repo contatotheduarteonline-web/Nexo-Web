@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useStudy } from "../../context/StudyContext";
 import { ScheduledReview, StudyModality, StudySession } from "../../types";
-import { getTodayLocalYmd } from "./reviewHelpers";
+import { getReviewDueYmd, getTodayLocalYmd, isCompletedReview } from "./reviewHelpers";
 import { TimerOverlay } from "./TimerOverlay";
 import { X, CalendarCheck2, ChevronDown, Plus, Pause, Play, RotateCcw } from "lucide-react";
 
@@ -73,6 +73,7 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
     finishCurrentSession,
     completeScheduledReview,
     createScheduledReview,
+    scheduledReviews,
   } = useStudy();
 
   const todayStr = getTodayLocalYmd();
@@ -185,6 +186,23 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
       return;
     }
 
+    const timerLinkedReview = fromTimer && timer.scheduledReviewId
+      ? scheduledReviews.find((item) => item.id === timer.scheduledReviewId) || null
+      : null;
+    const manuallyMatchedDueReview = !review && !timerLinkedReview && modality === "Revisão"
+      ? scheduledReviews
+          .filter((item) =>
+            item.editalId === (activeEdital?.id || "") &&
+            item.topicId === topic.id &&
+            !isCompletedReview(item) &&
+            item.status !== "Ignorada" &&
+            getReviewDueYmd(item) <= studyDate
+          )
+          .sort((a, b) => getReviewDueYmd(a).localeCompare(getReviewDueYmd(b)))[0] || null
+      : null;
+    const reviewToComplete = review || timerLinkedReview || manuallyMatchedDueReview;
+    const linkedReviewId = reviewToComplete?.id || timer.scheduledReviewId || undefined;
+
     setSaving(true);
     try {
     const sessionData: Omit<StudySession, "id"> = {
@@ -193,6 +211,7 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
       disciplineName: disc.name,
       topicId: topic.id,
       topicName: topic.name,
+      scheduledReviewId: linkedReviewId,
       date: new Date(`${studyDate}T12:00:00`).toISOString(),
       studyDate,
       durationMinutes,
@@ -215,7 +234,7 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
       logStudySession(sessionData);
 
       // Mantém o vínculo: conclui a revisão (gera o próximo ciclo) e grava as métricas nela.
-      completeScheduledReview(review.id, {
+      await completeScheduledReview(review.id, {
         logAsSession: false,
         createNextReview: false,
         notes: comments,
@@ -231,6 +250,7 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
         editalId: review?.editalId || activeEdital?.id || "",
         disciplineId: disc.id,
         topicId: topic.id,
+        scheduledReviewId: linkedReviewId,
         modality,
         durationMinutes,
         questionsDone: qDone,
@@ -239,14 +259,14 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
         notes: comments,
         studyDate,
         theoryCompleted,
-        scheduleReviews: fromTimer && timer.scheduledReviewId ? false : scheduleReviews,
-        selectedReviewDays: fromTimer && timer.scheduledReviewId ? [] : chips,
+        scheduleReviews: linkedReviewId || modality === "Revisão" ? false : scheduleReviews,
+        selectedReviewDays: linkedReviewId || modality === "Revisão" ? [] : chips,
       });
 
-      // A sessão iniciada pelo botão "Iniciar revisão" mantém o ID da revisão
-      // até a gravação. Finalizamos a mesma revisão sem duplicar a sessão no histórico.
-      if (fromTimer && timer.scheduledReviewId) {
-        completeScheduledReview(timer.scheduledReviewId, {
+      // Finaliza o item selecionado, vinculado ao cronômetro ou identificado
+      // pelo lançamento manual da modalidade Revisão.
+      if (linkedReviewId) {
+        await completeScheduledReview(linkedReviewId, {
           logAsSession: false,
           createNextReview: false,
           notes: comments,
@@ -257,7 +277,11 @@ export const RegistroEstudoModal: React.FC<RegistroEstudoModalProps> = ({
       }
 
       onSuccessToast?.(
-        scheduleReviews && chips.length > 0
+        linkedReviewId
+          ? "Registro salvo! Revisão concluída."
+          : modality === "Revisão"
+          ? "Registro de revisão salvo."
+          : scheduleReviews && chips.length > 0
           ? "Registro salvo e revisões programadas!"
           : "Registro de estudo salvo!"
       );

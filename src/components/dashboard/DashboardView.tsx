@@ -5,6 +5,7 @@ import { computeGamificationData } from "../../utils/gamificationBadges";
 import { RegistroEstudoModal } from "../revisoes/RegistroEstudoModal";
 import { FloatingTimerWidget } from "./FloatingTimerWidget";
 import { ScheduledReview } from "../../types";
+import { getReviewSessionAssociations } from "../revisoes/reviewHelpers";
 
 import { StatCardsRow } from "./StatCardsRow";
 import { EditalProgressCard } from "./EditalProgressCard";
@@ -189,15 +190,23 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy 
     return list;
   }, [activePlan, activeEdital, studiedMinutesByDiscipline]);
 
-  // Pending scheduled reviews for the dashboard card: same source of truth as
-  // the Revisões page (excludes ignored, sorted by dueDate — overdue first).
+  // Share the same completed-by-history association as the Revisões page.
+  const reviewSessionAssociations = useMemo(
+    () => getReviewSessionAssociations(scheduledReviews, studySessions),
+    [scheduledReviews, studySessions]
+  );
   const pendingReviews = useMemo(() => {
     return scheduledReviews
       .filter(
-        (r) => (!activeEdital || r.editalId === activeEdital.id) && !r.completed && r.status !== "Ignorada" && r.status !== "Concluída"
+        (r) =>
+          (!activeEdital || r.editalId === activeEdital.id) &&
+          !r.completed &&
+          r.status !== "Ignorada" &&
+          r.status !== "Concluída" &&
+          !reviewSessionAssociations.completedReviewIds.has(r.id)
       )
       .sort((a, b) => a.dueDate.localeCompare(b.dueDate));
-  }, [scheduledReviews, activeEdital]);
+  }, [scheduledReviews, activeEdital, reviewSessionAssociations]);
 
   // Unified Discipline Performance (Combines Questions, Accuracy, Time and Topic Progress)
   const unifiedDisciplineStats: UnifiedDisciplineStat[] = useMemo(() => {
