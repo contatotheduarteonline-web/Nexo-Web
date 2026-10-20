@@ -537,10 +537,7 @@ export const RevisoesView: React.FC = () => {
                             ) : (
                               <div className="rounded-lg bg-[#111B2D] px-4 py-2 text-[12px] text-[#93A2B7]">
                                 <span className="font-medium text-[#C4CEDB]">{rev.topicName}</span>
-                                <span className="mx-2 text-[#C4CEDB]">&bull;</span>
-                                {reviewIsCompleted(rev)
-                                  ? "Revisão concluída — o registro permanece no Histórico."
-                                  : "Sem registro vinculado a esta revisão — use Registrar para lançar sua revisão."}
+
                               </div>
                             )}
                           </div>
