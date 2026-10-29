@@ -10,7 +10,7 @@ interface StatCardsRowProps {
 }
 
 export const StatCardsRow: React.FC<StatCardsRowProps> = ({ children }) => {
-  const { studySessions } = useStudy();
+  const { studySessions, simulados } = useStudy();
 
   // Use the complete synchronized study-session collection. The history screen
   // and these Home cards therefore use the same source of truth, including
@@ -18,18 +18,24 @@ export const StatCardsRow: React.FC<StatCardsRowProps> = ({ children }) => {
   const registeredSessions = useMemo(() => studySessions || [], [studySessions]);
 
   const totalMinutes = useMemo(
-    () => registeredSessions.reduce((total, session) => total + Number(session.durationMinutes || 0), 0),
-    [registeredSessions]
+    () =>
+      registeredSessions.reduce((total, session) => total + Number(session.durationMinutes || 0), 0) +
+      (simulados || []).reduce((total, simulado) => total + Number(simulado.durationMinutes || 0), 0),
+    [registeredSessions, simulados]
   );
 
   const totalQuestionsDone = useMemo(
-    () => registeredSessions.reduce((total, session) => total + Number(session.questionsDone || 0), 0),
-    [registeredSessions]
+    () =>
+      registeredSessions.reduce((total, session) => total + Number(session.questionsDone || 0), 0) +
+      (simulados || []).reduce((total, simulado) => total + Number(simulado.totalQuestions || 0), 0),
+    [registeredSessions, simulados]
   );
 
   const totalQuestionsCorrect = useMemo(
-    () => registeredSessions.reduce((total, session) => total + Number(session.questionsCorrect || 0), 0),
-    [registeredSessions]
+    () =>
+      registeredSessions.reduce((total, session) => total + Number(session.questionsCorrect || 0), 0) +
+      (simulados || []).reduce((total, simulado) => total + Number(simulado.totalCorrect || 0), 0),
+    [registeredSessions, simulados]
   );
 
   const hours = Math.floor(totalMinutes / 60);

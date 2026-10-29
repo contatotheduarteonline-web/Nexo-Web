@@ -36,7 +36,7 @@ interface OfensivaCardProps {
 }
 
 export const OfensivaCard: React.FC<OfensivaCardProps> = ({ className = "" }) => {
-  const { studySessions } = useStudy();
+  const { studySessions, simulados } = useStudy();
 
   // 1. Mapeamento de todos os dias com estudo (Set de YYYY-MM-DD)
   const studiedDatesSet = useMemo(() => {
@@ -47,8 +47,15 @@ export const OfensivaCard: React.FC<OfensivaCardProps> = ({ className = "" }) =>
         set.add(key);
       }
     });
+    simulados.forEach((simulado) => {
+      const rawDate = simulado.date || "";
+      const key = /^\d{4}-\d{2}-\d{2}/.test(rawDate)
+        ? rawDate.slice(0, 10)
+        : extractSessionDateKey({ date: rawDate });
+      if (key) set.add(key);
+    });
     return set;
-  }, [studySessions]);
+  }, [studySessions, simulados]);
 
   // 2. Cálculo da sequência atual e do recorde histórico
   const { currentStreak, recordStreak } = useMemo(() => {

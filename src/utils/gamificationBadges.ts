@@ -71,20 +71,26 @@ export function computeGamificationData(
     ? Math.round((completedTopicsCount / totalTopicsCount) * 100)
     : 0;
 
-  // Real questions and accuracy derived directly from study sessions (single source of truth)
+  // Study sessions and registered simulados both contribute to questions, accuracy and study time.
   const editalSessions = activeEdital
     ? studySessions.filter((s) => s.editalId === activeEdital.id)
     : studySessions;
+  const editalSimulados = simulados.filter(
+    (simulado) => !activeEdital || simulado.editalId === activeEdital.id
+  );
 
-  const totalQ = editalSessions.reduce((acc, s) => acc + (Number(s.questionsDone) || 0), 0);
-  const totalCorr = editalSessions.reduce((acc, s) => acc + (Number(s.questionsCorrect) || 0), 0);
+  const totalQ =
+    editalSessions.reduce((acc, s) => acc + (Number(s.questionsDone) || 0), 0) +
+    editalSimulados.reduce((acc, simulado) => acc + (Number(simulado.totalQuestions) || 0), 0);
+  const totalCorr =
+    editalSessions.reduce((acc, s) => acc + (Number(s.questionsCorrect) || 0), 0) +
+    editalSimulados.reduce((acc, simulado) => acc + (Number(simulado.totalCorrect) || 0), 0);
   const accuracy = totalQ > 0 ? Math.round((totalCorr / totalQ) * 100) : 0;
 
-  // Real studied minutes & hours
-  const totalStudiedMinutes = editalSessions.reduce(
-    (acc, s) => acc + (Number(s.durationMinutes) || 0),
-    0
-  );
+  // Study time includes recorded simulados.
+  const totalStudiedMinutes =
+    editalSessions.reduce((acc, s) => acc + (Number(s.durationMinutes) || 0), 0) +
+    editalSimulados.reduce((acc, simulado) => acc + (Number(simulado.durationMinutes) || 0), 0);
   const totalStudiedHours = Math.floor(totalStudiedMinutes / 60);
 
   // Reviews completed
@@ -94,9 +100,7 @@ export function computeGamificationData(
   const totalCompletedReviews = Math.max(reviewedTopicsCount, completedReviewsCount);
 
   // Simulados count
-  const editalSimuladosCount = simulados.filter(
-    (sim) => !activeEdital || sim.editalId === activeEdital.id
-  ).length;
+  const editalSimuladosCount = editalSimulados.length;
 
   // Completed disciplines count
   const completedDisciplinesCount = disciplines.filter((d) => {

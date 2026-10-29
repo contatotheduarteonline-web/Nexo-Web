@@ -37,6 +37,12 @@ function getTodayLocalYmd(): string {
   return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
 }
 
+function getSimuladoDateKey(simulado: { date: string }): string {
+  const rawDate = simulado.date || "";
+  if (/^\d{4}-\d{2}-\d{2}/.test(rawDate)) return rawDate.slice(0, 10);
+  return getLocalStudyDate({ date: rawDate });
+}
+
 export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy }) => {
   const {
     activeEdital,
@@ -85,17 +91,31 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy 
     return studySessions.filter((s) => getLocalStudyDate(s) === todayStr);
   }, [studySessions]);
 
+  const todaySimulados = useMemo(() => {
+    const todayStr = getTodayLocalYmd();
+    return simulados.filter((simulado) => getSimuladoDateKey(simulado) === todayStr);
+  }, [simulados]);
+
   const todayMinutes = useMemo(() => {
-    return todaySessions.reduce((acc, s) => acc + s.durationMinutes, 0);
-  }, [todaySessions]);
+    return (
+      todaySessions.reduce((acc, s) => acc + s.durationMinutes, 0) +
+      todaySimulados.reduce((acc, simulado) => acc + Number(simulado.durationMinutes || 0), 0)
+    );
+  }, [todaySessions, todaySimulados]);
 
   const todayQuestionsDone = useMemo(() => {
-    return todaySessions.reduce((acc, s) => acc + (s.questionsDone || 0), 0);
-  }, [todaySessions]);
+    return (
+      todaySessions.reduce((acc, s) => acc + (s.questionsDone || 0), 0) +
+      todaySimulados.reduce((acc, simulado) => acc + Number(simulado.totalQuestions || 0), 0)
+    );
+  }, [todaySessions, todaySimulados]);
 
   const todayQuestionsCorrect = useMemo(() => {
-    return todaySessions.reduce((acc, s) => acc + (s.questionsCorrect || 0), 0);
-  }, [todaySessions]);
+    return (
+      todaySessions.reduce((acc, s) => acc + (s.questionsCorrect || 0), 0) +
+      todaySimulados.reduce((acc, simulado) => acc + Number(simulado.totalCorrect || 0), 0)
+    );
+  }, [todaySessions, todaySimulados]);
 
   // Handle Quick Start Study for a planned block or discipline
   const handleStartStudy = (disciplineId: string, durationMinutes: number = 60) => {
@@ -218,8 +238,16 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy 
         (s) => s.disciplineId === disc.id || s.disciplineName === disc.name
       );
 
-      const qDone = discSessions.reduce((acc, s) => acc + (s.questionsDone || 0), 0);
-      const qCorrect = discSessions.reduce((acc, s) => acc + (s.questionsCorrect || 0), 0);
+      const simulatedDisciplineResults = simulados
+        .filter((simulado) => simulado.editalId === activeEdital.id)
+        .flatMap((simulado) => simulado.resultsByDiscipline || [])
+        .filter((result) => result.disciplineId === disc.id);
+      const qDone =
+        discSessions.reduce((acc, s) => acc + (s.questionsDone || 0), 0) +
+        simulatedDisciplineResults.reduce((acc, result) => acc + Number(result.total || 0), 0);
+      const qCorrect =
+        discSessions.reduce((acc, s) => acc + (s.questionsCorrect || 0), 0) +
+        simulatedDisciplineResults.reduce((acc, result) => acc + Number(result.correct || 0), 0);
 
       const totalMinutes = discSessions.reduce((acc, s) => acc + (s.durationMinutes || 0), 0);
       const hoursInt = Math.floor(totalMinutes / 60);
@@ -245,7 +273,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy 
         topicsProgressPercent,
       };
     });
-  }, [activeEdital, studySessions]);
+  }, [activeEdital, studySessions, simulados]);
 
   // Weekly Goals & Chart calculation
   const weeklyChartData: WeeklyChartData = useMemo(() => {
@@ -280,6 +308,19 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy 
       }
     });
 
+    simulados.forEach((simulado) => {
+      const dateKey = getSimuladoDateKey(simulado);
+      if (!dateKey) return;
+      const [year, month, day] = dateKey.split("-").map(Number);
+      const simuladoDate = new Date(year, month - 1, day, 12, 0, 0);
+      if (simuladoDate >= monday && simuladoDate <= sunday) {
+        const jsDay = simuladoDate.getDay();
+        const chartIdx = jsDay === 0 ? 6 : jsDay - 1;
+        dayMinutes[chartIdx] += Number(simulado.durationMinutes || 0);
+        dayQuestions[chartIdx] += Number(simulado.totalQuestions || 0);
+      }
+    });
+
     const totalWeekMinutes = dayMinutes.reduce((a, b) => a + b, 0);
     const totalWeekQuestions = dayQuestions.reduce((a, b) => a + b, 0);
     const maxMinute = Math.max(...dayMinutes, 120);
@@ -302,7 +343,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onOpenManualStudy 
         hasStudied: dayMinutes[idx] > 0,
       })),
     };
-  }, [studySessions, weekOffset]);
+  }, [studySessions, simulados, weekOffset]);
 
   // Recent Study Sessions (Clean 4 items)
   const recentActivities = useMemo(() => {
