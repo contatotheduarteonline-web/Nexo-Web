@@ -353,44 +353,6 @@ export async function deleteStudyPlanCascadeFromFirestore(
       batch.delete(doc(db, "users", userId, "editais", editalId));
     }
 
-    const [sessionsSnap, reviewsSnap, simuladosSnap, remindersSnap] = await Promise.all([
-      getDocs(collection(db, "users", userId, "studySessions")),
-      getDocs(collection(db, "users", userId, "scheduledReviews")),
-      getDocs(collection(db, "users", userId, "simulados")),
-      getDocs(collection(db, "users", userId, "reminders")),
-    ]);
-
-    const extraDeleteRefs: ReturnType<typeof doc>[] = [];
-    sessionsSnap.forEach((d) => {
-      const data = d.data() as { editalId?: string; planningBlockId?: string };
-      if ((editalId && data.editalId === editalId) || data.planningBlockId === planId) {
-        extraDeleteRefs.push(d.ref);
-      }
-    });
-    reviewsSnap.forEach((d) => {
-      if (editalId && (d.data() as { editalId?: string }).editalId === editalId) {
-        extraDeleteRefs.push(d.ref);
-      }
-    });
-    simuladosSnap.forEach((d) => {
-      if (editalId && (d.data() as { editalId?: string }).editalId === editalId) {
-        extraDeleteRefs.push(d.ref);
-      }
-    });
-    remindersSnap.forEach((d) => {
-      if (editalId && (d.data() as { editalId?: string }).editalId === editalId) {
-        extraDeleteRefs.push(d.ref);
-      }
-    });
-
-    // Firestore limita batches a 500 operações — fatia em lotes de 450.
-    const CHUNK = 450;
-    for (let i = 0; i < extraDeleteRefs.length; i += CHUNK) {
-      const chunkBatch = writeBatch(db);
-      extraDeleteRefs.slice(i, i + CHUNK).forEach((ref) => chunkBatch.delete(ref));
-      await chunkBatch.commit();
-    }
-
     await batch.commit();
   } catch (error) {
     handleFirestoreError(error as Error, OperationType.DELETE, path);
