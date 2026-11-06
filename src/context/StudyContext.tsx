@@ -1457,17 +1457,8 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
     setActiveEditalId(nextActiveEditalId);
 
-    // 3. Cascade delete all study sessions linked to this edital
-    setStudySessions((prev) => prev.filter((s) => s.editalId !== id));
-
-    // 4. Cascade delete all scheduled reviews linked to this edital
-    setScheduledReviews((prev) => prev.filter((r) => r.editalId !== id));
-
-    // 5. Cascade delete all simulados linked to this edital
-    setSimulados((prev) => prev.filter((sim) => sim.editalId !== id));
-
-    // 6. Cascade delete all reminders linked to this edital
-    setReminders((prev) => prev.filter((rem) => rem.editalId !== id));
+    // Histórico pessoal (sessões, questões, simulados, revisões e lembretes)
+    // é independente do edital e permanece salvo após sua exclusão.
 
     // 7. Reset timer if running on this edital
     setTimer((prev) => {
@@ -1875,38 +1866,9 @@ export const StudyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     setStudyPlans(updatedPlans);
     setActiveEditalId(nextActiveEditalId);
 
-    // 3. Cascade delete all study sessions linked to this plan or edital
-    setStudySessions((prev) =>
-      prev.filter((s) => {
-        if (targetEditalId && s.editalId === targetEditalId) return false;
-        if (s.planningBlockId === id) return false;
-        return true;
-      })
-    );
-
-    // 4. Cascade delete all scheduled reviews linked to this edital
-    setScheduledReviews((prev) =>
-      prev.filter((r) => {
-        if (targetEditalId && r.editalId === targetEditalId) return false;
-        return true;
-      })
-    );
-
-    // 5. Cascade delete all simulados linked to this edital
-    setSimulados((prev) =>
-      prev.filter((sim) => {
-        if (targetEditalId && sim.editalId === targetEditalId) return false;
-        return true;
-      })
-    );
-
-    // 6. Cascade delete all reminders linked to this edital
-    setReminders((prev) =>
-      prev.filter((rem) => {
-        if (targetEditalId && rem.editalId === targetEditalId) return false;
-        return true;
-      })
-    );
+    // Não excluir registros históricos ao remover um plano.
+    // Sessões, questões, simulados, revisões e lembretes pertencem ao usuário,
+    // não ao ciclo de vida do plano ou edital.
 
     // 7. Reset active timer if it belonged to the deleted plan or edital
     setTimer((prev) => {
