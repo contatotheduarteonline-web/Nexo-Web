@@ -59,31 +59,33 @@ export function buildPlanSchedule(input: ScheduleEngineInput): ScheduleEngineRes
     return { cycle: [], weeklySchedule: [], weeklyGoalHours: 0, weightPercentageByDiscipline };
   }
 
-  // Distribuição dos minutos da semana por disciplina
-  let distributedSum = 0;
+  // Distribui toda a carga semanal proporcionalmente entre as disciplinas.
+  // Quando há tempo suficiente, cada matéria recebe ao menos uma sessão mínima.
+  const canGiveMinimumToAll = totalWeeklyMinutes >= scores.length * minSessionLimit;
+  const remainingMinutes = canGiveMinimumToAll
+    ? totalWeeklyMinutes - scores.length * minSessionLimit
+    : totalWeeklyMinutes;
   const items = scores.map((item) => {
-    const weightPercentage = Math.round((item.score / totalScore) * 100);
-    let totalMinutes = Math.round((item.score / totalScore) * totalWeeklyMinutes);
-    totalMinutes = Math.max(minSessionLimit, totalMinutes);
-    distributedSum += totalMinutes;
-    return { ...item, weightPercentage, totalMinutes };
+    const exactExtra = (item.score / totalScore) * remainingMinutes;
+    const extraMinutes = Math.floor(exactExtra);
+    return {
+      ...item,
+      weightPercentage: Math.round((item.score / totalScore) * 100),
+      exactExtra,
+      extraMinutes,
+      totalMinutes: (canGiveMinimumToAll ? minSessionLimit : 0) + extraMinutes,
+    };
   });
-
-  const diff = totalWeeklyMinutes - distributedSum;
-  if (diff !== 0 && items.length > 0) {
-    items[0].totalMinutes = Math.max(30, items[0].totalMinutes + diff);
-  }
+  let unassignedMinutes = totalWeeklyMinutes - items.reduce((sum, item) => sum + item.totalMinutes, 0);
+  items
+    .map((item, index) => ({ index, remainder: item.exactExtra - item.extraMinutes, score: item.score }))
+    .sort((a, b) => b.remainder - a.remainder || b.score - a.score)
+    .slice(0, Math.max(0, unassignedMinutes))
+    .forEach(({ index }) => { items[index].totalMinutes += 1; });
 
   const withBlocks = items.map((item) => {
-    const maxBlocks = Math.max(1, Math.floor(item.totalMinutes / minSessionLimit));
-    const blockCount = Math.min(
-      maxBlocks,
-      Math.max(1, Math.round(item.totalMinutes / maxSessionLimit))
-    );
-    const minutesPerBlock = Math.min(
-      maxSessionLimit,
-      Math.max(minSessionLimit, Math.round(item.totalMinutes / blockCount))
-    );
+    const blockCount = Math.max(1, Math.ceil(item.totalMinutes / maxSessionLimit));
+    const minutesPerBlock = Math.round(item.totalMinutes / blockCount);
     return { ...item, blockCount, minutesPerBlock };
   });
 
