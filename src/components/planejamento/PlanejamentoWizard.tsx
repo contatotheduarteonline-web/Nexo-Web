@@ -266,34 +266,35 @@ export const PlanejamentoWizard: React.FC<PlanejamentoWizardProps> = ({ onFinish
     const totalWeeklyMinutes = totalWeeklyHours * 60;
     if (calculatedScores.length === 0 || totalWeeklyMinutes === 0) return [];
 
-    const minSessionLimit = minSessionMinutes || 30;
-    let distributedSum = 0;
-    const items = calculatedScores.map((item) => {
-      const weightPercentage = Math.round((item.score / totalScore) * 100);
-      let totalMinutes = Math.round((item.score / totalScore) * totalWeeklyMinutes);
-      totalMinutes = Math.max(minSessionLimit, totalMinutes);
-      distributedSum += totalMinutes;
-      return { ...item, weightPercentage, totalMinutes };
+    const minSessionLimit = Math.max(1, minSessionMinutes || 30);
+    const maxSessionLimit = Math.max(minSessionLimit, maxSessionMinutes || 90);
+    const canGiveMinimumToAll = totalWeeklyMinutes >= calculatedScores.length * minSessionLimit;
+
+    // Reserva o mínimo por disciplina quando a carga semanal permite e distribui
+    // todo o tempo restante proporcionalmente ao peso de cada matéria.
+    const remainingMinutes = canGiveMinimumToAll
+      ? totalWeeklyMinutes - calculatedScores.length * minSessionLimit
+      : totalWeeklyMinutes;
+    const allocationBase = calculatedScores.map((item) => {
+      const proportional = (item.score / totalScore) * remainingMinutes;
+      return {
+        ...item,
+        weightPercentage: Math.round((item.score / totalScore) * 100),
+        exactExtra: proportional,
+        extraMinutes: Math.floor(proportional),
+        totalMinutes: (canGiveMinimumToAll ? minSessionLimit : 0) + Math.floor(proportional),
+      };
     });
+    let unassignedMinutes = totalWeeklyMinutes - allocationBase.reduce((sum, item) => sum + item.totalMinutes, 0);
+    allocationBase
+      .map((item, index) => ({ index, remainder: item.exactExtra - item.extraMinutes, score: item.score }))
+      .sort((a, b) => b.remainder - a.remainder || b.score - a.score)
+      .slice(0, Math.max(0, unassignedMinutes))
+      .forEach(({ index }) => { allocationBase[index].totalMinutes += 1; });
 
-    const diff = totalWeeklyMinutes - distributedSum;
-    if (diff !== 0 && items.length > 0) {
-      items[0].totalMinutes = Math.max(30, items[0].totalMinutes + diff);
-    }
-
-    return items.map((item) => {
-      const minSessionLimit = minSessionMinutes || 30;
-      const maxSessionLimit = Math.max(minSessionLimit, maxSessionMinutes || 90);
-      // Never split into more blocks than fit at the minimum session size
-      const maxBlocks = Math.max(1, Math.floor(item.totalMinutes / minSessionLimit));
-      const blockCount = Math.min(
-        maxBlocks,
-        Math.max(1, Math.round(item.totalMinutes / maxSessionLimit))
-      );
-      const minutesPerBlock = Math.min(
-        maxSessionLimit,
-        Math.max(minSessionLimit, Math.round(item.totalMinutes / blockCount))
-      );
+    return allocationBase.map((item) => {
+      const blockCount = Math.max(1, Math.ceil(item.totalMinutes / maxSessionLimit));
+      const minutesPerBlock = Math.round(item.totalMinutes / blockCount);
       return { ...item, blockCount, minutesPerBlock };
     });
   }, [calculatedScores, totalScore, totalWeeklyHours, minSessionMinutes, maxSessionMinutes]);
